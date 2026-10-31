@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>فلش کارت‌های مهم نوبت اول - پایه هفتم</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; font-family:'Vazirmatn',sans-serif; }
+  body {
+    background-color: #f4f7f6;
+    background-image: radial-gradient(#d1e0e0 1px, transparent 1px);
+    background-size: 20px 20px;
+    color: #2c3e50; padding: 30px 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh;
+  }
+  .container {
+    background: #fff; width: 100%; max-width: 800px; border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08); padding: 35px; border: 1px solid #eef2f5;
+    text-align: center;
+  }
+  
+  .header { margin-bottom: 30px; border-bottom: 2px dashed #eef2f5; padding-bottom: 20px; }
+  .header h1 { color: #3498db; font-size: 1.6rem; margin-bottom: 8px; }
+  .header p { color: #7f8c8d; font-size: 0.95rem; }
+
+  /* ===== بخش فلش کارت ===== */
+  .flashcard-container {
+    perspective: 1000px;
+    width: 100%;
+    height: 300px;
+    margin-bottom: 30px;
+    cursor: pointer;
+  }
+
+  .flashcard {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+  }
+
+  .flashcard.flipped {
+    transform: rotateY(180deg);
+  }
+
+  .flashcard-front, .flashcard-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+  }
+
+  .flashcard-front {
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    color: #fff;
+  }
+
+  .flashcard-back {
+    background: linear-gradient(135deg, #ecf0f1, #bdc3c7);
+    color: #2c3e50;
+    transform: rotateY(180deg);
+  }
+
+  .card-content {
+    font-size: 1.3rem;
+    font-weight: 900;
+    line-height: 1.8;
+  }
+
+  .card-label {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 0.8rem;
+    background: rgba(255,255,255,0.2);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-weight: 700;
+  }
+  .flashcard-back .card-label {
+    background: rgba(0,0,0,0.05);
+    color: #7f8c8d;
+  }
+  .card-topic {
+    position: absolute;
+    top: 15px;
+    left: 20px;
+    font-size: 0.8rem;
+    background: rgba(255,255,255,0.3);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-weight: 700;
+  }
+
+  .click-hint {
+    position: absolute;
+    bottom: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.8rem;
+    opacity: 0.7;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  /* ===== کنترل‌ها ===== */
+  .controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+  }
+
+  .nav-btn {
+    background: #3498db; color: #fff; border: none; padding: 12px 25px;
+    border-radius: 30px; font-weight: 700; font-family: inherit;
+    font-size: 1rem; cursor: pointer; transition: 0.3s;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .nav-btn:hover { background: #2980b9; transform: translateY(-2px); }
+  .nav-btn:disabled { background: #bdc3c7; cursor: not-allowed; transform: none; }
+
+  .counter {
+    font-weight: 900; font-size: 1.1rem; color: #7f8c8d;
+    background: #ecf0f1; padding: 8px 20px; border-radius: 30px;
+  }
+
+  .back-home {
+    display: inline-block; margin-top: 30px; background: #2c3e50; color: #fff;
+    text-decoration: none; padding: 10px 25px; border-radius: 30px; font-weight: 700; transition: 0.3s;
+  }
+  .back-home:hover { background: #1a252f; }
+
+  @media(max-width:600px) {
+    .container { padding: 20px; }
+    .flashcard-container { height: 400px; }
+    .card-content { font-size: 1.1rem; }
+    .controls { flex-direction: column; gap: 15px; }
+    .nav-btn { width: 100%; justify-content: center; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  
+  <div class="header">
+    <h1>🎴 فلش کارت‌های مهم نوبت اول</h1>
+    <p>درس‌های ۱ تا ۱۲ — مطالعات اجتماعی پایه هفتم</p>
+  </div>
+
+  <!-- فلش کارت -->
+  <div class="flashcard-container" onclick="flipCard()">
+    <div class="flashcard" id="flashcard">
+      <div class="flashcard-front">
+        <span class="card-topic" id="topic-label">درس</span>
+        <span class="card-label">سوال</span>
+        <div class="card-content" id="question-text">سوال اینجا قرار می‌گیرد</div>
+        <span class="click-hint">👆 برای دیدن جواب کلیک کنید</span>
+      </div>
+      <div class="flashcard-back">
+        <span class="card-label">جواب</span>
+        <div class="card-content" id="answer-text">جواب اینجا قرار می‌گیرد</div>
+        <span class="click-hint">👆 برای دیدن سوال کلیک کنید</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- کنترل‌ها -->
+  <div class="controls">
+    <button class="nav-btn" id="prev-btn" onclick="prevCard()">▶ کارت قبلی</button>
+    <div class="counter" id="counter">۱ از ۳۰</div>
+    <button class="nav-btn" id="next-btn" onclick="nextCard()">کارت بعدی ◀</button>
+  </div>
+
+  <a href="haftom.html" class="back-home">🔙 بازگشت به صفحه دروس</a>
+
+</div>
+
+<script>
+  // ==========================================
+  // بانک ۳۰ فلش کارت مهم نوبت اول (درس ۱ تا ۱۲)
+  // ==========================================
+  const flashcards = [
+    // درس ۱
+    { topic: "درس ۱", q: "حق چیست؟", a: "چیزهایی که یک انسان به دلیل مقام انسانی و شایستگی خود، داشتن آنها را دارد." },
+    { topic: "درس ۱", q: "مهم‌ترین حق طبیعی انسان چیست؟", a: "حق حیات (زندگی)." },
+    { topic: "درس ۱", q: "طبق آیه ۷۰ سوره اسراء، خداوند درباره انسان چه فرموده است؟", a: "«ما فرزندان آدم را بسیار گرامی داشتیم و آنها را بر بسیاری مخلوقات دیگر برتری بخشیدیم.»" },
+    
+    // درس ۲
+    { topic: "درس ۲", q: "مسئولیت یعنی چه؟", a: "وظایفی که هر یک از ما به عهده داریم و انتظار می‌رود آن‌ها را انجام دهیم." },
+    { topic: "درس ۲", q: "شکرگزاری از نعمت‌های خداوند یعنی چه؟", a: "یعنی دانستن و قدر نعمت‌ها و استفاده صحیح از آن‌ها و به هدر ندادن آن‌ها." },
+    { topic: "درس ۲", q: "ما در برابر چه کسانی مسئول هستیم؟", a: "در برابر خداوند، خودمان، دیگران (خانواده، مدرسه، جامعه) و محیط زندگی و عالم آفرینش." },
+
+    // درس ۳
+    { topic: "درس ۳", q: "مهم‌ترین علل پدید آمدن مقررات و قوانین در جامعه چیست؟", a: "برقراری نظم و حفظ حقوق افراد." },
+    { topic: "درس ۳", q: "سه دلیل اصلی وجود قانون در جامعه چیست؟", a: "۱. حفظ حقوق افراد ۲. برقراری نظم و امنیت ۳. رشد اخلاقی انسان‌ها." },
+    { topic: "درس ۳", q: "پیامدهای عدم رعایت قوانین در جامعه چیست؟", a: "به هم زدن نظم و امنیت اجتماعی، پایمال شدن حقوق افراد و ایجاد هرج و مرج." },
+
+    // درس ۴
+    { topic: "درس ۴", q: "قانون چیست؟", a: "هرگاه مقررات به وسیلهٔ یک نهاد دارای صلاحیت مثل مجلس تصویب شود، به آن قانون می‌گویند." },
+    { topic: "درس ۴", q: "چرا قانون اساسی را «مادر همه قانون‌ها» می‌نامند؟", a: "چون سایر قوانین در چارچوب آن تصویب می‌شوند." },
+    { topic: "درس ۴", q: "دو وظیفه مهم شورای نگهبان چیست؟", a: "۱. بررسی قوانین مصوب مجلس ۲. نظارت بر انتخابات." },
+
+    // درس ۵
+    { topic: "درس ۵", q: "همدلی و همیاری را تعریف کنید.", a: "همدلی: درک احساسات فرد حادثه‌دیده. همیاری: کمک عملی به او پس از درک احساسش." },
+    { topic: "درس ۵", q: "جمعیت هلال احمر چه وظایفی دارد؟", a: "کمک‌های اولیه به مجروحین، انتقال به بیمارستان، برپایی چادرهای اسکان و جمع‌آوری کمک‌های مردمی." },
+    { topic: "درس ۵", q: "طبق سوره مائده آیه ۳۲، نجات جان یک نفر با چه چیزی برابر است؟", a: "با نجات جان همهٔ مردم." },
+
+    // درس ۶
+    { topic: "درس ۶", q: "بیمه چیست؟", a: "قراردادی بین بیمه‌گر و بیمه‌شونده که بیمه‌گر در قبال دریافت حق بیمه، تعهد می‌کند خسارت ناشی از حوادث معینی را جبران کند." },
+    { topic: "درس ۶", q: "تفاوت بیمه‌های اجباری و اختیاری چیست؟", a: "بیمه‌های اجباری طبق قانون باید انجام شوند (مثل بیمه وسایل نقلیه) اما بیمه‌های اختیاری داوطلبانه هستند (مثل بیمه عمر)." },
+    { topic: "درس ۶", q: "بیمه مرکزی چه وظیفه‌ای دارد؟", a: "تدوین قوانین و مقررات برای مؤسسات بیمه و نظارت بر فعالیت و عملکرد آن‌ها." },
+
+    // درس ۷
+    { topic: "درس ۷", q: "سه عامل اصلی تولید را نام ببرید.", a: "۱. منابع طبیعی ۲. سرمایه ۳. نیروی انسانی." },
+    { topic: "درس ۷", q: "تفاوت کالا و خدمات چیست؟", a: "کالا محصولی است که تولید می‌شود (مثل یخچال) و خدمات کاری است که ارائه می‌شود (مثل پزشکی)." },
+    { topic: "درس ۷", q: "توزیع چیست؟", a: "فعالیتی که بین تولیدکننده و مصرف‌کننده رابطه برقرار می‌کند تا محصولات به دست مشتریان برسد." },
+
+    // درس ۸
+    { topic: "درس ۸", q: "مصرف‌کننده کیست؟", a: "کسی که کالاها و خدمات را به منظور رفع نیازها و خواسته‌های خود خریداری می‌کند." },
+    { topic: "درس ۸", q: "مصرف‌گرایی را تعریف کنید.", a: "خرید کالا بدون نیاز واقعی برای تفریح یا خودنمایی و چشم و هم‌چشمی با دیگران." },
+    { topic: "درس ۸", q: "طبق آیه ۲۷ سوره اسراء، مُبَذّرین چه کسانی هستند؟", a: "برادران شیاطین (ریخت و پاش‌کنندگان)." },
+
+    // درس ۹
+    { topic: "درس ۹", q: "ویژگی‌های طبیعی و انسانی مکان را با مثال توضیح دهید.", a: "طبیعی: آب‌وهوا، ناهمواری، رود. انسانی: جمعیت، فعالیت اقتصادی، سواد، زبان و آثار تاریخی." },
+    { topic: "درس ۹", q: "پرسش‌های جغرافیایی با چه کلماتی آغاز می‌شوند؟", a: "کجا؟ چرا؟ چگونه؟ چه موقع؟ و چه کسانی؟" },
+    { topic: "درس ۹", q: "نقشه چیست؟", a: "تصویری افقی از سطح زمین که به نسبت مورد نیاز کوچک شده است." },
+
+    // درس ۱۰
+    { topic: "درس ۱۰", q: "وسعت ایران چقدر است؟", a: "۱,۶۴۸,۱۹۵ کیلومتر مربع." },
+    { topic: "درس ۱۰", q: "تقسیمات کشوری ایران به چه ترتیبی است؟", a: "استان ← شهرستان ← شهر و روستا." },
+    { topic: "درس ۱۰", q: "شهرها و روستاها توسط چه نهادهایی اداره می‌شوند؟", a: "شهرها: شورای اسلامی شهر و شهردار. روستاها: شورای اسلامی روستا و دهیار." },
+
+    // درس ۱۱
+    { topic: "درس ۱۱", q: "چهار ناحیه آب و هوایی ایران را نام ببرید.", a: "۱. معتدل و مرطوب خزری ۲. معتدل و نیمه‌خشک کوهستانی ۳. گرم و خشک داخلی ۴. گرم و شرجی سواحل جنوب." },
+    { topic: "درس ۱۱", q: "مرطوب‌ترین ناحیه آب و هوایی ایران کدام است؟", a: "ناحیه معتدل و مرطوب خزری." },
+
+    // درس ۱۲
+    { topic: "درس ۱۲", q: "مهم‌ترین عامل تخریب زیستگاه‌ها چیست؟", a: "فعالیت‌های نادرست انسان (تخریب زیستگاه، قطع درختان، شکار بیش از حد و آلودگی)." },
+    { topic: "درس ۱۲", q: "طبق اصل ۵۰ قانون اساسی، حفاظت از محیط زیست چه حکمی دارد؟", a: "وظیفهٔ عمومی تلقی می‌گردد (وظیفهٔ همهٔ ماست)." },
+    { topic: "درس ۱۲", q: "چهار نمونه از گونه‌های جانوری در خطر انقراض ایران را نام ببرید.", a: "یوزپلنگ ایرانی، گاندو، هوبره و گورخر ایرانی." }
+  ];
+
+  // درهم‌ریزی آرایه برای نمایش تصادفی
+  function shuffle(array) {
+    let currentIndex = array.length, randomIndex;
+    while (currentIndex != 0) {
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex--;
+      [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+    }
+    return array;
+  }
+
+  const shuffledFlashcards = shuffle([...flashcards]);
+
+  let currentIndex = 0;
+  const flashcardElement = document.getElementById('flashcard');
+  const questionText = document.getElementById('question-text');
+  const answerText = document.getElementById('answer-text');
+  const topicLabel = document.getElementById('topic-label');
+  const counter = document.getElementById('counter');
+  const prevBtn = document.getElementById('prev-btn');
+  const nextBtn = document.getElementById('next-btn');
+
+  function updateCard() {
+    flashcardElement.classList.remove('flipped');
+    
+    setTimeout(() => {
+      questionText.innerText = shuffledFlashcards[currentIndex].q;
+      answerText.innerText = shuffledFlashcards[currentIndex].a;
+      topicLabel.innerText = shuffledFlashcards[currentIndex].topic;
+      
+      const persianNumbers = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+      const currentPersian = String(currentIndex + 1).replace(/\d/g, d => persianNumbers[d]);
+      const totalPersian = String(shuffledFlashcards.length).replace(/\d/g, d => persianNumbers[d]);
+      counter.innerText = `${currentPersian} از ${totalPersian}`;
+      
+      prevBtn.disabled = currentIndex === 0;
+      nextBtn.disabled = currentIndex === shuffledFlashcards.length - 1;
+    }, 150);
+  }
+
+  function flipCard() {
+    flashcardElement.classList.toggle('flipped');
+  }
+
+  function nextCard() {
+    if (currentIndex < shuffledFlashcards.length - 1) {
+      currentIndex++;
+      updateCard();
+    }
+  }
+
+  function prevCard() {
+    if (currentIndex > 0) {
+      currentIndex--;
+      updateCard();
+    }
+  }
+
+  updateCard();
+</script>
+
+</body>
+</html>
