@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>فلش کارت - درس ۱۲: عصر طلایی فرهنگ و تمدن ایرانی ــ اسلامی</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; font-family:'Vazirmatn',sans-serif; }
+  body {
+    background-color: #f4f7f6;
+    background-image: radial-gradient(#d1e0e0 1px, transparent 1px);
+    background-size: 20px 20px;
+    color: #2c3e50; padding: 30px 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh;
+  }
+  .container {
+    background: #fff; width: 100%; max-width: 800px; border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08); padding: 35px; border: 1px solid #eef2f5;
+    text-align: center;
+  }
+  
+  .header { margin-bottom: 30px; border-bottom: 2px dashed #eef2f5; padding-bottom: 20px; }
+  .header h1 { color: #00acc1; font-size: 1.6rem; margin-bottom: 8px; }
+  .header p { color: #7f8c8d; font-size: 0.95rem; }
+
+  .flashcard-container {
+    perspective: 1000px;
+    width: 100%;
+    height: 300px;
+    margin-bottom: 30px;
+    cursor: pointer;
+  }
+
+  .flashcard {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+  }
+
+  .flashcard.flipped {
+    transform: rotateY(180deg);
+  }
+
+  .flashcard-front, .flashcard-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+  }
+
+  .flashcard-front {
+    background: linear-gradient(135deg, #00acc1, #00838f);
+    color: #fff;
+  }
+
+  .flashcard-back {
+    background: linear-gradient(135deg, #ecf0f1, #bdc3c7);
+    color: #2c3e50;
+    transform: rotateY(180deg);
+  }
+
+  .card-content {
+    font-size: 1.2rem;
+    font-weight: 900;
+    line-height: 1.9;
+  }
+
+  .card-label {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 0.8rem;
+    background: rgba(255,255,255,0.2);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-weight: 700;
+  }
+  .flashcard-back .card-label {
+    background: rgba(0,0,0,0.05);
+    color: #7f8c8d;
+  }
+
+  .click-hint {
+    position: absolute;
+    bottom: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.8rem;
+    opacity: 0.7;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+  }
+
+  .nav-btn {
+    background: #00acc1; color: #fff; border: none; padding: 12px 25px;
+    border-radius: 30px; font-weight: 700; font-family: inherit;
+    font-size: 1rem; cursor: pointer; transition: 0.3s;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .nav-btn:hover { background: #00838f; transform: translateY(-2px); }
+  .nav-btn:disabled { background: #bdc3c7; cursor: not-allowed; transform: none; }
+
+  .counter {
+    font-weight: 900; font-size: 1.1rem; color: #7f8c8d;
+    background: #ecf0f1; padding: 8px 20px; border-radius: 30px;
+  }
+
+  .back-home {
+    display: inline-block; margin-top: 30px; background: #2c3e50; color: #fff;
+    text-decoration: none; padding: 10px 25px; border-radius: 30px; font-weight: 700; transition: 0.3s;
+  }
+  .back-home:hover { background: #1a252f; }
+
+  @media(max-width:600px) {
+    .container { padding: 20px; }
+    .flashcard-container { height: 400px; }
+    .card-content { font-size: 1.05rem; }
+    .controls { flex-direction: column; gap: 15px; }
+    .nav-btn { width: 100%; justify-content: center; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  
+  <div class="header">
+    <h1>🎴 فلش کارت‌های درس ۱۲</h1>
+    <p>عصر طلایی فرهنگ و تمدن ایرانی ــ اسلامی — مطالعات اجتماعی پایه هشتم</p>
+  </div>
+
+  <div class="flashcard-container" onclick="flipCard()">
+    <div class="flashcard" id="flashcard">
+      <div class="flashcard-front">
+        <span class="card-label">سوال</span>
+        <div class="card-content" id="question-text">سوال اینجا قرار می‌گیرد</div>
+        <span class="click-hint">👆 برای دیدن جواب کلیک کنید</span>
+      </div>
+      <div class="flashcard-back">
+        <span class="card-label">جواب</span>
+        <div class="card-content" id="answer-text">جواب اینجا قرار می‌گیرد</div>
+        <span class="click-hint">👆 برای دیدن سوال کلیک کنید</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button class="nav-btn" id="prev-btn" onclick="prevCard()">▶ کارت قبلی</button>
+    <div class="counter" id="counter">۱ از ۱۵</div>
+    <button class="nav-btn" id="next-btn" onclick="nextCard()">کارت بعدی ◀</button>
+  </div>
+
+  <a href="hashtom.html" class="back-home">🔙 بازگشت به صفحه دروس</a>
+
+</div>
+
+<script>
+  const flashcards = [
+    {
+      q: "«عصر طلایی فرهنگ و تمدن ایرانی ــ اسلامی» به چه دوره‌ای گفته می‌شود؟",
+      a: "به دورهٔ قرن سوم تا پنجم هجری که در آن فرهنگ و تمدن ایرانی ــ اسلامی به اوج شکوفایی رسید."
+    },
+    {
+      q: "حدیث پیامبر اکرم ﷺ دربارهٔ ایرانیان چه بود؟",
+      a: "«اگر علم در ستارهٔ ثریا و در آسمان‌ها باشد، مردانی از سرزمین پارس (ایرانیان) به آن دست پیدا خواهند کرد.»"
+    },
+    {
+      q: "سه تن از دانشمندان ایرانی در رشتهٔ حدیث و فقه را با آثارشان نام ببرید.",
+      a: "بخاری (صحیح بخاری)، کلینی (کافی)، شیخ طوسی (تهذیب الاحکام)."
+    },
+    {
+      q: "دو تن از مفسران ایرانی قرآن را با آثارشان نام ببرید.",
+      a: "طبری (تفسیر طبری)، شیخ طوسی (تفسیر قرآن)."
+    },
+    {
+      q: "ابوعلی سینا و فارابی در چه رشته‌ای بودند و چه آثاری دارند؟",
+      a: "هر دو در فلسفه بودند. ابوعلی سینا: شفا و دانشنامهٔ علایی. فارابی: رساله فلسفه (و در موسیقی نیز تبحر داشت)."
+    },
+    {
+      q: "چهار تن از مورخان ایرانی را با آثارشان نام ببرید.",
+      a: "طبری (تاریخ طبری)، دینوری (اخبارالطوال)، بلعمی (تاریخ بلعمی)، حمزهٔ اصفهانی (تاریخ پیامبران و پادشاهان)."
+    },
+    {
+      q: "پنج تن از جغرافی‌دانان ایرانی را با آثارشان نام ببرید.",
+      a: "ابن خردادبه (مسالک و ممالک)، ابوزید بلخی (صُوَر الاقالیم)، ابوریحان بیرونی (آثار الباقیه)، جیهانی (مسالک و ممالک)، اصطخری (مسالک و ممالک)."
+    },
+    {
+      q: "سه تن از دانشمندان ایرانی در زمینهٔ موسیقی را نام ببرید.",
+      a: "ابراهیم موصلی (ابن ماهان)، اسحاق موصلی، ابونصر محمد فارابی."
+    },
+    {
+      q: "عبدالله بن مقفع که بود و چه نقشی داشت؟",
+      a: "مشهور به روزبه ایرانی؛ نویسنده و مترجمی بود که کتاب‌های پهلوی در موضوع تاریخ پادشاهان، قهرمانان کهن ایران و اندرزنامه‌ها را به عربی ترجمه کرد."
+    },
+    {
+      q: "سامانیان و آل‌بویه چه نقشی در شکوفایی فرهنگ و تمدن ایرانی ــ اسلامی داشتند؟",
+      a: "به علم و ادب علاقه داشتند، برای عالمان و ادیبان ارزش و احترام قائل بودند، پایتختشان مرکز دانش بود و وزیرانی دانشمند و فرهنگ‌دوست داشتند."
+    },
+    {
+      q: "وزیران دانشمند سامانیان از کدام خاندان‌ها بودند؟",
+      a: "خاندان جیهانی و خاندان بلعمی."
+    },
+    {
+      q: "وضعیت زبان و ادبیات فارسی در قرون نخست هجری چگونه بود؟",
+      a: "تا مدتی عربی زبان اداری بود، اما از قرن سوم هجری با حمایت صفاریان و سامانیان، رونق ادبیات فارسی آغاز شد."
+    },
+    {
+      q: "رودکی و فردوسی چه جایگاهی در ادبیات فارسی دارند؟",
+      a: "رودکی پدر شعر فارسی است و با حمایت سامانیان شعر سرود. فردوسی سرودن شاهنامه را در اواخر دورهٔ سامانیان آغاز کرد."
+    },
+    {
+      q: "دربارهٔ معماری ایرانی ــ اسلامی در قرون نخست هجری توضیح دهید.",
+      a: "در ادامهٔ معماری عصر باستان بود. مساجد از نخستین جلوه‌های مهم معماری ایرانی ــ اسلامی بودند و برخی از آنها براساس اصول معماری دورهٔ ساسانی ساخته شدند."
+    },
+    {
+      q: "سه نمونه از شاهکارهای معماری ایرانی ــ اسلامی را نام ببرید.",
+      a: "مسجد جامع فهرج یزد (براساس اصول معماری ساسانی)، آرامگاه امیراسماعیل سامانی در بخارا، آرامگاه قابوس وشمگیر در گنبد کاووس."
+    }
+  ];
+
+  let currentIndex = 0;
+  const flashcardElement = document.getElementById('flashcard');
+  const questionText = document.getElementById('question-text');
+  const answerText = document.getElementById('answer-text');
+  const counter = document.getElementById('counter');
+  const prevBtn = document.getElementById('prev-btn');
+  const nextBtn = document.getElementById('next-btn');
+
+  function updateCard() {
+    flashcardElement.classList.remove('flipped');
+    
+    setTimeout(() => {
+      questionText.innerText = flashcards[currentIndex].q;
+      answerText.innerText = flashcards[currentIndex].a;
+      
+      const persianNumbers = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+      const currentPersian = String(currentIndex + 1).replace(/\d/g, d => persianNumbers[d]);
+      const totalPersian = String(flashcards.length).replace(/\d/g, d => persianNumbers[d]);
+      counter.innerText = `${currentPersian} از ${totalPersian}`;
+      
+      prevBtn.disabled = currentIndex === 0;
+      nextBtn.disabled = currentIndex === flashcards.length - 1;
+    }, 150);
+  }
+
+  function flipCard() {
+    flashcardElement.classList.toggle('flipped');
+  }
+
+  function nextCard() {
+    if (currentIndex < flashcards.length - 1) {
+      currentIndex++;
+      updateCard();
+    }
+  }
+
+  function prevCard() {
+    if (currentIndex > 0) {
+      currentIndex--;
+      updateCard();
+    }
+  }
+
+  updateCard();
+</script>
+
+</body>
+</html>
