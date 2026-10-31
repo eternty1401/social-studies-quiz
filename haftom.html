@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>پایه هفتم | مطالعات اجتماعی</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; font-family:'Vazirmatn',sans-serif; }
+  
+  body {
+    min-height:100vh;
+    background: linear-gradient(-45deg, #0f2027, #203a43, #2c5364, #1a1a2e);
+    background-size: 400% 400%;
+    animation: gradientBG 15s ease infinite;
+    display:flex; flex-direction:column; align-items:center;
+    padding:30px 20px; color:#fff; overflow-x:hidden;
+  }
+
+  @keyframes gradientBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  /* ===== هدر ===== */
+  .header { text-align:center; margin-bottom:35px; width:100%; max-width:800px; }
+  
+  .back-btn {
+    display:inline-flex; align-items:center; gap:8px;
+    text-decoration:none; color:#b8b3d4; font-size:0.9rem;
+    background: rgba(255,255,255,0.08); padding:8px 16px; border-radius:50px;
+    margin-bottom:20px; transition:0.3s; border:1px solid rgba(255,255,255,0.1);
+  }
+  .back-btn:hover { background: rgba(255,255,255,0.15); color:#fff; }
+
+  h1 {
+    font-size:2rem; font-weight:900; margin-bottom:10px;
+    background: linear-gradient(90deg,#43e97b,#4facfe);
+    -webkit-background-clip:text; background-clip:text;
+    -webkit-text-fill-color:transparent;
+  }
+  .subtitle { color:#b8b3d4; font-size:0.95rem; margin-bottom:15px; }
+  
+  .teacher-badge {
+    display:inline-flex; align-items:center; gap:8px;
+    background: rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15);
+    backdrop-filter: blur(10px); color:#f6d365; padding:8px 20px; border-radius:50px;
+    font-weight:700; font-size:0.9rem;
+  }
+
+  /* ===== لیست دروس (آکاردئون) ===== */
+  .lessons-container { width:100%; max-width:800px; z-index:1; display:flex; flex-direction:column; gap:15px; }
+
+  .lesson-item {
+    background: rgba(255,255,255,0.05);
+    backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius:20px; overflow:hidden;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  }
+
+  .lesson-item.active {
+    border-color: rgba(67,233,123,0.5);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3), 0 0 20px rgba(67,233,123,0.15);
+  }
+
+  .lesson-header {
+    padding: 22px 25px; cursor:pointer;
+    display:flex; justify-content:space-between; align-items:center;
+    transition: background 0.3s;
+    user-select: none;
+  }
+  .lesson-header:hover { background: rgba(255,255,255,0.05); }
+  
+  .lesson-title-wrap { display:flex; align-items:center; gap:15px; }
+  .lesson-num {
+    width: 45px; height: 45px; border-radius: 12px;
+    background: linear-gradient(135deg, #43e97b, #38f9d7);
+    display:flex; align-items:center; justify-content:center;
+    font-weight:900; font-size:1.2rem; color:#0f2027;
+    box-shadow: 0 4px 10px rgba(67,233,123,0.3); flex-shrink:0;
+  }
+  .lesson-name { font-size:1.15rem; font-weight:700; color:#e0dcf0; }
+  .lesson-desc { font-size:0.8rem; color:#8a85a8; margin-top:4px; }
+
+  .toggle-icon {
+    font-size:1.2rem; color:#4facfe; transition: transform 0.4s;
+    background: rgba(79,172,254,0.1); width: 35px; height: 35px;
+    display:flex; align-items:center; justify-content:center;
+    border-radius: 50%; flex-shrink:0;
+  }
+  .lesson-item.active .toggle-icon { transform: rotate(180deg); background: rgba(67,233,123,0.2); color:#43e97b; }
+
+  /* بخش بازشو */
+  .lesson-content {
+    max-height: 0; overflow: hidden;
+    transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    background: rgba(0,0,0,0.2);
+  }
+  .lesson-item.active .lesson-content { max-height: 500px; }
+
+  .buttons-grid {
+    padding: 20px 25px; display:grid; grid-template-columns: 1fr 1fr; gap:12px;
+  }
+
+  .action-btn {
+    display:flex; align-items:center; gap:10px;
+    padding: 14px 18px; border-radius: 14px; text-decoration:none;
+    color:#fff; font-weight:700; font-size:0.95rem;
+    transition: 0.25s; border: 1px solid rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.05);
+  }
+  .action-btn:hover {
+    transform: translateY(-3px);
+    background: rgba(255,255,255,0.1);
+    border-color: rgba(255,255,255,0.3);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+  }
+
+  /* آیکون و رنگ اختصاصی هر دکمه */
+  .btn-note { color: #f6d365; }
+  .btn-note:hover { border-color: #f6d365; box-shadow: 0 8px 20px rgba(246,211,101,0.15); }
+  
+  .btn-quiz { color: #4facfe; }
+  .btn-quiz:hover { border-color: #4facfe; box-shadow: 0 8px 20px rgba(79,172,254,0.15); }
+  
+  .btn-essay { color: #f5576c; }
+  .btn-essay:hover { border-color: #f5576c; box-shadow: 0 8px 20px rgba(245,87,108,0.15); }
+  
+  .btn-game { color: #43e97b; }
+  .btn-game:hover { border-color: #43e97b; box-shadow: 0 8px 20px rgba(67,233,123,0.15); }
+
+  .action-icon { font-size:1.3rem; }
+
+  /* ===== کارت درس‌های در حال ساخت ===== */
+  .lesson-item.soon {
+    opacity: 0.6; cursor: not-allowed;
+    border-style: dashed; background: rgba(255,255,255,0.02);
+  }
+  .lesson-item.soon .lesson-header { cursor: not-allowed; }
+  .lesson-item.soon .lesson-num { background: #2c5364; color:#8a85a8; box-shadow:none; }
+
+  .footer-note { margin-top:40px; font-size:0.85rem; color:#6b6688; text-align:center; z-index:1; }
+
+  @media(max-width:600px){
+    h1 { font-size:1.6rem; }
+    .buttons-grid { grid-template-columns: 1fr; }
+    .lesson-header { padding: 18px 20px; }
+    .lesson-name { font-size:1.05rem; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="header">
+    <a href="index.html" class="back-btn">➡ بازگشت به صفحه اصلی</a>
+    <h1>📗 پایه هفتم</h1>
+    <p class="subtitle">درسنامه‌ها، آزمون‌ها و بازی‌های تعاملی</p>
+    <div class="teacher-badge">
+      <span>👨‍🏫</span>
+      <span>دبیر: ابراهیم اسحقی</span>
+    </div>
+  </div>
+
+  <div class="lessons-container">
+
+    <!-- ===== درس ۵ ===== -->
+    <div class="lesson-item" onclick="toggleLesson(this)">
+      <div class="lesson-header">
+        <div class="lesson-title-wrap">
+          <div class="lesson-num">۵</div>
+          <div>
+            <div class="lesson-name">همدلی و همیاری در حوادث</div>
+            <div class="lesson-desc">درس پنجم مطالعات اجتماعی</div>
+          </div>
+        </div>
+        <div class="toggle-icon">▼</div>
+      </div>
+      <div class="lesson-content">
+        <div class="buttons-grid" onclick="event.stopPropagation()">
+          <a href="haftom-lesson5-note.html" class="action-btn btn-note">
+            <span class="action-icon">📖</span> درسنامه
+          </a>
+          <a href="haftom-lesson5-quiz.html" class="action-btn btn-quiz">
+            <span class="action-icon">📝</span> آزمون تستی
+          </a>
+          <a href="haftom-lesson5-essay.html" class="action-btn btn-essay">
+            <span class="action-icon">✍️</span> آزمون تشریحی
+          </a>
+          <a href="haftom-lesson5-wheel.html" class="action-btn btn-game">
+            <span class="action-icon">🎡</span> چرخ شانس
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== درس ۶ ===== -->
+    <div class="lesson-item" onclick="toggleLesson(this)">
+      <div class="lesson-header">
+        <div class="lesson-title-wrap">
+          <div class="lesson-num">۶</div>
+          <div>
+            <div class="lesson-name">بیمه و مقابله با حوادث</div>
+            <div class="lesson-desc">درس ششم مطالعات اجتماعی</div>
+          </div>
+        </div>
+        <div class="toggle-icon">▼</div>
+      </div>
+      <div class="lesson-content">
+        <div class="buttons-grid" onclick="event.stopPropagation()">
+          <a href="haftom-lesson6-note.html" class="action-btn btn-note">
+            <span class="action-icon">📖</span> درسنامه
+          </a>
+          <a href="haftom-lesson6-quiz.html" class="action-btn btn-quiz">
+            <span class="action-icon">📝</span> آزمون تستی
+          </a>
+          <a href="haftom-lesson6-essay.html" class="action-btn btn-essay">
+            <span class="action-icon">✍️</span> آزمون تشریحی
+          </a>
+          <a href="haftom-lesson6-wheel.html" class="action-btn btn-game">
+            <span class="action-icon">🎡</span> چرخ شانس
+          </a>
+          <a href="haftom-lesson6-audio.html" class="action-btn btn-quiz" style="grid-column: span 2; justify-content:center;">
+            <span class="action-icon">🔊</span> آزمون صوتی (مخصوص گوشی و کامپیوتر)
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== درس‌های در حال ساخت ===== -->
+    <div class="lesson-item soon">
+      <div class="lesson-header">
+        <div class="lesson-title-wrap">
+          <div class="lesson-num">۷</div>
+          <div>
+            <div class="lesson-name">تولید و توزیع</div>
+            <div class="lesson-desc">به‌زودی اضافه می‌شود...</div>
+          </div>
+        </div>
+        <div class="toggle-icon">⏳</div>
+      </div>
+    </div>
+
+    <div class="lesson-item soon">
+      <div class="lesson-header">
+        <div class="lesson-title-wrap">
+          <div class="lesson-num">۸</div>
+          <div>
+            <div class="lesson-name">مصرف</div>
+            <div class="lesson-desc">به‌زودی اضافه می‌شود...</div>
+          </div>
+        </div>
+        <div class="toggle-icon">⏳</div>
+      </div>
+    </div>
+
+  </div>
+
+  <p class="footer-note">ساخته شده با ❤️ برای دانش‌آموزان عزیز</p>
+
+<script>
+  function toggleLesson(element) {
+    // اگر درس در حال ساخت بود، کاری نکن
+    if (element.classList.contains('soon')) return;
+
+    // بستن بقیه درس‌ها (اختیاری - برای اینکه فقط یکی باز بمونه)
+    document.querySelectorAll('.lesson-item').forEach(item => {
+      if (item !== element && item.classList.contains('active')) {
+        item.classList.remove('active');
+      }
+    });
+
+    // باز و بسته کردن درس کلیک شده
+    element.classList.toggle('active');
+  }
+</script>
+
+</body>
+</html>
