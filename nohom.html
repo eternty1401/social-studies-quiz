@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>پایه نهم | مطالعات اجتماعی</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; font-family:'Vazirmatn',sans-serif; }
+  body {
+    min-height:100vh; background-color: #f4f7f6;
+    background-image: radial-gradient(#d1e0e0 1px, transparent 1px);
+    background-size: 20px 20px; color: #2c3e50;
+    padding: 30px 20px; display: flex; flex-direction: column; align-items: center;
+  }
+  .header { text-align:center; margin-bottom:30px; width:100%; max-width:900px; }
+  .back-btn {
+    display:inline-flex; align-items:center; gap:8px; text-decoration:none; color:#34495e; font-size:0.9rem;
+    background: #fff; padding:8px 18px; border-radius:50px; margin-bottom:20px; transition:0.3s; border:1px solid #dcdde1;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05); font-weight: 700;
+  }
+  .back-btn:hover { background: #f8f9fa; transform: translateY(-2px); box-shadow: 0 6px 15px rgba(0,0,0,0.1); }
+  h1 { font-size:2.2rem; font-weight:900; margin-bottom:10px; color: #00838f; }
+  .subtitle { color:#7f8c8d; font-size:1rem; margin-bottom:15px; }
+  .teacher-badge {
+    display:inline-flex; align-items:center; gap:8px; background: #fff; border:1px solid #dcdde1;
+    color:#f39c12; padding:8px 20px; border-radius:50px; font-weight:700; font-size:0.9rem; box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  }
+  .main-container { width:100%; max-width:900px; z-index:1; }
+  .chapter-box {
+    background: #fff; border-radius: 20px; margin-bottom: 20px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.05); border: 1px solid #eef2f5; overflow: hidden;
+  }
+  .chapter-title {
+    background: linear-gradient(90deg, #e0f7fa, #fff); padding: 18px 25px;
+    font-size: 1.15rem; font-weight: 900; color: #00838f;
+    border-bottom: 1px solid #eef2f5; display: flex; align-items: center; gap: 10px;
+  }
+  .lesson-item { border-bottom: 1px solid #f1f2f6; }
+  .lesson-item:last-child { border-bottom: none; }
+  .lesson-header {
+    padding: 18px 25px; cursor:pointer; display:flex; justify-content:space-between; align-items:center;
+    transition: background 0.3s; user-select: none;
+  }
+  .lesson-header:hover { background: #fafbfc; }
+  .lesson-title-wrap { display:flex; align-items:center; gap:15px; }
+  .lesson-num {
+    width: 40px; height: 40px; border-radius: 10px; background: #ecf0f1; color: #34495e;
+    display:flex; align-items:center; justify-content:center; font-weight:900; font-size:1.1rem; flex-shrink:0; transition: 0.3s;
+  }
+  .lesson-item.active .lesson-num { background: #00838f; color: #fff; }
+  .lesson-name { font-size:1.05rem; font-weight:700; color:#2c3e50; }
+  .toggle-icon { font-size:1rem; color:#bdc3c7; transition: transform 0.4s; }
+  .lesson-item.active .toggle-icon { transform: rotate(180deg); color:#00838f; }
+  .lesson-content {
+    max-height: 0; overflow: hidden; transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1); background: #fafbfc;
+  }
+  .lesson-item.active .lesson-content { max-height: 600px; border-top: 1px solid #eef2f5; }
+  .buttons-grid { padding: 20px 25px; display:grid; grid-template-columns: repeat(2, 1fr); gap:12px; }
+  .action-btn {
+    display:flex; align-items:center; justify-content: center; gap:8px; padding: 12px 15px; border-radius: 12px;
+    text-decoration:none; font-weight:700; font-size:0.95rem; transition: 0.25s; border: 1px solid #e2e8f0; background: #fff; color: #34495e;
+  }
+  .action-btn:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+  .btn-note:hover { border-color: #f1c40f; color: #f1c40f; background: #fef9e7; }
+  .btn-quiz:hover { border-color: #3498db; color: #3498db; background: #ebf5fb; }
+  .btn-essay:hover { border-color: #e74c3c; color: #e74c3c; background: #fdedec; }
+  .btn-files:hover { border-color: #9b59b6; color: #9b59b6; background: #f4ecf7; }
+  .btn-flash:hover { border-color: #2ecc71; color: #2ecc71; background: #e8f8f5; }
+  .action-icon { font-size:1.2rem; }
+  .footer-note { margin-top:40px; font-size:0.85rem; color:#95a5a6; text-align:center; }
+  @media(max-width:600px){
+    h1 { font-size:1.7rem; } .buttons-grid { grid-template-columns: 1fr; padding: 15px; }
+    .lesson-header { padding: 15px 18px; } .chapter-title { padding: 15px 18px; font-size: 1rem; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="header">
+    <a href="index.html" class="back-btn">➡ بازگشت به صفحه اصلی</a>
+    <h1>📙 پایه نهم</h1>
+    <p class="subtitle">درسنامه‌ها، آزمون‌ها، فایل‌ها و فلش کارت‌ها</p>
+    <div class="teacher-badge"><span>👨‍🏫</span><span>دبیر: ابراهیم اسحقی</span></div>
+  </div>
+
+  <div class="main-container">
+  <!-- ================= فصل ۱ ================= -->
+<div class="chapter-box">
+  <div class="chapter-title">🌍 فصل ۱: سیارهٔ ما، زمین</div>
+
+  <div class="lesson-item" onclick="toggleLesson(this)">
+    <div class="lesson-header">
+      <div class="lesson-title-wrap"><div class="lesson-num">۱</div><div class="lesson-name">زمین، مهد زیبای انسان‌ها</div></div>
+      <div class="toggle-icon">▼</div>
+    </div>
+    <div class="lesson-content">
+      <div class="buttons-grid" onclick="event.stopPropagation()">
+        <a href="nohom-lesson1-note.html" class="action-btn btn-note"><span class="action-icon">📖</span> درسنامه</a>
+        <a href="nohom-lesson1-quiz.html" class="action-btn btn-quiz"><span class="action-icon">📝</span> آزمون تستی</a>
+        <a href="nohom-lesson1-essay.html" class="action-btn btn-essay"><span class="action-icon">✍️</span> آزمون تشریحی</a>
+        <a href="nohom-lesson1-files.html" class="action-btn btn-files"><span class="action-icon">📂</span> فایل‌ها و عکس‌ها</a>
+        <a href="nohom-lesson1-flash.html" class="action-btn btn-flash"><span class="action-icon">🎴</span> فلش کارت</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="lesson-item" onclick="toggleLesson(this)">
+    <div class="lesson-header">
+      <div class="lesson-title-wrap"><div class="lesson-num">۲</div><div class="lesson-name">حرکات زمین</div></div>
+      <div class="toggle-icon">▼</div>
+    </div>
+    <div class="lesson-content">
+      <div class="buttons-grid" onclick="event.stopPropagation()">
+        <a href="nohom-lesson2-note.html" class="action-btn btn-note"><span class="action-icon">📖</span> درسنامه</a>
+        <a href="nohom-lesson2-quiz.html" class="action-btn btn-quiz"><span class="action-icon">📝</span> آزمون تستی</a>
+        <a href="nohom-lesson2-essay.html" class="action-btn btn-essay"><span class="action-icon">✍️</span> آزمون تشریحی</a>
+        <a href="nohom-lesson2-files.html" class="action-btn btn-files"><span class="action-icon">📂</span> فایل‌ها و عکس‌ها</a>
+        <a href="nohom-lesson2-flash.html" class="action-btn btn-flash"><span class="action-icon">🎴</span> فلش کارت</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= فصل ۲ ================= -->
+<div class="chapter-box">
+  <div class="chapter-title">⛰️ فصل ۲: سنگ کره، آب کره، هوا کره</div>
+
+  <div class="lesson-item" onclick="toggleLesson(this)">
+    <div class="lesson-header">
+      <div class="lesson-title-wrap"><div class="lesson-num">۳</div><div class="lesson-name">چهرۀ زمین</div></div>
+      <div class="toggle-icon">▼</div>
+    </div>
+    <div class="lesson-content">
+      <div class="buttons-grid" onclick="event.stopPropagation()">
+        <a href="nohom-lesson3-note.html" class="action-btn btn-note"><span class="action-icon">📖</span> درسنامه</a>
+        <a href="nohom-lesson3-quiz.html" class="action-btn btn-quiz"><span class="action-icon">📝</span> آزمون تستی</a>
+        <a href="nohom-lesson3-essay.html" class="action-btn btn-essay"><span class="action-icon">✍️</span> آزمون تشریحی</a>
+        <a href="nohom-lesson3-files.html" class="action-btn btn-files"><span class="action-icon">📂</span> فایل‌ها و عکس‌ها</a>
+        <a href="nohom-lesson3-flash.html" class="action-btn btn-flash"><span class="action-icon">🎴</span> فلش کارت</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="lesson-item" onclick="toggleLesson(this)">
+    <div class="lesson-header">
+      <div class="lesson-title-wrap"><div class="lesson-num">۴</div><div class="lesson-name">آب فراوان، هوای پاک</div></div>
+      <div class="toggle-icon">▼</div>
+    </div>
+    <div class="lesson-content">
+      <div class="buttons-grid" onclick="event.stopPropagation()">
+        <a href="nohom-lesson4-note.html" class="action-btn btn-note"><span class="action-icon">📖</span> درسنامه</a>
+        <a href="nohom-lesson4-quiz.html" class="action-btn btn-quiz"><span class="action-icon">📝</span> آزمون تستی</a>
+        <a href="nohom-lesson4-essay.html" class="action-btn btn-essay"><span class="action-icon">✍️</span> آزمون تشریحی</a>
+        <a href="nohom-lesson4-files.html" class="action-btn btn-files"><span class="action-icon">📂</span> فایل‌ها و عکس‌ها</a>
+        <a href="nohom-lesson4-flash.html" class="action-btn btn-flash"><span class="action-icon">🎴</span> فلش کارت</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= فصل ۳ ================= -->
+<div class="chapter-box">
+  <div class="chapter-title">🌱 فصل ۳: زیست کره، تنوع شگفت‌انگیز</div>
+
+  <div class="lesson-item" onclick="toggleLesson(this)">
+    <div class="lesson-header">
+      <div class="lesson-title-wrap"><div class="lesson-num">۵</div><div class="lesson-name">پراکندگی زیست‌بوم‌های جهان</div></div>
+      <div class="toggle-icon">▼</div>
+    </div>
+    <div class="lesson-content">
+      <div class="buttons-grid" onclick="event.stopPropagation()">
+        <a href="nohom-lesson5-note.html" class="action-btn btn-note"><span class="action-icon">📖</span> درسنامه</a>
+        <a href="nohom-lesson5-quiz.html" class="action-btn btn-quiz"><span class="action-icon">📝</span> آزمون تستی</a>
+        <a href="nohom-lesson5-essay.html" class="action-btn btn-essay"><span class="action-icon">✍️</span> آزمون تشریحی</a>
+        <a href="nohom-lesson5-files.html" class="action-btn btn-files"><span class="action-icon">📂</span> فایل‌ها و عکس‌ها</a>
+        <a href="nohom-lesson5-flash.html" class="action-btn btn-flash"><span class="action-icon">🎴</span> فلش کارت</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="lesson-item" onclick="toggleLesson(this)">
+    <div class="lesson-header">
+      <div class="lesson-title-wrap"><div class="lesson-num">۶</div><div class="lesson-name">زیست‌بوم‌ها در خطرند</div></div>
+      <div class="toggle-icon">▼</div>
+    </div>
+    <div class="lesson-content">
+      <div class="buttons-grid" onclick="event.stopPropagation()">
+        <a href="nohom-lesson6-note.html" class="action-btn btn-note"><span class="action-icon">📖</span> درسنامه</a>
+        <a href="nohom-lesson6-quiz.html" class="action-btn btn-quiz"><span class="action-icon">📝</span> آزمون تستی</a>
+        <a href="nohom-lesson6-essay.html" class="action-btn btn-essay"><span class="action-icon">✍️</span> آزمون تشریحی</a>
+        <a href="nohom-lesson6-files.html" class="action-btn btn-files"><span class="action-icon">📂</span> فایل‌ها و عکس‌ها</a>
+        <a href="nohom-lesson6-flash.html" class="action-btn btn-flash"><span class="action-icon">🎴</span> فلش کارت</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= فصل ۴ ================= -->
+<div class="chapter-box">
+  <div class="chapter-title">👥 فصل ۴: ساکنان سیارۀ زمین</div>
+
+  <div class="lesson-item" onclick="toggleLesson(this)">
+    <div class="lesson-header">
+      <div class="lesson-title-wrap"><div class="lesson-num">۷</div><div class="lesson-name">جمعیت جهان</div></div>
+      <div class="toggle-icon">▼</div>
+    </div>
+    <div class="lesson-content">
+      <div class="buttons-grid" onclick="event.stopPropagation()">
+        <a href="nohom-lesson7-note.html" class="action-btn btn-note"><span class="action-icon">📖</span> درسنامه</a>
+        <a href="nohom-lesson7-quiz.html" class="action-btn btn-quiz"><span class="action-icon">📝</span> آزمون تستی</a>
+        <a href="nohom-lesson7-essay.html" class="action-btn btn-essay"><span class="action-icon">✍️</span> آزمون تشریحی</a>
+        <a href="nohom-lesson7-files.html" class="action-btn btn-files"><span class="action-icon">📂</span> فایل‌ها و عکس‌ها</a>
+        <a href="nohom-lesson7-flash.html" class="action-btn btn-flash"><span class="action-icon">🎴</span> فلش کارت</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="lesson-item" onclick="toggleLesson(this)">
+    <div class="lesson-header">
+      <div class="lesson-title-wrap"><div class="lesson-num">۸</div><div class="lesson-name">بی‌عدالتی و نابرابری در جهان</div></div>
+      <div class="toggle-icon">▼</div>
+    </div>
+    <div class="lesson-content">
+      <div class="buttons-grid" onclick="event.stopPropagation()">
+        <a href="nohom-lesson8-note.html" class="action-btn btn-note"><span class="action-icon">📖</span> درسنامه</a>
+        <a href="nohom-lesson8-quiz.html" class="action-btn btn-quiz"><span class="action-icon">📝</span> آزمون تستی</a>
+        <a href="nohom-lesson8-essay.html" class="action-btn btn-essay"><span class="action-icon">✍️</span> آزمون تشریحی</a>
+        <a href="nohom-lesson8-files.html" class="action-btn btn-files"><span class="action-icon">📂</span> فایل‌ها و عکس‌ها</a>
+        <a href="nohom-lesson8-flash.html" class="action-btn btn-flash"><span class="action-icon">🎴</span> فلش کارت</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= فصل ۵ ================= -->
+<div class="chapter-box">
+  <div class="chapter-title">🏛️ فصل ۵: عصر یکپارچگی و شکوفایی</div>
+
+  <div class="lesson-item" onclick="toggleLesson(this)">
+    <div class="lesson-header">
+      <div class="lesson-title-wrap"><div class="lesson-num">۹</div><div class="lesson-name">ایران متحد و یکپارچه</div></div>
+      <div class="toggle-icon">▼</div>
+    </div>
+    <div class="lesson-content">
+      <div class="buttons-grid" onclick="event.stopPropagation()">
+        <a href="nohom-lesson9-note.html" class="action-btn btn-note"><span class="action-icon">📖</span> درسنامه</a>
+        <a href="nohom-lesson9-quiz.html" class="action-btn btn-quiz"><span class="action-icon">📝</span> آزمون تستی</a>
+        <a href="nohom-lesson9-essay.html" class="action-btn btn-essay"><span class="action-icon">✍️</span> آزمون تشریحی</a>
+        <a href="nohom-lesson9-files.html" class="action-btn btn-files"><span class="action-icon">📂</span> فایل‌ها و عکس‌ها</a>
+        <a href="nohom-lesson9-flash.html" class="action-btn btn-flash"><span class="action-icon">🎴</span> فلش کارت</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="lesson-item" onclick="toggleLesson(this)">
+    <div class="lesson-header">
+      <div class="lesson-title-wrap"><div class="lesson-num">۱۰</div><div class="lesson-name">اوضاع اجتماعی، اقتصادی، علمی و فرهنگی ایران در عصر صفوی</div></div>
+      <div class="toggle-icon">▼</div>
+    </div>
+    <div class="lesson-content">
+      <div class="buttons-grid" onclick="event.stopPropagation()">
+        <a href="nohom-lesson10-note.html" class="action-btn btn-note"><span class="action-icon">📖</span> درسنامه</a>
+        <a href="nohom-lesson10-quiz.html" class="action-btn btn-quiz"><span class="action-icon">📝</span> آزمون تستی</a>
+        <a href="nohom-lesson10-essay.html" class="action-btn btn-essay"><span class="action-icon">✍️</span> آزمون تشریحی</a>
+        <a href="nohom-lesson10-files.html" class="action-btn btn-files"><span class="action-icon">📂</span> فایل‌ها و عکس‌ها</a>
+        <a href="nohom-lesson10-flash.html" class="action-btn btn-flash"><span class="action-icon">🎴</span> فلش کارت</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= فصل ۶ ================= -->
+<div class="chapter-box">
+  <div class="chapter-title">👑 فصل ۶: ایران از عهد نادرشاه تا ناصرالدین‌شاه</div>
+
+  <div class="lesson-item" onclick="toggleLesson(this)">
+    <div class="lesson-header">
+      <div class="lesson-title-wrap"><div class="lesson-num">۱۱</div><div class="lesson-name">تلاش برای حفظ استقلال و اتحاد سیاسی ایران</div></div>
+      <div class="toggle-icon">▼</div>
+    </div>
+    <div class="lesson-content">
+      <div class="buttons-grid" onclick="event.stopPropagation()">
+        <a href="nohom-lesson11-note.html" class="action-btn btn-note"><span class="action-icon">📖</span> درسنامه</a>
+        <a href="nohom-lesson11-quiz.html" class="action-btn btn-quiz"><span class="action-icon">📝</span> آزمون تستی</a>
+        <a href="nohom-lesson11-essay.html" class="action-btn btn-essay"><span class="action-icon">✍️</span> آزمون تشریحی</a>
+        <a href="nohom-lesson11-files.html" class="action-btn btn-files"><span class="action-icon">📂</span> فایل‌ها و عکس‌ها</a>
+        <a href="nohom-lesson11-flash.html" class="action-btn btn-flash"><span class="action-icon">🎴</span> فلش کارت</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="lesson-item" onclick="toggleLesson(this)">
+    <div class="lesson-header">
+      <div class="lesson-title-wrap"><div class="lesson-num">۱۲</div><div class="lesson-name">در جست‌وجوی پیشرفت و رهایی از سلطۀ خارجی</div></div>
+      <div class="toggle-icon">▼</div>
+    </div>
+    <div class="lesson-content">
+      <div class="buttons-grid" onclick="event.stopPropagation()">
+        <a href="nohom-lesson12-note.html" class="action-btn btn-note"><span class="action-icon">📖</span> درسنامه</a>
+        <a href="nohom-lesson12-quiz.html" class="action-btn btn-quiz"><span class="action-icon">📝</span> آزمون تستی</a>
+        <a href="nohom-lesson12-essay.html" class="action-btn btn-essay"><span class="action-icon">✍️</span> آزمون تشریحی</a>
+        <a href="nohom-lesson12-files.html" class="action-btn btn-files"><span class="action-icon">📂</span> فایل‌ها و عکس‌ها</a>
+        <a href="nohom-lesson12-flash.html" class="action-btn btn-flash"><span class="action-icon">🎴</span> فلش کارت</a>
+      </div>
+    </div>
+  </div>
+</div>
+    <!-- ================= فصل ۷ ================= -->
+    <div class="chapter-box">
+      <div class="chapter-title">📜 فصل ۷: ایران در عصر مشروطه</div>
+
+      <div class="lesson-item" onclick="toggleLesson(this)">
+        <div class="lesson-header">
+          <div class="lesson-title-wrap"><div class="lesson-num">۱۳</div><div class="lesson-name">نهضت مشروطه</div></div>
+          <div class="toggle-icon">▼</div>
+        </div>
+        <div class="lesson-content">
+          <div class="buttons-grid" onclick="event.stopPropagation()">
+            <a href="nohom-lesson13-note.html" class="action-btn btn-note"><span class="action-icon">📖</span> درسنامه</a>
+            <a href="nohom-lesson13-quiz.html" class="action-btn btn-quiz"><span class="action-icon">📝</span> آزمون تستی</a>
+            <a href="nohom-lesson13-essay.html" class="action-btn btn-essay"><span class="action-icon">✍️</span> آزمون تشریحی</a>
+            <a href="nohom-lesson13-files.html" class="action-btn btn-files"><span class="action-icon">📂</span> فایل‌ها و عکس‌ها</a>
+            <a href="nohom-lesson13-flash.html" class="action-btn btn-flash"><span class="action-icon">🎴</span> فلش کارت</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="lesson-item" onclick="toggleLesson(this)">
+        <div class="lesson-header">
+          <div class="lesson-title-wrap"><div class="lesson-num">۱۴</div><div class="lesson-name">ایران در دوران حکومت پهلوی</div></div>
+          <div class="toggle-icon">▼</div>
+        </div>
+        <div class="lesson-content">
+          <div class="buttons-grid" onclick="event.stopPropagation()">
+            <a href="nohom-lesson14-note.html" class="action-btn btn-note"><span class="action-icon">📖</span> درسنامه</a>
+            <a href="nohom-lesson14-quiz.html" class="action-btn btn-quiz"><span class="action-icon">📝</span> آزمون تستی</a>
+            <a href="nohom-lesson14-essay.html" class="action-btn btn-essay"><span class="action-icon">✍️</span> آزمون تشریحی</a>
+            <a href="nohom-lesson14-files.html" class="action-btn btn-files"><span class="action-icon">📂</span> فایل‌ها و عکس‌ها</a>
+            <a href="nohom-lesson14-flash.html" class="action-btn btn-flash"><span class="action-icon">🎴</span> فلش کارت</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= فصل ۸ ================= -->
+    <div class="chapter-box">
+      <div class="chapter-title">✊ فصل ۸: سقوط حکومت شاهنشاهی و شکل‌گیری نظام جمهوری اسلامی</div>
+
+      <div class="lesson-item" onclick="toggleLesson(this)">
+        <div class="lesson-header">
+          <div class="lesson-title-wrap"><div class="lesson-num">۱۵</div><div class="lesson-name">انقلاب اسلامی ایران</div></div>
+          <div class="toggle-icon">▼</div>
+        </div>
+        <div class="lesson-content">
+          <div class="buttons-grid" onclick="event.stopPropagation()">
+            <a href="nohom-lesson15-note.html" class="action-btn btn-note"><span class="action-icon">📖</span> درسنامه</a>
+            <a href="nohom-lesson15-quiz.html" class="action-btn btn-quiz"><span class="action-icon">📝</span> آزمون تستی</a>
+            <a href="nohom-lesson15-essay.html" class="action-btn btn-essay"><span class="action-icon">✍️</span> آزمون تشریحی</a>
+            <a href="nohom-lesson15-files.html" class="action-btn btn-files"><span class="action-icon">📂</span> فایل‌ها و عکس‌ها</a>
+            <a href="nohom-lesson15-flash.html" class="action-btn btn-flash"><span class="action-icon">🎴</span> فلش کارت</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="lesson-item" onclick="toggleLesson(this)">
+        <div class="lesson-header">
+          <div class="lesson-title-wrap"><div class="lesson-num">۱۶</div><div class="lesson-name">ایران در دوران پس از پیروزی انقلاب اسلامی</div></div>
+          <div class="toggle-icon">▼</div>
+        </div>
+        <div class="lesson-content">
+          <div class="buttons-grid" onclick="event.stopPropagation()">
+            <a href="nohom-lesson16-note.html" class="action-btn btn-note"><span class="action-icon">📖</span> درسنامه</a>
+            <a href="nohom-lesson16-quiz.html" class="action-btn btn-quiz"><span class="action-icon">📝</span> آزمون تستی</a>
+            <a href="nohom-lesson16-essay.html" class="action-btn btn-essay"><span class="action-icon">✍️</span> آزمون تشریحی</a>
+            <a href="nohom-lesson16-files.html" class="action-btn btn-files"><span class="action-icon">📂</span> فایل‌ها و عکس‌ها</a>
+            <a href="nohom-lesson16-flash.html" class="action-btn btn-flash"><span class="action-icon">🎴</span> فلش کارت</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= فصل ۹ ================= -->
+    <div class="chapter-box">
+      <div class="chapter-title">🪶 فصل ۹: فرهنگ و هویت</div>
+
+      <div class="lesson-item" onclick="toggleLesson(this)">
+        <div class="lesson-header">
+          <div class="lesson-title-wrap"><div class="lesson-num">۱۷</div><div class="lesson-name">فرهنگ</div></div>
+          <div class="toggle-icon">▼</div>
+        </div>
+        <div class="lesson-content">
+          <div class="buttons-grid" onclick="event.stopPropagation()">
+            <a href="nohom-lesson17-note.html" class="action-btn btn-note"><span class="action-icon">📖</span> درسنامه</a>
+            <a href="nohom-lesson17-quiz.html" class="action-btn btn-quiz"><span class="action-icon">📝</span> آزمون تستی</a>
+            <a href="nohom-lesson17-essay.html" class="action-btn btn-essay"><span class="action-icon">✍️</span> آزمون تشریحی</a>
+            <a href="nohom-lesson17-files.html" class="action-btn btn-files"><span class="action-icon">📂</span> فایل‌ها و عکس‌ها</a>
+            <a href="nohom-lesson17-flash.html" class="action-btn btn-flash"><span class="action-icon">🎴</span> فلش کارت</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="lesson-item" onclick="toggleLesson(this)">
+        <div class="lesson-header">
+          <div class="lesson-title-wrap"><div class="lesson-num">۱۸</div><div class="lesson-name">هویت</div></div>
+          <div class="toggle-icon">▼</div>
+        </div>
+        <div class="lesson-content">
+          <div class="buttons-grid" onclick="event.stopPropagation()">
+            <a href="nohom-lesson18-note.html" class="action-btn btn-note"><span class="action-icon">📖</span> درسنامه</a>
+            <a href="nohom-lesson18-quiz.html" class="action-btn btn-quiz"><span class="action-icon">📝</span> آزمون تستی</a>
+            <a href="nohom-lesson18-essay.html" class="action-btn btn-essay"><span class="action-icon">✍️</span> آزمون تشریحی</a>
+            <a href="nohom-lesson18-files.html" class="action-btn btn-files"><span class="action-icon">📂</span> فایل‌ها و عکس‌ها</a>
+            <a href="nohom-lesson18-flash.html" class="action-btn btn-flash"><span class="action-icon">🎴</span> فلش کارت</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= فصل ۱۰ ================= -->
+    <div class="chapter-box">
+      <div class="chapter-title">👨‍👩‍👧 فصل ۱۰: خانواده و جامعه</div>
+
+      <div class="lesson-item" onclick="toggleLesson(this)">
+        <div class="lesson-header">
+          <div class="lesson-title-wrap"><div class="lesson-num">۱۹</div><div class="lesson-name">ارزش‌ها و کارکردهای خانواده</div></div>
+          <div class="toggle-icon">▼</div>
+        </div>
+        <div class="lesson-content">
+          <div class="buttons-grid" onclick="event.stopPropagation()">
+            <a href="nohom-lesson19-note.html" class="action-btn btn-note"><span class="action-icon">📖</span> درسنامه</a>
+            <a href="nohom-lesson19-quiz.html" class="action-btn btn-quiz"><span class="action-icon">📝</span> آزمون تستی</a>
+            <a href="nohom-lesson19-essay.html" class="action-btn btn-essay"><span class="action-icon">✍️</span> آزمون تشریحی</a>
+            <a href="nohom-lesson19-files.html" class="action-btn btn-files"><span class="action-icon">📂</span> فایل‌ها و عکس‌ها</a>
+            <a href="nohom-lesson19-flash.html" class="action-btn btn-flash"><span class="action-icon">🎴</span> فلش کارت</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="lesson-item" onclick="toggleLesson(this)">
+        <div class="lesson-header">
+          <div class="lesson-title-wrap"><div class="lesson-num">۲۰</div><div class="lesson-name">آرامش در خانواده</div></div>
+          <div class="toggle-icon">▼</div>
+        </div>
+        <div class="lesson-content">
+          <div class="buttons-grid" onclick="event.stopPropagation()">
+            <a href="nohom-lesson20-note.html" class="action-btn btn-note"><span class="action-icon">📖</span> درسنامه</a>
+            <a href="nohom-lesson20-quiz.html" class="action-btn btn-quiz"><span class="action-icon">📝</span> آزمون تستی</a>
+            <a href="nohom-lesson20-essay.html" class="action-btn btn-essay"><span class="action-icon">✍️</span> آزمون تشریحی</a>
+            <a href="nohom-lesson20-files.html" class="action-btn btn-files"><span class="action-icon">📂</span> فایل‌ها و عکس‌ها</a>
+            <a href="nohom-lesson20-flash.html" class="action-btn btn-flash"><span class="action-icon">🎴</span> فلش کارت</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= فصل ۱۱ ================= -->
+    <div class="chapter-box">
+      <div class="chapter-title">⚖️ فصل ۱۱: حکومت و مردم</div>
+
+      <div class="lesson-item" onclick="toggleLesson(this)">
+        <div class="lesson-header">
+          <div class="lesson-title-wrap"><div class="lesson-num">۲۱</div><div class="lesson-name">نهاد حکومت</div></div>
+          <div class="toggle-icon">▼</div>
+        </div>
+        <div class="lesson-content">
+          <div class="buttons-grid" onclick="event.stopPropagation()">
+            <a href="nohom-lesson21-note.html" class="action-btn btn-note"><span class="action-icon">📖</span> درسنامه</a>
+            <a href="nohom-lesson21-quiz.html" class="action-btn btn-quiz"><span class="action-icon">📝</span> آزمون تستی</a>
+            <a href="nohom-lesson21-essay.html" class="action-btn btn-essay"><span class="action-icon">✍️</span> آزمون تشریحی</a>
+            <a href="nohom-lesson21-files.html" class="action-btn btn-files"><span class="action-icon">📂</span> فایل‌ها و عکس‌ها</a>
+            <a href="nohom-lesson21-flash.html" class="action-btn btn-flash"><span class="action-icon">🎴</span> فلش کارت</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="lesson-item" onclick="toggleLesson(this)">
+        <div class="lesson-header">
+          <div class="lesson-title-wrap"><div class="lesson-num">۲۲</div><div class="lesson-name">حقوق و تکالیف شهروندی</div></div>
+          <div class="toggle-icon">▼</div>
+        </div>
+        <div class="lesson-content">
+          <div class="buttons-grid" onclick="event.stopPropagation()">
+            <a href="nohom-lesson22-note.html" class="action-btn btn-note"><span class="action-icon">📖</span> درسنامه</a>
+            <a href="nohom-lesson22-quiz.html" class="action-btn btn-quiz"><span class="action-icon">📝</span> آزمون تستی</a>
+            <a href="nohom-lesson22-essay.html" class="action-btn btn-essay"><span class="action-icon">✍️</span> آزمون تشریحی</a>
+            <a href="nohom-lesson22-files.html" class="action-btn btn-files"><span class="action-icon">📂</span> فایل‌ها و عکس‌ها</a>
+            <a href="nohom-lesson22-flash.html" class="action-btn btn-flash"><span class="action-icon">🎴</span> فلش کارت</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= فصل ۱۲ ================= -->
+    <div class="chapter-box">
+      <div class="chapter-title">📈 فصل ۱۲: بهره‌وری</div>
+
+      <div class="lesson-item" onclick="toggleLesson(this)">
+        <div class="lesson-header">
+          <div class="lesson-title-wrap"><div class="lesson-num">۲۳</div><div class="lesson-name">بهره‌وری چیست؟</div></div>
+          <div class="toggle-icon">▼</div>
+        </div>
+        <div class="lesson-content">
+          <div class="buttons-grid" onclick="event.stopPropagation()">
+            <a href="nohom-lesson23-note.html" class="action-btn btn-note"><span class="action-icon">📖</span> درسنامه</a>
+            <a href="nohom-lesson23-quiz.html" class="action-btn btn-quiz"><span class="action-icon">📝</span> آزمون تستی</a>
+            <a href="nohom-lesson23-essay.html" class="action-btn btn-essay"><span class="action-icon">✍️</span> آزمون تشریحی</a>
+            <a href="nohom-lesson23-files.html" class="action-btn btn-files"><span class="action-icon">📂</span> فایل‌ها و عکس‌ها</a>
+            <a href="nohom-lesson23-flash.html" class="action-btn btn-flash"><span class="action-icon">🎴</span> فلش کارت</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="lesson-item" onclick="toggleLesson(this)">
+        <div class="lesson-header">
+          <div class="lesson-title-wrap"><div class="lesson-num">۲۴</div><div class="lesson-name">اقتصاد و بهره‌وری</div></div>
+          <div class="toggle-icon">▼</div>
+        </div>
+        <div class="lesson-content">
+          <div class="buttons-grid" onclick="event.stopPropagation()">
+            <a href="nohom-lesson24-note.html" class="action-btn btn-note"><span class="action-icon">📖</span> درسنامه</a>
+            <a href="nohom-lesson24-quiz.html" class="action-btn btn-quiz"><span class="action-icon">📝</span> آزمون تستی</a>
+            <a href="nohom-lesson24-essay.html" class="action-btn btn-essay"><span class="action-icon">✍️</span> آزمون تشریحی</a>
+            <a href="nohom-lesson24-files.html" class="action-btn btn-files"><span class="action-icon">📂</span> فایل‌ها و عکس‌ها</a>
+            <a href="nohom-lesson24-flash.html" class="action-btn btn-flash"><span class="action-icon">🎴</span> فلش کارت</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= بخش ویژه: آزمون نوبت اول ================= -->
+    <div class="chapter-box">
+      <div class="chapter-title" style="background: linear-gradient(90deg, #ebf5fb, #fff); color:#2980b9;">📝 ویژه آزمون نوبت اول (درس ۱ تا ۱۲)</div>
+
+      <div class="lesson-item" onclick="toggleLesson(this)">
+        <div class="lesson-header">
+          <div class="lesson-title-wrap"><div class="lesson-num" style="background:#ebf5fb; color:#2980b9;">📄</div><div class="lesson-name">نمونه سوالات نوبت اول</div></div>
+          <div class="toggle-icon" style="color:#3498db;">▼</div>
+        </div>
+        <div class="lesson-content">
+          <div class="buttons-grid" onclick="event.stopPropagation()">
+            <a href="nohom-exam-term1-pdf.html" class="action-btn btn-note"><span class="action-icon">📄</span> دانلود نمونه سوالات (PDF)</a>
+            <a href="nohom-exam-term1-flash.html" class="action-btn btn-flash"><span class="action-icon">🎴</span> فلش کارت‌های مهم نوبت اول</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= بخش ویژه: آزمون نوبت دوم ================= -->
+    <div class="chapter-box">
+      <div class="chapter-title" style="background: linear-gradient(90deg, #f4ecf7, #fff); color:#8e44ad;">📝 ویژه آزمون نوبت دوم (درس ۱۳ تا ۲۴)</div>
+
+      <div class="lesson-item" onclick="toggleLesson(this)">
+        <div class="lesson-header">
+          <div class="lesson-title-wrap"><div class="lesson-num" style="background:#f4ecf7; color:#8e44ad;">📄</div><div class="lesson-name">نمونه سوالات نوبت دوم</div></div>
+          <div class="toggle-icon" style="color:#9b59b6;">▼</div>
+        </div>
+        <div class="lesson-content">
+          <div class="buttons-grid" onclick="event.stopPropagation()">
+            <a href="nohom-exam-term2-pdf.html" class="action-btn btn-note"><span class="action-icon">📄</span> دانلود نمونه سوالات (PDF)</a>
+            <a href="nohom-exam-term2-flash.html" class="action-btn btn-flash"><span class="action-icon">🎴</span> فلش کارت‌های مهم نوبت دوم</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <p class="footer-note">ساخته شده با ❤️ برای دانش‌آموزان عزیز</p>
+
+<script>
+  function toggleLesson(element) {
+    element.classList.toggle('active');
+  }
+</script>
+
+</body>
+</html>
