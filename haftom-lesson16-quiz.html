@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>آزمون تستی درس ۱۶: جاذبه‌های گردشگری ایران</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; font-family:'Vazirmatn',sans-serif; }
+  body {
+    background-color: #f4f7f6;
+    background-image: radial-gradient(#d1e0e0 1px, transparent 1px);
+    background-size: 20px 20px;
+    color: #2c3e50; padding: 30px 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh;
+  }
+  .container {
+    background: #fff; width: 100%; max-width: 800px; border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08); padding: 35px; border: 1px solid #eef2f5;
+  }
+  
+  /* صفحه شروع */
+  #start-section { text-align: center; padding: 20px 0; }
+  #start-section h1 { color: #ef6c00; font-size: 1.6rem; margin-bottom: 15px; }
+  #start-section p { color: #7f8c8d; margin-bottom: 30px; line-height: 1.8; }
+  .name-input {
+    width: 100%; max-width: 400px; padding: 15px; margin-bottom: 20px;
+    border: 2px solid #e2e8f0; border-radius: 12px; font-family: inherit;
+    font-size: 1rem; text-align: center; outline: none; transition: 0.3s;
+  }
+  .name-input:focus { border-color: #ef6c00; box-shadow: 0 0 10px rgba(239,108,0,0.2); }
+  .start-btn {
+    background: #2ecc71; color: #fff; border: none; padding: 15px 40px;
+    border-radius: 12px; font-size: 1.1rem; font-weight: 900; font-family: inherit;
+    cursor: pointer; transition: 0.3s; box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);
+  }
+  .start-btn:hover { background: #27ae60; transform: translateY(-2px); }
+
+  /* هدر و تایمر */
+  .header-top { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px dashed #eef2f5; padding-bottom: 15px; margin-bottom: 25px; }
+  .header-title h1 { color: #ef6c00; font-size: 1.4rem; }
+  .header-title p { color: #7f8c8d; font-size: 0.85rem; margin-top: 5px; }
+  .timer-box {
+    background: #fdedec; color: #e74c3c; padding: 8px 18px; border-radius: 50px;
+    font-weight: 900; font-size: 1.1rem; border: 1px solid #fadbd8;
+    display: flex; align-items: center; gap: 8px; direction: ltr;
+  }
+  .timer-box.warning { background: #fef9e7; color: #f39c12; border-color: #fae5d3; animation: pulse 1s infinite; }
+  @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+
+  /* سوالات */
+  .question-box {
+    background: #fafbfc; border: 1px solid #eef2f5; border-radius: 12px;
+    padding: 20px; margin-bottom: 20px;
+  }
+  .q-title { font-weight: 900; font-size: 1.05rem; margin-bottom: 15px; line-height: 1.6; }
+  
+  .options { display: flex; flex-direction: column; gap: 10px; }
+  .option-label {
+    display: flex; align-items: center; gap: 10px; padding: 12px 15px;
+    background: #fff; border: 1px solid #e2e8f0; border-radius: 10px;
+    cursor: pointer; transition: 0.2s; font-size: 0.95rem;
+  }
+  .option-label:hover { background: #fff3e0; border-color: #ef6c00; }
+  .option-label input[type="radio"] { display: none; }
+  .option-label.selected { background: #fff3e0; border-color: #ef6c00; font-weight: 700; color: #d35400; }
+  
+  .submit-btn {
+    display: block; width: 100%; padding: 15px; margin-top: 30px;
+    background: #ef6c00; color: #fff; border: none; border-radius: 12px;
+    font-size: 1.1rem; font-weight: 900; font-family: inherit; cursor: pointer;
+    transition: 0.3s;
+  }
+  .submit-btn:hover { background: #d35400; }
+
+  /* کارنامه */
+  .result-container { display: none; text-align: center; }
+  .student-name-display {
+    font-size: 1.2rem; font-weight: 900; color: #2c3e50; margin-bottom: 20px;
+    background: #ecf0f1; padding: 10px 20px; border-radius: 10px; display: inline-block;
+  }
+  .score-circle {
+    width: 150px; height: 150px; border-radius: 50%; margin: 0 auto 20px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    border: 8px solid #ecf0f1;
+  }
+  .score-circle.excellent { border-color: #2ecc71; color: #2ecc71; }
+  .score-circle.good { border-color: #f39c12; color: #f39c12; }
+  .score-circle.fail { border-color: #e74c3c; color: #e74c3c; }
+  .score-num { font-size: 2.8rem; font-weight: 900; line-height: 1; }
+  .score-text { font-size: 0.9rem; color: #7f8c8d; margin-top: 5px; font-weight: 700; }
+  .result-stats { display: flex; justify-content: center; gap: 15px; margin-bottom: 30px; }
+  .stat-box { padding: 15px 25px; border-radius: 10px; font-weight: 700; font-size: 0.95rem; }
+  .stat-box.correct { color: #2ecc71; background: #e8f8f5; }
+  .stat-box.wrong { color: #e74c3c; background: #fdedec; }
+  
+  .review-btn {
+    display: inline-block; background: #3498db; color: #fff; text-decoration: none;
+    padding: 12px 30px; border-radius: 30px; font-weight: 700; border: none; cursor: pointer;
+    font-size: 1rem;
+  }
+
+  @media(max-width:600px) {
+    .container { padding: 20px; }
+    .header-top { flex-direction: column; gap: 10px; text-align: center; }
+    .result-stats { flex-direction: column; gap: 10px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  
+  <!-- صفحه شروع -->
+  <div id="start-section">
+    <h1>📝 آزمون تستی درس ۱۶</h1>
+    <p>جاذبه‌های گردشگری ایران — مطالعات اجتماعی پایه هفتم<br>لطفاً نام و نام خانوادگی خود را وارد کنید تا آزمون آغاز شود.</p>
+    <input type="text" id="student-name" class="name-input" placeholder="مثلاً: علی محمدی">
+    <br>
+    <button class="start-btn" onclick="startQuiz()">شروع آزمون</button>
+  </div>
+
+  <!-- بخش آزمون -->
+  <div id="quiz-section" style="display: none;">
+    <div class="header-top">
+      <div class="header-title">
+        <h1>📝 آزمون تستی درس ۱۶</h1>
+        <p>۱۵ سوال تصادفی از بانک ۴۰ سوالی</p>
+      </div>
+      <div class="timer-box" id="timer-display">⏱ ۱۰:۰۰</div>
+    </div>
+    
+    <form id="quiz-form">
+      <div id="questions-container"></div>
+      <button type="submit" class="submit-btn" id="submit-btn">ثبت پاسخ‌ها و مشاهده کارنامه</button>
+    </form>
+  </div>
+
+  <!-- بخش کارنامه -->
+  <div id="result-section" class="result-container">
+    <h2 style="color:#2c3e50; margin-bottom:20px; font-weight:900;">🎓 کارنامه شما</h2>
+    <div class="student-name-display" id="display-student-name">نام دانش‌آموز</div>
+    
+    <div id="score-circle" class="score-circle">
+      <div class="score-num" id="score-display">0</div>
+      <div class="score-text">از ۱۰۰</div>
+    </div>
+    <p id="result-message" style="font-size:1.1rem; font-weight:700; margin-bottom:25px;"></p>
+    <div class="result-stats">
+      <div class="stat-box correct" id="stat-correct">تعداد درست: ۰</div>
+      <div class="stat-box wrong" id="stat-wrong">تعداد غلط: ۰</div>
+    </div>
+    <a href="haftom.html" class="review-btn" style="background:#3498db; text-decoration:none;">🔙 بازگشت به دروس</a>
+  </div>
+
+</div>
+
+<script>
+  // ==========================================
+  // بانک ۴۰ سوالی درس ۱۶ (جاذبه‌های گردشگری ایران)
+  // ==========================================
+  const questionBank = [
+    { q: "مهم‌ترین قطب زیارتی ایران کدام است؟", options: ["مشهد مقدس (حرم امام رضا علیه‌السلام)", "قم", "شیراز", "اصفهان"], answer: 0 },
+    { q: "سالانه چند میلیون زائر به مشهد سفر می‌کنند؟", options: ["حدود ۱۷ میلیون نفر", "حدود ۵ میلیون نفر", "حدود ۳۰ میلیون نفر", "حدود ۱ میلیون نفر"], answer: 0 },
+    { q: "عتبات عالیات در کدام کشور قرار دارد؟", options: ["عراق", "ایران", "عربستان", "سوریه"], answer: 0 },
+    { q: "کدام یک از مساجد زیر در اصفهان قرار دارد؟", options: ["مسجد امام و شیخ لطف‌الله", "مسجد گوهرشاد", "مسجد جامع یزد", "مسجد الحرام"], answer: 0 },
+    { q: "مسجد جامع یزد در کدام شهر قرار دارد؟", options: ["یزد", "اصفهان", "مشهد", "شیراز"], answer: 0 },
+    { q: "مسجد گوهرشاد در کدام شهر قرار دارد؟", options: ["مشهد", "اصفهان", "یزد", "قم"], answer: 0 },
+    { q: "ضریح جدید امام رضا (ع) توسط چه کسی طراحی شده است؟", options: ["استاد فرشچیان", "استاد مطهری", "استاد بهشتی", "استاد شریعتی"], answer: 0 },
+    { q: "کدام یک از شخصیت‌های علمی زیر در حرم امام رضا (ع) دفن شده است؟", options: ["شیخ بهایی", "ابن سینا", "خواجه نصیرالدین طوسی", "فارابی"], answer: 0 },
+    { q: "تخت جمشید در کدام دوره ساخته شد؟", options: ["هخامنشیان", "ساسانیان", "اشکانیان", "سلجوقیان"], answer: 0 },
+    { q: "ساخت تخت جمشید به فرمان چه کسی آغاز شد؟", options: ["داریوش اول هخامنشی", "کوروش بزرگ", "خشایارشا", "اردشیر بابکان"], answer: 0 },
+    { q: "تخت جمشید را یونانیان چه می‌نامیدند؟", options: ["پرسپولیس", "آتن", "اسپارت", "المپیا"], answer: 0 },
+    { q: "وسعت تخت جمشید حدوداً چقدر است؟", options: ["۱۲۵,۰۰۰ متر مربع", "۵۰,۰۰۰ متر مربع", "۲۰۰,۰۰۰ متر مربع", "۱۰,۰۰۰ متر مربع"], answer: 0 },
+    { q: "تخت جمشید به عنوان چه شناخته می‌شود؟", options: ["میراث جهانی", "میراث ملی", "میراث استانی", "میراث طبیعی"], answer: 0 },
+    { q: "کدام یک از انواع گردشگری به سفر در طبیعت اشاره دارد؟", options: ["گردش طبیعت", "گردشگری زیارتی", "گردشگری علمی", "گردشگری تفریحی"], answer: 0 },
+    { q: "پارک ملی چیست؟", options: ["محیط امن طبیعی برای جانوران که در آن شکار ممنوع است", "پارک تفریحی شهری", "باغ وحش", "مزرعه حیوانات"], answer: 0 },
+    { q: "پارک ملی گلستان در کدام استان‌ها قرار دارد؟", options: ["گلستان و خراسان شمالی", "تهران و البرز", "اصفهان و یزد", "فارس و کرمان"], answer: 0 },
+    { q: "کدام یک از پارک‌های زیر از بزرگ‌ترین پارک‌های ملی ایران است؟", options: ["پارک ملی گلستان", "پارک ملی لار", "پارک ملی کویر", "پارک ملی بختگان"], answer: 0 },
+    { q: "میراث جهانی چیست؟", options: ["بناها یا آثار بسیار ارزشمندی که توسط یونسکو ثبت می‌شوند", "میراث شخصی افراد", "ثروت ملی", "ساختمان‌های جدید"], answer: 0 },
+    { q: "کدام یک از موارد زیر از جاذبه‌های گردشگری زیارتی ایران است؟", options: ["حرم امام رضا (ع)", "تخت جمشید", "پارک ملی گلستان", "آبشارها"], answer: 0 },
+    { q: "کدام یک از موارد زیر از جاذبه‌های گردشگری تاریخی ایران است؟", options: ["تخت جمشید", "حرم امام رضا (ع)", "پارک ملی گلستان", "جنگل‌های شمال"], answer: 0 },
+    { q: "موزه‌های آستان قدس رضوی شامل کدام یک از موارد زیر است؟", options: ["موزه قرآن، موزه سکه، موزه صدف و موزه سلاح", "فقط موزه قرآن", "فقط موزه سکه", "فقط موزه سلاح"], answer: 0 },
+    { q: "چرا گردشگری در طبیعت می‌تواند به محیط زیست آسیب بزند؟", options: ["به دلیل انبوه مسافران و رها کردن زباله", "به دلیل کم بودن مسافران", "به دلیل وجود درختان", "به دلیل وجود حیوانات"], answer: 0 },
+    { q: "برای جلوگیری از آسیب به محیط زیست در گردشگری چه اقدامی انجام می‌شود؟", options: ["ایجاد پارک‌های ملی و مناطق حفاظت‌شده", "ساخت هتل در جنگل", "افزایش مسافران", "قطع درختان"], answer: 0 },
+    { q: "مهم‌ترین جاذبه گردشگری تاریخی در استان فارس کدام است؟", options: ["تخت جمشید", "حرم امام رضا (ع)", "مسجد گوهرشاد", "پارک ملی گلستان"], answer: 0 },
+    { q: "یکی از مهم‌ترین جاذبه‌های گردشگری زیارتی کشور، کدام است؟", options: ["حرم امام رضا (ع) در مشهد", "تخت جمشید در فارس", "پارک ملی گلستان", "جنگل‌های شمال"], answer: 0 },
+    { q: "در حرم امام رضا (ع)، آثار هنری متعلق به کدام دوره‌ها است؟", options: ["دوره‌های مختلف تاریخی ایران", "فقط دوره معاصر", "فقط دوره صفویه", "فقط دوره قاجار"], answer: 0 },
+    { q: "چرا حفاظت از میراث فرهنگی اهمیت دارد؟", options: ["چون نشان‌دهنده هویت و تاریخ یک ملت است", "چون ثروت زیادی دارد", "چون فقط برای گردشگران است", "چون دولت این را می‌خواهد"], answer: 0 },
+    { q: "کدام یک از انواع گردشگری در ایران به دلیل وجود جاذبه‌های طبیعی فراوان، رشد کرده است؟", options: ["گردش طبیعت", "گردشگری زیارتی", "گردشگری علمی", "گردشگری تفریحی"], answer: 0 },
+    { q: "کدام یک از مساجد زیر در مشهد قرار دارد؟", options: ["مسجد گوهرشاد", "مسجد امام", "مسجد شیخ لطف‌الله", "مسجد جامع یزد"], answer: 0 },
+    { q: "مهم‌ترین ویژگی تخت جمشید از نظر معماری چیست؟", options: ["استفاده از اصول مهندسی و معماری دقیق و پیشرفته", "استفاده از آهن و فولاد", "استفاده از بتن", "استفاده از شیشه"], answer: 0 },
+    { q: "زیارت عتبات عالیات در کدام کشور انجام می‌شود؟", options: ["عراق", "ایران", "سوریه", "عربستان"], answer: 0 },
+    { q: "حرم امام رضا (ع) در کدام شهر قرار دارد؟", options: ["مشهد", "قم", "شیراز", "اصفهان"], answer: 0 },
+    { q: "کدام یک از مساجد زیر از نظر معماری زیبای اسلامی مورد توجه گردشگران است؟", options: ["مسجد امام و شیخ لطف‌الله اصفهان", "مسجد النبی", "مسجد الاقصی", "مسجد کوفه"], answer: 0 },
+    { q: "در پارک‌های ملی چه کارهایی ممنوع است؟", options: ["شکار، بوته‌کنی و چرای دام", "بازدید گردشگران", "کاشت درخت", "مطالعه علمی"], answer: 0 },
+    { q: "از جاذبه‌های گردشگری ایران کدام یک طبیعی است؟", options: ["آبشارها و چشمه‌ها", "تخت جمشید", "حرم امام رضا (ع)", "مسجد گوهرشاد"], answer: 0 },
+    { q: "کدام یک از موارد زیر از جاذبه‌های گردشگری ایران نیست؟", options: ["برج ایفل", "تخت جمشید", "حرم امام رضا (ع)", "پارک ملی گلستان"], answer: 0 },
+    { q: "کدام یک از انواع گردشگری بر اساس مطالعه و تحقیق در مکان‌های طبیعی است؟", options: ["گردش طبیعت", "گردشگری زیارتی", "گردشگری علمی", "گردشگری تفریحی"], answer: 0 },
+    { q: "چرا حفظ محیط زیست در گردشگری مهم است؟", options: ["چون مانع از بین رفتن جاذبه‌های طبیعی می‌شود", "چون هزینه‌ها را کاهش می‌دهد", "چون تعداد گردشگران را کم می‌کند", "چون درآمد را کاهش می‌دهد"], answer: 0 },
+    { q: "کدام یک از موارد زیر از ویژگی‌های گردشگری زیارتی است؟", options: ["سفر به اماکن مقدس", "سفر به مناطق جنگی", "سفر به طبیعت", "سفر به نمایشگاه‌ها"], answer: 0 },
+    { q: "کدام یک از موارد زیر از وظایف گردشگران در قبال محیط زیست است؟", options: ["حفاظت از طبیعت و رها نکردن زباله", "شکار حیوانات", "قطع درختان", "آتش زدن جنگل"], answer: 0 }
+  ];
+
+  const numQuestionsToShow = 15; 
+  const totalTime = 600; // ۱۰ دقیقه
+  
+  let selectedQuestions = [];
+  let timerInterval;
+  let timeLeft = totalTime;
+  let studentName = "";
+
+  function shuffle(array) {
+    let currentIndex = array.length, randomIndex;
+    while (currentIndex != 0) {
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex--;
+      [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+    }
+    return array;
+  }
+
+  function startQuiz() {
+    studentName = document.getElementById('student-name').value.trim();
+    if (studentName === "") {
+      alert("لطفاً نام و نام خانوادگی خود را وارد کنید.");
+      return;
+    }
+    
+    document.getElementById('start-section').style.display = 'none';
+    document.getElementById('quiz-section').style.display = 'block';
+    
+    initQuiz();
+  }
+
+  function initQuiz() {
+    const shuffledBank = shuffle([...questionBank]);
+    selectedQuestions = shuffledBank.slice(0, numQuestionsToShow);
+
+    const container = document.getElementById('questions-container');
+    container.innerHTML = '';
+
+    selectedQuestions.forEach((item, index) => {
+      const correctAnswerText = item.options[item.answer];
+      const shuffledOptions = shuffle([...item.options]);
+      const newCorrectIndex = shuffledOptions.indexOf(correctAnswerText);
+      
+      selectedQuestions[index].options = shuffledOptions;
+      selectedQuestions[index].answer = newCorrectIndex;
+
+      let optionsHTML = '';
+      shuffledOptions.forEach((opt, i) => {
+        optionsHTML += `
+          <label class="option-label" onclick="selectOption(this)">
+            <input type="radio" name="q${index}" value="${i}">
+            <span>${opt}</span>
+          </label>
+        `;
+      });
+
+      const qBox = document.createElement('div');
+      qBox.className = 'question-box';
+      qBox.innerHTML = `
+        <div class="q-title">${index + 1}. ${item.q}</div>
+        <div class="options">${optionsHTML}</div>
+      `;
+      container.appendChild(qBox);
+    });
+
+    startTimer();
+  }
+
+  function startTimer() {
+    const display = document.getElementById('timer-display');
+    
+    timerInterval = setInterval(() => {
+      timeLeft--;
+      const minutes = Math.floor(timeLeft / 60);
+      const seconds = timeLeft % 60;
+      
+      display.innerHTML = `⏱ ${minutes < 10 ? '0'+minutes : minutes}:${seconds < 10 ? '0'+seconds : seconds}`;
+
+      if (timeLeft <= 60) {
+        display.classList.add('warning');
+      }
+      
+      if (timeLeft <= 0) {
+        clearInterval(timerInterval);
+        display.innerHTML = `⏱ ۰۰:۰۰`;
+        document.getElementById('quiz-form').dispatchEvent(new Event('submit'));
+      }
+    }, 1000);
+  }
+
+  function selectOption(label) {
+    const name = label.querySelector('input').name;
+    document.querySelectorAll(`input[name="${name}"]`).forEach(input => {
+      input.parentElement.classList.remove('selected');
+    });
+    label.classList.add('selected');
+    label.querySelector('input').checked = true;
+  }
+
+  document.getElementById('quiz-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    clearInterval(timerInterval);
+
+    let correctCount = 0;
+    let wrongCount = 0;
+
+    selectedQuestions.forEach((item, index) => {
+      const selected = document.querySelector(`input[name="q${index}"]:checked`);
+      if (!selected) {
+        wrongCount++; 
+      } else if (parseInt(selected.value) === item.answer) {
+        correctCount++;
+      } else {
+        wrongCount++;
+      }
+    });
+
+    const score = Math.round((correctCount / selectedQuestions.length) * 100);
+
+    document.getElementById('quiz-section').style.display = 'none';
+    document.getElementById('result-section').style.display = 'block';
+
+    document.getElementById('display-student-name').innerText = `دانش‌آموز: ${studentName}`;
+    
+    document.getElementById('score-display').innerText = score;
+    document.getElementById('stat-correct').innerText = `تعداد درست: ${correctCount}`;
+    document.getElementById('stat-wrong').innerText = `تعداد غلط: ${wrongCount}`;
+
+    const circle = document.getElementById('score-circle');
+    const msg = document.getElementById('result-message');
+    
+    circle.className = 'score-circle';
+    if (score >= 80) {
+      circle.classList.add('excellent');
+      msg.innerText = "🌟 عالی بود! شما درس را به خوبی یاد گرفته‌اید.";
+      msg.style.color = "#2ecc71";
+    } else if (score >= 50) {
+      circle.classList.add('good');
+      msg.innerText = "👍 خوب بود، اما با کمی مطالعه بیشتر می‌توانید بهتر شوید.";
+      msg.style.color = "#f39c12";
+    } else {
+      circle.classList.add('fail');
+      msg.innerText = "📚 نیاز به مطالعه بیشتر دارید. ناامید نشوید و درسنامه را دوباره بخوانید.";
+      msg.style.color = "#e74c3c";
+    }
+    
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+</script>
+
+</body>
+</html>
