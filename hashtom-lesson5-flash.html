@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>فلش کارت - درس ۵: آسیب‌های اجتماعی و پیشگیری از آنها</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; font-family:'Vazirmatn',sans-serif; }
+  body {
+    background-color: #f4f7f6;
+    background-image: radial-gradient(#d1e0e0 1px, transparent 1px);
+    background-size: 20px 20px;
+    color: #2c3e50; padding: 30px 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh;
+  }
+  .container {
+    background: #fff; width: 100%; max-width: 800px; border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08); padding: 35px; border: 1px solid #eef2f5;
+    text-align: center;
+  }
+  
+  .header { margin-bottom: 30px; border-bottom: 2px dashed #eef2f5; padding-bottom: 20px; }
+  .header h1 { color: #c0392b; font-size: 1.6rem; margin-bottom: 8px; }
+  .header p { color: #7f8c8d; font-size: 0.95rem; }
+
+  .flashcard-container {
+    perspective: 1000px;
+    width: 100%;
+    height: 300px;
+    margin-bottom: 30px;
+    cursor: pointer;
+  }
+
+  .flashcard {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+  }
+
+  .flashcard.flipped {
+    transform: rotateY(180deg);
+  }
+
+  .flashcard-front, .flashcard-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+  }
+
+  .flashcard-front {
+    background: linear-gradient(135deg, #c0392b, #922b21);
+    color: #fff;
+  }
+
+  .flashcard-back {
+    background: linear-gradient(135deg, #ecf0f1, #bdc3c7);
+    color: #2c3e50;
+    transform: rotateY(180deg);
+  }
+
+  .card-content {
+    font-size: 1.2rem;
+    font-weight: 900;
+    line-height: 1.9;
+  }
+
+  .card-label {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 0.8rem;
+    background: rgba(255,255,255,0.2);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-weight: 700;
+  }
+  .flashcard-back .card-label {
+    background: rgba(0,0,0,0.05);
+    color: #7f8c8d;
+  }
+
+  .click-hint {
+    position: absolute;
+    bottom: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.8rem;
+    opacity: 0.7;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+  }
+
+  .nav-btn {
+    background: #c0392b; color: #fff; border: none; padding: 12px 25px;
+    border-radius: 30px; font-weight: 700; font-family: inherit;
+    font-size: 1rem; cursor: pointer; transition: 0.3s;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .nav-btn:hover { background: #922b21; transform: translateY(-2px); }
+  .nav-btn:disabled { background: #bdc3c7; cursor: not-allowed; transform: none; }
+
+  .counter {
+    font-weight: 900; font-size: 1.1rem; color: #7f8c8d;
+    background: #ecf0f1; padding: 8px 20px; border-radius: 30px;
+  }
+
+  .back-home {
+    display: inline-block; margin-top: 30px; background: #2c3e50; color: #fff;
+    text-decoration: none; padding: 10px 25px; border-radius: 30px; font-weight: 700; transition: 0.3s;
+  }
+  .back-home:hover { background: #1a252f; }
+
+  @media(max-width:600px) {
+    .container { padding: 20px; }
+    .flashcard-container { height: 400px; }
+    .card-content { font-size: 1.05rem; }
+    .controls { flex-direction: column; gap: 15px; }
+    .nav-btn { width: 100%; justify-content: center; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  
+  <div class="header">
+    <h1>🎴 فلش کارت‌های درس ۵</h1>
+    <p>آسیب‌های اجتماعی و پیشگیری از آنها — مطالعات اجتماعی پایه هشتم</p>
+  </div>
+
+  <div class="flashcard-container" onclick="flipCard()">
+    <div class="flashcard" id="flashcard">
+      <div class="flashcard-front">
+        <span class="card-label">سوال</span>
+        <div class="card-content" id="question-text">سوال اینجا قرار می‌گیرد</div>
+        <span class="click-hint">👆 برای دیدن جواب کلیک کنید</span>
+      </div>
+      <div class="flashcard-back">
+        <span class="card-label">جواب</span>
+        <div class="card-content" id="answer-text">جواب اینجا قرار می‌گیرد</div>
+        <span class="click-hint">👆 برای دیدن سوال کلیک کنید</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button class="nav-btn" id="prev-btn" onclick="prevCard()">▶ کارت قبلی</button>
+    <div class="counter" id="counter">۱ از ۱۵</div>
+    <button class="nav-btn" id="next-btn" onclick="nextCard()">کارت بعدی ◀</button>
+  </div>
+
+  <a href="hashtom.html" class="back-home">🔙 بازگشت به صفحه دروس</a>
+
+</div>
+
+<script>
+  const flashcards = [
+    {
+      q: "دورهٔ نوجوانی چه دوره‌ای است؟",
+      a: "دورهٔ ۱۲ تا ۱۸ سال؛ دورانی که فرد تغییرات جسمانی (بلوغ)، ذهنی و اجتماعی را تجربه می‌کند."
+    },
+    {
+      q: "سه مورد از خصوصیات دوران نوجوانی را نام ببرید.",
+      a: "۱. هویت‌جویی ۲. هیجان‌طلبی و میل به تجربه کردن ۳. استقلال‌طلبی (و حساسیت به خود و شک و تردید)."
+    },
+    {
+      q: "آسیب اجتماعی را تعریف کنید.",
+      a: "به هر پدیده و مسئله نامطلوب و مضر در سلامت اجتماعی و هر شرایطی که برای جامعه اختلال ایجاد کند، آسیب اجتماعی می‌گویند."
+    },
+    {
+      q: "سه نمونه از آسیب‌های اجتماعی را نام ببرید.",
+      a: "پرخاشگری و نزاع، اعتیاد به مواد مخدر، سرقت (طلاق، فقر و بی‌سوادی نیز از آسیب‌های اجتماعی هستند)."
+    },
+    {
+      q: "پرخاشگری و نزاع، نتیجهٔ چه چیزی است؟",
+      a: "نتیجهٔ کنترل نکردن خشم."
+    },
+    {
+      q: "سه قاعدهٔ مهم هنگام خشم و عصبانیت را بنویسید.",
+      a: "۱. نباید به وسایل یا اموال خودم و دیگران صدمه بزنم. ۲. نباید به دیگران صدمه بزنم. ۳. نباید به خودم صدمه بزنم."
+    },
+    {
+      q: "دو راه برای کنترل خشم (وقتی ما از دست کسی عصبانی هستیم) بنویسید.",
+      a: "۱. به آرامی از او بپرسیم چرا از دست ما عصبانی است. ۲. به حرف‌های طرف مقابل، خوب گوش کنیم و حرف‌های او را قطع نکنیم."
+    },
+    {
+      q: "دو راه برای کنترل خشم (وقتی کسی از دست ما عصبانی است) بنویسید.",
+      a: "۱. نفس‌های عمیق بکشیم و از یک تا ده بشماریم. ۲. با رعایت سه قاعده، علت عصبانیت خود را مؤدبانه و آرام بیان کنیم."
+    },
+    {
+      q: "طبق فرموده امام علی (ع)، خشم چه نسبتی با انسان دارد؟",
+      a: "«خشم، دشمن توست؛ پس آن را بر خود مسلط مگردان.»"
+    },
+    {
+      q: "مواد مخدر چیست؟",
+      a: "موادی که مصرف آنها تغییراتی روی دستگاه عصبی ایجاد می‌کند و باعث کم شدن هوشیاری و حالتی مثل بی‌حسی می‌شود."
+    },
+    {
+      q: "وابستگی به مواد مخدر چه معنایی دارد؟",
+      a: "یعنی پس از تمام شدن اثر آن روی مغز، فرد حال بدی پیدا می‌کند و مجبور است دوباره به سمت آن ماده برود."
+    },
+    {
+      q: "چهار علت گرایش افراد به مواد مخدر را بنویسید.",
+      a: "۱. فرار از مشکلات زندگی ۲. نداشتن مهارت نه گفتن ۳. تحت تأثیر دیگران قرار گرفتن ۴. کنجکاوی و خودنمایی."
+    },
+    {
+      q: "سه پیامد مصرف مواد مخدر را بنویسید.",
+      a: "۱. آسیب به جسم و روان ۲. تغییر در شخصیت و رفتار ۳. دور شدن از خانواده و دوستان سالم (و مشکل با قانون)."
+    },
+    {
+      q: "طبق قانون، خرید و فروش و مصرف مواد مخدر چه حکمی دارد؟",
+      a: "جُرم است و مجازات شدید دارد. اگر نوجوانی فریب قاچاقچیان را بخورد و مواد را جابه‌جا کند، مجرم شناخته می‌شود."
+    },
+    {
+      q: "نقش خانواده، مدرسه و قانون در پیشگیری از آسیب‌های اجتماعی چیست؟",
+      a: "خانواده: نظارت و تربیت؛ مدرسه: مراقبت و آموزش؛ قانون و پلیس: برقراری امنیت و برخورد با متخلفان؛ و خود نوجوان: مراقبت از خود و توکل به خدا."
+    }
+  ];
+
+  let currentIndex = 0;
+  const flashcardElement = document.getElementById('flashcard');
+  const questionText = document.getElementById('question-text');
+  const answerText = document.getElementById('answer-text');
+  const counter = document.getElementById('counter');
+  const prevBtn = document.getElementById('prev-btn');
+  const nextBtn = document.getElementById('next-btn');
+
+  function updateCard() {
+    flashcardElement.classList.remove('flipped');
+    
+    setTimeout(() => {
+      questionText.innerText = flashcards[currentIndex].q;
+      answerText.innerText = flashcards[currentIndex].a;
+      
+      const persianNumbers = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+      const currentPersian = String(currentIndex + 1).replace(/\d/g, d => persianNumbers[d]);
+      const totalPersian = String(flashcards.length).replace(/\d/g, d => persianNumbers[d]);
+      counter.innerText = `${currentPersian} از ${totalPersian}`;
+      
+      prevBtn.disabled = currentIndex === 0;
+      nextBtn.disabled = currentIndex === flashcards.length - 1;
+    }, 150);
+  }
+
+  function flipCard() {
+    flashcardElement.classList.toggle('flipped');
+  }
+
+  function nextCard() {
+    if (currentIndex < flashcards.length - 1) {
+      currentIndex++;
+      updateCard();
+    }
+  }
+
+  function prevCard() {
+    if (currentIndex > 0) {
+      currentIndex--;
+      updateCard();
+    }
+  }
+
+  updateCard();
+</script>
+
+</body>
+</html>
