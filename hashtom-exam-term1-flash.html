@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>فلش کارت‌های مهم نوبت اول - پایه هشتم</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; font-family:'Vazirmatn',sans-serif; }
+  body {
+    background-color: #f4f7f6;
+    background-image: radial-gradient(#d1e0e0 1px, transparent 1px);
+    background-size: 20px 20px;
+    color: #2c3e50; padding: 30px 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh;
+  }
+  .container {
+    background: #fff; width: 100%; max-width: 800px; border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08); padding: 35px; border: 1px solid #eef2f5;
+    text-align: center;
+  }
+  .header { margin-bottom: 30px; border-bottom: 2px dashed #eef2f5; padding-bottom: 20px; }
+  .header h1 { color: #2980b9; font-size: 1.6rem; margin-bottom: 8px; }
+  .header p { color: #7f8c8d; font-size: 0.95rem; }
+
+  .flashcard-container { perspective: 1000px; width: 100%; height: 300px; margin-bottom: 30px; cursor: pointer; }
+  .flashcard { position: relative; width: 100%; height: 100%; text-align: center; transition: transform 0.6s; transform-style: preserve-3d; }
+  .flashcard.flipped { transform: rotateY(180deg); }
+  .flashcard-front, .flashcard-back {
+    position: absolute; width: 100%; height: 100%; -webkit-backface-visibility: hidden; backface-visibility: hidden;
+    border-radius: 20px; display: flex; align-items: center; justify-content: center; padding: 30px; box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+  }
+  .flashcard-front { background: linear-gradient(135deg, #2980b9, #1f618d); color: #fff; }
+  .flashcard-back { background: linear-gradient(135deg, #ecf0f1, #bdc3c7); color: #2c3e50; transform: rotateY(180deg); }
+
+  .card-content { font-size: 1.2rem; font-weight: 900; line-height: 1.9; }
+  .card-label { position: absolute; top: 15px; right: 20px; font-size: 0.8rem; background: rgba(255,255,255,0.2); padding: 4px 12px; border-radius: 20px; font-weight: 700; }
+  .flashcard-back .card-label { background: rgba(0,0,0,0.05); color: #7f8c8d; }
+  .card-lesson { position: absolute; top: 15px; left: 20px; font-size: 0.75rem; background: rgba(0,0,0,0.15); padding: 4px 10px; border-radius: 20px; font-weight: 700; }
+  .flashcard-back .card-lesson { background: rgba(0,0,0,0.05); color: #7f8c8d; }
+  .click-hint { position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%); font-size: 0.8rem; opacity: 0.7; display: flex; align-items: center; gap: 5px; }
+
+  .controls { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; }
+  .nav-btn {
+    background: #2980b9; color: #fff; border: none; padding: 12px 25px; border-radius: 30px; font-weight: 700; font-family: inherit;
+    font-size: 1rem; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 8px;
+  }
+  .nav-btn:hover { background: #1f618d; transform: translateY(-2px); }
+  .nav-btn:disabled { background: #bdc3c7; cursor: not-allowed; transform: none; }
+  .counter { font-weight: 900; font-size: 1.1rem; color: #7f8c8d; background: #ecf0f1; padding: 8px 20px; border-radius: 30px; }
+  .back-home { display: inline-block; margin-top: 30px; background: #2c3e50; color: #fff; text-decoration: none; padding: 10px 25px; border-radius: 30px; font-weight: 700; transition: 0.3s; }
+  .back-home:hover { background: #1a252f; }
+
+  @media(max-width:600px) {
+    .container { padding: 20px; }
+    .flashcard-container { height: 420px; }
+    .card-content { font-size: 1rem; }
+    .controls { flex-direction: column; gap: 15px; }
+    .nav-btn { width: 100%; justify-content: center; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  
+  <div class="header">
+    <h1>🎴 فلش کارت‌های مهم نوبت اول</h1>
+    <p>مرور نکات کلیدی درس ۱ تا ۱۲ — مطالعات اجتماعی پایه هشتم</p>
+  </div>
+
+  <div class="flashcard-container" onclick="flipCard()">
+    <div class="flashcard" id="flashcard">
+      <div class="flashcard-front">
+        <span class="card-label">سوال</span>
+        <span class="card-lesson" id="lesson-badge-front">درس ۱</span>
+        <div class="card-content" id="question-text">سوال اینجا قرار می‌گیرد</div>
+        <span class="click-hint">👆 برای دیدن جواب کلیک کنید</span>
+      </div>
+      <div class="flashcard-back">
+        <span class="card-label">جواب</span>
+        <span class="card-lesson" id="lesson-badge-back">درس ۱</span>
+        <div class="card-content" id="answer-text">جواب اینجا قرار می‌گیرد</div>
+        <span class="click-hint">👆 برای دیدن سوال کلیک کنید</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button class="nav-btn" id="prev-btn" onclick="prevCard()">▶ کارت قبلی</button>
+    <div class="counter" id="counter">۱ از ۵۰</div>
+    <button class="nav-btn" id="next-btn" onclick="nextCard()">کارت بعدی ◀</button>
+  </div>
+
+  <a href="hashtom.html" class="back-home">🔙 بازگشت به صفحه دروس</a>
+
+</div>
+
+<script>
+  const flashcards = [
+    // درس ۱: تعاون (۱)
+    { lesson: "درس ۱", q: "تعاون را تعریف کنید.", a: "تعاون یعنی همکاری و یاری رساندن به یکدیگر." },
+    { lesson: "درس ۱", q: "آیهٔ تعاون در قرآن کریم چه می‌فرماید؟", a: "«وَتَعَاوَنُوا عَلَى الْبِرِّ وَالتَّقْوَىٰ وَلَا تَعَاوَنُوا عَلَى الْإِثْمِ وَالْعُدْوَانِ» — در کارهای نیک و پرهیزکاری یکدیگر را یاری کنید و در گناه و ستمکاری همکاری نکنید. (سورهٔ مائده، آیهٔ ۲)" },
+    { lesson: "درس ۱", q: "سه نمونه از جلوه‌های تعاون را نام ببرید.", a: "اظهار دوستی و محبت، همدلی و خوشحال کردن یکدیگر، هدیه دادن، صلح و آشتی، قرض دادن، رفع مشکلات مردم، مشارکت برای فقرا، امر به معروف و نهی از منکر." },
+    { lesson: "درس ۱", q: "حدیث پیامبر اکرم ﷺ دربارهٔ اهمیت به امور مسلمانان چه بود؟", a: "«مَنْ أَصْبَحَ لَا یَهْتَمُّ بِأُمُورِ الْمُسْلِمِینَ فَلَیْسَ مِنْهُمْ» — هر کس صبح کند و به امور مسلمانان اهمیت ندهد، از آن‌ها نیست. (وسائل الشیعه، جلد ۱۱)" },
+
+    // درس ۲: تعاون (۲)
+    { lesson: "درس ۲", q: "انفاق را تعریف کنید.", a: "بخشش مال، علم، توانایی‌ها و وقت خود به کسانی که نیازمند هستند، انفاق نامیده می‌شود." },
+    { lesson: "درس ۲", q: "وقف چیست؟", a: "وقف، بخشیدن اموال و دارایی‌ها به منظور استفادهٔ عمومی و خیرات است که تا ابد باید به همان صورت معین استفاده شود." },
+    { lesson: "درس ۲", q: "شرکت تعاونی چه ویژگی‌هایی دارد؟", a: "همهٔ اعضا با هم برابرند (هر کس یک حق رأی دارد)، هدف حل مشکلات اقتصادی و ایجاد رفاه است، منافع به‌طور برابر بین اعضا توزیع می‌شود." },
+    { lesson: "درس ۲", q: "مؤسسات خیریه چه نقشی در جامعه دارند؟", a: "به افراد نیازمند و آسیب‌دیده کمک می‌کنند و در اموری مانند حمایت از بیماران خاص، معلولان، سالمندان، ایتام و ساخت مدرسه و درمانگاه فعالیت دارند." },
+
+    // درس ۳: ساختار و تشکیلات دولت
+    { lesson: "درس ۳", q: "سه قوّهٔ حاکم در کشور ما کدام‌اند؟", a: "قوّهٔ مقننه، قوّهٔ قضائیه، قوّهٔ مجریّه — که همه زیر نظر مقام رهبری اداره می‌شوند." },
+    { lesson: "درس ۳", q: "قوّهٔ مجریه همان چیست؟", a: "دولت. ریاست قوّهٔ مجریه بر عهدهٔ رئیس‌جمهور است." },
+    { lesson: "درس ۳", q: "رئیس‌جمهور چگونه انتخاب می‌شود؟", a: "با رأی مستقیم مردم، برای مدت چهار سال. انتخاب مجدد او برای یک دورهٔ چهارسالهٔ دیگر مانعی ندارد." },
+    { lesson: "درس ۳", q: "شرایط رئیس‌جمهور طبق قانون اساسی چیست؟", a: "ایرانی‌الاصل، تابع ایران، مدیر و مدبّر، دارای حسن سابقه و امانت و تقوا، مؤمن و معتقد به مبانی جمهوری اسلامی ایران و مذهب رسمی کشور." },
+    { lesson: "درس ۳", q: "تنفیذ و تحلیف رئیس‌جمهور یعنی چه؟", a: "تنفیذ: امضای حکم رئیس‌جمهور توسط رهبر. تحلیف: سوگند رئیس‌جمهور در مجلس شورای اسلامی." },
+    { lesson: "درس ۳", q: "کابینه (هیئت دولت) از چه کسانی تشکیل می‌شود؟", a: "از رئیس‌جمهور، معاونان و وزیران." },
+    { lesson: "درس ۳", q: "رأی اعتماد مجلس به وزیران یعنی چه؟", a: "پس از معرفی وزیر از سوی رئیس‌جمهور به مجلس، نمایندگان دربارهٔ صلاحیت او اظهارنظر و رأی می‌دهند. وزیر با رأی اعتماد مجلس کار خود را شروع می‌کند." },
+
+    // درس ۴: وظایف دولت
+    { lesson: "درس ۴", q: "شهروندان در برابر دولت چه وظایفی دارند؟", a: "احترام به قوانین و مقررات، مشارکت و همکاری صمیمانه با دولت، پرداخت مالیات، دفاع از کشور در هنگام جنگ." },
+    { lesson: "درس ۴", q: "طبق قانون اساسی، دولت چه وظایفی دارد؟", a: "فراهم کردن شرایط سواد و آموزش، بهداشت، شغل مناسب، رفاه، امنیت، فرهنگ و اخلاق اسلامی؛ تجهیزات زیربنایی و خدمات عمومی مانند راه، پل، بیمارستان، مدرسه، سد، آب، برق و گاز." },
+    { lesson: "درس ۴", q: "رئیس‌جمهور علاوه بر هدایت وزیران چه وظایف دیگری دارد؟", a: "امضای قراردادهای بین‌المللی، امضای استوارنامهٔ سفیران، پذیرش استوارنامهٔ سفیران دیگر کشورها، اعطای نشان‌های دولتی." },
+    { lesson: "درس ۴", q: "لایحه چیست؟", a: "پیشنهادی است که از سوی دولت به مجلس ارائه می‌شود و اگر مجلس آن را تأیید کند، به قانون تبدیل می‌شود." },
+    { lesson: "درس ۴", q: "استیضاح یعنی چه؟", a: "توضیح خواستن نمایندگان از وزیر. وزیر باید در مجلس حاضر شود و توضیح دهد و دوباره از مجلس رأی اعتماد بگیرد." },
+    { lesson: "درس ۴", q: "بودجه چیست؟", a: "سندی که دولت در آن درآمدها و هزینه‌های یک کشور را برای یک سال پیش‌بینی می‌کند و باید در مجلس تصویب شود." },
+    { lesson: "درس ۴", q: "درآمدهای دولت از چه راه‌هایی تأمین می‌شود؟", a: "۱. درآمدهای حاصل از صادرات نفت ۲. درآمدهای حاصل از مالیات ۳. سایر درآمدها (خدمات برق، آب، گاز، تلفن، گذرنامه و…)." },
+    { lesson: "درس ۴", q: "مالیات چیست؟", a: "پولی است که بر طبق قانون، افراد و مؤسسات به دولت می‌پردازند تا در جهت ادارهٔ امور کشور مورد استفاده قرار بگیرد." },
+
+    // درس ۵: آسیب‌های اجتماعی و پیشگیری از آنها
+    { lesson: "درس ۵", q: "دورهٔ نوجوانی چه دوره‌ای است؟", a: "دورهٔ بین ۱۲ تا ۱۸ سال که در آن افراد از نظر جسمانی و ذهنی و اجتماعی دچار تغییرات می‌شوند (بلوغ)." },
+    { lesson: "درس ۵", q: "چند ویژگی دوران نوجوانی را نام ببرید.", a: "هویت‌جویی، هیجان‌طلبی و میل به تجربه کردن، استقلال‌طلبی، حساسیت نسبت به خود، شک و تردید." },
+    { lesson: "درس ۵", q: "پرخاشگری چیست؟", a: "پرخاشگری نتیجهٔ کنترل (مهار) نکردن خشم است و می‌تواند به اشکال مختلف مانند آزار و اذیت، کتک زدن، مسخره کردن، شکستن وسایل و ناسزا گفتن بروز کند." },
+    { lesson: "درس ۵", q: "سه قاعدهٔ مهم در هنگام خشم و عصبانیت چیست؟", a: "۱. نباید به وسایل یا اموال خودم و دیگران صدمه بزنم. ۲. نباید به دیگران صدمه بزنم. ۳. نباید به خودم صدمه بزنم." },
+    { lesson: "درس ۵", q: "موادّ مخدّر چه تأثیری بر انسان دارند؟", a: "موادی هستند که تغییراتی روی دستگاه عصبی ایجاد می‌کنند و باعث کاهش هوشیاری می‌شوند. فرد پس از مدتی به آن‌ها وابستگی پیدا می‌کند و برای به دست آوردنشان هر کاری می‌کند." },
+    { lesson: "درس ۵", q: "چند مورد از علل گرایش افراد به موادّ مخدّر را نام ببرید.", a: "فرار از مشکلات، نداشتن مهارت «نه گفتن»، تأثیر دوستان ناباب، کنجکاوی، خودنمایی." },
+
+    // درس ۶: قوّهٔ قضائیه
+    { lesson: "درس ۶", q: "قوّهٔ قضائیه چه وظیفه‌ای دارد؟", a: "برقراری عدالت اجتماعی، نظارت بر اجرای قوانین، برخورد با تخلفات، مجازات متخلفان و پشتیبانی از حقوق فردی و اجتماعی افراد." },
+    { lesson: "درس ۶", q: "رئیس قوّهٔ قضائیه چگونه انتخاب می‌شود؟", a: "از سوی رهبر جمهوری اسلامی به مدت پنج سال انتخاب می‌شود. باید فردی مجتهد، عادل، آگاه به امور قضایی، مدیر و مدبّر باشد." },
+    { lesson: "درس ۶", q: "وظایف قوّهٔ قضائیه را نام ببرید.", a: "رسیدگی به شکایت‌های مردم و حل اختلافات، کشف جرم و تعقیب و مجازات مجرمان، پیشگیری از وقوع جرم، گسترش عدل و آزادی‌های مشروع، نظارت بر حسن اجرای قوانین." },
+    { lesson: "درس ۶", q: "شورای حل اختلاف چه نقشی دارد؟", a: "برای حل اختلافات کوچک و محلی، افراد می‌توانند به شورای حل اختلاف مراجعه کنند تا از راه گفت‌وگو و مسالمت‌آمیز اختلاف حل شود." },
+    { lesson: "درس ۶", q: "دعاوی کیفری چیست؟", a: "دعاوی مربوط به اعمالی که دادگاه برای فردی که مرتکب جرمی شده است، مجازات تعیین می‌کند. مثال: فحاشی، افترا، غصب عنوان." },
+    { lesson: "درس ۶", q: "دعاوی حقوقی چیست؟", a: "دعاوی مربوط به اعمالی که دادگاه مجازاتی تعیین نمی‌کند، بلکه افراد را ملزم می‌کند که تکالیفشان را انجام دهند یا حقوق قانونی دیگران را بدهند. مثال: خسارت، پس دادن حقوق." },
+    { lesson: "درس ۶", q: "وکیل کیست؟", a: "کسی که در رشتهٔ حقوق درس خوانده و به قوانین آشناست و پروانهٔ وکالت دارد. افراد می‌توانند در دادگاه او را برای دفاع از حقوق خود انتخاب کنند." },
+
+    // درس ۷: ارتباط و رسانه
+    { lesson: "درس ۷", q: "سه عنصر اصلی ارتباط کدام‌اند؟", a: "فرستنده (ارسال‌کننده پیام)، گیرنده (دریافت‌کننده پیام)، پیام (محتوای ارتباط)." },
+    { lesson: "درس ۷", q: "بازخورد را تعریف کنید.", a: "اگر گیرنده به فرستنده پیامی بفرستد و او را متوجه کند که معنی پیام را دریافت کرده، به این عمل «بازخورد» می‌گویند." },
+    { lesson: "درس ۷", q: "رسانه را تعریف کنید.", a: "هر وسیله‌ای که پیامی را از فرستنده به گیرنده منتقل کند، رسانه نام دارد. مانند زبان، کتاب، روزنامه، تلفن، رادیو، تلویزیون، اینترنت." },
+    { lesson: "درس ۷", q: "چاپارخانه چه بود؟", a: "از ابتکارات ایرانیان باستان. در مسیر راه‌ها ساخته می‌شد و در آن اسب‌های تازه‌نفس نگهداری می‌شد تا چاپارها (پیک‌ها) پیام‌ها را در فاصله‌های دور انتقال دهند." },
+    { lesson: "درس ۷", q: "ماشین چاپ توسط چه کسی اختراع شد؟", a: "گوتنبرگ آلمانی (در قرن ۱۵ میلادی). این اختراع موجب تحول بزرگی در تولید کتاب و انتشار علوم و فنون در همه‌جا شد." },
+    { lesson: "درس ۷", q: "چه کسی تلفن را اختراع کرد و در چه سالی؟", a: "گراهام بل، در سال ۱۸۷۶ میلادی." },
+    { lesson: "درس ۷", q: "نخستین ماهواره جهان چه نام داشت؟", a: "«اسپوتنیک ۱» که توسط روس‌ها در سال ۱۹۵۷ میلادی به فضا فرستاده شد." },
+
+    // درس ۸: رسانه‌ها در زندگی ما
+    { lesson: "درس ۸", q: "دولت الکترونیکی چیست؟", a: "ارائهٔ خدمات دولتی از طریق اینترنت، مانند پرداخت قبض، ثبت‌نام حج و زیارت، ثبت‌نام کنکور، صدور گواهینامه." },
+    { lesson: "درس ۸", q: "دو مورد از آثار منفی رسانه‌ها را نام ببرید.", a: "ترویج خشونت در فیلم‌ها، ترویج بی‌بندوباری در فضای مجازی، آگهی‌های بازرگانی گمراه‌کننده، بازی‌های رایانه‌ای مضر، کم‌شدن ارتباط چهره‌به‌چهره." },
+    { lesson: "درس ۸", q: "چرا نباید عکس‌ها و فیلم‌های خانوادگی را در اینترنت منتشر کرد؟", a: "زیرا ممکن است مورد سرقت و سوءاستفاده قرار بگیرد. حتی نباید برای دوستان ارسال کرد." },
+
+    // درس ۹: ظهور اسلام در شبه‌جزیرهٔ عربستان
+    { lesson: "درس ۹", q: "بعثت پیامبر اکرم ﷺ در چه تاریخی و در چه سنی رخ داد؟", a: "۲۷ رجب، در ۴۰ سالگی، با نزول فرشتهٔ وحی در غار حرا." },
+    { lesson: "درس ۹", q: "نخستین مسلمانان چه کسانی بودند؟", a: "حضرت خدیجه و حضرت علی ﷺ." },
+    { lesson: "درس ۹", q: "نخستین شهیدان راه اسلام چه کسانی بودند؟", a: "یاسر و همسرش سمیه." },
+
+    // درس ۱۰: از رحلت پیامبر تا قیام کربلا
+    { lesson: "درس ۱۰", q: "رحلت پیامبر اکرم ﷺ در چه تاریخی رخ داد؟", a: "۲۸ صفر سال ۱۱ هجری در مدینه." },
+    { lesson: "درس ۱۰", q: "سه جنگ تحمیلی بر امام علی ﷺ کدام‌اند؟", a: "جنگ جمل، جنگ صفین، جنگ نهروان." },
+    { lesson: "درس ۱۰", q: "هدف قیام امام حسین ﷺ چه بود؟", a: "اصلاح امت جدّش رسول الله ﷺ، امر به معروف و نهی از منکر، پیاده کردن سیرهٔ پیامبر ﷺ و امام علی ﷺ." },
+
+    // درس ۱۱: ورود اسلام به ایران
+    { lesson: "درس ۱۱", q: "نبرد قادسیه و نهاوند چه نتیجه‌ای داشتند؟", a: "در نبرد قادسیه، ارتش ساسانی شکست خورد و تیسفون فتح شد. در نبرد نهاوند، ضربهٔ نهایی بر پیکر ارتش ساسانی وارد شد." },
+    { lesson: "درس ۱۱", q: "یزدگرد سوم چه سرنوشتی پیدا کرد؟", a: "آخرین پادشاه ساسانی بود که به دست آسیابانی در مرو به قتل رسید (سال ۳۱ هجری)." },
+    { lesson: "درس ۱۱", q: "سلمان فارسی که بود؟", a: "به گفتهٔ برخی مورخان، نخستین ایرانی مسلمان بود. در جنگ احزاب (خندق) پیشنهاد کندن خندق را داد. پیامبر ﷺ فرمود: «سلمان از ما اهل بیت است.»" },
+
+    // درس ۱۲: عصر طلایی فرهنگ و تمدن ایرانی ــ اسلامی
+    { lesson: "درس ۱۲", q: "«عصر طلایی فرهنگ و تمدن ایرانی ــ اسلامی» به چه دوره‌ای گفته می‌شود؟", a: "به دورهٔ قرن سوم تا پنجم هجری که در آن فرهنگ و تمدن ایرانی ــ اسلامی به اوج شکوفایی رسید." },
+    { lesson: "درس ۱۲", q: "رودکی و فردوسی چه جایگاهی در ادبیات فارسی دارند؟", a: "رودکی پدر شعر فارسی است و با حمایت سامانیان شعر سرود. فردوسی سرودن شاهنامه را در اواخر دورهٔ سامانیان آغاز کرد." },
+    { lesson: "درس ۱۲", q: "سه نمونه از شاهکارهای معماری ایرانی ــ اسلامی را نام ببرید.", a: "مسجد جامع فهرج یزد، آرامگاه امیراسماعیل سامانی در بخارا، آرامگاه قابوس وشمگیر در گنبد کاووس." }
+  ];
+
+  let currentIndex = 0;
+  const flashcardElement = document.getElementById('flashcard');
+  const questionText = document.getElementById('question-text');
+  const answerText = document.getElementById('answer-text');
+  const counter = document.getElementById('counter');
+  const prevBtn = document.getElementById('prev-btn');
+  const nextBtn = document.getElementById('next-btn');
+  const lessonFront = document.getElementById('lesson-badge-front');
+  const lessonBack = document.getElementById('lesson-badge-back');
+
+  function updateCard() {
+    flashcardElement.classList.remove('flipped');
+    
+    setTimeout(() => {
+      questionText.innerText = flashcards[currentIndex].q;
+      answerText.innerText = flashcards[currentIndex].a;
+      lessonFront.innerText = flashcards[currentIndex].lesson;
+      lessonBack.innerText = flashcards[currentIndex].lesson;
+      
+      const persianNumbers = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+      const currentPersian = String(currentIndex + 1).replace(/\d/g, d => persianNumbers[d]);
+      const totalPersian = String(flashcards.length).replace(/\d/g, d => persianNumbers[d]);
+      counter.innerText = `${currentPersian} از ${totalPersian}`;
+      
+      prevBtn.disabled = currentIndex === 0;
+      nextBtn.disabled = currentIndex === flashcards.length - 1;
+    }, 150);
+  }
+
+  function flipCard() {
+    flashcardElement.classList.toggle('flipped');
+  }
+
+  function nextCard() {
+    if (currentIndex < flashcards.length - 1) {
+      currentIndex++;
+      updateCard();
+    }
+  }
+
+  function prevCard() {
+    if (currentIndex > 0) {
+      currentIndex--;
+      updateCard();
+    }
+  }
+
+  updateCard();
+</script>
+
+</body>
+</html>
