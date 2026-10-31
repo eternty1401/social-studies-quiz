@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>فلش کارت - درس ۱۵: حملهٔ چنگیز و تیمور به ایران</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; font-family:'Vazirmatn',sans-serif; }
+  body { background-color: #f4f7f6; background-image: radial-gradient(#d1e0e0 1px, transparent 1px); background-size: 20px 20px; color: #2c3e50; padding: 30px 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+  .container { background: #fff; width: 100%; max-width: 800px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); padding: 35px; border: 1px solid #eef2f5; text-align: center; }
+  .header { margin-bottom: 30px; border-bottom: 2px dashed #eef2f5; padding-bottom: 20px; }
+  .header h1 { color: #00acc1; font-size: 1.6rem; margin-bottom: 8px; }
+  .header p { color: #7f8c8d; font-size: 0.95rem; }
+  .flashcard-container { perspective: 1000px; width: 100%; height: 300px; margin-bottom: 30px; cursor: pointer; }
+  .flashcard { position: relative; width: 100%; height: 100%; text-align: center; transition: transform 0.6s; transform-style: preserve-3d; }
+  .flashcard.flipped { transform: rotateY(180deg); }
+  .flashcard-front, .flashcard-back { position: absolute; width: 100%; height: 100%; -webkit-backface-visibility: hidden; backface-visibility: hidden; border-radius: 20px; display: flex; align-items: center; justify-content: center; padding: 30px; box-shadow: 0 8px 25px rgba(0,0,0,0.1); }
+  .flashcard-front { background: linear-gradient(135deg, #00acc1, #00838f); color: #fff; }
+  .flashcard-back { background: linear-gradient(135deg, #ecf0f1, #bdc3c7); color: #2c3e50; transform: rotateY(180deg); }
+  .card-content { font-size: 1.2rem; font-weight: 900; line-height: 1.9; }
+  .card-label { position: absolute; top: 15px; right: 20px; font-size: 0.8rem; background: rgba(255,255,255,0.2); padding: 4px 12px; border-radius: 20px; font-weight: 700; }
+  .flashcard-back .card-label { background: rgba(0,0,0,0.05); color: #7f8c8d; }
+  .click-hint { position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%); font-size: 0.8rem; opacity: 0.7; display: flex; align-items: center; gap: 5px; }
+  .controls { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; }
+  .nav-btn { background: #00acc1; color: #fff; border: none; padding: 12px 25px; border-radius: 30px; font-weight: 700; font-family: inherit; font-size: 1rem; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 8px; }
+  .nav-btn:hover { background: #00838f; transform: translateY(-2px); }
+  .nav-btn:disabled { background: #bdc3c7; cursor: not-allowed; transform: none; }
+  .counter { font-weight: 900; font-size: 1.1rem; color: #7f8c8d; background: #ecf0f1; padding: 8px 20px; border-radius: 30px; }
+  .back-home { display: inline-block; margin-top: 30px; background: #2c3e50; color: #fff; text-decoration: none; padding: 10px 25px; border-radius: 30px; font-weight: 700; transition: 0.3s; }
+  .back-home:hover { background: #1a252f; }
+  @media(max-width:600px) { .container { padding: 20px; } .flashcard-container { height: 420px; } .card-content { font-size: 1.05rem; } .controls { flex-direction: column; gap: 15px; } .nav-btn { width: 100%; justify-content: center; } }
+</style>
+</head>
+<body>
+
+<div class="container">
+  
+  <div class="header">
+    <h1>🎴 فلش کارت‌های درس ۱۵</h1>
+    <p>حملهٔ چنگیز و تیمور به ایران — مطالعات اجتماعی پایه هشتم</p>
+  </div>
+
+  <div class="flashcard-container" onclick="flipCard()">
+    <div class="flashcard" id="flashcard">
+      <div class="flashcard-front">
+        <span class="card-label">سوال</span>
+        <div class="card-content" id="question-text">سوال اینجا قرار می‌گیرد</div>
+        <span class="click-hint">👆 برای دیدن جواب کلیک کنید</span>
+      </div>
+      <div class="flashcard-back">
+        <span class="card-label">جواب</span>
+        <div class="card-content" id="answer-text">جواب اینجا قرار می‌گیرد</div>
+        <span class="click-hint">👆 برای دیدن سوال کلیک کنید</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button class="nav-btn" id="prev-btn" onclick="prevCard()">▶ کارت قبلی</button>
+    <div class="counter" id="counter">۱ از ۱۵</div>
+    <button class="nav-btn" id="next-btn" onclick="nextCard()">کارت بعدی ◀</button>
+  </div>
+
+  <a href="hashtom.html" class="back-home">🔙 بازگشت به صفحه دروس</a>
+
+</div>
+
+<script>
+  const flashcards = [
+    {
+      q: "مغولان چه کسانی بودند و در چه سرزمینی زندگی می‌کردند؟",
+      a: "اقوام بیابانگردی بودند که در سرزمین مغولستان، واقع در شمال چین و جنوب سیبری، می‌زیستند."
+    },
+    {
+      q: "شرایط آب و هوایی مغولستان چه تأثیری بر شیوهٔ زندگی مردم آن داشت؟",
+      a: "آب و هوای سرد و خشک منطقه موجب شده بود که آنها شیوهٔ زندگی کوچ‌نشینی و دامداری را برگزینند."
+    },
+    {
+      q: "چنگیزخان چه کسی بود و چه حکومتی تشکیل داد؟",
+      a: "رئیس یکی از قبایل مغول بود که قبایل مغول را زیر فرمان خود درآورد و حکومتی نیرومند تشکیل داد."
+    },
+    {
+      q: "«یاسای چنگیزی» چه بود؟",
+      a: "مجموعه قوانینی که چنگیزخان برای ادارهٔ حکومت خود تدوین کرد و به اجرا گذاشت."
+    },
+    {
+      q: "یکی از اصول مهم یاسای چنگیزی چه بود؟",
+      a: "کسانی که خود را تسلیم سپاه مغول می‌کردند، از قتل و غارت در امان بودند، اما آنان که مقاومت می‌کردند، باید قتل‌عام و غارت می‌شدند."
+    },
+    {
+      q: "چه بهانه‌ای موجب هجوم مغول به ایران شد؟",
+      a: "در زمان سلطان محمد خوارزمشاه، اعضای یک کاروان تجاری مغول در یکی از شهرهای ایران به دستور حاکم آن شهر به جرم جاسوسی دستگیر و کشته شدند. چنگیزخان این موضوع را بهانه قرار داد و به ایران هجوم آورد."
+    },
+    {
+      q: "هجوم مغول به ایران در چه سالی و در زمان کدام پادشاه رخ داد؟",
+      a: "در سال ۶۱۶ هجری، در زمان سلطان محمد خوارزمشاه."
+    },
+    {
+      q: "واکنش سلطان محمد خوارزمشاه در برابر حملهٔ مغول چه بود؟",
+      a: "به مقابله شتافت، اما در همان برخورد اول با سپاه مغول دچار بیم و هراس شد و فرار کرد. فرار او روحیهٔ سپاهیان و مردم را تضعیف کرد."
+    },
+    {
+      q: "پیامدهای حملهٔ چنگیز به ایران چه بود؟",
+      a: "بسیاری از ایرانیان جان باختند، تعداد زیادی به اسارت درآمدند یا آواره شدند، ترس و وحشت سراسر ایران را فراگرفت، مردم دچار سرخوردگی شدند، شهرها و آبادی‌های زیادی ویران شد، آسیب فراوانی به مزارع و قنات‌ها وارد آمد و مساجد، مدارس و کتابخانه‌ها سوزانده شد."
+    },
+    {
+      q: "جلال‌الدین خوارزمشاه چه ویژگی داشت و چرا موفق نشد مغولان را شکست دهد؟",
+      a: "شهامتی از خود نشان داد و در یک جنگ بر مغولان پیروز شد، اما به دلیل اختلافات داخلی و یاری نکردن سرداران و خلیفهٔ عباسی، کاری از پیش نبرد."
+    },
+    {
+      q: "هالکوخان که بود و چه اقداماتی انجام داد؟",
+      a: "نوهٔ چنگیز بود که مأمور شد فتوحات مغول را کامل کند. او نخست اسماعیلیان ایران را از بین برد و قلعه‌های آنها را ویران کرد، سپس با تسخیر بغداد و کشتن خلیفه (سال ۶۵۶ هجری)، خلافت عباسی را برانداخت و حکومت ایلخانان را تأسیس کرد."
+    },
+    {
+      q: "حکومت ایلخانان چه ویژگی‌هایی داشت؟",
+      a: "حدود هشتاد سال بر ایران فرمان راند. در دوران آنها ایران از نظر سیاسی یکپارچه و متحد شد. ایلخانان با حکومت‌های مغولی در آسیا و اروپا ارتباط برقرار کردند."
+    },
+    {
+      q: "پس از مرگ ابوسعید (آخرین ایلخان مغول) چه اتفاقی افتاد؟",
+      a: "حکومت ایلخانان فروپاشید. ایران بار دیگر گرفتار هرج و مرج، آشوب و قتل و غارت شد. یکپارچگی و اتحاد سیاسی از بین رفت و حاکمان محلی و سرداران مغول و غیرمغول بر بخش‌هایی از ایران مسلط شدند."
+    },
+    {
+      q: "قیام سربداران چگونه شکل گرفت و شعار آنان چه بود؟",
+      a: "از روستای باشتین در سبزوار آغاز شد. ساکنان روستا از زیاده‌خواهی مأموران مغول به ستوه آمده بودند و با شعار «سر به دار می‌دهیم، تن به ذلّت نمی‌دهیم» سپاه حاکم مغول را شکست دادند و حکومت خود را تأسیس کردند. حکومت سربداران پشتیبان مذهب شیعه بود و پس از یورش تیمور از بین رفت."
+    }
+  ];
+
+  let currentIndex = 0;
+  const flashcardElement = document.getElementById('flashcard');
+  const questionText = document.getElementById('question-text');
+  const answerText = document.getElementById('answer-text');
+  const counter = document.getElementById('counter');
+  const prevBtn = document.getElementById('prev-btn');
+  const nextBtn = document.getElementById('next-btn');
+
+  function updateCard() {
+    flashcardElement.classList.remove('flipped');
+    setTimeout(() => {
+      questionText.innerText = flashcards[currentIndex].q;
+      answerText.innerText = flashcards[currentIndex].a;
+      const persianNumbers = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+      const cur = String(currentIndex + 1).replace(/\d/g, d => persianNumbers[d]);
+      const tot = String(flashcards.length).replace(/\d/g, d => persianNumbers[d]);
+      counter.innerText = `${cur} از ${tot}`;
+      prevBtn.disabled = currentIndex === 0;
+      nextBtn.disabled = currentIndex === flashcards.length - 1;
+    }, 150);
+  }
+
+  function flipCard() { flashcardElement.classList.toggle('flipped'); }
+  function nextCard() { if (currentIndex < flashcards.length - 1) { currentIndex++; updateCard(); } }
+  function prevCard() { if (currentIndex > 0) { currentIndex--; updateCard(); } }
+  updateCard();
+</script>
+
+</body>
+</html>
