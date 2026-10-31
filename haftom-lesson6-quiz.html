@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>آزمون تستی درس ۶: بیمه و مقابله با حوادث</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; font-family:'Vazirmatn',sans-serif; }
+  body {
+    background-color: #f4f7f6;
+    background-image: radial-gradient(#d1e0e0 1px, transparent 1px);
+    background-size: 20px 20px;
+    color: #2c3e50; padding: 30px 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh;
+  }
+  .container {
+    background: #fff; width: 100%; max-width: 800px; border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08); padding: 35px; border: 1px solid #eef2f5;
+  }
+  
+  /* صفحه شروع */
+  #start-section { text-align: center; padding: 20px 0; }
+  #start-section h1 { color: #f39c12; font-size: 1.6rem; margin-bottom: 15px; }
+  #start-section p { color: #7f8c8d; margin-bottom: 30px; line-height: 1.8; }
+  .name-input {
+    width: 100%; max-width: 400px; padding: 15px; margin-bottom: 20px;
+    border: 2px solid #e2e8f0; border-radius: 12px; font-family: inherit;
+    font-size: 1rem; text-align: center; outline: none; transition: 0.3s;
+  }
+  .name-input:focus { border-color: #f39c12; box-shadow: 0 0 10px rgba(243,156,18,0.2); }
+  .start-btn {
+    background: #2ecc71; color: #fff; border: none; padding: 15px 40px;
+    border-radius: 12px; font-size: 1.1rem; font-weight: 900; font-family: inherit;
+    cursor: pointer; transition: 0.3s; box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);
+  }
+  .start-btn:hover { background: #27ae60; transform: translateY(-2px); }
+
+  /* هدر و تایمر */
+  .header-top { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px dashed #eef2f5; padding-bottom: 15px; margin-bottom: 25px; }
+  .header-title h1 { color: #f39c12; font-size: 1.4rem; }
+  .header-title p { color: #7f8c8d; font-size: 0.85rem; margin-top: 5px; }
+  .timer-box {
+    background: #fdedec; color: #e74c3c; padding: 8px 18px; border-radius: 50px;
+    font-weight: 900; font-size: 1.1rem; border: 1px solid #fadbd8;
+    display: flex; align-items: center; gap: 8px; direction: ltr;
+  }
+  .timer-box.warning { background: #fef9e7; color: #f39c12; border-color: #fae5d3; animation: pulse 1s infinite; }
+  @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+
+  /* سوالات */
+  .question-box {
+    background: #fafbfc; border: 1px solid #eef2f5; border-radius: 12px;
+    padding: 20px; margin-bottom: 20px;
+  }
+  .q-title { font-weight: 900; font-size: 1.05rem; margin-bottom: 15px; line-height: 1.6; }
+  
+  .options { display: flex; flex-direction: column; gap: 10px; }
+  .option-label {
+    display: flex; align-items: center; gap: 10px; padding: 12px 15px;
+    background: #fff; border: 1px solid #e2e8f0; border-radius: 10px;
+    cursor: pointer; transition: 0.2s; font-size: 0.95rem;
+  }
+  .option-label:hover { background: #fff3e0; border-color: #f39c12; }
+  .option-label input[type="radio"] { display: none; }
+  .option-label.selected { background: #fff3e0; border-color: #f39c12; font-weight: 700; color: #d68910; }
+  
+  .submit-btn {
+    display: block; width: 100%; padding: 15px; margin-top: 30px;
+    background: #f39c12; color: #fff; border: none; border-radius: 12px;
+    font-size: 1.1rem; font-weight: 900; font-family: inherit; cursor: pointer;
+    transition: 0.3s;
+  }
+  .submit-btn:hover { background: #d68910; }
+
+  /* کارنامه */
+  .result-container { display: none; text-align: center; }
+  .student-name-display {
+    font-size: 1.2rem; font-weight: 900; color: #2c3e50; margin-bottom: 20px;
+    background: #ecf0f1; padding: 10px 20px; border-radius: 10px; display: inline-block;
+  }
+  .score-circle {
+    width: 150px; height: 150px; border-radius: 50%; margin: 0 auto 20px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    border: 8px solid #ecf0f1;
+  }
+  .score-circle.excellent { border-color: #2ecc71; color: #2ecc71; }
+  .score-circle.good { border-color: #f39c12; color: #f39c12; }
+  .score-circle.fail { border-color: #e74c3c; color: #e74c3c; }
+  .score-num { font-size: 2.8rem; font-weight: 900; line-height: 1; }
+  .score-text { font-size: 0.9rem; color: #7f8c8d; margin-top: 5px; font-weight: 700; }
+  .result-stats { display: flex; justify-content: center; gap: 15px; margin-bottom: 30px; }
+  .stat-box { padding: 15px 25px; border-radius: 10px; font-weight: 700; font-size: 0.95rem; }
+  .stat-box.correct { color: #2ecc71; background: #e8f8f5; }
+  .stat-box.wrong { color: #e74c3c; background: #fdedec; }
+  
+  .review-btn {
+    display: inline-block; background: #3498db; color: #fff; text-decoration: none;
+    padding: 12px 30px; border-radius: 30px; font-weight: 700; border: none; cursor: pointer;
+    font-size: 1rem;
+  }
+
+  @media(max-width:600px) {
+    .container { padding: 20px; }
+    .header-top { flex-direction: column; gap: 10px; text-align: center; }
+    .result-stats { flex-direction: column; gap: 10px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  
+  <!-- صفحه شروع -->
+  <div id="start-section">
+    <h1>📝 آزمون تستی درس ۶</h1>
+    <p>بیمه و مقابله با حوادث — مطالعات اجتماعی پایه هفتم<br>لطفاً نام و نام خانوادگی خود را وارد کنید تا آزمون آغاز شود.</p>
+    <input type="text" id="student-name" class="name-input" placeholder="مثلاً: علی محمدی">
+    <br>
+    <button class="start-btn" onclick="startQuiz()">شروع آزمون</button>
+  </div>
+
+  <!-- بخش آزمون -->
+  <div id="quiz-section" style="display: none;">
+    <div class="header-top">
+      <div class="header-title">
+        <h1>📝 آزمون تستی درس ۶</h1>
+        <p>۱۵ سوال تصادفی از بانک ۴۰ سوالی</p>
+      </div>
+      <div class="timer-box" id="timer-display">⏱ ۱۰:۰۰</div>
+    </div>
+    
+    <form id="quiz-form">
+      <div id="questions-container"></div>
+      <button type="submit" class="submit-btn" id="submit-btn">ثبت پاسخ‌ها و مشاهده کارنامه</button>
+    </form>
+  </div>
+
+  <!-- بخش کارنامه -->
+  <div id="result-section" class="result-container">
+    <h2 style="color:#2c3e50; margin-bottom:20px; font-weight:900;">🎓 کارنامه شما</h2>
+    <div class="student-name-display" id="display-student-name">نام دانش‌آموز</div>
+    
+    <div id="score-circle" class="score-circle">
+      <div class="score-num" id="score-display">0</div>
+      <div class="score-text">از ۱۰۰</div>
+    </div>
+    <p id="result-message" style="font-size:1.1rem; font-weight:700; margin-bottom:25px;"></p>
+    <div class="result-stats">
+      <div class="stat-box correct" id="stat-correct">تعداد درست: ۰</div>
+      <div class="stat-box wrong" id="stat-wrong">تعداد غلط: ۰</div>
+    </div>
+    <a href="haftom.html" class="review-btn" style="background:#3498db; text-decoration:none;">🔙 بازگشت به دروس</a>
+  </div>
+
+</div>
+
+<script>
+  // ==========================================
+  // بانک ۴۰ سوالی درس ۶ (بیمه و مقابله با حوادث)
+  // ==========================================
+  const questionBank = [
+    { q: "بیمه چیست؟", options: ["یک قرارداد بین بیمه‌گر و بیمه‌شونده", "یک نوع مالیات", "یک نوع کمک دولتی رایگان", "یک نوع وام بانکی"], answer: 0 },
+    { q: "در قرارداد بیمه، بیمه‌گر چه تعهدی می‌دهد؟", options: ["دریافت پول از بیمه‌شونده", "جبران خسارت ناشی از حوادث معین", "ساخت خانه برای بیمه‌شونده", "پرداخت حقوق ماهیانه"], answer: 1 },
+    { q: "حق بیمه چیست؟", options: ["مبلغی که بیمه‌گر به بیمه‌شونده می‌دهد", "مبلغی که بیمه‌شونده به بیمه‌گر می‌پردازد", "سود بانکی", "جریمه دیرکرد"], answer: 1 },
+    { q: "چرا بیمه به وجود آمده است؟", options: ["برای افزایش مالیات", "برای جبران خسارت‌های ناشی از حوادث", "برای کاهش حقوق کارگران", "برای افزایش قیمت کالاها"], answer: 1 },
+    { q: "بیمه‌های اجباری چه نوع بیمه‌هایی هستند؟", options: ["بیمه‌هایی که طبق قانون باید انجام شوند", "بیمه‌هایی که افراد داوطلبانه انجام می‌دهند", "بیمه‌هایی که فقط برای ثروتمندان است", "بیمه‌هایی که فقط برای کارمندان است"], answer: 0 },
+    { q: "کدام یک از موارد زیر از بیمه‌های اجباری است؟", options: ["بیمه عمر", "بیمه وسایل نقلیه", "بیمه منازل مسکونی", "بیمه سفر"], answer: 1 },
+    { q: "طبق قانون، چه کسانی باید کارگران و کارمندان خود را بیمه کنند؟", options: ["فقط دولت", "کلیه سازمان‌ها، شرکت‌ها و کارفرمایان", "فقط کارمندان", "فقط شهرداری"], answer: 1 },
+    { q: "بیمه مرکزی جمهوری اسلامی ایران چه وظیفه‌ای دارد؟", options: ["فروش بیمه به مردم", "نظارت بر مؤسسات بیمه و تدوین قوانین", "پرداخت وام به مردم", "ساخت بیمارستان"], answer: 1 },
+    { q: "کدام گزینه از انواع بیمه‌ها از نظر خدماتی است؟", options: ["بیمه بهداشت و درمان", "بیمه بیکاری", "بیمه عمر", "همه موارد"], answer: 3 },
+    { q: "افرادی که تحت پوشش بیمه بهداشت و درمان هستند، چه هزینه‌هایی را می‌توانند دریافت کنند؟", options: ["فقط هزینه دارو", "فقط هزینه جراحی", "بخشی از هزینه‌های پزشکی مانند جراحی، آزمایشگاه و دارو", "همه هزینه‌های پزشکی به طور کامل"], answer: 2 },
+    { q: "سازمان تأمین اجتماعی چه نوع خدماتی ارائه می‌دهد؟", options: ["بیمه بیکاری، از کارافتادگی و درمانی", "فقط بیمه عمر", "فقط بیمه خودرو", "فقط بیمه منزل"], answer: 0 },
+    { q: "هدف اصلی سازمان تأمین اجتماعی چیست؟", options: ["افزایش مالیات", "حمایت از افراد در برابر حوادث و مشکلات زندگی", "ساخت مسکن", "فروش بیمه عمر"], answer: 1 },
+    { q: "بیمه منازل مسکونی از کدام نوع بیمه است؟", options: ["بیمه اجباری", "بیمه اختیاری", "بیمه دولتی رایگان", "بیمه سلامت"], answer: 1 },
+    { q: "چرا بیمه می‌تواند موجب رفاه و آسایش همگانی شود؟", options: ["چون افراد در هنگام حوادث تنها نمی‌مانند و خساراتشان جبران می‌شود", "چون مالیات را کاهش می‌دهد", "چون قیمت کالاها را کاهش می‌دهد", "چون دولت را ثروتمند می‌کند"], answer: 0 },
+    { q: "بیمه بدنه اتومبیل چه نوع بیمه‌ای است؟", options: ["بیمه اجباری", "بیمه اختیاری", "بیمه رایگان دولتی", "بیمه سلامت"], answer: 1 },
+    { q: "امام علی (ع) در برخورد با پیرمرد نصرانی (مسیحی) چه فرمودند؟", options: ["او را از شهر بیرون کنید", "بروید از بیت‌المال به او مستمری بدهید", "او را به حال خود بگذارید", "او را به گدایی مجبور کنید"], answer: 1 },
+    { q: "کدام گزینه از بیمه‌های اختیاری است؟", options: ["بیمه بدنه اتومبیل", "بیمه کارمندان", "بیمه کارگران", "بیمه وسایل نقلیه"], answer: 0 },
+    { q: "بیمه مرکزی چه نقشی در قبال مؤسسات بیمه دارد؟", options: ["نظارت و هدایت فعالیت مؤسسات بیمه", "خرید سهام مؤسسات بیمه", "تعطیل کردن مؤسسات بیمه", "ادغام همه مؤسسات بیمه"], answer: 0 },
+    { q: "کدام گزینه از بیمه‌های بهداشت و درمان است؟", options: ["بیمه بدنه اتومبیل", "بیمه عمر", "بیمه روستاییان", "بیمه منازل"], answer: 2 },
+    { q: "بیمه سرنشین خودرو چه چیزی را پوشش می‌دهد؟", options: ["خسارت به خودروی خودمان", "خسارت به سرنشینان خودرو", "خسارت به منازل", "خسارت به مغازه‌ها"], answer: 1 },
+    { q: "چرا افراد برای روزهای سخت آینده باید فکر کنند؟", options: ["چون ممکن است بیمار، از کار افتاده یا بازنشسته شوند", "چون هیچ‌وقت حادثه‌ای رخ نمی‌دهد", "چون بیمه اجباری است", "چون دولت به آن‌ها پول می‌دهد"], answer: 0 },
+    { q: "بیمه آتش‌سوزی چه نوع بیمه‌ای است؟", options: ["بیمه اجباری", "بیمه اختیاری", "بیمه دولتی", "بیمه سلامت"], answer: 1 },
+    { q: "کدام گزینه درباره بیمه صحیح است؟", options: ["بیمه فقط برای ثروتمندان است", "بیمه به همه افراد در جبران خسارت کمک می‌کند", "بیمه هزینه‌ها را افزایش می‌دهد", "بیمه فقط برای کارمندان است"], answer: 1 },
+    { q: "کدام یک از خدمات سازمان تأمین اجتماعی نیست؟", options: ["بیمه بیکاری", "بیمه از کارافتادگی", "بیمه بدنه اتومبیل", "بیمه درمانی"], answer: 2 },
+    { q: "بیمه روستاییان چه هدفی دارد؟", options: ["حمایت از روستاییان در برابر حوادث و مشکلات", "کاهش درآمد روستاییان", "افزایش مالیات روستاییان", "تخریب روستاها"], answer: 0 },
+    { q: "بیمه از کارافتادگی چه زمانی به کمک فرد می‌آید؟", options: ["زمانی که فرد بیکار می‌شود", "زمانی که فرد از کار افتاده می‌شود", "زمانی که فرد بازنشسته می‌شود", "زمانی که فرد بیمار می‌شود"], answer: 1 },
+    { q: "چرا سازمان تأمین اجتماعی از افراد حق بیمه دریافت می‌کند؟", options: ["برای پرداخت خدمات به آن‌ها در هنگام حوادث و مشکلات", "برای افزایش درآمد دولت", "برای کاهش حقوق کارگران", "برای سرمایه‌گذاری در بورس"], answer: 0 },
+    { q: "بیمه عمر چه نوع بیمه‌ای است؟", options: ["بیمه اجباری", "بیمه اختیاری", "بیمه دولتی", "بیمه سلامت"], answer: 1 },
+    { q: "کدام یک از انواع بیمه، مربوط به حوادث ناشی از کار است؟", options: ["بیمه منازل", "بیمه کارمندان و کارگران", "بیمه عمر", "بیمه بدنه اتومبیل"], answer: 1 },
+    { q: "روایت امام علی (ع) درباره پیرمرد نصرانی چه درسی به ما می‌دهد؟", options: ["نباید به غیرمسلمانان کمک کنیم", "حمایت از افراد نیازمند در جامعه اسلامی وظیفه‌ای همگانی است", "پیرمرد باید خودش کار کند", "گدایی ممنوع است"], answer: 1 },
+    { q: "کدام گزینه از بیمه‌های مربوط به خودرو است؟", options: ["بیمه بدنه اتومبیل و بیمه سرنشین خودرو", "بیمه عمر و بیکاری", "بیمه روستاییان و آتش‌سوزی", "بیمه منازل و درمان"], answer: 0 },
+    { q: "یکی از راه‌های جلوگیری از زیان‌های مالی در حوادث چیست؟", options: ["بیمه کردن", "نادیده گرفتن حوادث", "پرهیز از قانون", "پنهان کردن دارایی"], answer: 0 },
+    { q: "چرا بیمه برای همه اقشار جامعه مفید است؟", options: ["چون همه افراد در برابر حوادث حمایت می‌شوند", "چون فقط برای ثروتمندان است", "چون فقط به کارمندان کمک می‌کند", "چون هیچ فایده‌ای ندارد"], answer: 0 },
+    { q: "بیمه بیکاری چه زمانی به فرد کمک می‌کند؟", options: ["وقتی که فرد شاغل است", "وقتی که فرد بیکار می‌شود", "وقتی که فرد بیمار است", "وقتی که فرد ازدواج می‌کند"], answer: 1 },
+    { q: "بیمه درمانی چه نوع خدماتی ارائه می‌دهد؟", options: ["کمک به هزینه‌های پزشکی", "کمک به هزینه‌های مسکن", "کمک به هزینه‌های خودرو", "کمک به هزینه‌های سفر"], answer: 0 },
+    { q: "کدام یک از موارد زیر از بیمه‌های اختیاری نیست؟", options: ["بیمه عمر", "بیمه بدنه اتومبیل", "بیمه منازل مسکونی", "بیمه کارمندان"], answer: 3 },
+    { q: "بیمه مرکزی چه نوع سازمانی است؟", options: ["سازمان نظارتی بر مؤسسات بیمه", "سازمان فروش بیمه", "سازمان دولتی رایگان", "سازمان قضایی"], answer: 0 },
+    { q: "بیمه کارمندان توسط چه کسانی انجام می‌شود؟", options: ["خود کارمندان به تنهایی", "کارفرمایان طبق قانون", "شهرداری", "دولت به تنهایی"], answer: 1 },
+    { q: "چرا بیمه برای جلوگیری از فقر و آسیب‌های اجتماعی مهم است؟", options: ["چون خانواده‌ها را در برابر خسارات بزرگ حمایت می‌کند", "چون مالیات را افزایش می‌دهد", "چون قیمت‌ها را کاهش می‌دهد", "چون همه را ثروتمند می‌کند"], answer: 0 }
+  ];
+
+  const numQuestionsToShow = 15; 
+  const totalTime = 600; // ۱۰ دقیقه
+  
+  let selectedQuestions = [];
+  let timerInterval;
+  let timeLeft = totalTime;
+  let studentName = "";
+
+  function shuffle(array) {
+    let currentIndex = array.length, randomIndex;
+    while (currentIndex != 0) {
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex--;
+      [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+    }
+    return array;
+  }
+
+  function startQuiz() {
+    studentName = document.getElementById('student-name').value.trim();
+    if (studentName === "") {
+      alert("لطفاً نام و نام خانوادگی خود را وارد کنید.");
+      return;
+    }
+    
+    document.getElementById('start-section').style.display = 'none';
+    document.getElementById('quiz-section').style.display = 'block';
+    
+    initQuiz();
+  }
+
+  function initQuiz() {
+    const shuffledBank = shuffle([...questionBank]);
+    selectedQuestions = shuffledBank.slice(0, numQuestionsToShow);
+
+    const container = document.getElementById('questions-container');
+    container.innerHTML = '';
+
+    selectedQuestions.forEach((item, index) => {
+      const correctAnswerText = item.options[item.answer];
+      const shuffledOptions = shuffle([...item.options]);
+      const newCorrectIndex = shuffledOptions.indexOf(correctAnswerText);
+      
+      selectedQuestions[index].options = shuffledOptions;
+      selectedQuestions[index].answer = newCorrectIndex;
+
+      let optionsHTML = '';
+      shuffledOptions.forEach((opt, i) => {
+        optionsHTML += `
+          <label class="option-label" onclick="selectOption(this)">
+            <input type="radio" name="q${index}" value="${i}">
+            <span>${opt}</span>
+          </label>
+        `;
+      });
+
+      const qBox = document.createElement('div');
+      qBox.className = 'question-box';
+      qBox.innerHTML = `
+        <div class="q-title">${index + 1}. ${item.q}</div>
+        <div class="options">${optionsHTML}</div>
+      `;
+      container.appendChild(qBox);
+    });
+
+    startTimer();
+  }
+
+  function startTimer() {
+    const display = document.getElementById('timer-display');
+    
+    timerInterval = setInterval(() => {
+      timeLeft--;
+      const minutes = Math.floor(timeLeft / 60);
+      const seconds = timeLeft % 60;
+      
+      display.innerHTML = `⏱ ${minutes < 10 ? '0'+minutes : minutes}:${seconds < 10 ? '0'+seconds : seconds}`;
+
+      if (timeLeft <= 60) {
+        display.classList.add('warning');
+      }
+      
+      if (timeLeft <= 0) {
+        clearInterval(timerInterval);
+        display.innerHTML = `⏱ ۰۰:۰۰`;
+        document.getElementById('quiz-form').dispatchEvent(new Event('submit'));
+      }
+    }, 1000);
+  }
+
+  function selectOption(label) {
+    const name = label.querySelector('input').name;
+    document.querySelectorAll(`input[name="${name}"]`).forEach(input => {
+      input.parentElement.classList.remove('selected');
+    });
+    label.classList.add('selected');
+    label.querySelector('input').checked = true;
+  }
+
+  document.getElementById('quiz-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    clearInterval(timerInterval);
+
+    let correctCount = 0;
+    let wrongCount = 0;
+
+    selectedQuestions.forEach((item, index) => {
+      const selected = document.querySelector(`input[name="q${index}"]:checked`);
+      if (!selected) {
+        wrongCount++; 
+      } else if (parseInt(selected.value) === item.answer) {
+        correctCount++;
+      } else {
+        wrongCount++;
+      }
+    });
+
+    const score = Math.round((correctCount / selectedQuestions.length) * 100);
+
+    document.getElementById('quiz-section').style.display = 'none';
+    document.getElementById('result-section').style.display = 'block';
+
+    document.getElementById('display-student-name').innerText = `دانش‌آموز: ${studentName}`;
+    
+    document.getElementById('score-display').innerText = score;
+    document.getElementById('stat-correct').innerText = `تعداد درست: ${correctCount}`;
+    document.getElementById('stat-wrong').innerText = `تعداد غلط: ${wrongCount}`;
+
+    const circle = document.getElementById('score-circle');
+    const msg = document.getElementById('result-message');
+    
+    circle.className = 'score-circle';
+    if (score >= 80) {
+      circle.classList.add('excellent');
+      msg.innerText = "🌟 عالی بود! شما درس را به خوبی یاد گرفته‌اید.";
+      msg.style.color = "#2ecc71";
+    } else if (score >= 50) {
+      circle.classList.add('good');
+      msg.innerText = "👍 خوب بود، اما با کمی مطالعه بیشتر می‌توانید بهتر شوید.";
+      msg.style.color = "#f39c12";
+    } else {
+      circle.classList.add('fail');
+      msg.innerText = "📚 نیاز به مطالعه بیشتر دارید. ناامید نشوید و درسنامه را دوباره بخوانید.";
+      msg.style.color = "#e74c3c";
+    }
+    
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+</script>
+
+</body>
+</html>
