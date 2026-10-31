@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>فلش کارت - درس ۱: تعاون (۱)</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; font-family:'Vazirmatn',sans-serif; }
+  body {
+    background-color: #f4f7f6;
+    background-image: radial-gradient(#d1e0e0 1px, transparent 1px);
+    background-size: 20px 20px;
+    color: #2c3e50; padding: 30px 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh;
+  }
+  .container {
+    background: #fff; width: 100%; max-width: 800px; border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08); padding: 35px; border: 1px solid #eef2f5;
+    text-align: center;
+  }
+  
+  .header { margin-bottom: 30px; border-bottom: 2px dashed #eef2f5; padding-bottom: 20px; }
+  .header h1 { color: #00838f; font-size: 1.6rem; margin-bottom: 8px; }
+  .header p { color: #7f8c8d; font-size: 0.95rem; }
+
+  /* ===== بخش فلش کارت ===== */
+  .flashcard-container {
+    perspective: 1000px;
+    width: 100%;
+    height: 300px;
+    margin-bottom: 30px;
+    cursor: pointer;
+  }
+
+  .flashcard {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+  }
+
+  .flashcard.flipped {
+    transform: rotateY(180deg);
+  }
+
+  .flashcard-front, .flashcard-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+  }
+
+  .flashcard-front {
+    background: linear-gradient(135deg, #00838f, #005662);
+    color: #fff;
+  }
+
+  .flashcard-back {
+    background: linear-gradient(135deg, #ecf0f1, #bdc3c7);
+    color: #2c3e50;
+    transform: rotateY(180deg);
+  }
+
+  .card-content {
+    font-size: 1.25rem;
+    font-weight: 900;
+    line-height: 1.9;
+  }
+
+  .card-label {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 0.8rem;
+    background: rgba(255,255,255,0.2);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-weight: 700;
+  }
+  .flashcard-back .card-label {
+    background: rgba(0,0,0,0.05);
+    color: #7f8c8d;
+  }
+
+  .click-hint {
+    position: absolute;
+    bottom: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.8rem;
+    opacity: 0.7;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  /* ===== کنترل‌ها ===== */
+  .controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+  }
+
+  .nav-btn {
+    background: #00838f; color: #fff; border: none; padding: 12px 25px;
+    border-radius: 30px; font-weight: 700; font-family: inherit;
+    font-size: 1rem; cursor: pointer; transition: 0.3s;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .nav-btn:hover { background: #005662; transform: translateY(-2px); }
+  .nav-btn:disabled { background: #bdc3c7; cursor: not-allowed; transform: none; }
+
+  .counter {
+    font-weight: 900; font-size: 1.1rem; color: #7f8c8d;
+    background: #ecf0f1; padding: 8px 20px; border-radius: 30px;
+  }
+
+  .back-home {
+    display: inline-block; margin-top: 30px; background: #2c3e50; color: #fff;
+    text-decoration: none; padding: 10px 25px; border-radius: 30px; font-weight: 700; transition: 0.3s;
+  }
+  .back-home:hover { background: #1a252f; }
+
+  @media(max-width:600px) {
+    .container { padding: 20px; }
+    .flashcard-container { height: 400px; }
+    .card-content { font-size: 1.05rem; }
+    .controls { flex-direction: column; gap: 15px; }
+    .nav-btn { width: 100%; justify-content: center; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  
+  <div class="header">
+    <h1>🎴 فلش کارت‌های درس ۱</h1>
+    <p>تعاون (۱) — مطالعات اجتماعی پایه هشتم</p>
+  </div>
+
+  <!-- فلش کارت -->
+  <div class="flashcard-container" onclick="flipCard()">
+    <div class="flashcard" id="flashcard">
+      <div class="flashcard-front">
+        <span class="card-label">سوال</span>
+        <div class="card-content" id="question-text">سوال اینجا قرار می‌گیرد</div>
+        <span class="click-hint">👆 برای دیدن جواب کلیک کنید</span>
+      </div>
+      <div class="flashcard-back">
+        <span class="card-label">جواب</span>
+        <div class="card-content" id="answer-text">جواب اینجا قرار می‌گیرد</div>
+        <span class="click-hint">👆 برای دیدن سوال کلیک کنید</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- کنترل‌ها -->
+  <div class="controls">
+    <button class="nav-btn" id="prev-btn" onclick="prevCard()">▶ کارت قبلی</button>
+    <div class="counter" id="counter">۱ از ۱۵</div>
+    <button class="nav-btn" id="next-btn" onclick="nextCard()">کارت بعدی ◀</button>
+  </div>
+
+  <a href="hashtom.html" class="back-home">🔙 بازگشت به صفحه دروس</a>
+
+</div>
+
+<script>
+  // ==========================================
+  // بانک ۱۵ فلش کارت درس ۱ پایه هشتم (تعاون ۱)
+  // ==========================================
+  const flashcards = [
+    {
+      q: "تعاون به زبان ساده یعنی چه؟",
+      a: "همکاری و یاری رساندن به یکدیگر."
+    },
+    {
+      q: "طبق فرموده پیامبر اکرم (ص)، جامعه در دوستی و مهربانی به چه چیزی تشبیه شده است؟",
+      a: "به یک بدن واحد؛ هرگاه عضوی از آن به درد آید، اعضای دیگر نیز ابراز همدردی می‌کنند."
+    },
+    {
+      q: "طبق آیه ۲ سوره مائده، در چه کارهایی باید همکاری کنیم و در چه کارهایی نباید؟",
+      a: "در کارهای نیک و پرهیزکاری همکاری کنیم؛ اما در گناه و ستمکاری همکاری نکنیم."
+    },
+    {
+      q: "منظور از «همکاری نکردن در گناه» چیست؟",
+      a: "یعنی فرد گناهکار را تشویق نکنیم، با او موافقت نکنیم و مقدمهٔ گناه را فراهم نکنیم."
+    },
+    {
+      q: "چهار مورد از جلوه‌های تعاون در کارهای نیک را نام ببرید.",
+      a: "اظهار دوستی و محبت، عیادت از بیمار، قرض دادن، ایجاد صلح و آشتی بین انسان‌ها."
+    },
+    {
+      q: "همکاری و همدلی در خانواده چه تأثیری دارد؟",
+      a: "باعث صمیمیت و محبت بیشتر بین اعضای خانواده می‌شود و هر عضو احساس مفید بودن می‌کند."
+    },
+    {
+      q: "پیامبر اکرم (ص) و امامان (ع) در خانه چه کارهایی انجام می‌دادند؟",
+      a: "در کارهایی مانند دوشیدن شیر چهارپایان، آسیاب کردن گندم و جو و نظافت خانه، همکاری می‌کردند."
+    },
+    {
+      q: "صندوق قرض‌الحسنه خانوادگی چیست؟",
+      a: "صندوقی که خویشاوندان برای رفع نیازهای مالی یکدیگر تشکیل می‌دهند و هر ماه مبلغی به آن واریز می‌کنند تا به نوبت به نیازمندان وام داده شود."
+    },
+    {
+      q: "سه مورد از جلوه‌های تعاون در مدرسه را بنویسید.",
+      a: "همکاری در نظافت کلاس و مدرسه، کمک به هم‌کلاسی‌های ضعیف در درس، همکاری در مراسم صبحگاهی."
+    },
+    {
+      q: "امام صادق (ع) درباره خوش‌رفتاری با همسایه چه فرموده‌اند؟",
+      a: "«با همسایه‌ات خوش‌رفتاری کن تا مسلمان راستین باشی.»"
+    },
+    {
+      q: "سه مورد از جلوه‌های تعاون در محله را نام ببرید.",
+      a: "عیادت از همسایه بیمار، کمک به همسایه جدید، همکاری در نظافت و پاکیزگی محله."
+    },
+    {
+      q: "چرا تعاون در محله موجب بهتر پیش رفتن کارها می‌شود؟",
+      a: "چون همدلی و همکاری بین اهل محله، صمیمیت و همبستگی ایجاد می‌کند و کارها با همفکری و کمک همدیگر بهتر پیش می‌رود."
+    },
+    {
+      q: "امر به معروف و نهی از منکر از چه نوع تعاونی است؟",
+      a: "از جلوه‌های تعاون در کارهای نیک."
+    },
+    {
+      q: "چرا انسان به تعاون نیاز دارد؟",
+      a: "چون انسان موجودی اجتماعی آفریده شده است و بدون همکاری با دیگران نمی‌تواند به خوبی زندگی کند."
+    },
+    {
+      q: "چه ارتباطی بین تعاون در خانواده و تعاون در جامعه وجود دارد؟",
+      a: "کسی که در خانواده یاد بگیرد با اعضا همکاری کند، در جامعه نیز با دیگران همکاری خواهد کرد؛ تعاون در خانواده، پایه تعاون در جامعه است."
+    }
+  ];
+
+  let currentIndex = 0;
+  const flashcardElement = document.getElementById('flashcard');
+  const questionText = document.getElementById('question-text');
+  const answerText = document.getElementById('answer-text');
+  const counter = document.getElementById('counter');
+  const prevBtn = document.getElementById('prev-btn');
+  const nextBtn = document.getElementById('next-btn');
+
+  function updateCard() {
+    flashcardElement.classList.remove('flipped');
+    
+    setTimeout(() => {
+      questionText.innerText = flashcards[currentIndex].q;
+      answerText.innerText = flashcards[currentIndex].a;
+      
+      const persianNumbers = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+      const currentPersian = String(currentIndex + 1).replace(/\d/g, d => persianNumbers[d]);
+      const totalPersian = String(flashcards.length).replace(/\d/g, d => persianNumbers[d]);
+      counter.innerText = `${currentPersian} از ${totalPersian}`;
+      
+      prevBtn.disabled = currentIndex === 0;
+      nextBtn.disabled = currentIndex === flashcards.length - 1;
+    }, 150);
+  }
+
+  function flipCard() {
+    flashcardElement.classList.toggle('flipped');
+  }
+
+  function nextCard() {
+    if (currentIndex < flashcards.length - 1) {
+      currentIndex++;
+      updateCard();
+    }
+  }
+
+  function prevCard() {
+    if (currentIndex > 0) {
+      currentIndex--;
+      updateCard();
+    }
+  }
+
+  updateCard();
+</script>
+
+</body>
+</html>
