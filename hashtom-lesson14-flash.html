@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>فلش کارت - درس ۱۴: میراث فرهنگی ایران در عصر سلجوقی</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; font-family:'Vazirmatn',sans-serif; }
+  body {
+    background-color: #f4f7f6;
+    background-image: radial-gradient(#d1e0e0 1px, transparent 1px);
+    background-size: 20px 20px;
+    color: #2c3e50; padding: 30px 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh;
+  }
+  .container { background: #fff; width: 100%; max-width: 800px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); padding: 35px; border: 1px solid #eef2f5; text-align: center; }
+  .header { margin-bottom: 30px; border-bottom: 2px dashed #eef2f5; padding-bottom: 20px; }
+  .header h1 { color: #00acc1; font-size: 1.6rem; margin-bottom: 8px; }
+  .header p { color: #7f8c8d; font-size: 0.95rem; }
+  .flashcard-container { perspective: 1000px; width: 100%; height: 300px; margin-bottom: 30px; cursor: pointer; }
+  .flashcard { position: relative; width: 100%; height: 100%; text-align: center; transition: transform 0.6s; transform-style: preserve-3d; }
+  .flashcard.flipped { transform: rotateY(180deg); }
+  .flashcard-front, .flashcard-back { position: absolute; width: 100%; height: 100%; -webkit-backface-visibility: hidden; backface-visibility: hidden; border-radius: 20px; display: flex; align-items: center; justify-content: center; padding: 30px; box-shadow: 0 8px 25px rgba(0,0,0,0.1); }
+  .flashcard-front { background: linear-gradient(135deg, #00acc1, #00838f); color: #fff; }
+  .flashcard-back { background: linear-gradient(135deg, #ecf0f1, #bdc3c7); color: #2c3e50; transform: rotateY(180deg); }
+  .card-content { font-size: 1.2rem; font-weight: 900; line-height: 1.9; }
+  .card-label { position: absolute; top: 15px; right: 20px; font-size: 0.8rem; background: rgba(255,255,255,0.2); padding: 4px 12px; border-radius: 20px; font-weight: 700; }
+  .flashcard-back .card-label { background: rgba(0,0,0,0.05); color: #7f8c8d; }
+  .click-hint { position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%); font-size: 0.8rem; opacity: 0.7; display: flex; align-items: center; gap: 5px; }
+  .controls { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; }
+  .nav-btn { background: #00acc1; color: #fff; border: none; padding: 12px 25px; border-radius: 30px; font-weight: 700; font-family: inherit; font-size: 1rem; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 8px; }
+  .nav-btn:hover { background: #00838f; transform: translateY(-2px); }
+  .nav-btn:disabled { background: #bdc3c7; cursor: not-allowed; transform: none; }
+  .counter { font-weight: 900; font-size: 1.1rem; color: #7f8c8d; background: #ecf0f1; padding: 8px 20px; border-radius: 30px; }
+  .back-home { display: inline-block; margin-top: 30px; background: #2c3e50; color: #fff; text-decoration: none; padding: 10px 25px; border-radius: 30px; font-weight: 700; transition: 0.3s; }
+  .back-home:hover { background: #1a252f; }
+  @media(max-width:600px) { .container { padding: 20px; } .flashcard-container { height: 420px; } .card-content { font-size: 1.05rem; } .controls { flex-direction: column; gap: 15px; } .nav-btn { width: 100%; justify-content: center; } }
+</style>
+</head>
+<body>
+
+<div class="container">
+  
+  <div class="header">
+    <h1>🎴 فلش کارت‌های درس ۱۴</h1>
+    <p>میراث فرهنگی ایران در عصر سلجوقی — مطالعات اجتماعی پایه هشتم</p>
+  </div>
+
+  <div class="flashcard-container" onclick="flipCard()">
+    <div class="flashcard" id="flashcard">
+      <div class="flashcard-front">
+        <span class="card-label">سوال</span>
+        <div class="card-content" id="question-text">سوال اینجا قرار می‌گیرد</div>
+        <span class="click-hint">👆 برای دیدن جواب کلیک کنید</span>
+      </div>
+      <div class="flashcard-back">
+        <span class="card-label">جواب</span>
+        <div class="card-content" id="answer-text">جواب اینجا قرار می‌گیرد</div>
+        <span class="click-hint">👆 برای دیدن سوال کلیک کنید</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button class="nav-btn" id="prev-btn" onclick="prevCard()">▶ کارت قبلی</button>
+    <div class="counter" id="counter">۱ از ۱۵</div>
+    <button class="nav-btn" id="next-btn" onclick="nextCard()">کارت بعدی ◀</button>
+  </div>
+
+  <a href="hashtom.html" class="back-home">🔙 بازگشت به صفحه دروس</a>
+
+</div>
+
+<script>
+  const flashcards = [
+    {
+      q: "در رأس حکومت سلجوقی چه کسی قرار داشت؟",
+      a: "سلطان. در آن دوره، خلیفهٔ عباسی بیشتر ریاست معنوی و دینی داشت و قدرت سیاسی و نظامی در اختیار سلاطین بود."
+    },
+    {
+      q: "مهم‌ترین مقام پس از سلطان در دورهٔ سلجوقی چه بود؟",
+      a: "مقام وزارت. حکومت سلجوقی قدرت و عظمت خود را با سیاست و کفایت وزیران ایرانی به دست آورده بود."
+    },
+    {
+      q: "دو تن از وزیران مشهور دورهٔ سلجوقی را نام ببرید.",
+      a: "عمیدالملک کندری (وزیر طغرل) و خواجه نظام‌الملک (وزیر آلب‌ارسالن و ملکشاه)."
+    },
+    {
+      q: "چهار دیوان مهم عصر سلجوقی را نام ببرید.",
+      a: "دیوان استیفا (مالی)، دیوان رسایل یا طغرا (نامه‌ها)، دیوان اشراف (بازرسی)، دیوان عرض (نظامی)."
+    },
+    {
+      q: "مدارس نظامیه چه بودند و توسط چه کسی تأسیس شدند؟",
+      a: "مدارس مهمی که خواجه نظام‌الملک در شهرهای مختلف (نیشابور، اصفهان، بغداد) بنیان گذاشت. اموال زیادی را وقف آنها کرد و به مدرسان و کارکنان حقوق پرداخت می‌شد."
+    },
+    {
+      q: "دو تن از مشاهیر مرتبط با مدارس نظامیه را نام ببرید.",
+      a: "امام محمد غزالی (از استادان) و سعدی (از دانش‌آموختگان)."
+    },
+    {
+      q: "چه عواملی موجب گسترش زبان فارسی در دورهٔ سلجوقی شد؟",
+      a: "لشکرکشی‌های محمود غزنوی به هندوستان (رواج در هند)، توسعهٔ قلمرو سلجوقیان به سمت غرب (رواج در آسیای صغیر)، و تغییر زبان نامه‌ها و دفترهای دیوانی از عربی به فارسی."
+    },
+    {
+      q: "پایتخت‌های مهم سلجوقیان کدام شهرها بودند؟",
+      a: "ری، نیشابور و اصفهان — از شهرهای بزرگ و آباد آن دوره محسوب می‌شدند."
+    },
+    {
+      q: "مهم‌ترین ابتکار در معماری مساجد دورهٔ سلجوقی چه بود؟",
+      a: "حیاط و چهار ایوان اطراف آن. همچنین الگوهای جدید در ساختن گنبدها، مناره‌ها، کاروانسراها و مدارس به کار گرفته شد."
+    },
+    {
+      q: "در معماری دورهٔ سلجوقی، کدام هنرها به اوج شکوفایی رسیدند؟",
+      a: "آجرکاری و کاشی‌کاری. کاشی‌های این دوره ابتکارات مهم معماران ایرانی برای تزیین بناها بود."
+    },
+    {
+      q: "سه نمونه از شاهکارهای معماری دورهٔ سلجوقی را نام ببرید.",
+      a: "میل خسروگرد (نزدیکی سبزوار)، برج‌های خرقان (شهرستان آوج، استان قزوین)، کاروانسرای شرف (نزدیکی سرخس، خراسان رضوی)."
+    },
+    {
+      q: "هنرهای مهم دورهٔ سلجوقی کدام‌اند؟",
+      a: "سفالگری (ظروف زرین‌فام و لعاب‌دار)، فلزکاری، خوشنویسی، تذهیب و جلدسازی (چرم)."
+    },
+    {
+      q: "«احیاءالعلوم» و «کشاف» به ترتیب اثر چه کسانی هستند؟",
+      a: "احیاءالعلوم اثر امام محمد غزالی و کشاف اثر زمخشری است."
+    },
+    {
+      q: "«سیاست‌نامه» و «قابوس‌نامه» به ترتیب اثر چه کسانی هستند؟",
+      a: "سیاست‌نامه اثر خواجه نظام‌الملک (دربارهٔ آیین فرمانروایی و کشورداری) و قابوس‌نامه اثر عنصرالمعالی."
+    },
+    {
+      q: "چهار شاعر بزرگ دورهٔ سلجوقی را با آثارشان نام ببرید.",
+      a: "فردوسی (شاهنامه)، عمر خیام (رباعیات)، ناصرخسرو (سفرنامه)، عطار (منطق‌الطیر و تذکرةالاولیا)، نظامی (خسرو و شیرین، لیلی و مجنون)، سنایی (حدیقةالحقیقه)."
+    }
+  ];
+
+  let currentIndex = 0;
+  const flashcardElement = document.getElementById('flashcard');
+  const questionText = document.getElementById('question-text');
+  const answerText = document.getElementById('answer-text');
+  const counter = document.getElementById('counter');
+  const prevBtn = document.getElementById('prev-btn');
+  const nextBtn = document.getElementById('next-btn');
+
+  function updateCard() {
+    flashcardElement.classList.remove('flipped');
+    setTimeout(() => {
+      questionText.innerText = flashcards[currentIndex].q;
+      answerText.innerText = flashcards[currentIndex].a;
+      const persianNumbers = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+      const cur = String(currentIndex + 1).replace(/\d/g, d => persianNumbers[d]);
+      const tot = String(flashcards.length).replace(/\d/g, d => persianNumbers[d]);
+      counter.innerText = `${cur} از ${tot}`;
+      prevBtn.disabled = currentIndex === 0;
+      nextBtn.disabled = currentIndex === flashcards.length - 1;
+    }, 150);
+  }
+
+  function flipCard() { flashcardElement.classList.toggle('flipped'); }
+  function nextCard() { if (currentIndex < flashcards.length - 1) { currentIndex++; updateCard(); } }
+  function prevCard() { if (currentIndex > 0) { currentIndex--; updateCard(); } }
+  updateCard();
+</script>
+
+</body>
+</html>
