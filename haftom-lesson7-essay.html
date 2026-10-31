@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>آزمون تشریحی درس ۷: تولید و توزیع</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; font-family:'Vazirmatn',sans-serif; }
+  body {
+    background-color: #f4f7f6;
+    background-image: radial-gradient(#d1e0e0 1px, transparent 1px);
+    background-size: 20px 20px;
+    color: #2c3e50; padding: 30px 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh;
+  }
+  .container {
+    background: #fff; width: 100%; max-width: 800px; border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08); padding: 35px; border: 1px solid #eef2f5;
+  }
+  
+  /* صفحه شروع */
+  #start-section { text-align: center; padding: 20px 0; }
+  #start-section h1 { color: #00acc1; font-size: 1.6rem; margin-bottom: 15px; }
+  #start-section p { color: #7f8c8d; margin-bottom: 30px; line-height: 1.8; }
+  .name-input {
+    width: 100%; max-width: 400px; padding: 15px; margin-bottom: 20px;
+    border: 2px solid #e2e8f0; border-radius: 12px; font-family: inherit;
+    font-size: 1rem; text-align: center; outline: none; transition: 0.3s;
+  }
+  .name-input:focus { border-color: #00acc1; box-shadow: 0 0 10px rgba(0,172,193,0.2); }
+  .start-btn {
+    background: #2ecc71; color: #fff; border: none; padding: 15px 40px;
+    border-radius: 12px; font-size: 1.1rem; font-weight: 900; font-family: inherit;
+    cursor: pointer; transition: 0.3s; box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);
+  }
+  .start-btn:hover { background: #27ae60; transform: translateY(-2px); }
+
+  /* هدر و تایمر */
+  .header-top { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px dashed #eef2f5; padding-bottom: 15px; margin-bottom: 25px; }
+  .header-title h1 { color: #00acc1; font-size: 1.4rem; }
+  .header-title p { color: #7f8c8d; font-size: 0.85rem; margin-top: 5px; }
+  .timer-box {
+    background: #fdedec; color: #e74c3c; padding: 8px 18px; border-radius: 50px;
+    font-weight: 900; font-size: 1.1rem; border: 1px solid #fadbd8;
+    display: flex; align-items: center; gap: 8px; direction: ltr;
+  }
+  .timer-box.warning { background: #fef9e7; color: #f39c12; border-color: #fae5d3; animation: pulse 1s infinite; }
+  @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+
+  /* سوالات تشریحی */
+  .question-box {
+    background: #fafbfc; border: 1px solid #eef2f5; border-radius: 12px;
+    padding: 20px; margin-bottom: 20px;
+  }
+  .q-title { font-weight: 900; font-size: 1.05rem; margin-bottom: 15px; line-height: 1.6; color: #2c3e50; }
+  .essay-textarea {
+    width: 100%; min-height: 100px; padding: 15px; border: 1px solid #dcdde1;
+    border-radius: 10px; font-family: inherit; font-size: 0.95rem; resize: vertical;
+    background: #fff; outline: none; transition: 0.3s; line-height: 1.8;
+  }
+  .essay-textarea:focus { border-color: #00acc1; box-shadow: 0 0 8px rgba(0,172,193,0.1); }
+  
+  .submit-btn {
+    display: block; width: 100%; padding: 15px; margin-top: 30px;
+    background: #00acc1; color: #fff; border: none; border-radius: 12px;
+    font-size: 1.1rem; font-weight: 900; font-family: inherit; cursor: pointer;
+    transition: 0.3s;
+  }
+  .submit-btn:hover { background: #00838f; }
+
+  /* کارنامه */
+  .result-container { display: none; text-align: center; }
+  .student-name-display {
+    font-size: 1.2rem; font-weight: 900; color: #2c3e50; margin-bottom: 20px;
+    background: #ecf0f1; padding: 10px 20px; border-radius: 10px; display: inline-block;
+  }
+  .result-message {
+    font-size: 1.1rem; font-weight: 700; color: #e74c3c; margin-bottom: 30px;
+  }
+  
+  /* بخش پاسخ‌های دانش‌آموز */
+  .answers-review-box {
+    text-align: right; background: #f8f9fa; border: 1px dashed #bdc3c7;
+    padding: 20px; border-radius: 12px; margin-bottom: 30px;
+  }
+  .answers-review-box h3 { color: #2980b9; margin-bottom: 15px; font-size: 1.1rem; }
+  .review-item { margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #ecf0f1; }
+  .review-q { font-weight: 900; color: #2c3e50; margin-bottom: 8px; }
+  .review-a { color: #27ae60; background: #e8f8f5; padding: 10px; border-radius: 8px; line-height: 1.8; white-space: pre-wrap; }
+  .review-a.empty { color: #e74c3c; background: #fdedec; }
+  
+  .action-btns { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+  .review-btn {
+    background: #3498db; color: #fff; text-decoration: none; border: none;
+    padding: 12px 25px; border-radius: 30px; font-weight: 700; cursor: pointer;
+    font-size: 1rem; transition: 0.3s; font-family: inherit;
+  }
+  .review-btn:hover { background: #2980b9; }
+  .copy-btn { background: #f39c12; }
+  .copy-btn:hover { background: #d68910; }
+
+  @media(max-width:600px) {
+    .container { padding: 20px; }
+    .header-top { flex-direction: column; gap: 10px; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  
+  <!-- صفحه شروع -->
+  <div id="start-section">
+    <h1>✍️ آزمون تشریحی درس ۷</h1>
+    <p>تولید و توزیع — مطالعات اجتماعی پایه هفتم<br>لطفاً نام و نام خانوادگی خود را وارد کنید.</p>
+    <input type="text" id="student-name" class="name-input" placeholder="مثلاً: علی محمدی">
+    <br>
+    <button class="start-btn" onclick="startQuiz()">شروع آزمون</button>
+  </div>
+
+  <!-- بخش آزمون -->
+  <div id="quiz-section" style="display: none;">
+    <div class="header-top">
+      <div class="header-title">
+        <h1>✍️ آزمون تشریحی درس ۷</h1>
+        <p>۵ سوال تصادفی از بانک سوالات</p>
+      </div>
+      <div class="timer-box" id="timer-display">⏱ ۱۵:۰۰</div>
+    </div>
+    
+    <form id="quiz-form">
+      <div id="questions-container"></div>
+      <button type="submit" class="submit-btn" id="submit-btn">پایان آزمون و مشاهده کارنامه</button>
+    </form>
+  </div>
+
+  <!-- بخش کارنامه -->
+  <div id="result-section" class="result-container">
+    <h2 style="color:#2c3e50; margin-bottom:20px; font-weight:900;">🎓 کارنامه آزمون تشریحی</h2>
+    <div class="student-name-display" id="display-student-name">نام دانش‌آموز</div>
+    
+    <p class="result-message">
+      پاسخ‌های شما ثبت شد. برای تصحیح، کادر زیر را کپی کرده و برای دبیر خود ارسال کنید.
+    </p>
+
+    <!-- بخش کپی پاسخ‌ها -->
+    <div class="answers-review-box" id="copyable-answers">
+      <!-- پاسخ‌ها به صورت داینامیک اینجا قرار می‌گیرند -->
+    </div>
+
+    <div class="action-btns">
+      <button class="review-btn copy-btn" onclick="copyAnswers()">📋 کپی پاسخ‌ها</button>
+      <a href="haftom.html" class="review-btn">🔙 بازگشت به دروس</a>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // ==========================================
+  // بانک سوالات تشریحی درس ۷
+  // ==========================================
+  const essayBank = [
+    { q: "چرا انسان تولید می‌کند؟ توضیح دهید." },
+    { q: "تفاوت کالا و خدمات را با ذکر مثال توضیح دهید." },
+    { q: "سه عامل اصلی تولید را نام ببرید و هر یک را به طور مختصر توضیح دهید." },
+    { q: "نقش نیروی انسانی در تولید چیست و چرا مهم است؟" },
+    { q: "چرا کشورهایی که تولید کافی ندارند، ضعیف و وابسته می‌شوند؟" },
+    { q: "تقسیم کار در جامعه چگونه پدید آمد؟" },
+    { q: "سه گروه اصلی مشاغل و فعالیت‌های اقتصادی را نام ببرید و برای هر کدام یک مثال بزنید." },
+    { q: "توزیع چیست و چه نقشی در اقتصاد دارد؟" },
+    { q: "تولیدکنندگان برای فروش محصولات خود چه اقداماتی انجام می‌دهند؟ (دو مورد)" },
+    { q: "بازار در ایران از چه زمانی اهمیت داشته است و چه نقشی در شهرها داشته است؟" },
+    { q: "بازارها علاوه بر دادوستد اقتصادی، چه نقش‌های اجتماعی داشته‌اند؟ (دو مورد)" },
+    { q: "چرا در هنگام اعتراض مردم علیه حکومت‌های ظالم، بازارها تعطیل می‌شدند؟" },
+    { q: "طبق قرآن کریم، کم‌فروشی چه حکمی دارد و چرا؟" },
+    { q: "آیه‌های سوره مطففین درباره کم‌فروشان چه می‌فرماید؟" },
+    { q: "چرا کسب روزی حلال در اسلام اهمیت دارد؟" },
+    { q: "چه ارتباطی بین تولید داخلی و اقتصاد کشور وجود دارد؟" },
+    { q: "چرا مصرف‌کنندگان باید به کیفیت کالاها توجه کنند؟" },
+    { q: "چند نمونه از محصولات کشاورزی، صنعتی و خدماتی که در زندگی روزمره استفاده می‌کنید نام ببرید." },
+    { q: "به نظر شما چگونه می‌توانیم از تولیدکنندگان داخلی حمایت کنیم؟" },
+    { q: "چرا کم‌فروشی و گران‌فروشی برای اقتصاد جامعه مضر است؟" }
+  ];
+
+  const numQuestionsToShow = 5; // تعداد سوالات تشریحی در هر آزمون
+  const totalTime = 900; // ۱۵ دقیقه
+  
+  let selectedQuestions = [];
+  let timerInterval;
+  let timeLeft = totalTime;
+  let studentName = "";
+
+  function shuffle(array) {
+    let currentIndex = array.length, randomIndex;
+    while (currentIndex != 0) {
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex--;
+      [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+    }
+    return array;
+  }
+
+  function startQuiz() {
+    studentName = document.getElementById('student-name').value.trim();
+    if (studentName === "") {
+      alert("لطفاً نام و نام خانوادگی خود را وارد کنید.");
+      return;
+    }
+    
+    document.getElementById('start-section').style.display = 'none';
+    document.getElementById('quiz-section').style.display = 'block';
+    
+    initQuiz();
+  }
+
+  function initQuiz() {
+    const shuffledBank = shuffle([...essayBank]);
+    selectedQuestions = shuffledBank.slice(0, numQuestionsToShow);
+
+    const container = document.getElementById('questions-container');
+    container.innerHTML = '';
+
+    selectedQuestions.forEach((item, index) => {
+      const qBox = document.createElement('div');
+      qBox.className = 'question-box';
+      qBox.innerHTML = `
+        <div class="q-title">${index + 1}. ${item.q}</div>
+        <textarea class="essay-textarea" name="a${index}" placeholder="پاسخ خود را اینجا بنویسید..."></textarea>
+      `;
+      container.appendChild(qBox);
+    });
+
+    startTimer();
+  }
+
+  function startTimer() {
+    const display = document.getElementById('timer-display');
+    
+    timerInterval = setInterval(() => {
+      timeLeft--;
+      const minutes = Math.floor(timeLeft / 60);
+      const seconds = timeLeft % 60;
+      
+      display.innerHTML = `⏱ ${minutes < 10 ? '0'+minutes : minutes}:${seconds < 10 ? '0'+seconds : seconds}`;
+
+      if (timeLeft <= 60) {
+        display.classList.add('warning');
+      }
+      
+      if (timeLeft <= 0) {
+        clearInterval(timerInterval);
+        display.innerHTML = `⏱ ۰۰:۰۰`;
+        document.getElementById('quiz-form').dispatchEvent(new Event('submit'));
+      }
+    }, 1000);
+  }
+
+  // ثبت و نمایش کارنامه
+  document.getElementById('quiz-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    clearInterval(timerInterval);
+
+    document.getElementById('quiz-section').style.display = 'none';
+    document.getElementById('result-section').style.display = 'block';
+
+    document.getElementById('display-student-name').innerText = `دانش‌آموز: ${studentName}`;
+    
+    const reviewContainer = document.getElementById('copyable-answers');
+    reviewContainer.innerHTML = `<h3>📝 پاسخ‌های دانش‌آموز (جهت ارسال به دبیر):</h3>`;
+
+    selectedQuestions.forEach((item, index) => {
+      const answerText = document.querySelector(`textarea[name="a${index}"]`).value.trim();
+      const answerHTML = answerText === "" ? `<div class="review-a empty">[بدون پاسخ]</div>` : `<div class="review-a">${answerText}</div>`;
+      
+      reviewContainer.innerHTML += `
+        <div class="review-item">
+          <div class="review-q">سوال ${index + 1}: ${item.q}</div>
+          ${answerHTML}
+        </div>
+      `;
+    });
+    
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  // کپی کردن پاسخ‌ها
+  function copyAnswers() {
+    const textToCopy = document.getElementById('copyable-answers').innerText;
+    navigator.clipboard.writeText(textToCopy).then(() => {
+      alert("✅ پاسخ‌ها با موفقیت کپی شدند. می‌توانید آن را برای معلم خود ارسال کنید.");
+    }).catch(err => {
+      alert("❌ خطایی در کپی کردن رخ داد. لطفاً به صورت دستی متن را انتخاب و کپی کنید.");
+    });
+  }
+</script>
+
+</body>
+</html>
