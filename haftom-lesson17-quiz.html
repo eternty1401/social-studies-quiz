@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>آزمون تستی درس ۱۷: میراث فرهنگی و تاریخ</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; font-family:'Vazirmatn',sans-serif; }
+  body {
+    background-color: #f4f7f6;
+    background-image: radial-gradient(#d1e0e0 1px, transparent 1px);
+    background-size: 20px 20px;
+    color: #2c3e50; padding: 30px 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh;
+  }
+  .container {
+    background: #fff; width: 100%; max-width: 800px; border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08); padding: 35px; border: 1px solid #eef2f5;
+  }
+  
+  /* صفحه شروع */
+  #start-section { text-align: center; padding: 20px 0; }
+  #start-section h1 { color: #6d4c41; font-size: 1.6rem; margin-bottom: 15px; }
+  #start-section p { color: #7f8c8d; margin-bottom: 30px; line-height: 1.8; }
+  .name-input {
+    width: 100%; max-width: 400px; padding: 15px; margin-bottom: 20px;
+    border: 2px solid #e2e8f0; border-radius: 12px; font-family: inherit;
+    font-size: 1rem; text-align: center; outline: none; transition: 0.3s;
+  }
+  .name-input:focus { border-color: #6d4c41; box-shadow: 0 0 10px rgba(109,76,65,0.2); }
+  .start-btn {
+    background: #2ecc71; color: #fff; border: none; padding: 15px 40px;
+    border-radius: 12px; font-size: 1.1rem; font-weight: 900; font-family: inherit;
+    cursor: pointer; transition: 0.3s; box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);
+  }
+  .start-btn:hover { background: #27ae60; transform: translateY(-2px); }
+
+  /* هدر و تایمر */
+  .header-top { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px dashed #eef2f5; padding-bottom: 15px; margin-bottom: 25px; }
+  .header-title h1 { color: #6d4c41; font-size: 1.4rem; }
+  .header-title p { color: #7f8c8d; font-size: 0.85rem; margin-top: 5px; }
+  .timer-box {
+    background: #fdedec; color: #e74c3c; padding: 8px 18px; border-radius: 50px;
+    font-weight: 900; font-size: 1.1rem; border: 1px solid #fadbd8;
+    display: flex; align-items: center; gap: 8px; direction: ltr;
+  }
+  .timer-box.warning { background: #fef9e7; color: #f39c12; border-color: #fae5d3; animation: pulse 1s infinite; }
+  @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+
+  /* سوالات */
+  .question-box {
+    background: #fafbfc; border: 1px solid #eef2f5; border-radius: 12px;
+    padding: 20px; margin-bottom: 20px;
+  }
+  .q-title { font-weight: 900; font-size: 1.05rem; margin-bottom: 15px; line-height: 1.6; }
+  
+  .options { display: flex; flex-direction: column; gap: 10px; }
+  .option-label {
+    display: flex; align-items: center; gap: 10px; padding: 12px 15px;
+    background: #fff; border: 1px solid #e2e8f0; border-radius: 10px;
+    cursor: pointer; transition: 0.2s; font-size: 0.95rem;
+  }
+  .option-label:hover { background: #efebe9; border-color: #6d4c41; }
+  .option-label input[type="radio"] { display: none; }
+  .option-label.selected { background: #efebe9; border-color: #6d4c41; font-weight: 700; color: #4e342e; }
+  
+  .submit-btn {
+    display: block; width: 100%; padding: 15px; margin-top: 30px;
+    background: #6d4c41; color: #fff; border: none; border-radius: 12px;
+    font-size: 1.1rem; font-weight: 900; font-family: inherit; cursor: pointer;
+    transition: 0.3s;
+  }
+  .submit-btn:hover { background: #4e342e; }
+
+  /* کارنامه */
+  .result-container { display: none; text-align: center; }
+  .student-name-display {
+    font-size: 1.2rem; font-weight: 900; color: #2c3e50; margin-bottom: 20px;
+    background: #ecf0f1; padding: 10px 20px; border-radius: 10px; display: inline-block;
+  }
+  .score-circle {
+    width: 150px; height: 150px; border-radius: 50%; margin: 0 auto 20px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    border: 8px solid #ecf0f1;
+  }
+  .score-circle.excellent { border-color: #2ecc71; color: #2ecc71; }
+  .score-circle.good { border-color: #f39c12; color: #f39c12; }
+  .score-circle.fail { border-color: #e74c3c; color: #e74c3c; }
+  .score-num { font-size: 2.8rem; font-weight: 900; line-height: 1; }
+  .score-text { font-size: 0.9rem; color: #7f8c8d; margin-top: 5px; font-weight: 700; }
+  .result-stats { display: flex; justify-content: center; gap: 15px; margin-bottom: 30px; }
+  .stat-box { padding: 15px 25px; border-radius: 10px; font-weight: 700; font-size: 0.95rem; }
+  .stat-box.correct { color: #2ecc71; background: #e8f8f5; }
+  .stat-box.wrong { color: #e74c3c; background: #fdedec; }
+  
+  .review-btn {
+    display: inline-block; background: #3498db; color: #fff; text-decoration: none;
+    padding: 12px 30px; border-radius: 30px; font-weight: 700; border: none; cursor: pointer;
+    font-size: 1rem;
+  }
+
+  @media(max-width:600px) {
+    .container { padding: 20px; }
+    .header-top { flex-direction: column; gap: 10px; text-align: center; }
+    .result-stats { flex-direction: column; gap: 10px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  
+  <!-- صفحه شروع -->
+  <div id="start-section">
+    <h1>📝 آزمون تستی درس ۱۷</h1>
+    <p>میراث فرهنگی و تاریخ — مطالعات اجتماعی پایه هفتم<br>لطفاً نام و نام خانوادگی خود را وارد کنید تا آزمون آغاز شود.</p>
+    <input type="text" id="student-name" class="name-input" placeholder="مثلاً: علی محمدی">
+    <br>
+    <button class="start-btn" onclick="startQuiz()">شروع آزمون</button>
+  </div>
+
+  <!-- بخش آزمون -->
+  <div id="quiz-section" style="display: none;">
+    <div class="header-top">
+      <div class="header-title">
+        <h1>📝 آزمون تستی درس ۱۷</h1>
+        <p>۱۵ سوال تصادفی از بانک ۴۰ سوالی</p>
+      </div>
+      <div class="timer-box" id="timer-display">⏱ ۱۰:۰۰</div>
+    </div>
+    
+    <form id="quiz-form">
+      <div id="questions-container"></div>
+      <button type="submit" class="submit-btn" id="submit-btn">ثبت پاسخ‌ها و مشاهده کارنامه</button>
+    </form>
+  </div>
+
+  <!-- بخش کارنامه -->
+  <div id="result-section" class="result-container">
+    <h2 style="color:#2c3e50; margin-bottom:20px; font-weight:900;">🎓 کارنامه شما</h2>
+    <div class="student-name-display" id="display-student-name">نام دانش‌آموز</div>
+    
+    <div id="score-circle" class="score-circle">
+      <div class="score-num" id="score-display">0</div>
+      <div class="score-text">از ۱۰۰</div>
+    </div>
+    <p id="result-message" style="font-size:1.1rem; font-weight:700; margin-bottom:25px;"></p>
+    <div class="result-stats">
+      <div class="stat-box correct" id="stat-correct">تعداد درست: ۰</div>
+      <div class="stat-box wrong" id="stat-wrong">تعداد غلط: ۰</div>
+    </div>
+    <a href="haftom.html" class="review-btn" style="background:#3498db; text-decoration:none;">🔙 بازگشت به دروس</a>
+  </div>
+
+</div>
+
+<script>
+  // ==========================================
+  // بانک ۴۰ سوالی درس ۱۷ (میراث فرهنگی و تاریخ)
+  // ==========================================
+  const questionBank = [
+    { q: "میراث فرهنگی چیست؟", options: ["همهٔ آثار ارزشمندی که به فرهنگ، تمدن و هویت یک ملت مربوط می‌شود", "فقط بناهای تاریخی", "فقط اشیای موزه‌ای", "فقط کتاب‌های قدیمی"], answer: 0 },
+    { q: "کدام یک از موارد زیر از میراث فرهنگی مادی است؟", options: ["سکه‌های قدیمی", "اعتقادات", "آداب و رسوم", "زبان"], answer: 0 },
+    { q: "کدام یک از موارد زیر از میراث فرهنگی غیرمادی است؟", options: ["اعتقادات و زبان", "ظروف و سکه‌ها", "کتیبه‌ها", "بناهای تاریخی"], answer: 0 },
+    { q: "میراث فرهنگی غیرمادی شامل چه چیزهایی است؟", options: ["اعتقادات، دستاوردهای علمی و هنری، زبان و آداب و رسوم", "ظروف و سکه‌ها", "کتیبه‌ها و فرش‌ها", "بناهای تاریخی"], answer: 0 },
+    { q: "قبل از انقلاب اسلامی، بخشی از آثار باستانی ایران توسط کدام کشورها به غارت رفت؟", options: ["فرانسه، انگلیس و آمریکا", "آلمان، ایتالیا و اسپانیا", "روسیه و چین", "ژاپن و کره"], answer: 0 },
+    { q: "تاریخ چیست؟", options: ["مطالعه زندگی انسان‌ها در گذشته", "مطالعه حیوانات", "مطالعه کوه‌ها", "مطالعه گیاهان"], answer: 0 },
+    { q: "مورخ کیست؟", options: ["کسی که درباره زندگی انسان‌ها و رویدادهای گذشته مطالعه می‌کند", "کسی که کتاب می‌نویسد", "کسی که در موزه کار می‌کند", "کسی که کاوش می‌کند"], answer: 0 },
+    { q: "مورخان از چه منابعی استفاده می‌کنند؟", options: ["کتاب‌ها، کتیبه‌ها، ابزارها و اشیا باقی مانده از گذشته", "فقط کتاب‌ها", "فقط کتیبه‌ها", "فقط سکه‌ها"], answer: 0 },
+    { q: "باستان‌شناس کیست؟", options: ["کسی که با حفاری و کاوش، آثار باستانی را کشف می‌کند", "کسی که درباره گذشته مطالعه می‌کند", "کسی که در موزه کار می‌کند", "کسی که کتاب می‌نویسد"], answer: 0 },
+    { q: "چرا باستان‌شناسان از اشیا کشف شده عکس و فیلم تهیه می‌کنند؟", options: ["برای مستندسازی و حفظ اطلاعات قبل از جابه‌جایی", "برای تفریح", "برای فروش", "برای نمایش در تلویزیون"], answer: 0 },
+    { q: "کدام یک از پرسش‌های تاریخی است؟", options: ["چه کسی در این واقعه شرکت داشته است؟", "قیمت نان چقدر است؟", "اسم من چیست؟", "امروز چه روزی است؟"], answer: 0 },
+    { q: "موزه چیست؟", options: ["مکانی برای حفظ، نگهداری و نمایش آثار تاریخی و میراث فرهنگی", "مکانی برای خرید و فروش", "مکانی برای تفریح", "مکانی برای ورزش"], answer: 0 },
+    { q: "وزارت میراث فرهنگی، گردشگری و صنایع دستی چه وظیفه‌ای دارد؟", options: ["معرفی فرهنگ و تمدن ایرانی-اسلامی و حفظ و احیای میراث فرهنگی", "فقط مدیریت گردشگری", "فقط فروش صنایع دستی", "فقط ساخت موزه"], answer: 0 },
+    { q: "طبق فرموده امام علی (ع)، چه چیزی از حوادث گذشته برای آینده به ما می‌آموزد؟", options: ["عبرت گرفتن", "فراموش کردن", "تکرار اشتباهات", "بی‌توجهی"], answer: 0 },
+    { q: "آیا موزه‌ها فقط برای نگهداری آثار هستند؟", options: ["خیر، علاوه بر نگهداری، آثار را به نمایش می‌گذارند", "بله، فقط برای نگهداری هستند", "خیر، فقط برای فروش هستند", "خیر، فقط برای تفریح هستند"], answer: 0 },
+    { q: "کدام یک از موارد زیر از مصادیق میراث فرهنگی است؟", options: ["بناهای تاریخی و آداب و رسوم", "فقط بناهای تاریخی", "فقط آداب و رسوم", "هیچ‌کدام"], answer: 0 },
+    { q: "میراث فرهنگی متعلق به چه کسانی است؟", options: ["همهٔ مردم یک کشور", "فقط دولت", "فقط ثروتمندان", "فقط مورخان"], answer: 0 },
+    { q: "ایران از نظر تمدنی چه ویژگی‌ای دارد؟", options: ["جایگاه تمدن‌های کهن و یکی از قدیمی‌ترین سکونتگاه‌های بشری", "تمدن کوتاه مدت", "بدون تمدن", "تمدن جدید"], answer: 0 },
+    { q: "چرا میراث فرهنگی برای یک ملت اهمیت دارد؟", options: ["چون نشان‌دهنده هویت و تاریخ آن ملت است", "چون ارزش مادی زیادی دارد", "چون توسط دولت ساخته شده", "چون در موزه نگهداری می‌شود"], answer: 0 },
+    { q: "کدام یک از موارد زیر از آداب و رسوم (میراث غیرمادی) ایران است؟", options: ["مراسم نوروز و شب یلدا", "تخت جمشید", "سکه‌های هخامنشی", "ظروف سفالی"], answer: 0 },
+    { q: "مورخان در کار خود از یافته‌های چه کسانی استفاده می‌کنند؟", options: ["باستان‌شناسان", "پزشکان", "مهندسان", "معلمان"], answer: 0 },
+    { q: "چرا بعضی از آثار باستانی در دل خاک قرار دارند؟", options: ["چون مربوط به زمان‌های بسیار دور هستند و در طول زمان زیر خاک مدفون شده‌اند", "چون مردم آن‌ها را پنهان کرده‌اند", "چون از آسمان افتاده‌اند", "چون در آب غرق شده‌اند"], answer: 0 },
+    { q: "چرا حفظ میراث فرهنگی برای نسل‌های آینده مهم است؟", options: ["تا آیندگان بتوانند از تاریخ و فرهنگ خود آگاه شوند", "تا ارزش مادی آن حفظ شود", "تا در موزه نگهداری شود", "تا به فروش برسد"], answer: 0 },
+    { q: "یکی از راه‌های شناخت گذشته چیست؟", options: ["مطالعه تاریخ و بررسی آثار باستانی", "فقط خواندن رمان", "تماشای فیلم تخیلی", "گوش دادن به موسیقی"], answer: 0 },
+    { q: "برای حفظ میراث فرهنگی چه کاری می‌توانیم انجام دهیم؟", options: ["با شناخت و معرفی فرهنگ خود و حمایت از آن", "فقط تماشای تلویزیون", "فقط خواندن کتاب", "هیچ کاری نمی‌توان انجام داد"], answer: 0 },
+    { q: "وزارت میراث فرهنگی، گردشگری و صنایع دستی چه فعالیتی انجام می‌دهد؟", options: ["حفظ و احیای میراث طبیعی، فرهنگی و صنایع دستی", "فقط ساخت بنا", "فقط فروش صنایع دستی", "فقط مدیریت موزه"], answer: 0 },
+    { q: "یکی از وظایف ما در قبال میراث فرهنگی چیست؟", options: ["شناخت و معرفی آن", "فروش آن", "تخریب آن", "نگهداری آن در خانه"], answer: 0 },
+    { q: "کدام یک از موارد زیر از میراث مادی است؟", options: ["کتاب‌های قدیمی و ظروف", "اعتقادات و زبان", "آداب و رسوم", "مراسم نوروز"], answer: 0 },
+    { q: "مهم‌ترین کار مورخ بررسی چه چیزی است؟", options: ["شواهد و مدارک برای پی بردن به واقعیت گذشته", "ساختن بناهای تاریخی", "فروش اشیای عتیقه", "نوشتن داستان"], answer: 0 },
+    { q: "کدام یک از موارد زیر از جاذبه‌های میراث فرهنگی است؟", options: ["تخت جمشید", "پارک ملی گلستان", "جنگل‌های شمال", "آبشارها"], answer: 0 },
+    { q: "کدام یک از انواع میراث فرهنگی در موزه نگهداری می‌شود؟", options: ["میراث مادی مانند ظروف، سکه و کتیبه", "میراث غیرمادی مانند اعتقادات", "فقط زبان", "فقط آداب و رسوم"], answer: 0 },
+    { q: "تاریخ چه کمکی به ما می‌کند؟", options: ["به ما کمک می‌کند زمان حال را بهتر بفهمیم و از تجربه‌ها استفاده کنیم", "هیچ کمکی نمی‌کند", "فقط سرگرمی است", "فقط برای مورخان است"], answer: 0 },
+    { q: "یکی از نمونه‌های میراث فرهنگی غیرمادی در ایران چیست؟", options: ["مراسم نوروز", "تخت جمشید", "سکه‌های قدیمی", "ظروف سفالی"], answer: 0 },
+    { q: "چرا باستان‌شناسان با حوصله کار می‌کنند؟", options: ["چون آثار باستانی در دل خاک قرار دارند و نیاز به دقت دارند", "چون عجله دارند", "چون کار سختی است", "چون زمان محدودی دارند"], answer: 0 },
+    { q: "کدام یک از کارهای زیر موجب تخریب میراث فرهنگی می‌شود؟", options: ["نوشتن یادگاری روی دیوار بناهای تاریخی", "بازدید از موزه", "مطالعه تاریخ", "شرکت در کلاس تاریخ"], answer: 0 },
+    { q: "چرا مراسم نوروز در فهرست میراث فرهنگی ناملموس ثبت شده است؟", options: ["چون نشان‌دهنده فرهنگ و هویت ایرانی است", "چون ارزش مادی دارد", "چون توسط دولت برگزار می‌شود", "چون قدیمی است"], answer: 0 },
+    { q: "چرا باید از میراث فرهنگی حفاظت کنیم؟", options: ["چون نشان‌دهنده هویت، تاریخ و فرهنگ یک ملت است", "چون ارزش مادی دارد", "چون در موزه نگهداری می‌شود", "چون دولت این را می‌خواهد"], answer: 0 },
+    { q: "کدام یک از موارد زیر از نگاه قرآن درباره تاریخ اهمیت دارد؟", options: ["عبرت گرفتن از سرگذشت اقوام گذشته", "فقط یادگیری تاریخ", "فقط مطالعه تاریخ", "هیچ‌کدام"], answer: 0 },
+    { q: "باستان‌شناسان به هر شیئی که در حفاری برخورد می‌کنند چه می‌کنند؟", options: ["از آن عکس و فیلم تهیه می‌کنند", "آن را دور می‌اندازند", "آن را می‌فروشند", "آن را به موزه می‌دهند"], answer: 0 },
+    { q: "چرا میراث فرهنگی باید به آیندگان سپرده شود؟", options: ["تا آن‌ها هم از تاریخ و فرهنگ خود آگاه شوند", "چون به فروش برسد", "چون فقط برای نسل امروز است", "چون از بین می‌رود"], answer: 0 }
+  ];
+
+  const numQuestionsToShow = 15; 
+  const totalTime = 600; // ۱۰ دقیقه
+  
+  let selectedQuestions = [];
+  let timerInterval;
+  let timeLeft = totalTime;
+  let studentName = "";
+
+  function shuffle(array) {
+    let currentIndex = array.length, randomIndex;
+    while (currentIndex != 0) {
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex--;
+      [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+    }
+    return array;
+  }
+
+  function startQuiz() {
+    studentName = document.getElementById('student-name').value.trim();
+    if (studentName === "") {
+      alert("لطفاً نام و نام خانوادگی خود را وارد کنید.");
+      return;
+    }
+    
+    document.getElementById('start-section').style.display = 'none';
+    document.getElementById('quiz-section').style.display = 'block';
+    
+    initQuiz();
+  }
+
+  function initQuiz() {
+    const shuffledBank = shuffle([...questionBank]);
+    selectedQuestions = shuffledBank.slice(0, numQuestionsToShow);
+
+    const container = document.getElementById('questions-container');
+    container.innerHTML = '';
+
+    selectedQuestions.forEach((item, index) => {
+      const correctAnswerText = item.options[item.answer];
+      const shuffledOptions = shuffle([...item.options]);
+      const newCorrectIndex = shuffledOptions.indexOf(correctAnswerText);
+      
+      selectedQuestions[index].options = shuffledOptions;
+      selectedQuestions[index].answer = newCorrectIndex;
+
+      let optionsHTML = '';
+      shuffledOptions.forEach((opt, i) => {
+        optionsHTML += `
+          <label class="option-label" onclick="selectOption(this)">
+            <input type="radio" name="q${index}" value="${i}">
+            <span>${opt}</span>
+          </label>
+        `;
+      });
+
+      const qBox = document.createElement('div');
+      qBox.className = 'question-box';
+      qBox.innerHTML = `
+        <div class="q-title">${index + 1}. ${item.q}</div>
+        <div class="options">${optionsHTML}</div>
+      `;
+      container.appendChild(qBox);
+    });
+
+    startTimer();
+  }
+
+  function startTimer() {
+    const display = document.getElementById('timer-display');
+    
+    timerInterval = setInterval(() => {
+      timeLeft--;
+      const minutes = Math.floor(timeLeft / 60);
+      const seconds = timeLeft % 60;
+      
+      display.innerHTML = `⏱ ${minutes < 10 ? '0'+minutes : minutes}:${seconds < 10 ? '0'+seconds : seconds}`;
+
+      if (timeLeft <= 60) {
+        display.classList.add('warning');
+      }
+      
+      if (timeLeft <= 0) {
+        clearInterval(timerInterval);
+        display.innerHTML = `⏱ ۰۰:۰۰`;
+        document.getElementById('quiz-form').dispatchEvent(new Event('submit'));
+      }
+    }, 1000);
+  }
+
+  function selectOption(label) {
+    const name = label.querySelector('input').name;
+    document.querySelectorAll(`input[name="${name}"]`).forEach(input => {
+      input.parentElement.classList.remove('selected');
+    });
+    label.classList.add('selected');
+    label.querySelector('input').checked = true;
+  }
+
+  document.getElementById('quiz-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    clearInterval(timerInterval);
+
+    let correctCount = 0;
+    let wrongCount = 0;
+
+    selectedQuestions.forEach((item, index) => {
+      const selected = document.querySelector(`input[name="q${index}"]:checked`);
+      if (!selected) {
+        wrongCount++; 
+      } else if (parseInt(selected.value) === item.answer) {
+        correctCount++;
+      } else {
+        wrongCount++;
+      }
+    });
+
+    const score = Math.round((correctCount / selectedQuestions.length) * 100);
+
+    document.getElementById('quiz-section').style.display = 'none';
+    document.getElementById('result-section').style.display = 'block';
+
+    document.getElementById('display-student-name').innerText = `دانش‌آموز: ${studentName}`;
+    
+    document.getElementById('score-display').innerText = score;
+    document.getElementById('stat-correct').innerText = `تعداد درست: ${correctCount}`;
+    document.getElementById('stat-wrong').innerText = `تعداد غلط: ${wrongCount}`;
+
+    const circle = document.getElementById('score-circle');
+    const msg = document.getElementById('result-message');
+    
+    circle.className = 'score-circle';
+    if (score >= 80) {
+      circle.classList.add('excellent');
+      msg.innerText = "🌟 عالی بود! شما درس را به خوبی یاد گرفته‌اید.";
+      msg.style.color = "#2ecc71";
+    } else if (score >= 50) {
+      circle.classList.add('good');
+      msg.innerText = "👍 خوب بود، اما با کمی مطالعه بیشتر می‌توانید بهتر شوید.";
+      msg.style.color = "#f39c12";
+    } else {
+      circle.classList.add('fail');
+      msg.innerText = "📚 نیاز به مطالعه بیشتر دارید. ناامید نشوید و درسنامه را دوباره بخوانید.";
+      msg.style.color = "#e74c3c";
+    }
+    
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+</script>
+
+</body>
+</html>
