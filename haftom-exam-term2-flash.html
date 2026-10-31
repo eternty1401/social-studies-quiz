@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>فلش کارت‌های مهم نوبت دوم - پایه هفتم</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; font-family:'Vazirmatn',sans-serif; }
+  body {
+    background-color: #f4f7f6;
+    background-image: radial-gradient(#d1e0e0 1px, transparent 1px);
+    background-size: 20px 20px;
+    color: #2c3e50; padding: 30px 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh;
+  }
+  .container {
+    background: #fff; width: 100%; max-width: 800px; border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08); padding: 35px; border: 1px solid #eef2f5;
+    text-align: center;
+  }
+  
+  .header { margin-bottom: 30px; border-bottom: 2px dashed #eef2f5; padding-bottom: 20px; }
+  .header h1 { color: #9b59b6; font-size: 1.6rem; margin-bottom: 8px; }
+  .header p { color: #7f8c8d; font-size: 0.95rem; }
+
+  /* ===== بخش فلش کارت ===== */
+  .flashcard-container {
+    perspective: 1000px;
+    width: 100%;
+    height: 300px;
+    margin-bottom: 30px;
+    cursor: pointer;
+  }
+
+  .flashcard {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+  }
+
+  .flashcard.flipped {
+    transform: rotateY(180deg);
+  }
+
+  .flashcard-front, .flashcard-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+  }
+
+  .flashcard-front {
+    background: linear-gradient(135deg, #9b59b6, #8e44ad);
+    color: #fff;
+  }
+
+  .flashcard-back {
+    background: linear-gradient(135deg, #ecf0f1, #bdc3c7);
+    color: #2c3e50;
+    transform: rotateY(180deg);
+  }
+
+  .card-content {
+    font-size: 1.3rem;
+    font-weight: 900;
+    line-height: 1.8;
+  }
+
+  .card-label {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 0.8rem;
+    background: rgba(255,255,255,0.2);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-weight: 700;
+  }
+  .flashcard-back .card-label {
+    background: rgba(0,0,0,0.05);
+    color: #7f8c8d;
+  }
+  .card-topic {
+    position: absolute;
+    top: 15px;
+    left: 20px;
+    font-size: 0.8rem;
+    background: rgba(255,255,255,0.3);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-weight: 700;
+  }
+
+  .click-hint {
+    position: absolute;
+    bottom: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.8rem;
+    opacity: 0.7;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  /* ===== کنترل‌ها ===== */
+  .controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+  }
+
+  .nav-btn {
+    background: #9b59b6; color: #fff; border: none; padding: 12px 25px;
+    border-radius: 30px; font-weight: 700; font-family: inherit;
+    font-size: 1rem; cursor: pointer; transition: 0.3s;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .nav-btn:hover { background: #8e44ad; transform: translateY(-2px); }
+  .nav-btn:disabled { background: #bdc3c7; cursor: not-allowed; transform: none; }
+
+  .counter {
+    font-weight: 900; font-size: 1.1rem; color: #7f8c8d;
+    background: #ecf0f1; padding: 8px 20px; border-radius: 30px;
+  }
+
+  .back-home {
+    display: inline-block; margin-top: 30px; background: #2c3e50; color: #fff;
+    text-decoration: none; padding: 10px 25px; border-radius: 30px; font-weight: 700; transition: 0.3s;
+  }
+  .back-home:hover { background: #1a252f; }
+
+  @media(max-width:600px) {
+    .container { padding: 20px; }
+    .flashcard-container { height: 400px; }
+    .card-content { font-size: 1.1rem; }
+    .controls { flex-direction: column; gap: 15px; }
+    .nav-btn { width: 100%; justify-content: center; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  
+  <div class="header">
+    <h1>🎴 فلش کارت‌های مهم نوبت دوم</h1>
+    <p>درس‌های ۱۳ تا ۲۴ — مطالعات اجتماعی پایه هفتم</p>
+  </div>
+
+  <!-- فلش کارت -->
+  <div class="flashcard-container" onclick="flipCard()">
+    <div class="flashcard" id="flashcard">
+      <div class="flashcard-front">
+        <span class="card-topic" id="topic-label">درس</span>
+        <span class="card-label">سوال</span>
+        <div class="card-content" id="question-text">سوال اینجا قرار می‌گیرد</div>
+        <span class="click-hint">👆 برای دیدن جواب کلیک کنید</span>
+      </div>
+      <div class="flashcard-back">
+        <span class="card-label">جواب</span>
+        <div class="card-content" id="answer-text">جواب اینجا قرار می‌گیرد</div>
+        <span class="click-hint">👆 برای دیدن سوال کلیک کنید</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- کنترل‌ها -->
+  <div class="controls">
+    <button class="nav-btn" id="prev-btn" onclick="prevCard()">▶ کارت قبلی</button>
+    <div class="counter" id="counter">۱ از ۵۰</div>
+    <button class="nav-btn" id="next-btn" onclick="nextCard()">کارت بعدی ◀</button>
+  </div>
+
+  <a href="haftom.html" class="back-home">🔙 بازگشت به صفحه دروس</a>
+
+</div>
+
+<script>
+  // ==========================================
+  // بانک ۵۰ فلش کارت مهم نوبت دوم (درس ۱۳ تا ۲۴)
+  // ==========================================
+  const flashcards = [
+    // درس ۱۳
+    { topic: "درس ۱۳", q: "رشد جمعیت چگونه محاسبه می‌شود؟", a: "با محاسبه تفاوت بین زاد و ولد (تولد) و مرگ و میر." },
+    { topic: "درس ۱۳", q: "تراکم جمعیت چیست؟", a: "نسبت افرادی که در یک مکان زندگی می‌کنند به مساحت آنجا (جمعیت ÷ مساحت)." },
+    { topic: "درس ۱۳", q: "پرجمعیت‌ترین و پرتراکم‌ترین ناحیه کشور کدام است؟", a: "منطقه شهری تهران." },
+    { topic: "درس ۱۳", q: "دومین ناحیه پرتراکم کشور ما کدام است؟", a: "جلگه‌های کناره دریای خزر." },
+    { topic: "درس ۱۳", q: "مرکز آمار ایران چه وظیفه‌ای دارد؟", a: "مسئولیت سرشماری جمعیت و انتشار اطلاعات جمعیتی هر ۵ سال یک بار." },
+
+    // درس ۱۴
+    { topic: "درس ۱۴", q: "میانگین بارش سالانه کشور ما حدوداً چقدر است؟", a: "حدود ۲۳۰ میلی‌متر." },
+    { topic: "درس ۱۴", q: "سه حوضه آبریز ایران را نام ببرید.", a: "۱. حوضه آبریز دریای خزر ۲. حوضه آبریز خلیج فارس و دریای عمان ۳. حوضه آبریز داخلی." },
+    { topic: "درس ۱۴", q: "قنات (کاریز) چیست؟", a: "یکی از ابداعات ایرانیان باستان برای استفاده از آب‌های زیرزمینی در نواحی خشک." },
+    { topic: "درس ۱۴", q: "خاک چگونه تشکیل می‌شود؟", a: "از خرد شدن سنگ‌ها، آب، دمای هوا و موجودات زنده یک منطقه در طی زمان طولانی." },
+    { topic: "درس ۱۴", q: "سازمان مسئول حفاظت از خاک در کشور ما کدام است؟", a: "سازمان جنگل‌ها، مراتع و آبخیزداری (البته حفاظت از خاک وظیفه همه ماست)." },
+
+    // درس ۱۵
+    { topic: "درس ۱۵", q: "گردشگر را تعریف کنید.", a: "کسانی که محل اقامت یا کار خود را به طور موقت ترک می‌کنند و برای استراحت یا گردش به سفر می‌روند." },
+    { topic: "درس ۱۵", q: "چهار نوع گردشگری را نام ببرید.", a: "۱. تفریحی ۲. زیارتی ۳. تاریخی-فرهنگی ۴. علمی (و گردش طبیعت)." },
+    { topic: "درس ۱۵", q: "گردش طبیعت (اکوتوریسم) چیست؟", a: "سفر به مناطق طبیعی بدون آسیب رساندن به محیط زیست." },
+    { topic: "درس ۱۵", q: "نقشه راه چه اطلاعاتی به ما می‌دهد؟", a: "جاده‌های اصلی و فرعی و مکان‌های خدماتی مانند رستوران‌ها، پمپ بنزین‌ها و تعمیرگاه‌ها." },
+    { topic: "درس ۱۵", q: "راهنمای نقشه چیست؟", a: "نشانه‌ها و علامت‌هایی که برای درک نقشه به کار می‌روند." },
+
+    // درس ۱۶
+    { topic: "درس ۱۶", q: "مهم‌ترین قطب زیارتی ایران کدام است؟", a: "مشهد مقدس (حرم امام رضا علیه‌السلام)." },
+    { topic: "درس ۱۶", q: "سه مسجد تاریخی ایران را نام ببرید.", a: "مسجد امام و شیخ لطف‌الله (اصفهان)، مسجد جامع (یزد)، مسجد گوهرشاد (مشهد)." },
+    { topic: "درس ۱۶", q: "تخت جمشید در کدام دوره ساخته شد؟", a: "دوره هخامنشیان (به فرمان داریوش اول)." },
+    { topic: "درس ۱۶", q: "پارک ملی چیست؟", a: "محیط‌های امن طبیعی که در آن‌ها شکار و بوته‌کنی ممنوع است تا از جانوران حفاظت شود." },
+    { topic: "درس ۱۶", q: "پارک ملی گلستان در کدام استان‌ها قرار دارد؟", a: "در استان‌های گلستان و خراسان شمالی." },
+
+    // درس ۱۷
+    { topic: "درس ۱۷", q: "میراث فرهنگی را تعریف کنید.", a: "همهٔ آثار ارزشمندی که به فرهنگ، تمدن و هویت یک ملت مربوط می‌شود." },
+    { topic: "درس ۱۷", q: "تفاوت میراث مادی و غیرمادی چیست؟", a: "مادی: ظروف، سکه، بناهای تاریخی. غیرمادی: اعتقادات، زبان، آداب و رسوم." },
+    { topic: "درس ۱۷", q: "تاریخ چیست؟", a: "علم تاریخ مطالعهٔ زندگی انسان‌ها در گذشته است." },
+    { topic: "درس ۱۷", q: "مورخ کیست؟", a: "کسی که درباره زندگی انسان‌ها و رویدادهای گذشته مطالعه و تحقیق می‌کند." },
+    { topic: "درس ۱۷", q: "باستان‌شناس کیست؟", a: "کسی که با حفاری و کاوش در دل خاک، آثار باستانی را کشف می‌کند." },
+
+    // درس ۱۸
+    { topic: "درس ۱۸", q: "تاریخ ایران به چه دوره‌هایی تقسیم می‌شود؟", a: "به دو دوره: ایران باستان (قبل از اسلام) و دوره اسلامی." },
+    { topic: "درس ۱۸", q: "شهر سوخته در کجا قرار دارد و چند سال قدمت دارد؟", a: "در نزدیکی زابل (سیستان و بلوچستان) و حدود پنج هزار سال قدمت دارد." },
+    { topic: "درس ۱۸", q: "مهم‌ترین اثر به جای مانده از تمدن ایلام چیست؟", a: "خرابه‌های چُغازنبیل در نزدیکی شوش (خوزستان)." },
+    { topic: "درس ۱۸", q: "تمدن جیرفت چه ویژگی مهمی دارد؟", a: "احتمال می‌رود یکی از قدیمی‌ترین خطوط دنیا را اختراع کرده باشد." },
+    { topic: "درس ۱۸", q: "چرا خداوند پیامبران را فرستاد؟", a: "برای هدایت مردم و نجات آنها از گمراهی، ظلم و خرافات." },
+
+    // درس ۱۹
+    { topic: "درس ۱۹", q: "آریایی‌ها از کجا به ایران مهاجرت کردند؟", a: "از مناطق ورکانه (گرگان) شمال دریای خزر به سمت جنوب." },
+    { topic: "درس ۱۹", q: "سه قوم بزرگ آریایی را نام ببرید.", a: "مادها، پارس‌ها و پارت‌ها." },
+    { topic: "درس ۱۹", q: "نخستین حکومت آریایی در ایران کدام است و مؤسس آن کیست؟", a: "مادها؛ مؤسس آن دَهیوکَ بود." },
+    { topic: "درس ۱۹", q: "بنیان‌گذار سلسله هخامنشیان چه کسی بود؟", a: "کوروش بزرگ." },
+    { topic: "درس ۱۹", q: "آخرین حکومت ایران باستان کدام است و چه زمانی به پایان رسید؟", a: "ساسانیان؛ در سال ۶۵۱ میلادی با قتل یزدگرد سوم." },
+
+    // درس ۲۰
+    { topic: "درس ۲۰", q: "نوع حکومت در ایران باستان چگونه بود؟", a: "پادشاهی موروثی (از پدر به پسر)." },
+    { topic: "درس ۲۰", q: "داریوش کشور را به چند ایالت تقسیم کرده بود؟", a: "به ۲۳ ایالت و برای هر ایالت یک شهربان انتخاب می‌کرد." },
+    { topic: "درس ۲۰", q: "سپاه جاویدان توسط چه کسی تشکیل شد؟", a: "داریوش هخامنشی؛ تعداد آن ده هزار نفر بود." },
+    { topic: "درس ۲۰", q: "سه مورد از ابتکارات نظامی ایرانیان باستان را نام ببرید.", a: "۱. سپاه جاویدان ۲. ارابه داس‌دار ۳. برج‌های متحرک (و نیروی دریایی)." },
+    { topic: "درس ۲۰", q: "پایتخت‌های حکومت ساسانیان کدام بودند؟", a: "گور (فیروزآباد) و تیسفون." },
+
+    // درس ۲۱
+    { topic: "درس ۲۱", q: "جامعه ایران باستان به چند طبقه تقسیم می‌شد؟", a: "به دو طبقه: بزرگان (اشراف) و مردم عامه." },
+    { topic: "درس ۲۱", q: "سه مورد از امتیازات طبقه بزرگان را بنویسید.", a: "۱. داشتن زمین و ثروت ۲. معاف بودن از مالیات ۳. برخورداری از حق تحصیل." },
+    { topic: "درس ۲۱", q: "چرا ایرانیان از دین اسلام استقبال کردند؟", a: "چون در اسلام انسان‌ها در برابر خدا با هم برابرند." },
+    { topic: "درس ۲۱", q: "زنان در ایران باستان چه کارهایی انجام می‌دادند؟", a: "نخ‌ریسی، پارچه‌بافی، قالی‌بافی و مشارکت در کشاورزی." },
+    { topic: "درس ۲۱", q: "در دوره ساسانیان، شهرها چه تحولی پیدا کردند؟", a: "تعداد شهرها افزایش یافت و جمعیت شهری زیاد شد." },
+
+    // درس ۲۲
+    { topic: "درس ۲۲", q: "مهم‌ترین پیشه و وسیله معیشت در ایران باستان چه بود؟", a: "کشاورزی." },
+    { topic: "درس ۲۲", q: "جاده ابریشم چه مناطقی را به هم متصل می‌کرد؟", a: "چین و هند را در شرق به اروپا در غرب (و از خاک ایران عبور می‌کرد)." },
+    { topic: "درس ۲۲", q: "اولین سکه زرین در زمان کدام پادشاه و با چه نامی ضرب شد؟", a: "در زمان داریوش اول و با نام «دِریک» یا «زریک»." },
+    { topic: "درس ۲۲", q: "منبع اصلی درآمد حکومت در ایران باستان چه بود؟", a: "مالیات." },
+    { topic: "درس ۲۲", q: "مالیات سرانه از چه کسانی گرفته می‌شد؟", a: "فقط از عامه مردم؛ بزرگان و اشراف از آن معاف بودند." }
+  ];
+
+  // درهم‌ریزی آرایه برای نمایش تصادفی
+  function shuffle(array) {
+    let currentIndex = array.length, randomIndex;
+    while (currentIndex != 0) {
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex--;
+      [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+    }
+    return array;
+  }
+
+  const shuffledFlashcards = shuffle([...flashcards]);
+
+  let currentIndex = 0;
+  const flashcardElement = document.getElementById('flashcard');
+  const questionText = document.getElementById('question-text');
+  const answerText = document.getElementById('answer-text');
+  const topicLabel = document.getElementById('topic-label');
+  const counter = document.getElementById('counter');
+  const prevBtn = document.getElementById('prev-btn');
+  const nextBtn = document.getElementById('next-btn');
+
+  function updateCard() {
+    flashcardElement.classList.remove('flipped');
+    
+    setTimeout(() => {
+      questionText.innerText = shuffledFlashcards[currentIndex].q;
+      answerText.innerText = shuffledFlashcards[currentIndex].a;
+      topicLabel.innerText = shuffledFlashcards[currentIndex].topic;
+      
+      const persianNumbers = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+      const currentPersian = String(currentIndex + 1).replace(/\d/g, d => persianNumbers[d]);
+      const totalPersian = String(shuffledFlashcards.length).replace(/\d/g, d => persianNumbers[d]);
+      counter.innerText = `${currentPersian} از ${totalPersian}`;
+      
+      prevBtn.disabled = currentIndex === 0;
+      nextBtn.disabled = currentIndex === shuffledFlashcards.length - 1;
+    }, 150);
+  }
+
+  function flipCard() {
+    flashcardElement.classList.toggle('flipped');
+  }
+
+  function nextCard() {
+    if (currentIndex < shuffledFlashcards.length - 1) {
+      currentIndex++;
+      updateCard();
+    }
+  }
+
+  function prevCard() {
+    if (currentIndex > 0) {
+      currentIndex--;
+      updateCard();
+    }
+  }
+
+  updateCard();
+</script>
+
+</body>
+</html>
