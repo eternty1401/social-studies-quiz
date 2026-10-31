@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>فایل‌ها و تصاویر - درس ۱۶ پایه هشتم</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; font-family:'Vazirmatn',sans-serif; }
+  body {
+    background-color: #f4f7f6;
+    background-image: radial-gradient(#d1e0e0 1px, transparent 1px);
+    background-size: 20px 20px;
+    color: #2c3e50; padding: 30px 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh;
+  }
+  .container { background: #fff; width: 100%; max-width: 900px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); padding: 35px; border: 1px solid #eef2f5; }
+  .header { text-align: center; margin-bottom: 30px; border-bottom: 2px dashed #eef2f5; padding-bottom: 20px; }
+  .header h1 { color: #00acc1; font-size: 1.6rem; margin-bottom: 8px; }
+  .header p { color: #7f8c8d; font-size: 0.95rem; }
+  .section-title { font-size: 1.2rem; font-weight: 900; color: #2c3e50; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+  .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; margin-bottom: 40px; }
+  .gallery-item { background: #f8f9fa; border: 2px dashed #bdc3c7; border-radius: 12px; height: 180px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; transition: 0.3s; color: #95a5a6; }
+  .gallery-item:hover { background: #e0f7fa; border-color: #00acc1; color: #00acc1; transform: translateY(-3px); }
+  .gallery-item i { font-size: 2.5rem; margin-bottom: 10px; font-style: normal; }
+  .gallery-item span { font-weight: 700; font-size: 0.9rem; }
+  .gallery-item img { width: 100%; height: 100%; object-fit: cover; border-radius: 10px; }
+  .files-list { display: flex; flex-direction: column; gap: 12px; }
+  .file-item { display: flex; justify-content: space-between; align-items: center; background: #fafbfc; border: 1px solid #eef2f5; padding: 15px 20px; border-radius: 12px; transition: 0.3s; }
+  .file-item:hover { background: #fff; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border-color: #dcdde1; }
+  .file-info { display: flex; align-items: center; gap: 15px; }
+  .file-icon { font-size: 1.8rem; }
+  .file-name { font-weight: 900; color: #2c3e50; font-size: 1rem; }
+  .file-desc { font-size: 0.8rem; color: #7f8c8d; margin-top: 3px; }
+  .download-btn { background: #00acc1; color: #fff; text-decoration: none; padding: 8px 20px; border-radius: 8px; font-weight: 700; font-size: 0.85rem; transition: 0.3s; }
+  .download-btn:hover { background: #00838f; transform: translateY(-2px); }
+  .lightbox { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.9); justify-content: center; align-items: center; padding: 20px; }
+  .lightbox.active { display: flex; }
+  .lightbox img { max-width: 90%; max-height: 90vh; border-radius: 10px; box-shadow: 0 0 30px rgba(0,0,0,0.5); }
+  .close-lightbox { position: absolute; top: 20px; right: 30px; color: #fff; font-size: 3rem; cursor: pointer; font-weight: bold; transition: 0.3s; }
+  .close-lightbox:hover { color: #e74c3c; transform: scale(1.1); }
+  .back-btn-wrapper { text-align: center; margin-top: 30px; }
+  .back-btn { display: inline-block; background: #3498db; color: #fff; text-decoration: none; padding: 12px 30px; border-radius: 30px; font-weight: 700; transition: 0.3s; }
+  .back-btn:hover { background: #2980b9; transform: translateY(-2px); }
+  @media(max-width:600px) { .container { padding: 20px; } .gallery-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; } .gallery-item { height: 130px; } .file-item { flex-direction: column; gap: 15px; text-align: center; } }
+</style>
+</head>
+<body>
+
+<div class="container">
+  
+  <div class="header">
+    <h1>📂 فایل‌ها و تصاویر درس ۱۶</h1>
+    <p>پیروزی فرهنگ بر شمشیر — مطالعات اجتماعی پایه هشتم</p>
+  </div>
+
+  <div class="section-title"><span>🖼️ گالری تصاویر</span></div>
+  
+  <div class="gallery-grid">
+    <div class="gallery-item" onclick="openLightbox('')"><i>➕</i><span>عکس جدید</span></div>
+    <div class="gallery-item" onclick="openLightbox('')"><i>➕</i><span>عکس جدید</span></div>
+    <div class="gallery-item" onclick="openLightbox('')"><i>➕</i><span>عکس جدید</span></div>
+  </div>
+
+  <div class="section-title"><span>📄 فایل‌های قابل دانلود</span></div>
+
+  <div class="files-list">
+    <div class="file-item">
+      <div class="file-info">
+        <div class="file-icon">📕</div>
+        <div>
+          <div class="file-name">کاربرگ درس ۱۶</div>
+          <div class="file-desc">فرمت PDF — حجم: ۲ مگابایت</div>
+        </div>
+      </div>
+      <a href="#" class="download-btn soon-btn">به‌زودی</a>
+    </div>
+
+    <div class="file-item">
+      <div class="file-info">
+        <div class="file-icon">📝</div>
+        <div>
+          <div class="file-name">نمونه سوالات تشریحی درس ۱۶</div>
+          <div class="file-desc">فرمت PDF — حجم: ۱ مگابایت</div>
+        </div>
+      </div>
+      <a href="#" class="download-btn soon-btn">به‌زودی</a>
+    </div>
+  </div>
+
+  <div class="back-btn-wrapper">
+    <a href="hashtom.html" class="back-btn">🔙 بازگشت به دروس</a>
+  </div>
+
+</div>
+
+<div id="lightbox" class="lightbox" onclick="closeLightbox()">
+  <span class="close-lightbox">&times;</span>
+  <img id="lightbox-img" src="" alt="عکس بزرگ">
+</div>
+
+<script>
+  function openLightbox(imgSrc) {
+    if(imgSrc === '') {
+      alert('این جای خالی برای عکس است. هنوز عکسی اضافه نشده است.');
+      return;
+    }
+    const lightbox = document.getElementById('lightbox');
+    const img = document.getElementById('lightbox-img');
+    img.src = imgSrc;
+    lightbox.classList.add('active');
+  }
+  function closeLightbox() {
+    document.getElementById('lightbox').classList.remove('active');
+  }
+</script>
+
+</body>
+</html>
