@@ -3,151 +3,394 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>آزمون‌های مطالعات اجتماعی</title>
-<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;900&display=swap" rel="stylesheet">
+<title>مطالعات اجتماعی | خانه</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700;900&display=swap" rel="stylesheet">
 <style>
   * { margin:0; padding:0; box-sizing:border-box; font-family:'Vazirmatn',sans-serif; }
   
   body {
-    min-height:100vh;
-    background: linear-gradient(-45deg, #0f2027, #203a43, #2c5364, #1a1a2e);
-    background-size: 400% 400%;
-    animation: gradientBG 15s ease infinite;
-    display:flex; flex-direction:column; align-items:center;
-    padding:40px 20px; color:#fff; overflow-x:hidden;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+    background-size: 200% 200%;
+    animation: gradientShift 15s ease infinite;
+    color: #fff;
+    display: flex; flex-direction: column; align-items: center;
+    padding: 40px 20px;
+    overflow-x: hidden;
   }
 
-  @keyframes gradientBG {
+  @keyframes gradientShift {
     0% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }
     100% { background-position: 0% 50%; }
   }
 
-  .header { text-align:center; margin-bottom:50px; z-index:1; }
-  
-  h1 {
-    font-size:2.2rem; font-weight:900; margin-bottom:12px;
-    background: linear-gradient(90deg,#f6d365,#fda085,#4facfe,#43e97b);
-    background-size: 300% auto;
-    -webkit-background-clip:text; background-clip:text;
-    -webkit-text-fill-color:transparent;
-    animation: shine 5s linear infinite;
-  }
-  
-  @keyframes shine { to { background-position: 300% center; } }
-
-  .subtitle { color:#b8b3d4; margin-bottom:18px; font-size:1.05rem; }
-  
-  .teacher-badge {
-    display:inline-flex; align-items:center; gap:8px;
-    background: rgba(255,255,255,0.08);
-    border:1px solid rgba(255,255,255,0.15);
-    backdrop-filter: blur(10px);
-    color:#f6d365; padding:10px 24px; border-radius:50px;
-    font-weight:700; font-size:0.95rem;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-  }
-
-  /* کانتینر کارت‌ها */
-  .grid {
-    display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));
-    gap:25px; width:100%; max-width:1100px; z-index:1;
-  }
-
-  /* استایل کارت‌ها */
-  .card {
-    background: rgba(255,255,255,0.05);
-    backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius:24px; padding:35px 25px;
-    text-decoration:none; color:#fff;
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    position:relative; overflow:hidden;
-    display:flex; flex-direction:column; align-items:center; text-align:center;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-  }
-
-  .card:hover {
-    transform: translateY(-10px) scale(1.02);
+  /* حباب‌های تزئینی پس‌زمینه */
+  .bubble {
+    position: fixed;
+    border-radius: 50%;
     background: rgba(255,255,255,0.1);
-    border-color: rgba(246,211,101,0.4);
-    box-shadow: 0 20px 40px rgba(0,0,0,0.4), 0 0 20px rgba(246,211,101,0.2);
+    animation: floatBubble 20s infinite ease-in-out;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .bubble:nth-child(1) { width: 80px; height: 80px; top: 10%; left: 10%; animation-delay: 0s; }
+  .bubble:nth-child(2) { width: 120px; height: 120px; top: 60%; left: 80%; animation-delay: 3s; }
+  .bubble:nth-child(3) { width: 60px; height: 60px; top: 80%; left: 20%; animation-delay: 6s; }
+  .bubble:nth-child(4) { width: 100px; height: 100px; top: 30%; left: 70%; animation-delay: 9s; }
+  .bubble:nth-child(5) { width: 50px; height: 50px; top: 50%; left: 40%; animation-delay: 12s; }
+
+  @keyframes floatBubble {
+    0%, 100% { transform: translateY(0) scale(1); opacity: 0.3; }
+    50% { transform: translateY(-30px) scale(1.1); opacity: 0.6; }
   }
 
-  /* نور پس‌زمینه کارت */
-  .card::before {
-    content:''; position:absolute; top:-50%; left:-50%;
-    width:200%; height:200%;
-    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
-    opacity:0; transition:opacity 0.4s;
+  /* ===== هدر ===== */
+  .header {
+    text-align: center;
+    margin-bottom: 40px;
+    z-index: 1;
+    position: relative;
   }
-  .card:hover::before { opacity:1; }
 
-  .card-icon { font-size:4rem; margin-bottom:20px; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.3)); }
-  
-  .card-title { font-size:1.5rem; font-weight:900; margin-bottom:10px; }
-  .card-grade { color:#f6d365; }
-  
-  .card-desc { font-size:0.95rem; color:#c8c4dc; line-height:1.8; }
-
-  .card-arrow {
-    margin-top:25px; font-size:1.5rem; color:#4facfe; transition:0.3s;
+  .header h1 {
+    font-size: 2.6rem;
+    font-weight: 900;
+    margin-bottom: 15px;
+    text-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    animation: fadeInDown 1s ease;
+    background: linear-gradient(90deg, #fff, #ffd6ff, #fff);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: shineText 3s linear infinite, fadeInDown 1s ease;
   }
-  .card:hover .card-arrow { transform: translateX(-10px); color:#f6d365; }
 
-  /* رنگ‌های اختصاصی هر پایه */
-  .card.h7 .card-title { color:#43e97b; }
-  .card.h8 .card-title { color:#4facfe; }
-  .card.h9 .card-title { color:#f5576c; }
+  @keyframes shineText {
+    to { background-position: 200% center; }
+  }
 
-  .footer-note { margin-top:50px; font-size:0.85rem; color:#6b6688; text-align:center; z-index:1; }
+  .header .subtitle {
+    font-size: 1.1rem;
+    color: rgba(255,255,255,0.9);
+    margin-bottom: 25px;
+    animation: fadeInUp 1s ease 0.3s backwards;
+  }
 
-  @media(max-width:600px){
-    h1 { font-size:1.7rem; }
-    .grid { grid-template-columns: 1fr; }
+  @keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ===== نشان دبیر ===== */
+  .teacher-badge {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: rgba(255,255,255,0.2);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(255,255,255,0.3);
+    padding: 12px 28px;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 1rem;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+    animation: fadeInUp 1s ease 0.5s backwards;
+    transition: 0.3s;
+  }
+  .teacher-badge:hover {
+    background: rgba(255,255,255,0.3);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.25);
+  }
+  .teacher-badge .emoji { font-size: 1.4rem; }
+
+  /* ===== کانتینر اصلی ===== */
+  .main-container {
+    width: 100%;
+    max-width: 1000px;
+    z-index: 1;
+    position: relative;
+  }
+
+  /* ===== عنوان بخش ===== */
+  .section-title {
+    text-align: center;
+    font-size: 1.4rem;
+    font-weight: 900;
+    margin-bottom: 25px;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    animation: fadeInUp 1s ease 0.7s backwards;
+  }
+
+  /* ===== کارت‌های پایه ===== */
+  .grades-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 25px;
+    margin-bottom: 40px;
+  }
+
+  .grade-card {
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 24px;
+    padding: 40px 25px;
+    text-decoration: none;
+    color: #fff;
+    text-align: center;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+    position: relative;
+    overflow: hidden;
+    animation: fadeInUp 1s ease backwards;
+  }
+
+  .grade-card:nth-child(1) { animation-delay: 0.8s; }
+  .grade-card:nth-child(2) { animation-delay: 1s; }
+  .grade-card:nth-child(3) { animation-delay: 1.2s; }
+
+  .grade-card::before {
+    content: '';
+    position: absolute;
+    top: -50%; left: -50%;
+    width: 200%; height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 60%);
+    opacity: 0;
+    transition: opacity 0.5s;
+    pointer-events: none;
+  }
+
+  .grade-card:hover {
+    transform: translateY(-10px) scale(1.03);
+    background: rgba(255,255,255,0.25);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  }
+
+  .grade-card:hover::before { opacity: 1; }
+
+  .grade-icon {
+    font-size: 4rem;
+    display: block;
+    margin-bottom: 15px;
+    filter: drop-shadow(0 4px 10px rgba(0,0,0,0.2));
+    transition: 0.4s;
+  }
+  .grade-card:hover .grade-icon {
+    transform: scale(1.15) rotate(-5deg);
+  }
+
+  .grade-num {
+    font-size: 1.8rem;
+    font-weight: 900;
+    margin-bottom: 8px;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  }
+
+  .grade-desc {
+    font-size: 0.9rem;
+    color: rgba(255,255,255,0.85);
+    margin-bottom: 20px;
+  }
+
+  .grade-btn {
+    display: inline-block;
+    background: rgba(255,255,255,0.95);
+    color: #764ba2;
+    padding: 10px 30px;
+    border-radius: 30px;
+    font-weight: 900;
+    font-size: 0.95rem;
+    transition: 0.3s;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  }
+
+  .grade-card:hover .grade-btn {
+    background: #fff;
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+  }
+
+  /* دکمه در حال ساخت */
+  .grade-card.coming-soon {
+    opacity: 0.65;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+  .grade-card.coming-soon .grade-btn {
+    background: rgba(255,255,255,0.5);
+    color: rgba(118,75,162,0.6);
+  }
+
+  /* ===== بخش درباره ===== */
+  .about-section {
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 24px;
+    padding: 35px 30px;
+    text-align: center;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+    animation: fadeInUp 1s ease 1.5s backwards;
+    margin-bottom: 30px;
+  }
+
+  .about-section h2 {
+    font-size: 1.3rem;
+    margin-bottom: 15px;
+    font-weight: 900;
+  }
+
+  .about-section p {
+    font-size: 1rem;
+    color: rgba(255,255,255,0.9);
+    line-height: 1.9;
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  .features-row {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-top: 25px;
+  }
+
+  .feature-chip {
+    background: rgba(255,255,255,0.2);
+    border: 1px solid rgba(255,255,255,0.3);
+    padding: 8px 18px;
+    border-radius: 30px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: 0.3s;
+  }
+  .feature-chip:hover {
+    background: rgba(255,255,255,0.3);
+    transform: translateY(-2px);
+  }
+
+  /* ===== فوتر ===== */
+  .footer {
+    text-align: center;
+    color: rgba(255,255,255,0.8);
+    font-size: 0.9rem;
+    margin-top: 20px;
+    z-index: 1;
+    position: relative;
+  }
+
+  .footer .heart {
+    color: #ff6b9d;
+    animation: pulse 1.5s infinite;
+    display: inline-block;
+  }
+
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+  }
+
+  /* ===== ریسپانسیو ===== */
+  @media(max-width:600px) {
+    body { padding: 25px 15px; }
+    .header h1 { font-size: 1.9rem; }
+    .header .subtitle { font-size: 0.95rem; }
+    .teacher-badge { padding: 10px 22px; font-size: 0.9rem; }
+    .section-title { font-size: 1.2rem; }
+    .grade-card { padding: 30px 20px; }
+    .grade-icon { font-size: 3rem; }
+    .grade-num { font-size: 1.5rem; }
+    .about-section { padding: 25px 20px; }
+    .about-section h2 { font-size: 1.1rem; }
+    .about-section p { font-size: 0.9rem; }
   }
 </style>
 </head>
 <body>
 
+  <!-- حباب‌های تزئینی -->
+  <div class="bubble"></div>
+  <div class="bubble"></div>
+  <div class="bubble"></div>
+  <div class="bubble"></div>
+  <div class="bubble"></div>
+
+  <!-- هدر -->
   <div class="header">
     <h1>📚 مطالعات اجتماعی</h1>
-    <p class="subtitle">سامانه درسنامه و آزمون‌های دوره اول متوسطه</p>
+    <p class="subtitle">بسته کامل آموزشی، آزمون و بازی‌های تعاملی</p>
     <div class="teacher-badge">
-      <span>👨‍🏫</span>
+      <span class="emoji">👨‍🏫</span>
       <span>دبیر: ابراهیم اسحقی</span>
     </div>
   </div>
 
-  <div class="grid">
+  <div class="main-container">
     
-    <!-- پایه هفتم -->
-    <a class="card h7" href="haftom.html">
-      <div class="card-icon">📗</div>
-      <div class="card-title">پایه <span class="card-grade">هفتم</span></div>
-      <div class="card-desc">درسنامه‌ها، آزمون‌های تستی، تشریحی و بازی‌های تعاملی مخصوص دانش‌آموزان پایه هفتم</div>
-      <div class="card-arrow">⬅ ورود به پایه هفتم</div>
-    </a>
+    <h2 class="section-title">🎯 پایه تحصیلی خود را انتخاب کنید</h2>
 
-    <!-- پایه هشتم -->
-    <a class="card h8" href="hashtom.html">
-      <div class="card-icon">📘</div>
-      <div class="card-title">پایه <span class="card-grade">هشتم</span></div>
-      <div class="card-desc">محتوای آموزشی و ارزشیابی کامل منطبق با کتاب درسی پایه هشتم</div>
-      <div class="card-arrow">⬅ ورود به پایه هشتم</div>
-    </a>
+    <div class="grades-grid">
 
-    <!-- پایه نهم -->
-    <a class="card h9" href="nohom.html">
-      <div class="card-icon">📙</div>
-      <div class="card-title">پایه <span class="card-grade">نهم</span></div>
-      <div class="card-desc">درسنامه‌های جامع و آزمون‌های استاندارد برای آمادگی پایه نهم</div>
-      <div class="card-arrow">⬅ ورود به پایه نهم</div>
-    </a>
+      <!-- پایه هفتم -->
+      <a href="haftom.html" class="grade-card">
+        <span class="grade-icon">📗</span>
+        <div class="grade-num">پایه هفتم</div>
+        <div class="grade-desc">۲۴ درس کامل با درسنامه، آزمون، فلش کارت و فایل‌ها</div>
+        <span class="grade-btn">ورود به پایه هفتم ←</span>
+      </a>
+
+      <!-- پایه هشتم -->
+      <div class="grade-card coming-soon">
+        <span class="grade-icon">📘</span>
+        <div class="grade-num">پایه هشتم</div>
+        <div class="grade-desc">به‌زودی در دسترس خواهد بود</div>
+        <span class="grade-btn">به‌زودی...</span>
+      </div>
+
+      <!-- پایه نهم -->
+      <div class="grade-card coming-soon">
+        <span class="grade-icon">📙</span>
+        <div class="grade-num">پایه نهم</div>
+        <div class="grade-desc">به‌زودی در دسترس خواهد بود</div>
+        <span class="grade-btn">به‌زودی...</span>
+      </div>
+
+    </div>
+
+    <!-- بخش درباره -->
+    <div class="about-section">
+      <h2>✨ درباره این سایت</h2>
+      <p>
+        این سایت آموزشی به منظور کمک به دانش‌آموزان عزیز در یادگیری بهتر و عمیق‌تر درس مطالعات اجتماعی طراحی شده است. 
+        امیدواریم با استفاده از درسنامه‌ها، آزمون‌ها و فلش کارت‌ها، تجربه‌ای لذت‌بخش از یادگیری داشته باشید.
+      </p>
+      <div class="features-row">
+        <span class="feature-chip">📖 درسنامه</span>
+        <span class="feature-chip">📝 آزمون تستی</span>
+        <span class="feature-chip">✍️ آزمون تشریحی</span>
+        <span class="feature-chip">🎴 فلش کارت</span>
+        <span class="feature-chip">📂 فایل‌ها و عکس‌ها</span>
+      </div>
+    </div>
 
   </div>
 
-  <p class="footer-note">ساخته شده با ❤️ برای دانش‌آموزان عزیز</p>
+  <!-- فوتر -->
+  <div class="footer">
+    ساخته شده با <span class="heart">❤️</span> برای دانش‌آموزان عزیز
+  </div>
 
 </body>
 </html>
