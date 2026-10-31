@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>فلش کارت - درس ۱۰: ایران، خانه ما</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; font-family:'Vazirmatn',sans-serif; }
+  body {
+    background-color: #f4f7f6;
+    background-image: radial-gradient(#d1e0e0 1px, transparent 1px);
+    background-size: 20px 20px;
+    color: #2c3e50; padding: 30px 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh;
+  }
+  .container {
+    background: #fff; width: 100%; max-width: 800px; border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08); padding: 35px; border: 1px solid #eef2f5;
+    text-align: center;
+  }
+  
+  .header { margin-bottom: 30px; border-bottom: 2px dashed #eef2f5; padding-bottom: 20px; }
+  .header h1 { color: #558b2f; font-size: 1.6rem; margin-bottom: 8px; }
+  .header p { color: #7f8c8d; font-size: 0.95rem; }
+
+  /* ===== بخش فلش کارت ===== */
+  .flashcard-container {
+    perspective: 1000px;
+    width: 100%;
+    height: 300px;
+    margin-bottom: 30px;
+    cursor: pointer;
+  }
+
+  .flashcard {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+  }
+
+  .flashcard.flipped {
+    transform: rotateY(180deg);
+  }
+
+  .flashcard-front, .flashcard-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+  }
+
+  .flashcard-front {
+    background: linear-gradient(135deg, #558b2f, #33691e);
+    color: #fff;
+  }
+
+  .flashcard-back {
+    background: linear-gradient(135deg, #ecf0f1, #bdc3c7);
+    color: #2c3e50;
+    transform: rotateY(180deg);
+  }
+
+  .card-content {
+    font-size: 1.3rem;
+    font-weight: 900;
+    line-height: 1.8;
+  }
+
+  .card-label {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 0.8rem;
+    background: rgba(255,255,255,0.2);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-weight: 700;
+  }
+  .flashcard-back .card-label {
+    background: rgba(0,0,0,0.05);
+    color: #7f8c8d;
+  }
+
+  .click-hint {
+    position: absolute;
+    bottom: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.8rem;
+    opacity: 0.7;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  /* ===== کنترل‌ها ===== */
+  .controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+  }
+
+  .nav-btn {
+    background: #558b2f; color: #fff; border: none; padding: 12px 25px;
+    border-radius: 30px; font-weight: 700; font-family: inherit;
+    font-size: 1rem; cursor: pointer; transition: 0.3s;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .nav-btn:hover { background: #33691e; transform: translateY(-2px); }
+  .nav-btn:disabled { background: #bdc3c7; cursor: not-allowed; transform: none; }
+
+  .counter {
+    font-weight: 900; font-size: 1.1rem; color: #7f8c8d;
+    background: #ecf0f1; padding: 8px 20px; border-radius: 30px;
+  }
+
+  .back-home {
+    display: inline-block; margin-top: 30px; background: #2c3e50; color: #fff;
+    text-decoration: none; padding: 10px 25px; border-radius: 30px; font-weight: 700; transition: 0.3s;
+  }
+  .back-home:hover { background: #1a252f; }
+
+  @media(max-width:600px) {
+    .container { padding: 20px; }
+    .flashcard-container { height: 400px; }
+    .card-content { font-size: 1.1rem; }
+    .controls { flex-direction: column; gap: 15px; }
+    .nav-btn { width: 100%; justify-content: center; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  
+  <div class="header">
+    <h1>🎴 فلش کارت‌های درس ۱۰</h1>
+    <p>ایران، خانه ما — مطالعات اجتماعی پایه هفتم</p>
+  </div>
+
+  <!-- فلش کارت -->
+  <div class="flashcard-container" onclick="flipCard()">
+    <div class="flashcard" id="flashcard">
+      <div class="flashcard-front">
+        <span class="card-label">سوال</span>
+        <div class="card-content" id="question-text">سوال اینجا قرار می‌گیرد</div>
+        <span class="click-hint">👆 برای دیدن جواب کلیک کنید</span>
+      </div>
+      <div class="flashcard-back">
+        <span class="card-label">جواب</span>
+        <div class="card-content" id="answer-text">جواب اینجا قرار می‌گیرد</div>
+        <span class="click-hint">👆 برای دیدن سوال کلیک کنید</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- کنترل‌ها -->
+  <div class="controls">
+    <button class="nav-btn" id="prev-btn" onclick="prevCard()">▶ کارت قبلی</button>
+    <div class="counter" id="counter">۱ از ۱۰</div>
+    <button class="nav-btn" id="next-btn" onclick="nextCard()">کارت بعدی ◀</button>
+  </div>
+
+  <a href="haftom.html" class="back-home">🔙 بازگشت به صفحه دروس</a>
+
+</div>
+
+<script>
+  // ==========================================
+  // بانک ۱۰ فلش کارت درس ۱۰ (ایران، خانه ما)
+  // ==========================================
+  const flashcards = [
+    {
+      q: "وسعت کشور ایران چقدر است؟",
+      a: "۱,۶۴۸,۱۹۵ کیلومتر مربع."
+    },
+    {
+      q: "جمعیت ایران در سال ۱۳۹۵ حدوداً چقدر بوده است؟",
+      a: "حدود ۸۰ میلیون نفر."
+    },
+    {
+      q: "تقسیمات کشوری ایران به چه ترتیبی است؟",
+      a: "استان ← شهرستان ← شهر و روستا."
+    },
+    {
+      q: "استان توسط چه نهادی اداره می‌شود؟",
+      a: "استانداری."
+    },
+    {
+      q: "شهرها توسط چه نهادهایی اداره می‌شوند؟",
+      a: "شورای اسلامی شهر و شهردار."
+    },
+    {
+      q: "سه مورد از وظایف شهرداری را نام ببرید.",
+      a: "۱. ایجاد و نگهداری فضای سبز و نظافت شهر ۲. توسعه حمل و نقل عمومی ۳. صدور پروانه ساختمان."
+    },
+    {
+      q: "عوارض نوسازی چیست؟",
+      a: "مبلغی که شهرنشینان سالانه به شهرداری می‌پردازند تا شهرداری بتواند خدمات ارائه دهد."
+    },
+    {
+      q: "روستاها توسط چه نهادهایی اداره می‌شوند؟",
+      a: "شورای اسلامی روستا و دهیار."
+    },
+    {
+      q: "نواحی مرتفع ایران کدام‌اند؟",
+      a: "کوه‌های آذربایجان، رشته کوه البرز (شمال) و رشته کوه زاگرس (غرب)."
+    },
+    {
+      q: "نواحی پست و هموار ایران شامل چه بخش‌هایی است؟",
+      a: "دشت‌ها و جلگه‌ها که به دلیل خاک مساعد و آب مناسب، برای کشاورزی مناسب‌اند."
+    }
+  ];
+
+  let currentIndex = 0;
+  const flashcardElement = document.getElementById('flashcard');
+  const questionText = document.getElementById('question-text');
+  const answerText = document.getElementById('answer-text');
+  const counter = document.getElementById('counter');
+  const prevBtn = document.getElementById('prev-btn');
+  const nextBtn = document.getElementById('next-btn');
+
+  function updateCard() {
+    flashcardElement.classList.remove('flipped');
+    
+    setTimeout(() => {
+      questionText.innerText = flashcards[currentIndex].q;
+      answerText.innerText = flashcards[currentIndex].a;
+      
+      const persianNumbers = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+      const currentPersian = String(currentIndex + 1).replace(/\d/g, d => persianNumbers[d]);
+      const totalPersian = String(flashcards.length).replace(/\d/g, d => persianNumbers[d]);
+      counter.innerText = `${currentPersian} از ${totalPersian}`;
+      
+      prevBtn.disabled = currentIndex === 0;
+      nextBtn.disabled = currentIndex === flashcards.length - 1;
+    }, 150);
+  }
+
+  function flipCard() {
+    flashcardElement.classList.toggle('flipped');
+  }
+
+  function nextCard() {
+    if (currentIndex < flashcards.length - 1) {
+      currentIndex++;
+      updateCard();
+    }
+  }
+
+  function prevCard() {
+    if (currentIndex > 0) {
+      currentIndex--;
+      updateCard();
+    }
+  }
+
+  updateCard();
+</script>
+
+</body>
+</html>
