@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>فلش کارت - درس ۲۰: ایران و منطقهٔ جنوب غربی آسیا</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; font-family:'Vazirmatn',sans-serif; }
+  body { background-color: #f4f7f6; background-image: radial-gradient(#d1e0e0 1px, transparent 1px); background-size: 20px 20px; color: #2c3e50; padding: 30px 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+  .container { background: #fff; width: 100%; max-width: 800px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); padding: 35px; border: 1px solid #eef2f5; text-align: center; }
+  .header { margin-bottom: 30px; border-bottom: 2px dashed #eef2f5; padding-bottom: 20px; }
+  .header h1 { color: #00acc1; font-size: 1.6rem; margin-bottom: 8px; }
+  .header p { color: #7f8c8d; font-size: 0.95rem; }
+  .flashcard-container { perspective: 1000px; width: 100%; height: 300px; margin-bottom: 30px; cursor: pointer; }
+  .flashcard { position: relative; width: 100%; height: 100%; text-align: center; transition: transform 0.6s; transform-style: preserve-3d; }
+  .flashcard.flipped { transform: rotateY(180deg); }
+  .flashcard-front, .flashcard-back { position: absolute; width: 100%; height: 100%; -webkit-backface-visibility: hidden; backface-visibility: hidden; border-radius: 20px; display: flex; align-items: center; justify-content: center; padding: 30px; box-shadow: 0 8px 25px rgba(0,0,0,0.1); }
+  .flashcard-front { background: linear-gradient(135deg, #00acc1, #00838f); color: #fff; }
+  .flashcard-back { background: linear-gradient(135deg, #ecf0f1, #bdc3c7); color: #2c3e50; transform: rotateY(180deg); }
+  .card-content { font-size: 1.2rem; font-weight: 900; line-height: 1.9; }
+  .card-label { position: absolute; top: 15px; right: 20px; font-size: 0.8rem; background: rgba(255,255,255,0.2); padding: 4px 12px; border-radius: 20px; font-weight: 700; }
+  .flashcard-back .card-label { background: rgba(0,0,0,0.05); color: #7f8c8d; }
+  .click-hint { position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%); font-size: 0.8rem; opacity: 0.7; display: flex; align-items: center; gap: 5px; }
+  .controls { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; }
+  .nav-btn { background: #00acc1; color: #fff; border: none; padding: 12px 25px; border-radius: 30px; font-weight: 700; font-family: inherit; font-size: 1rem; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 8px; }
+  .nav-btn:hover { background: #00838f; transform: translateY(-2px); }
+  .nav-btn:disabled { background: #bdc3c7; cursor: not-allowed; transform: none; }
+  .counter { font-weight: 900; font-size: 1.1rem; color: #7f8c8d; background: #ecf0f1; padding: 8px 20px; border-radius: 30px; }
+  .back-home { display: inline-block; margin-top: 30px; background: #2c3e50; color: #fff; text-decoration: none; padding: 10px 25px; border-radius: 30px; font-weight: 700; transition: 0.3s; }
+  .back-home:hover { background: #1a252f; }
+  @media(max-width:600px) { .container { padding: 20px; } .flashcard-container { height: 420px; } .card-content { font-size: 1.05rem; } .controls { flex-direction: column; gap: 15px; } .nav-btn { width: 100%; justify-content: center; } }
+</style>
+</head>
+<body>
+
+<div class="container">
+  
+  <div class="header">
+    <h1>🎴 فلش کارت‌های درس ۲۰</h1>
+    <p>ایران و منطقهٔ جنوب غربی آسیا — مطالعات اجتماعی پایه هشتم</p>
+  </div>
+
+  <div class="flashcard-container" onclick="flipCard()">
+    <div class="flashcard" id="flashcard">
+      <div class="flashcard-front">
+        <span class="card-label">سوال</span>
+        <div class="card-content" id="question-text">سوال اینجا قرار می‌گیرد</div>
+        <span class="click-hint">👆 برای دیدن جواب کلیک کنید</span>
+      </div>
+      <div class="flashcard-back">
+        <span class="card-label">جواب</span>
+        <div class="card-content" id="answer-text">جواب اینجا قرار می‌گیرد</div>
+        <span class="click-hint">👆 برای دیدن سوال کلیک کنید</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button class="nav-btn" id="prev-btn" onclick="prevCard()">▶ کارت قبلی</button>
+    <div class="counter" id="counter">۱ از ۱۵</div>
+    <button class="nav-btn" id="next-btn" onclick="nextCard()">کارت بعدی ◀</button>
+  </div>
+
+  <a href="hashtom.html" class="back-home">🔙 بازگشت به صفحه دروس</a>
+
+</div>
+
+<script>
+  const flashcards = [
+    {
+      q: "ایران در کدام منطقهٔ راهبردی جهان قرار دارد؟",
+      a: "در منطقهٔ جنوب غربی آسیا که یکی از مناطق راهبردی (استراتژیک) جهان است."
+    },
+    {
+      q: "چرا منطقهٔ جنوب غربی آسیا استراتژیک است؟",
+      a: "به سه دلیل: ۱. کانون اتصال سه قارهٔ آسیا، اروپا و افریقا ۲. انبار مهم منابع انرژی (دوسوم نفت و یک‌سوم گاز جهان) ۳. کانون جهان اسلام."
+    },
+    {
+      q: "تنگه‌های مهم منطقهٔ جنوب غربی آسیا کدام‌اند؟",
+      a: "تنگهٔ هرمز، بُسفر، داردانل و بابُ‌المَندَب."
+    },
+    {
+      q: "چرا استفاده از حمل و نقل دریایی برای کشورها اهمیت دارد؟",
+      a: "زیرا بسیار ارزان‌تر از حمل و نقل جاده‌ای است و جابه‌جایی بارهای بسیار سنگین و حجیم (صدها هزار تن) فقط با کشتی میسر است. همچنین محدودیت‌های جاده‌ای را ندارد."
+    },
+    {
+      q: "دربارهٔ منابع انرژی منطقهٔ جنوب غربی آسیا توضیح دهید.",
+      a: "حدود دوسوم ذخایر شناخته‌شدهٔ نفت جهان و حدود یک‌سوم منابع گازی جهان در این منطقه قرار دارد که بخش بزرگی از آنها در منطقهٔ خلیج فارس است. کشورهای عمدهٔ صادرکنندهٔ نفت مانند عربستان، ایران، عراق، کویت و امارات در این منطقه هستند."
+    },
+    {
+      q: "«خاورمیانه» و «خاور دور» را در مطالعات غربی توضیح دهید.",
+      a: "در مطالعات کشورهای غربی، منطقهٔ جنوب غربی آسیا و شمال افریقا را «خاورمیانه» و کشورهای شرق آسیا را «خاور دور» نامیده‌اند."
+    },
+    {
+      q: "منطقهٔ جنوب غربی آسیا چه جایگاهی در جهان اسلام دارد؟",
+      a: "کانون جهان اسلام است. مکه و مدینه (مقدس‌ترین شهرهای مسلمانان) در این منطقه‌اند و هر ساله در مراسم حج صدها هزار نفر را در خود جای می‌دهند. راه‌پیمایی اربعین نیز هر ساله میلیون‌ها انسان را گرد هم جمع می‌کند."
+    },
+    {
+      q: "سازمان همکاری اقتصادی (اکو) را معرفی کنید.",
+      a: "نخست در سال ۱۳۴۱ بین ایران، پاکستان و ترکیه بسته شد. هم‌اکنون ده کشور منطقه عضو آن هستند و کشورها از طریق آن سعی می‌کنند در پیمان‌های اقتصادی و فرهنگی با یکدیگر همکاری کنند."
+    },
+    {
+      q: "چهار دلیل پرتنش بودن منطقهٔ جنوب غربی آسیا را بنویسید.",
+      a: "۱. منابع انرژی و راه‌های حمل و نقل دریایی و توجه قدرت‌های استکباری ۲. نفوذ قدرت‌های استکباری و ایجاد جنگ‌های نیابتی ۳. رژیم اشغالگر قدس (اسرائیل) با حمایت آمریکا و انگلیس ۴. پایگاه‌های نظامی آمریکا و برخی کشورهای سلطه‌گر در منطقه."
+    },
+    {
+      q: "مهم‌ترین بنادر ایران در خلیج فارس کدام‌اند؟",
+      a: "خارک، کیش، قشم، لارک، لاوان، تنب بزرگ، تنب کوچک، ابوموسی و... . این جزایر از نظر استخراج نفت، بازرگانی، تجارت و نظامی اهمیت دارند."
+    },
+    {
+      q: "تنگهٔ هرمز چه ویژگی حقوقی دارد؟",
+      a: "یک آبراههٔ بین‌المللی است که همهٔ کشورها حق دارند بر طبق قوانین، با کشتی از آن رفت و آمد کنند."
+    },
+    {
+      q: "نقش نیروی دریایی ایران در دفاع از کشور و کمک‌رسانی را توضیح دهید.",
+      a: "در جنگ تحمیلی رژیم بعثی عراق علیه ایران، با شجاعت و رشادت با دشمنان جنگید و نگذاشت در رفت و آمد کشتی‌های تجاری و واردات کالا به ایران مشکلی پیش بیاید. در زمان صلح نیز حافظ منافع کشور ایران در دریاهاست و در حوادث بین‌المللی به کشتی‌های ایران و دیگران کمک می‌رساند."
+    },
+    {
+      q: "مسئلهٔ فلسطین را تعریف کنید و بگویید چرا مهم‌ترین مسئلهٔ جهان اسلام است.",
+      a: "مسئلهٔ فلسطین و ظلمی که بر مردم این کشور پس از اشغال آن توسط یهودیان صهیونیست می‌شود، تنها یک مسئلهٔ عربی یا اسلامی نیست، بلکه یک مسئلهٔ بسیار با اهمیت است. دلایل: مهد ادیان الهی، محل تقاطع سه قاره، عبور آبراه مهم، تشکیل دولت جعلی اسرائیل در قلب دنیای اسلام."
+    },
+    {
+      q: "چرا موقعیت جغرافیایی فلسطین اهمیت دارد؟",
+      a: "کشور فلسطین در محل تقاطع سه قارهٔ آسیا، افریقا و اروپا قرار دارد و راه‌های ارتباطی زمینی این سه قاره از این منطقه می‌گذرد. یکی از مهم‌ترین آبراه‌های جهان (مسیر دریای مدیترانه ــ دریای سرخ ــ اقیانوس هند) از این منطقه و نزدیک فلسطین عبور می‌کند."
+    },
+    {
+      q: "صهیونیسم چیست و چرا فراتر از اسرائیل است؟",
+      a: "صهیونیسم یک جریان فکری ــ سیاسی متجاوز است که تشکیل دولت اسرائیل را هدف نهایی خود می‌داند. منظور فقط دولت اشغالگر فلسطین نیست، بلکه راه‌اندازی و ادارهٔ دولت اسرائیل تنها بخشی از فعالیت این گروه است. آنها سرمایه‌داران بزرگی هستند که در کشورهایی مانند آمریکا نفوذ فراوان دارند و بر سیاست آن کشور مسلط‌اند. امروزه حتی برخی سازمان‌های بین‌المللی نیز در زمینه‌های مالی، نظامی و تبلیغاتی اسیر سیاست‌های توسعه‌طلبانهٔ صهیونیسم‌اند."
+    }
+  ];
+
+  let currentIndex = 0;
+  const flashcardElement = document.getElementById('flashcard');
+  const questionText = document.getElementById('question-text');
+  const answerText = document.getElementById('answer-text');
+  const counter = document.getElementById('counter');
+  const prevBtn = document.getElementById('prev-btn');
+  const nextBtn = document.getElementById('next-btn');
+
+  function updateCard() {
+    flashcardElement.classList.remove('flipped');
+    setTimeout(() => {
+      questionText.innerText = flashcards[currentIndex].q;
+      answerText.innerText = flashcards[currentIndex].a;
+      const persianNumbers = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+      const cur = String(currentIndex + 1).replace(/\d/g, d => persianNumbers[d]);
+      const tot = String(flashcards.length).replace(/\d/g, d => persianNumbers[d]);
+      counter.innerText = `${cur} از ${tot}`;
+      prevBtn.disabled = currentIndex === 0;
+      nextBtn.disabled = currentIndex === flashcards.length - 1;
+    }, 150);
+  }
+
+  function flipCard() { flashcardElement.classList.toggle('flipped'); }
+  function nextCard() { if (currentIndex < flashcards.length - 1) { currentIndex++; updateCard(); } }
+  function prevCard() { if (currentIndex > 0) { currentIndex--; updateCard(); } }
+  updateCard();
+</script>
+
+</body>
+</html>
