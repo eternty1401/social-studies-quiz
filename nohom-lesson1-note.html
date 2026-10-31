@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>درس ۱: زمین، مهد زیبای انسان‌ها | مطالعات اجتماعی پایه نهم</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; font-family:'Vazirmatn',sans-serif; }
+  body {
+    min-height:100vh; background-color: #f4f7f6;
+    background-image: radial-gradient(#d1e0e0 1px, transparent 1px);
+    background-size: 20px 20px; color: #2c3e50;
+    padding: 30px 20px; display: flex; flex-direction: column; align-items: center;
+  }
+  .container { width:100%; max-width:900px; }
+
+  /* هدر */
+  .header-card {
+    background: linear-gradient(135deg, #00acc1 0%, #00838f 100%);
+    color:#fff; border-radius: 20px; padding: 35px 25px;
+    text-align:center; box-shadow: 0 10px 30px rgba(0,172,193,0.25);
+    margin-bottom: 20px; position: relative; overflow: hidden;
+  }
+  .header-card::before {
+    content:""; position:absolute; top:-60px; left:-60px;
+    width:180px; height:180px; background:rgba(255,255,255,0.08); border-radius:50%;
+  }
+  .header-badge {
+    display:inline-block; background:rgba(255,255,255,0.22);
+    padding:6px 16px; border-radius:50px; font-size:0.82rem;
+    font-weight:700; margin-bottom:12px; backdrop-filter: blur(4px);
+  }
+  .header-card h1 { font-size:1.7rem; font-weight:900; margin-bottom:8px; }
+  .header-card .subtitle { font-size:0.95rem; opacity:0.95; }
+
+  /* دکمه بازگشت */
+  .back-btn {
+    display:inline-flex; align-items:center; gap:8px; text-decoration:none;
+    color:#34495e; font-size:0.9rem; background:#fff; padding:8px 18px;
+    border-radius:50px; margin-bottom:20px; transition:0.3s;
+    border:1px solid #dcdde1; box-shadow:0 4px 10px rgba(0,0,0,0.05); font-weight:700;
+  }
+  .back-btn:hover { background:#f8f9fa; transform:translateY(-2px); box-shadow:0 6px 15px rgba(0,0,0,0.1); }
+
+  /* highlight */
+  .highlight {
+    background:#e0f7fa; border-right:5px solid #00acc1;
+    border-radius:14px; padding:18px 22px; margin-bottom:22px;
+    font-size:0.98rem; line-height:1.9;
+  }
+  .highlight b { color:#00838f; }
+
+  /* بخش‌ها */
+  .section { background:#fff; border-radius:16px; padding:22px 24px; margin-bottom:18px; box-shadow:0 4px 16px rgba(0,0,0,0.05); }
+  .section h2 {
+    font-size:1.15rem; font-weight:900; color:#00838f; margin-bottom:14px;
+    padding-right:14px; border-right:5px solid #00acc1; line-height:1.6;
+  }
+  .section p { line-height:2; font-size:0.95rem; margin-bottom:10px; text-align:justify; }
+  .section ul { padding-right:22px; margin-bottom:10px; }
+  .section li { line-height:2; font-size:0.95rem; margin-bottom:4px; }
+
+  /* کادرها */
+  .warn-box {
+    background:#fef9e7; border-right:5px solid #f1c40f; border-radius:12px;
+    padding:15px 18px; margin:14px 0; font-size:0.92rem; line-height:1.9;
+  }
+  .warn-box b { color:#d4a017; }
+  .info-box {
+    background:#ebf5fb; border-right:5px solid #3498db; border-radius:12px;
+    padding:15px 18px; margin:14px 0; font-size:0.92rem; line-height:1.9;
+  }
+  .info-box b { color:#2980b9; }
+
+  /* جدول */
+  .summary-table { width:100%; border-collapse:collapse; margin:10px 0; border-radius:12px; overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,0.05); }
+  .summary-table th { background:#00acc1; color:#fff; padding:12px; font-size:0.9rem; font-weight:700; text-align:right; }
+  .summary-table td { padding:11px 12px; font-size:0.9rem; border-bottom:1px solid #eef2f5; line-height:1.8; }
+  .summary-table tr:nth-child(even) td { background:#f4fbfc; }
+  .summary-table tr:hover td { background:#e0f7fa; }
+
+  /* quiz box */
+  .quiz-box {
+    background: linear-gradient(135deg, #f4ecf7, #fdf6ff);
+    border:2px dashed #9b59b6; border-radius:16px;
+    padding:22px 24px; margin-bottom:18px;
+  }
+  .quiz-box h3 { color:#8e44ad; font-size:1.1rem; font-weight:900; margin-bottom:14px; }
+  .quiz-box .q { font-size:0.93rem; margin-bottom:8px; line-height:1.8; }
+  .quiz-box .q span { color:#8e44ad; font-weight:800; margin-left:5px; }
+
+  footer { text-align:center; margin-top:30px; font-size:0.85rem; color:#95a5a6; }
+
+  @media(max-width:600px){
+    .header-card h1 { font-size:1.3rem; }
+    .section { padding:18px; }
+  }
+</style>
+</head>
+<body>
+
+<a href="nohom.html" class="back-btn">➡ بازگشت به صفحهٔ دروس</a>
+
+<div class="container">
+
+  <!-- هدر -->
+  <div class="header-card">
+    <div class="header-badge">📖 درسنامه</div>
+    <h1>درس ۱: زمین، مهد زیبای انسان‌ها</h1>
+    <p class="subtitle">فصل ۱ — سیارهٔ ما، زمین</p>
+  </div>
+
+  <!-- هدف کلی -->
+  <div class="highlight">
+    <b>🎯 هدف کلی درس:</b>
+    در این درس با جایگاه زمین در فضا، منظومهٔ خورشیدی، چگونگی تعیین موقعیت مکانی بر روی کرهٔ زمین (مختصات جغرافیایی)، و همچنین کاربرد ماهواره‌ها در تعیین موقعیت آشنا می‌شوید.
+  </div>
+
+  <!-- بخش ۱ -->
+  <div class="section">
+    <h2>۱. زمین، امانت الهی</h2>
+    <p>
+      زمین، خانه و محل تولد ماست؛ همان امانت الهی که در دست انسان است. در قرآن کریم آیات زیادی دربارهٔ زمین و تأمل در شگفتی‌های آن آمده است. تفکر در آفرینش زمین، کوه‌ها، دریاها، ابرها و حرکت روز و شب، انسان متفکر را به خالقی مهربان و حکیم رهنمون می‌سازد.
+    </p>
+    <p>
+      در آیات قرآن، خداوند به «سیر در زمین» و «تفکر در آفرینش» سفارش کرده است. اگرچه برخی از اسرار غیبی زمین فقط از طریق وحی قابل درک است، انسان با دانش تجربی نیز می‌تواند بخشی از اسرار زمین و جایگاه آن را در آسمان کشف کند.
+    </p>
+    <div class="info-box">
+      <b>💡 نکته:</b> یک فضانورد مسلمان روسی دربارهٔ دیدن زمین از فضا گفته است: «تا از فضا به زمین نگاه نکنید، نمی‌توانید تصور کنید که سیارهٔ ما چقدر زیبا، کوچک، ظریف و شکننده است.»
+    </div>
+  </div>
+
+  <!-- بخش ۲ -->
+  <div class="section">
+    <h2>۲. منظومهٔ خورشیدی</h2>
+    <p>
+      زمین ما بخش کوچکی از <b>منظومهٔ خورشیدی</b> است. منظومهٔ خورشیدی از یک ستاره به نام خورشید و اجرام آسمانی متعددی تشکیل شده که در مدارهای پیرامون آن می‌گردند.
+    </p>
+    <ul>
+      <li>خورشید در مرکز منظومه قرار دارد و سرچشمهٔ اصلی زندگی روی زمین است.</li>
+      <li>منظومهٔ خورشیدی ۸ سیاره دارد و زمین <b>سومین</b> سیارهٔ آن است.</li>
+      <li>چهار سیارهٔ نزدیک به خورشید (تیر، ناهید، زمین، بهرام) سطحی جامد دارند و <b>«سیاره‌های درونی»</b> نامیده می‌شوند.</li>
+      <li>چهار سیارهٔ دورتر (برجیس، کیوان، اورانوس، نپتون) از گاز تشکیل شده‌اند و <b>«سیاره‌های بیرونی»</b> هستند.</li>
+      <li>عمر زمین و منظومهٔ خورشیدی حدود ۴/۵ میلیارد سال تخمین زده می‌شود.</li>
+    </ul>
+    <div class="warn-box">
+      <b>⚠️ توجه کنید:</b> برخی سیاره‌های منظومهٔ خورشیدی قمرهایی دارند که به دور آنها می‌گردند (مانند ماه که قمر زمین است).
+    </div>
+  </div>
+
+  <!-- بخش ۳ -->
+  <div class="section">
+    <h2>۳. زمین در کهکشان راه شیری</h2>
+    <p>
+      خورشید، تنها یکی از میلیاردها ستارهٔ <b>کهکشان راه شیری</b> است. کهکشان راه شیری نیز خود یکی از هزاران کهکشان در فضای بی‌کران کیهان است. بنابراین زمین ما با همهٔ وسعت و شگفتی‌اش، تنها بخش بسیار بسیار کوچکی از کیهان است.
+    </p>
+    <div class="info-box">
+      <b>📊 آمار جالب:</b> کهکشان راه شیری بیش از ۲۰۰ میلیارد ستاره دارد. قطر هستهٔ آن ۱۰٬۰۰۰ سال نوری است و خورشید با سرعت ۲۲۰ کیلومتر در ثانیه، حدود ۲۵۰ میلیون سال طول می‌کشد تا یک بار مرکز این کهکشان را دور بزند.
+    </div>
+  </div>
+
+  <!-- بخش ۴ -->
+  <div class="section">
+    <h2>۴. موقعیت مکانی و مختصات جغرافیایی</h2>
+    <p>
+      <b>موقعیت مکانی</b> یک پدیده، مکان دقیق قرار گرفتن آن روی کرهٔ زمین است. جغرافی‌دانان برای تعیین موقعیت مکانی پدیده‌ها، خطوط و تقسیمات فرضی را ابداع کرده‌اند: <b>مدارها</b> و <b>نصف‌النهارها</b>.
+    </p>
+
+    <p><b>🔹 مدارها:</b> دایره‌های فرضی که به موازات <b>استوا</b> (دایرهٔ بزرگ در فاصلهٔ مساوی از دو قطب) رسم می‌شوند.</p>
+    <ul>
+      <li>مدار استوا (مدار مبدأ) صفر درجه است.</li>
+      <li>بقیهٔ مدارها بین ۰ تا ۹۰ درجه شمالی یا جنوبی درجه‌بندی شده‌اند.</li>
+      <li>هرچه از استوا به قطب نزدیک‌تر شویم، این دایره‌ها کوچک‌تر می‌شوند.</li>
+    </ul>
+
+    <p><b>🔹 نصف‌النهارها:</b> نیم‌دایره‌های فرضی که از قطب شمال تا قطب جنوب کشیده شده‌اند.</p>
+    <ul>
+      <li>نصف‌النهاری که از رصدخانهٔ «گرینویچ» در لندن می‌گذرد، <b>نصف‌النهار مبدأ</b> (صفر درجه) است.</li>
+      <li>سایر نصف‌النهارها از ۰ تا ۱۸۰ درجهٔ شرقی و ۰ تا ۱۸۰ درجهٔ غربی درجه‌بندی شده‌اند.</li>
+      <li>نصف‌النهار مبدأ و امتداد آن، زمین را به دو نیمکرهٔ شرقی و غربی تقسیم می‌کند.</li>
+    </ul>
+
+    <div class="info-box">
+      <b>📌 نکته:</b> با داشتن شبکهٔ مدارها و نصف‌النهارها، می‌توانیم <b>مختصات جغرافیایی</b> هر مکان را به دست آوریم:
+      <br>🔸 <b>عرض جغرافیایی:</b> فاصلهٔ مکان تا مدار استوا (بر حسب درجه، شمالی N یا جنوبی S)
+      <br>🔸 <b>طول جغرافیایی:</b> فاصلهٔ مکان تا نصف‌النهار مبدأ (بر حسب درجه، شرقی E یا غربی W)
+    </div>
+
+    <div class="warn-box">
+      <b>⚠️ مثال:</b> نقطه‌ای با مختصات <b>۴۵°N و ۶۰°E</b> یعنی در ۴۵ درجهٔ شمالی (عرض) و ۶۰ درجهٔ شرقی (طول) قرار دارد. ایران در نیمکرهٔ شمالی و شرقی قرار دارد.
+    </div>
+  </div>
+
+  <!-- بخش ۵ -->
+  <div class="section">
+    <h2>۵. استفاده از ماهواره‌ها در تعیین موقعیت</h2>
+    <p>
+      از گذشته، مردم برای یافتن مسیر و تعیین مکان از ابزارهایی مانند <b>ستارگان</b>، <b>اسطرلاب</b> و <b>قطب‌نما</b> استفاده می‌کردند. تلاش برای مسیریابی دقیق در هر شرایطی، منجر به استفاده از <b>ماهواره‌ها</b> شد.
+    </p>
+    <p>
+      امروزه سیستم‌های ناوبری ماهواره‌ای مانند <b>GPS</b> (آمریکا)، <b>گلوناس</b> (روسیه) و <b>بیدو</b> (چین) کاربردهای فراوانی دارند:
+    </p>
+    <ul>
+      <li>تعیین دقیق مکان، سرعت و جهت وسایل نقلیه</li>
+      <li>کمک به امدادرسانی در حوادث</li>
+      <li>تهیهٔ نقشه‌های مختلف</li>
+      <li>کاربرد در کشاورزی و محیط زیست</li>
+      <li>کاربردهای نظامی و دفاعی</li>
+    </ul>
+
+    <div class="info-box">
+      <b>🇮🇷 افتخار ملی:</b> جمهوری اسلامی ایران در اردیبهشت ۱۳۹۹ موفق شد ماهوارهٔ <b>«نور»</b> را توسط ماهواره‌بر <b>«قاصد»</b> در مدار زمین قرار دهد. این موفقیت، نشان‌دهندهٔ پیشرفت ایران در فناوری فضایی است.
+    </div>
+
+    <div class="warn-box">
+      <b>⚠️ تهدیدهای وابستگی:</b> اگر همهٔ سیستم‌های موقعیت‌یابی یک کشور بر اساس GPS کشور دیگری باشد، احتمال کنترل، اختلال یا فریب از سوی آن کشور در فعالیت‌های دفاعی وجود دارد. بنابراین، بومی‌سازی و ساخت سیستم‌های داخلی، باعث استقلال و کاهش آسیب‌پذیری می‌شود.
+    </div>
+  </div>
+  <!-- جدول خلاصه -->
+  <div class="section">
+    <h2>📋 جدول خلاصهٔ درس</h2>
+    <table class="summary-table">
+      <thead>
+        <tr>
+          <th>موضوع</th>
+          <th>خلاصهٔ مطلب</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>منظومهٔ خورشیدی</td>
+          <td>شامل یک ستاره (خورشید) و ۸ سیاره؛ زمین سومین سیارهٔ آن است.</td>
+        </tr>
+        <tr>
+          <td>سیاره‌های درونی</td>
+          <td>تیر، ناهید، زمین، بهرام — سطحی جامد دارند.</td>
+        </tr>
+        <tr>
+          <td>سیاره‌های بیرونی</td>
+          <td>برجیس، کیوان، اورانوس، نپتون — از گاز تشکیل شده‌اند.</td>
+        </tr>
+        <tr>
+          <td>عمر زمین</td>
+          <td>حدود ۴/۵ میلیارد سال</td>
+        </tr>
+        <tr>
+          <td>کهکشان راه شیری</td>
+          <td>بیش از ۲۰۰ میلیارد ستاره دارد؛ خورشید یکی از آن‌هاست.</td>
+        </tr>
+        <tr>
+          <td>مدار استوا</td>
+          <td>مدار مبدأ (صفر درجه)، دایرهٔ بزرگ در فاصلهٔ مساوی از دو قطب.</td>
+        </tr>
+        <tr>
+          <td>نصف‌النهار مبدأ</td>
+          <td>از رصدخانهٔ گرینویچ لندن می‌گذرد (صفر درجه).</td>
+        </tr>
+        <tr>
+          <td>عرض جغرافیایی</td>
+          <td>فاصلهٔ مکان تا استوا (N شمالی / S جنوبی)</td>
+        </tr>
+        <tr>
+          <td>طول جغرافیایی</td>
+          <td>فاصلهٔ مکان تا نصف‌النهار مبدأ (E شرقی / W غربی)</td>
+        </tr>
+        <tr>
+          <td>سیستم‌های ناوبری ماهواره‌ای</td>
+          <td>GPS (آمریکا)، گلوناس (روسیه)، بیدو (چین)</td>
+        </tr>
+        <tr>
+          <td>دستاورد فضایی ایران</td>
+          <td>پرتاب ماهوارهٔ «نور» با ماهواره‌بر «قاصد» در اردیبهشت ۱۳۹۹</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- خودآزمایی -->
+  <div class="quiz-box">
+    <h3>🧠 خودآزمایی — آیا درس را یاد گرفتم؟</h3>
+
+    <p class="q"><span>۱.</span> زمین در منظومهٔ خورشیدی چندمین سیاره است و چرا سیاره‌های نزدیک به خورشید را «سیاره‌های درونی» می‌نامند؟</p>
+    <p class="q"><span>۲.</span> مدار استوا و نصف‌النهار مبدأ چه تفاوتی دارند و هر یک چه چیزی را مشخص می‌کنند؟</p>
+    <p class="q"><span>۳.</span> مختصات جغرافیایی نقطه‌ای ۳۰°S و ۴۵°W است. این نقطه در کدام نیمکره قرار دارد؟</p>
+    <p class="q"><span>۴.</span> چه تفاوتی بین «طول جغرافیایی» و «عرض جغرافیایی» وجود دارد؟</p>
+    <p class="q"><span>۵.</span> چرا کشورها به ساخت سیستم‌های بومی موقعیت‌یابی ماهواره‌ای علاقه دارند؟ دو دلیل ذکر کنید.</p>
+    <p class="q"><span>۶.</span> ماهوارهٔ «نور» ایران توسط چه ماهواره‌بری و در چه سالی در مدار زمین قرار گرفت؟</p>
+    <p class="q"><span>۷.</span> چرا دیدن زمین از فضا، آن را «کوچک و شکننده» نشان می‌دهد؟</p>
+  </div>
+
+  <!-- دکمه بازگشت -->
+  <div style="text-align:center; margin-top:10px;">
+    <a href="nohom.html" class="back-btn">➡ بازگشت به فهرست دروس</a>
+  </div>
+
+</div>
+
+<footer>ساخته شده با ❤️ برای دانش‌آموزان پایه نهم — مطالعات اجتماعی</footer>
+
+</body>
+</html>
