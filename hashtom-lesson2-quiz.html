@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>آزمون تستی درس ۲: تعاون (۲)</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; font-family:'Vazirmatn',sans-serif; }
+  body {
+    background-color: #f4f7f6;
+    background-image: radial-gradient(#d1e0e0 1px, transparent 1px);
+    background-size: 20px 20px;
+    color: #2c3e50; padding: 30px 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh;
+  }
+  .container {
+    background: #fff; width: 100%; max-width: 800px; border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08); padding: 35px; border: 1px solid #eef2f5;
+  }
+  
+  #start-section { text-align: center; padding: 20px 0; }
+  #start-section h1 { color: #2e7d32; font-size: 1.6rem; margin-bottom: 15px; }
+  #start-section p { color: #7f8c8d; margin-bottom: 20px; line-height: 1.8; }
+  .info-box {
+    background: #e8f5e9; border-radius: 12px; padding: 15px 20px;
+    margin-bottom: 25px; font-size: 0.9rem; color: #2e7d32; text-align: right;
+  }
+  .name-input {
+    width: 100%; max-width: 400px; padding: 15px; margin-bottom: 20px;
+    border: 2px solid #e2e8f0; border-radius: 12px; font-family: inherit;
+    font-size: 1rem; text-align: center; outline: none; transition: 0.3s;
+  }
+  .name-input:focus { border-color: #2e7d32; box-shadow: 0 0 10px rgba(46,125,50,0.2); }
+  .start-btn {
+    background: #2ecc71; color: #fff; border: none; padding: 15px 40px;
+    border-radius: 12px; font-size: 1.1rem; font-weight: 900; font-family: inherit;
+    cursor: pointer; transition: 0.3s; box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);
+  }
+  .start-btn:hover { background: #27ae60; transform: translateY(-2px); }
+
+  #quiz-section { display: none; }
+  .header-top { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px dashed #eef2f5; padding-bottom: 15px; margin-bottom: 25px; }
+  .header-title h1 { color: #2e7d32; font-size: 1.3rem; }
+  .header-title p { color: #7f8c8d; font-size: 0.85rem; margin-top: 5px; }
+  .timer-box {
+    background: #fdedec; color: #e74c3c; padding: 8px 18px; border-radius: 50px;
+    font-weight: 900; font-size: 1.1rem; border: 1px solid #fadbd8;
+    display: flex; align-items: center; gap: 8px; direction: ltr;
+    transition: all 0.3s;
+  }
+  .timer-box.warning { background: #fef9e7; color: #f39c12; border-color: #fae5d3; animation: pulse 1s infinite; }
+  @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+
+  .progress-bar-container {
+    width: 100%; height: 8px; background: #ecf0f1; border-radius: 10px;
+    margin-bottom: 25px; overflow: hidden;
+  }
+  .progress-bar {
+    height: 100%; background: linear-gradient(90deg, #2e7d32, #66bb6a);
+    border-radius: 10px; transition: width 0.4s ease;
+    width: 0%;
+  }
+
+  .question-box {
+    background: #fafbfc; border: 1px solid #eef2f5; border-radius: 12px;
+    padding: 25px; margin-bottom: 20px; min-height: 300px;
+    animation: slideIn 0.4s ease;
+  }
+  @keyframes slideIn { from { opacity: 0; transform: translateX(30px); } to { opacity: 1; transform: translateX(0); } }
+  
+  .q-number { font-size: 0.85rem; color: #2e7d32; font-weight: 900; margin-bottom: 10px; }
+  .q-title { font-weight: 900; font-size: 1.1rem; margin-bottom: 20px; line-height: 1.7; }
+  
+  .options { display: flex; flex-direction: column; gap: 10px; }
+  .option-label {
+    display: flex; align-items: center; gap: 10px; padding: 14px 18px;
+    background: #fff; border: 2px solid #e2e8f0; border-radius: 10px;
+    cursor: pointer; transition: 0.2s; font-size: 0.95rem;
+  }
+  .option-label:hover { background: #e8f5e9; border-color: #2e7d32; }
+  .option-label input[type="radio"] { display: none; }
+  .option-label.selected { background: #e8f5e9; border-color: #2e7d32; font-weight: 700; color: #1b5e20; }
+  
+  .nav-buttons { display: flex; justify-content: flex-end; margin-top: 20px; }
+  .next-btn {
+    background: #2e7d32; color: #fff; border: none; padding: 12px 35px;
+    border-radius: 30px; font-size: 1rem; font-weight: 700; font-family: inherit;
+    cursor: pointer; transition: 0.3s; box-shadow: 0 4px 12px rgba(46,125,50,0.3);
+  }
+  .next-btn:hover { background: #1b5e20; transform: translateY(-2px); }
+
+  .result-container { display: none; text-align: center; }
+  .student-name-display {
+    font-size: 1.2rem; font-weight: 900; color: #2c3e50; margin-bottom: 20px;
+    background: #ecf0f1; padding: 10px 20px; border-radius: 10px; display: inline-block;
+  }
+  .score-circle {
+    width: 150px; height: 150px; border-radius: 50%; margin: 0 auto 20px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    border: 8px solid #ecf0f1;
+  }
+  .score-circle.excellent { border-color: #2ecc71; color: #2ecc71; }
+  .score-circle.good { border-color: #f39c12; color: #f39c12; }
+  .score-circle.fail { border-color: #e74c3c; color: #e74c3c; }
+  .score-num { font-size: 2.8rem; font-weight: 900; line-height: 1; }
+  .score-text { font-size: 0.9rem; color: #7f8c8d; margin-top: 5px; font-weight: 700; }
+  .result-stats { display: flex; justify-content: center; gap: 15px; margin-bottom: 30px; }
+  .stat-box { padding: 15px 25px; border-radius: 10px; font-weight: 700; font-size: 0.95rem; }
+  .stat-box.correct { color: #2ecc71; background: #e8f8f5; }
+  .stat-box.wrong { color: #e74c3c; background: #fdedec; }
+  
+  .review-btn {
+    display: inline-block; background: #3498db; color: #fff; text-decoration: none;
+    padding: 12px 30px; border-radius: 30px; font-weight: 700; border: none; cursor: pointer;
+    font-size: 1rem; font-family: inherit; transition: 0.3s;
+  }
+  .review-btn:hover { background: #2980b9; }
+
+  .review-item { text-align: right; margin-bottom: 15px; padding: 15px; border-radius: 10px; background: #f8f9fa; }
+  .review-item .review-q { font-weight: 900; margin-bottom: 10px; }
+  .review-item .review-a-correct { color: #27ae60; background: #e8f8f5; padding: 8px 12px; border-radius: 8px; margin-top: 5px; }
+  .review-item .review-a-wrong { color: #e74c3c; background: #fdedec; padding: 8px 12px; border-radius: 8px; margin-top: 5px; }
+  .review-item .review-a-empty { color: #95a5a6; background: #ecf0f1; padding: 8px 12px; border-radius: 8px; margin-top: 5px; }
+
+  @media(max-width:600px) {
+    .container { padding: 20px; }
+    .header-top { flex-direction: column; gap: 10px; text-align: center; }
+    .result-stats { flex-direction: column; gap: 10px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  
+  <div id="start-section">
+    <h1>📝 آزمون تستی درس ۲</h1>
+    <p>تعاون (۲) — مطالعات اجتماعی پایه هشتم</p>
+    <div class="info-box">
+      <strong>📌 اطلاعات آزمون:</strong><br>
+      • ۱۵ سوال تصادفی از بانک ۴۰ سوالی<br>
+      • هر سوال <strong>۳۰ ثانیه</strong> زمان دارد<br>
+      • پس از پایان زمان هر سوال، خودکار به سوال بعدی می‌رود<br>
+      • در پایان، کارنامه و مرور پاسخ‌ها نمایش داده می‌شود
+    </div>
+    <input type="text" id="student-name" class="name-input" placeholder="نام و نام خانوادگی خود را وارد کنید">
+    <br>
+    <button class="start-btn" onclick="startQuiz()">شروع آزمون</button>
+  </div>
+
+  <div id="quiz-section">
+    <div class="header-top">
+      <div class="header-title">
+        <h1>📝 آزمون تستی درس ۲</h1>
+        <p id="progress-text">سوال ۱ از ۱۵</p>
+      </div>
+      <div class="timer-box" id="timer-display">⏱ ۳۰</div>
+    </div>
+    
+    <div class="progress-bar-container">
+      <div class="progress-bar" id="progress-bar"></div>
+    </div>
+    
+    <div id="question-container"></div>
+    
+    <div class="nav-buttons">
+      <button class="next-btn" id="next-btn" onclick="nextQuestion()">سوال بعدی ←</button>
+    </div>
+  </div>
+
+  <div id="result-section" class="result-container">
+    <h2 style="color:#2c3e50; margin-bottom:20px; font-weight:900;">🎓 کارنامه شما</h2>
+    <div class="student-name-display" id="display-student-name">نام دانش‌آموز</div>
+    
+    <div id="score-circle" class="score-circle">
+      <div class="score-num" id="score-display">0</div>
+      <div class="score-text">از ۱۰۰</div>
+    </div>
+    <p id="result-message" style="font-size:1.1rem; font-weight:700; margin-bottom:25px;"></p>
+    <div class="result-stats">
+      <div class="stat-box correct" id="stat-correct">تعداد درست: ۰</div>
+      <div class="stat-box wrong" id="stat-wrong">تعداد غلط: ۰</div>
+    </div>
+    
+    <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">
+      <button class="review-btn" onclick="showReview()" style="background:#f39c12;">🔍 مرور پاسخ‌ها</button>
+      <a href="hashtom.html" class="review-btn" style="background:#3498db;">🔙 بازگشت به دروس</a>
+    </div>
+    
+    <div id="review-section" style="display:none; margin-top:25px;"></div>
+  </div>
+
+</div>
+
+<script>
+  // بانک ۴۰ سوالی درس ۲ پایه هشتم (تعاون ۲)
+  const questionBank = [
+    { q: "انفاق یعنی چه؟", options: ["بخشیدن مال، علم، توانایی و وقت به نیازمندان", "جمع کردن ثروت", "خرید کالاهای گران‌قیمت", "رقابت با دیگران"], answer: 0 },
+    { q: "طبق آیه ۹۲ سوره آل‌عمران، چه زمانی به نیکی می‌رسیم؟", options: ["وقتی از آنچه دوست داریم انفاق کنیم", "وقتی ثروت جمع کنیم", "وقتی تنها زندگی کنیم", "وقتی از دیگران دوری کنیم"], answer: 0 },
+    { q: "کدام یک از آثار مثبت انفاق در زندگی فردی است؟", options: ["آرامش روحی و روانی", "افزایش اضطراب", "افزایش فقر", "دوری از دیگران"], answer: 0 },
+    { q: "کدام یک از آثار مثبت انفاق در جامعه است؟", options: ["کاهش فقر و محرومیت", "افزایش فقر", "افزایش اختلافات", "کاهش محبت"], answer: 0 },
+    { q: "راه‌های انفاق کدام‌اند؟", options: ["بخشش مال و صرف وقت و توانایی", "فقط بخشش مال", "فقط بخشش علم", "فقط صرف وقت"], answer: 0 },
+    { q: "سازمان‌های مردم‌نهاد (سمن) چه ویژگی‌هایی دارند؟", options: ["داوطلبانه، غیردولتی و غیرتجاری", "دولتی و تجاری", "اجباری و انتفاعی", "دولتی و انتفاعی"], answer: 0 },
+    { q: "سازمان‌های مردم‌نهاد برای فعالیت‌های خود از کجا باید مجوز بگیرند؟", options: ["از وزارت کشور", "از شهرداری", "از آموزش و پرورش", "از سازمان ملل"], answer: 0 },
+    { q: "خیّرین مدرسه‌ساز چه کاری انجام می‌دهند؟", options: ["ساختن یا تعمیر مدارس و تحویل رایگان به آموزش و پرورش", "فروش مدرسه", "اجاره دادن مدرسه", "تعطیل کردن مدارس"], answer: 0 },
+    { q: "خیّرین مدرسه‌ساز چه نامی می‌توانند روی مدرسه بگذارند؟", options: ["نام خود، پدر و مادر یا هر نامی که بخواهند", "فقط نام خودشان", "فقط نام شهیدان", "فقط نام وزیر"], answer: 0 },
+    { q: "شادروان غلامرضا مردانی آذری حدود چند مدرسه ساخته است؟", options: ["حدود ۲۷ مدرسه", "حدود ۷ مدرسه", "حدود ۵۰ مدرسه", "حدود ۱۰۰ مدرسه"], answer: 0 },
+    { q: "شادروان حسنعلی علی‌پور به احترام چه کسانی ۷۲ مدرسه ساخته است؟", options: ["۷۲ تن از یاران امام حسین (ع)", "۷۲ امام", "۷۲ پیامبر", "۷۲ شهید"], answer: 0 },
+    { q: "وقف چیست؟", options: ["بخشش اموال برای استفاده همیشگی مردم", "فروش اموال", "اجاره اموال", "خرید اموال"], answer: 0 },
+    { q: "به اموال و دارایی‌هایی که وقف می‌شوند چه می‌گویند؟", options: ["موقوفات", "امانات", "هدایا", "قرض‌ها"], answer: 0 },
+    { q: "کسی که چیزی را وقف می‌کند چه نام دارد؟", options: ["واقف", "موقوف", "وقف‌گیر", "موقوف‌علیه"], answer: 0 },
+    { q: "آیا می‌توان در موقوفات تصرف کرد؟", options: ["خیر، تا ابد باید به همان صورتی که واقف معین کرده استفاده شود", "بله، هر کسی می‌تواند", "بله، ولی با اجازه شهرداری", "بله، در مواقع ضروری"], answer: 0 },
+    { q: "یکی از انواع وقف کدام است؟", options: ["وقف گروهی یا خانوادگی", "وقف دولتی", "وقف تجاری", "وقف اجباری"], answer: 0 },
+    { q: "مسئولیت اداره موقوفات هر منطقه به عهده چه نهادی است؟", options: ["سازمان اوقاف و امور خیریه", "شهرداری", "آموزش و پرورش", "وزارت کشور"], answer: 0 },
+    { q: "شرکت تعاونی چگونه تأسیس می‌شود؟", options: ["گروهی از مردم برای رفع نیازهای معیشتی و شغلی دور هم جمع شوند", "یک نفر به تنهایی", "دولت به تنهایی", "با اجازه خارجی"], answer: 0 },
+    { q: "در شرکت تعاونی، همه اعضا چه ویژگی دارند؟", options: ["با هم برابر هستند و هر عضو یک حق رأی دارد", "هر کس پول بیشتر دارد، رأی بیشتر دارد", "فقط رئیس رأی دارد", "هر کس قدیمی‌تر است رأی بیشتر دارد"], answer: 0 },
+    { q: "در شرکت‌های غیرتعاونی، قدرت تصمیم‌گیری بر اساس چه چیزی است؟", options: ["میزان سرمایه و سهام", "تعداد اعضا", "سن اعضا", "میزان تحصیلات"], answer: 0 },
+    { q: "منافع حاصل از شرکت تعاونی چگونه توزیع می‌شود؟", options: ["به طور برابر بین همه اعضا", "فقط به رئیس", "به نسبت سرمایه", "فقط به مؤسسان"], answer: 0 },
+    { q: "هدف اصلی شرکت تعاونی چیست؟", options: ["حل مشکلات اقتصادی و ایجاد رفاه برای اعضا", "کسب سود برای رئیس", "رقابت با بانک‌ها", "خرید اموال شخصی"], answer: 0 },
+    { q: "کدام یک از موارد زیر از مؤسسات خیریه است؟", options: ["انجمن حمایت از بیماران خاص", "بانک", "بورس", "فروشگاه"], answer: 0 },
+    { q: "یکی از وظایف مؤسسات خیریه چیست؟", options: ["کمک به ایتام و نیازمندان", "کسب سود", "رقابت با دولت", "فروش کالا"], answer: 0 },
+    { q: "انفاق فقط شامل بخشش مال می‌شود؟", options: ["خیر، شامل بخشش علم، توانایی و وقت نیز می‌شود", "بله، فقط مال", "بله، فقط وقت", "خیر، فقط علم"], answer: 0 },
+    { q: "در دین اسلام، انفاق چه جایگاهی دارد؟", options: ["تأکید زیادی به آن شده است", "ممنوع است", "مکروه است", "فقط برای ثروتمندان است"], answer: 0 },
+    { q: "سازمان‌های مردم‌نهاد در چه اموری فعالیت می‌کنند؟", options: ["عمران و آبادانی، مقابله با آسیب‌های اجتماعی، حفظ محیط زیست", "فقط تجارت", "فقط سیاست", "فقط ورزش"], answer: 0 },
+    { q: "خیّرین مدرسه‌ساز چه تأثیری بر جامعه دارند؟", options: ["کمک به آموزش دانش‌آموزان و توسعه فضاهای آموزشی", "افزایش فقر", "کاهش آموزش", "تعطیل مدارس"], answer: 0 },
+    { q: "کدام یک از این موارد از مصادیق وقف است؟", options: ["ساختن مدرسه علمیه و کاروانسرا برای استفاده عمومی", "فروش مدرسه", "اجاره کاروانسرا", "خرید مغازه"], answer: 0 },
+    { q: "وقف چه تفاوتی با انفاق دارد؟", options: ["وقف همیشگی است اما انفاق ممکن است یک‌بار باشد", "هیچ تفاوتی ندارند", "وقف فقط برای مردگان است", "انفاق همیشگی است اما وقف یک‌بار"], answer: 0 },
+    { q: "کدام یک از این موارد از ویژگی‌های شرکت تعاونی نیست؟", options: ["هر کس سرمایه بیشتری دارد، رأی بیشتری دارد", "همه اعضا برابرند", "هر عضو یک حق رأی دارد", "منافع به طور برابر توزیع می‌شود"], answer: 0 },
+    { q: "کدام یک از این موارد از اقدامات سازمان اوقاف و امور خیریه است؟", options: ["اداره موقوفات", "ساخت مدرسه", "فروش موقوفات", "تعطیل موقوفات"], answer: 0 },
+    { q: "هدف از تشکیل مؤسسات خیریه چیست؟", options: ["کمک به نیازمندان و رفع مشکلات جامعه", "کسب سود", "رقابت با دولت", "افزایش قدرت"], answer: 0 },
+    { q: "انفاق چه تأثیری بر روحیه انفاق‌کننده دارد؟", options: ["آرامش روحی و روانی", "افزایش اضطراب", "افزایش افسردگی", "افزایش ترس"], answer: 0 },
+    { q: "کدام یک از موارد زیر از مصادیق تعاون در سطح جامعه است؟", options: ["انفاق، وقف و خیریه", "دعوا و اختلاف", "بی‌توجهی به دیگران", "تخریب اموال عمومی"], answer: 0 },
+    { q: "کدام یک از موارد زیر از مصادیق سازمان‌های مردم‌نهاد است؟", options: ["انجمن حمایت از محیط زیست", "بانک", "بورس", "اداره مالیات"], answer: 0 },
+    { q: "طبق آیه ۹۲ سوره آل‌عمران، انفاق از چه چیزی باید باشد؟", options: ["از آنچه دوست داریم", "از چیزهای بی‌ارزش", "از اضافی‌ها", "از چیزهایی که نیاز نداریم"], answer: 0 },
+    { q: "وقف گروهی یا خانوادگی چه نوع وقفی است؟", options: ["چند نفر با مشارکت مالی یکدیگر وقف می‌کنند", "فقط یک نفر وقف می‌کند", "دولت وقف می‌کند", "شهرداری وقف می‌کند"], answer: 0 },
+    { q: "کدام یک از این موارد از خدمات شرکت‌های تعاونی است؟", options: ["رفع نیازهای معیشتی و شغلی اعضا", "فروش کالاهای گران‌قیمت", "رقابت با بانک‌ها", "کسب سود برای رئیس"], answer: 0 },
+    { q: "مهم‌ترین پیام درس ۲ چیست؟", options: ["تعاون در سطح جامعه، جلوه‌های فراوانی دارد که به رفع نیازهای مردم کمک می‌کند", "انفاق فقط برای ثروتمندان است", "وقف کار خوبی نیست", "شرکت‌های تعاونی سودآور نیستند"], answer: 0 }
+  ];
+
+  const numQuestionsToShow = 15;
+  const timePerQuestion = 30;
+  
+  let selectedQuestions = [];
+  let currentIndex = 0;
+  let timerInterval;
+  let timeLeft = timePerQuestion;
+  let studentName = "";
+  let answers = [];
+
+  function shuffle(array) {
+    let currentIndex = array.length, randomIndex;
+    while (currentIndex != 0) {
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex--;
+      [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+    }
+    return array;
+  }
+
+  function startQuiz() {
+    studentName = document.getElementById('student-name').value.trim();
+    if (studentName === "") {
+      alert("لطفاً نام و نام خانوادگی خود را وارد کنید.");
+      return;
+    }
+    
+    document.getElementById('start-section').style.display = 'none';
+    document.getElementById('quiz-section').style.display = 'block';
+    
+    const shuffledBank = shuffle([...questionBank]);
+    selectedQuestions = shuffledBank.slice(0, numQuestionsToShow);
+    
+    selectedQuestions.forEach((item, index) => {
+      const correctAnswerText = item.options[item.answer];
+      const shuffledOptions = shuffle([...item.options]);
+      selectedQuestions[index].options = shuffledOptions;
+      selectedQuestions[index].answer = shuffledOptions.indexOf(correctAnswerText);
+    });
+    
+    answers = new Array(selectedQuestions.length).fill(null);
+    currentIndex = 0;
+    showQuestion();
+  }
+
+  function showQuestion() {
+    clearInterval(timerInterval);
+    
+    const container = document.getElementById('question-container');
+    const item = selectedQuestions[currentIndex];
+    
+    let optionsHTML = '';
+    item.options.forEach((opt, i) => {
+      const selectedClass = (answers[currentIndex] === i) ? 'selected' : '';
+      optionsHTML += `
+        <label class="option-label ${selectedClass}" onclick="selectOption(${i}, this)">
+          <input type="radio" name="q${currentIndex}" value="${i}" ${answers[currentIndex] === i ? 'checked' : ''}>
+          <span>${opt}</span>
+        </label>
+      `;
+    });
+    
+    container.innerHTML = `
+      <div class="question-box">
+        <div class="q-number">سوال ${currentIndex + 1} از ${selectedQuestions.length}</div>
+        <div class="q-title">${item.q}</div>
+        <div class="options">${optionsHTML}</div>
+      </div>
+    `;
+    
+    const progressPercent = ((currentIndex + 1) / selectedQuestions.length) * 100;
+    document.getElementById('progress-bar').style.width = progressPercent + '%';
+    document.getElementById('progress-text').innerText = `سوال ${currentIndex + 1} از ${selectedQuestions.length}`;
+    
+    const nextBtn = document.getElementById('next-btn');
+    if (currentIndex === selectedQuestions.length - 1) {
+      nextBtn.innerText = "پایان آزمون ✓";
+    } else {
+      nextBtn.innerText = "سوال بعدی ←";
+    }
+    
+    timeLeft = timePerQuestion;
+    updateTimerDisplay();
+    
+    timerInterval = setInterval(() => {
+      timeLeft--;
+      updateTimerDisplay();
+      
+      if (timeLeft <= 5) {
+        document.getElementById('timer-display').classList.add('warning');
+      }
+      
+      if (timeLeft <= 0) {
+        clearInterval(timerInterval);
+        nextQuestion(true);
+      }
+    }, 1000);
+  }
+  
+  function updateTimerDisplay() {
+    const display = document.getElementById('timer-display');
+    const persianNumbers = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+    const persianTime = String(timeLeft).replace(/\d/g, d => persianNumbers[d]);
+    display.innerHTML = `⏱ ${persianTime}`;
+    
+    if (timeLeft > 5) {
+      display.classList.remove('warning');
+    }
+  }
+  
+  function selectOption(optionIndex, element) {
+    answers[currentIndex] = optionIndex;
+    const allLabels = document.querySelectorAll('.option-label');
+    allLabels.forEach(l => l.classList.remove('selected'));
+    element.classList.add('selected');
+  }
+  
+  function nextQuestion(autoFromTimer = false) {
+    clearInterval(timerInterval);
+    
+    if (currentIndex < selectedQuestions.length - 1) {
+      currentIndex++;
+      showQuestion();
+    } else {
+      showResult();
+    }
+  }
+
+  function showResult() {
+    clearInterval(timerInterval);
+    
+    let correctCount = 0;
+    let wrongCount = 0;
+    
+    selectedQuestions.forEach((item, index) => {
+      if (answers[index] === item.answer) {
+        correctCount++;
+      } else {
+        wrongCount++;
+      }
+    });
+    
+    const score = Math.round((correctCount / selectedQuestions.length) * 100);
+    
+    document.getElementById('quiz-section').style.display = 'none';
+    document.getElementById('result-section').style.display = 'block';
+    
+    document.getElementById('display-student-name').innerText = `دانش‌آموز: ${studentName}`;
+    document.getElementById('score-display').innerText = score;
+    document.getElementById('stat-correct').innerText = `تعداد درست: ${correctCount}`;
+    document.getElementById('stat-wrong').innerText = `تعداد غلط: ${wrongCount}`;
+    
+    const circle = document.getElementById('score-circle');
+    const msg = document.getElementById('result-message');
+    
+    circle.className = 'score-circle';
+    if (score >= 80) {
+      circle.classList.add('excellent');
+      msg.innerText = "🌟 عالی بود! شما درس را به خوبی یاد گرفته‌اید.";
+      msg.style.color = "#2ecc71";
+    } else if (score >= 50) {
+      circle.classList.add('good');
+      msg.innerText = "👍 خوب بود، اما با کمی مطالعه بیشتر می‌توانید بهتر شوید.";
+      msg.style.color = "#f39c12";
+    } else {
+      circle.classList.add('fail');
+      msg.innerText = "📚 نیاز به مطالعه بیشتر دارید. ناامید نشوید و درسنامه را دوباره بخوانید.";
+      msg.style.color = "#e74c3c";
+    }
+    
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function showReview() {
+    const reviewSection = document.getElementById('review-section');
+    if (reviewSection.style.display === 'block') {
+      reviewSection.style.display = 'none';
+      return;
+    }
+    
+    let html = '<h3 style="color:#2c3e50; margin-bottom:15px;">🔍 مرور پاسخ‌ها</h3>';
+    
+    selectedQuestions.forEach((item, index) => {
+      const userAnswer = answers[index];
+      const correctAnswer = item.answer;
+      
+      let userAnswerHTML = '';
+      if (userAnswer === null) {
+        userAnswerHTML = `<div class="review-a-empty">❌ پاسخ داده نشد</div>`;
+      } else if (userAnswer === correctAnswer) {
+        userAnswerHTML = `<div class="review-a-correct">✅ پاسخ شما: ${item.options[userAnswer]}</div>`;
+      } else {
+        userAnswerHTML = `
+          <div class="review-a-wrong">❌ پاسخ شما: ${item.options[userAnswer]}</div>
+          <div class="review-a-correct">✅ پاسخ صحیح: ${item.options[correctAnswer]}</div>
+        `;
+      }
+      
+      html += `
+        <div class="review-item">
+          <div class="review-q">${index + 1}. ${item.q}</div>
+          ${userAnswerHTML}
+        </div>
+      `;
+    });
+    
+    reviewSection.innerHTML = html;
+    reviewSection.style.display = 'block';
+  }
+</script>
+
+</body>
+</html>
