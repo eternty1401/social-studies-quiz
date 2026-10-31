@@ -1,354 +1,153 @@
-<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>مطالعات اجتماعی | آزمون‌ها و درسنامه‌ها</title>
+<title>آزمون‌های مطالعات اجتماعی</title>
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;900&display=swap" rel="stylesheet">
 <style>
   * { margin:0; padding:0; box-sizing:border-box; font-family:'Vazirmatn',sans-serif; }
-
+  
   body {
     min-height:100vh;
-    background: linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,#533483 100%);
-    background-attachment: fixed;
-    padding:25px 18px; color:#fff;
+    background: linear-gradient(-45deg, #0f2027, #203a43, #2c5364, #1a1a2e);
+    background-size: 400% 400%;
+    animation: gradientBG 15s ease infinite;
     display:flex; flex-direction:column; align-items:center;
+    padding:40px 20px; color:#fff; overflow-x:hidden;
   }
 
-  /* ===== هدر ===== */
-  .header { text-align:center; margin-bottom:30px; }
+  @keyframes gradientBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  .header { text-align:center; margin-bottom:50px; z-index:1; }
+  
   h1 {
-    font-size:2rem; font-weight:900; margin-bottom:6px;
+    font-size:2.2rem; font-weight:900; margin-bottom:12px;
     background: linear-gradient(90deg,#f6d365,#fda085,#4facfe,#43e97b);
+    background-size: 300% auto;
     -webkit-background-clip:text; background-clip:text;
     -webkit-text-fill-color:transparent;
+    animation: shine 5s linear infinite;
   }
-  .subtitle { color:#b8b3d4; margin-bottom:14px; font-size:0.95rem; }
-  .teacher {
-    display:inline-block;
-    background: linear-gradient(90deg,rgba(246,211,101,0.2),rgba(79,172,254,0.2));
-    border:1px solid rgba(246,211,101,0.4);
-    color:#f6d365; padding:7px 22px; border-radius:50px;
-    font-weight:700; font-size:0.9rem;
-  }
+  
+  @keyframes shine { to { background-position: 300% center; } }
 
-  /* ===== تب‌های پایه ===== */
-  .tabs {
-    display:flex; gap:10px; margin-bottom:30px;
-    background: rgba(255,255,255,0.06);
-    padding:6px; border-radius:50px;
-    border:1px solid rgba(255,255,255,0.1);
-    flex-wrap:wrap; justify-content:center;
-  }
-  .tab-btn {
-    padding:12px 28px; border:none; cursor:pointer;
-    border-radius:50px; font-size:1rem; font-weight:700;
-    background:transparent; color:#b8b3d4;
-    transition:0.3s; font-family:'Vazirmatn',sans-serif;
-  }
-  .tab-btn:hover { color:#fff; background: rgba(255,255,255,0.08); }
-  .tab-btn.active {
-    background: linear-gradient(135deg,#f6d365,#fda085);
-    color:#1a1a2e;
-    box-shadow:0 6px 20px rgba(246,211,101,0.4);
-  }
-
-  /* ===== محتوای تب ===== */
-  .tab-content { width:100%; max-width:1000px; display:none; animation: fadeIn 0.5s; }
-  .tab-content.active { display:block; }
-  @keyframes fadeIn { from{opacity:0; transform:translateY(15px);} to{opacity:1; transform:translateY(0);} }
-
-  /* ===== بخش‌بندی ===== */
-  .section { margin-bottom:35px; }
-  .section-header {
-    display:flex; align-items:center; gap:12px;
-    margin-bottom:16px; padding-right:14px;
-    border-right:4px solid #f6d365;
-  }
-  .section-header .icon { font-size:1.6rem; }
-  .section-header h2 { font-size:1.2rem; font-weight:900; color:#f6d365; }
-
-  /* ===== گرید کارت‌ها ===== */
-  .grid {
-    display:grid;
-    grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
-    gap:16px;
-  }
-
-  .card {
-    background: rgba(255,255,255,0.07);
-    backdrop-filter: blur(12px);
+  .subtitle { color:#b8b3d4; margin-bottom:18px; font-size:1.05rem; }
+  
+  .teacher-badge {
+    display:inline-flex; align-items:center; gap:8px;
+    background: rgba(255,255,255,0.08);
     border:1px solid rgba(255,255,255,0.15);
-    border-radius:18px; padding:20px;
+    backdrop-filter: blur(10px);
+    color:#f6d365; padding:10px 24px; border-radius:50px;
+    font-weight:700; font-size:0.95rem;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  }
+
+  /* کانتینر کارت‌ها */
+  .grid {
+    display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));
+    gap:25px; width:100%; max-width:1100px; z-index:1;
+  }
+
+  /* استایل کارت‌ها */
+  .card {
+    background: rgba(255,255,255,0.05);
+    backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius:24px; padding:35px 25px;
     text-decoration:none; color:#fff;
-    transition:0.3s; position:relative; overflow:hidden;
-    display:flex; flex-direction:column; gap:10px;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position:relative; overflow:hidden;
+    display:flex; flex-direction:column; align-items:center; text-align:center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
   }
+
   .card:hover {
-    transform:translateY(-6px);
-    background: rgba(255,255,255,0.13);
-    box-shadow:0 20px 40px rgba(0,0,0,0.4);
-  }
-  .card.quiz-test::before { content:''; position:absolute; top:0; right:0; left:0; height:4px; background:linear-gradient(90deg,#4facfe,#43e97b); }
-  .card.quiz-essay::before { content:''; position:absolute; top:0; right:0; left:0; height:4px; background:linear-gradient(90deg,#f5576c,#f093fb); }
-  .card.note::before { content:''; position:absolute; top:0; right:0; left:0; height:4px; background:linear-gradient(90deg,#f6d365,#fda085); }
-
-  .card-icon { font-size:2.3rem; }
-  .card-title { font-size:1.05rem; font-weight:900; color:#f6d365; }
-  .card-desc { font-size:0.85rem; color:#c8c4dc; line-height:1.7; flex-grow:1; }
-  .card-tag {
-    display:inline-block; align-self:flex-start;
-    background:rgba(79,172,254,0.2); border:1px solid rgba(79,172,254,0.4);
-    color:#7dd3fc; padding:3px 12px; border-radius:50px;
-    font-size:0.72rem; font-weight:700; margin-top:4px;
-  }
-  .card.quiz-essay .card-tag {
-    background:rgba(245,87,108,0.2); border-color:rgba(245,87,108,0.4); color:#ff9eae;
-  }
-  .card.note .card-tag {
-    background:rgba(246,211,101,0.2); border-color:rgba(246,211,101,0.4); color:#f6d365;
+    transform: translateY(-10px) scale(1.02);
+    background: rgba(255,255,255,0.1);
+    border-color: rgba(246,211,101,0.4);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4), 0 0 20px rgba(246,211,101,0.2);
   }
 
-  /* ===== کارت خالی (به‌زودی) ===== */
-  .card.soon {
-    opacity:0.55; cursor:default; pointer-events:none;
-    border-style:dashed;
+  /* نور پس‌زمینه کارت */
+  .card::before {
+    content:''; position:absolute; top:-50%; left:-50%;
+    width:200%; height:200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
+    opacity:0; transition:opacity 0.4s;
   }
-  .card.soon:hover { transform:none; box-shadow:none; }
+  .card:hover::before { opacity:1; }
 
-  /* ===== یادداشت پایین ===== */
-  .note-box {
-    background: rgba(246,211,101,0.1);
-    border:1px solid rgba(246,211,101,0.3);
-    border-radius:16px; padding:18px 22px;
-    font-size:0.9rem; color:#f6d365; line-height:1.9;
-    max-width:1000px; margin-bottom:30px;
-  }
-  .note-box code {
-    background: rgba(0,0,0,0.3); padding:2px 8px;
-    border-radius:6px; font-family:monospace; color:#7dd3fc;
-  }
+  .card-icon { font-size:4rem; margin-bottom:20px; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.3)); }
+  
+  .card-title { font-size:1.5rem; font-weight:900; margin-bottom:10px; }
+  .card-grade { color:#f6d365; }
+  
+  .card-desc { font-size:0.95rem; color:#c8c4dc; line-height:1.8; }
 
-  .footer-note { text-align:center; font-size:0.8rem; color:#6b6688; margin-top:20px; }
+  .card-arrow {
+    margin-top:25px; font-size:1.5rem; color:#4facfe; transition:0.3s;
+  }
+  .card:hover .card-arrow { transform: translateX(-10px); color:#f6d365; }
+
+  /* رنگ‌های اختصاصی هر پایه */
+  .card.h7 .card-title { color:#43e97b; }
+  .card.h8 .card-title { color:#4facfe; }
+  .card.h9 .card-title { color:#f5576c; }
+
+  .footer-note { margin-top:50px; font-size:0.85rem; color:#6b6688; text-align:center; z-index:1; }
 
   @media(max-width:600px){
-    h1 { font-size:1.4rem; }
-    .tab-btn { padding:10px 18px; font-size:0.9rem; }
-    .grid { grid-template-columns:1fr; }
+    h1 { font-size:1.7rem; }
+    .grid { grid-template-columns: 1fr; }
   }
 </style>
 </head>
 <body>
 
-  <!-- ===== هدر ===== -->
   <div class="header">
     <h1>📚 مطالعات اجتماعی</h1>
-    <p class="subtitle">درسنامه‌ها و آزمون‌های تعاملی | دوره اول متوسطه</p>
-    <span class="teacher">👨‍🏫 دبیر: ابراهیم اسحقی</span>
+    <p class="subtitle">سامانه درسنامه و آزمون‌های دوره اول متوسطه</p>
+    <div class="teacher-badge">
+      <span>👨‍🏫</span>
+      <span>دبیر: ابراهیم اسحقی</span>
+    </div>
   </div>
 
-  <!-- ===== تب‌های پایه ===== -->
-  <div class="tabs">
-    <button class="tab-btn active" onclick="showTab('haftom', this)">📗 پایه هفتم</button>
-    <button class="tab-btn" onclick="showTab('hashtom', this)">📘 پایه هشتم</button>
-    <button class="tab-btn" onclick="showTab('nohom', this)">📙 پایه نهم</button>
-  </div>
+  <div class="grid">
+    
+    <!-- پایه هفتم -->
+    <a class="card h7" href="haftom.html">
+      <div class="card-icon">📗</div>
+      <div class="card-title">پایه <span class="card-grade">هفتم</span></div>
+      <div class="card-desc">درسنامه‌ها، آزمون‌های تستی، تشریحی و بازی‌های تعاملی مخصوص دانش‌آموزان پایه هفتم</div>
+      <div class="card-arrow">⬅ ورود به پایه هفتم</div>
+    </a>
 
-  <!-- ============================================================ -->
-  <!-- ===== محتوای پایه هفتم ===== -->
-  <!-- ============================================================ -->
-  <div class="tab-content active" id="tab-haftom">
+    <!-- پایه هشتم -->
+    <a class="card h8" href="hashtom.html">
+      <div class="card-icon">📘</div>
+      <div class="card-title">پایه <span class="card-grade">هشتم</span></div>
+      <div class="card-desc">محتوای آموزشی و ارزشیابی کامل منطبق با کتاب درسی پایه هشتم</div>
+      <div class="card-arrow">⬅ ورود به پایه هشتم</div>
+    </a>
 
-    <!-- درس ۵ -->
-    <div class="section">
-      <div class="section-header">
-        <span class="icon">🤝</span>
-        <h2>درس ۵ — همدلی و همیاری در حوادث</h2>
-      </div>
-      <div class="grid">
-
-        <!-- درسنامه -->
-        <a class="card note" href="haftom-lesson5-note.html">
-          <div class="card-icon">📖</div>
-          <div class="card-title">درسنامه</div>
-          <div class="card-desc">نکات مهم، مفاهیم کلیدی و خلاصه درس ۵</div>
-          <span class="card-tag">خلاصه</span>
-        </a>
-
-        <!-- آزمون تستی -->
-        <a class="card quiz-test" href="haftom-lesson5-quiz.html">
-          <div class="card-icon">📝</div>
-          <div class="card-title">آزمون تستی</div>
-          <div class="card-desc">۱۵ سوال تستی با تایمر ۳۰ ثانیه و تصحیح خودکار</div>
-          <span class="card-tag">۱۵ سوال</span>
-        </a>
-
-        <!-- آزمون تشریحی -->
-        <a class="card quiz-essay" href="haftom-lesson5-essay.html">
-          <div class="card-icon">✍️</div>
-          <div class="card-title">آزمون تشریحی</div>
-          <div class="card-desc">۵ سوال تشریحی با بارم‌بندی و پاسخ‌برگ</div>
-          <span class="card-tag">۵ سوال</span>
-        </a>
-
-        <!-- چرخ شانس -->
-        <a class="card quiz-test" href="haftom-lesson5-wheel.html">
-          <div class="card-icon">🎡</div>
-          <div class="card-title">چرخ شانس</div>
-          <div class="card-desc">۸ موضوع، ۲۴ سوال تعاملی</div>
-          <span class="card-tag">بازی</span>
-        </a>
-      </div>
-    </div>
-
-    <!-- درس ۶ -->
-    <div class="section">
-      <div class="section-header">
-        <span class="icon">🛡️</span>
-        <h2>درس ۶ — بیمه و مقابله با حوادث</h2>
-      </div>
-      <div class="grid">
-
-        <a class="card note" href="haftom-lesson6-note.html">
-          <div class="card-icon">📖</div>
-          <div class="card-title">درسنامه</div>
-          <div class="card-desc">نکات مهم، مفاهیم کلیدی و خلاصه درس ۶</div>
-          <span class="card-tag">خلاصه</span>
-        </a>
-
-        <a class="card quiz-test" href="haftom-lesson6-quiz.html">
-          <div class="card-icon">📝</div>
-          <div class="card-title">آزمون تستی</div>
-          <div class="card-desc">۱۵ سوال تستی با تایمر ۳۰ ثانیه و تصحیح خودکار</div>
-          <span class="card-tag">۱۵ سوال</span>
-        </a>
-
-        <a class="card quiz-essay" href="haftom-lesson6-essay.html">
-          <div class="card-icon">✍️</div>
-          <div class="card-title">آزمون تشریحی</div>
-          <div class="card-desc">۵ سوال تشریحی با بارم‌بندی و پاسخ‌برگ</div>
-          <span class="card-tag">۵ سوال</span>
-        </a>
-
-        <a class="card quiz-test" href="haftom-lesson6-wheel.html">
-          <div class="card-icon">🎡</div>
-          <div class="card-title">چرخ شانس</div>
-          <div class="card-desc">۸ موضوع، ۲۴ سوال تعاملی</div>
-          <span class="card-tag">بازی</span>
-        </a>
-
-        <a class="card quiz-test" href="haftom-lesson6-audio.html">
-          <div class="card-icon">🔊</div>
-          <div class="card-title">آزمون صوتی</div>
-          <div class="card-desc">۱۵ سوال صوتی با تایمر ۴۵ ثانیه</div>
-          <span class="card-tag">صوتی</span>
-        </a>
-      </div>
-    </div>
-
-    <!-- درس‌های آینده -->
-    <div class="section">
-      <div class="section-header">
-        <span class="icon">⏳</span>
-        <h2>درس‌های بعدی (به‌زودی)</h2>
-      </div>
-      <div class="grid">
-        <div class="card soon">
-          <div class="card-icon">📚</div>
-          <div class="card-title">درس ۷ — تولید و توزیع</div>
-          <div class="card-desc">در حال آماده‌سازی...</div>
-          <span class="card-tag">به‌زودی</span>
-        </div>
-        <div class="card soon">
-          <div class="card-icon">📚</div>
-          <div class="card-title">درس ۸ — مصرف</div>
-          <div class="card-desc">در حال آماده‌سازی...</div>
-          <span class="card-tag">به‌زودی</span>
-        </div>
-      </div>
-    </div>
+    <!-- پایه نهم -->
+    <a class="card h9" href="nohom.html">
+      <div class="card-icon">📙</div>
+      <div class="card-title">پایه <span class="card-grade">نهم</span></div>
+      <div class="card-desc">درسنامه‌های جامع و آزمون‌های استاندارد برای آمادگی پایه نهم</div>
+      <div class="card-arrow">⬅ ورود به پایه نهم</div>
+    </a>
 
   </div>
 
-  <!-- ============================================================ -->
-  <!-- ===== محتوای پایه هشتم ===== -->
-  <!-- ============================================================ -->
-  <div class="tab-content" id="tab-hashtom">
-
-    <div class="note-box">
-      💡 محتوای پایه هشتم در حال آماده‌سازی است. به‌زودی درسنامه‌ها و آزمون‌های این پایه اضافه می‌شوند.
-    </div>
-
-    <div class="section">
-      <div class="section-header">
-        <span class="icon">⏳</span>
-        <h2>درس‌های پایه هشتم (به‌زودی)</h2>
-      </div>
-      <div class="grid">
-        <div class="card soon">
-          <div class="card-icon">📚</div>
-          <div class="card-title">درس ۱ — تعاون</div>
-          <div class="card-desc">در حال آماده‌سازی...</div>
-          <span class="card-tag">به‌زودی</span>
-        </div>
-        <div class="card soon">
-          <div class="card-icon">📚</div>
-          <div class="card-title">درس ۲ — احکام</div>
-          <div class="card-desc">در حال آماده‌سازی...</div>
-          <span class="card-tag">به‌زودی</span>
-        </div>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- ============================================================ -->
-  <!-- ===== محتوای پایه نهم ===== -->
-  <!-- ============================================================ -->
-  <div class="tab-content" id="tab-nohom">
-
-    <div class="note-box">
-      💡 محتوای پایه نهم در حال آماده‌سازی است. به‌زودی درسنامه‌ها و آزمون‌های این پایه اضافه می‌شوند.
-    </div>
-
-    <div class="section">
-      <div class="section-header">
-        <span class="icon">⏳</span>
-        <h2>درس‌های پایه نهم (به‌زودی)</h2>
-      </div>
-      <div class="grid">
-        <div class="card soon">
-          <div class="card-icon">📚</div>
-          <div class="card-title">درس ۱ — اصول و مبانی</div>
-          <div class="card-desc">در حال آماده‌سازی...</div>
-          <span class="card-tag">به‌زودی</span>
-        </div>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- ===== راهنمای افزودن ===== -->
-  <div class="note-box" style="margin-top:40px;">
-    🛠️ <b>راهنمای افزودن درس جدید:</b><br>
-    ۱. فایل‌های HTML درس جدید را با الگوی <code>haftom-lessonX-note.html</code> و <code>haftom-lessonX-quiz.html</code> آپلود کن.<br>
-    ۲. در کد این صفحه، بخش درس مربوطه را کپی کن و لینک‌ها را تغییر بده.<br>
-    ۳. برای پایه‌های دیگر، پیشوند را به <code>hashtom-</code> یا <code>nohom-</code> تغییر بده.
-  </div>
-
-  <p class="footer-note">ساخته‌شده با ❤️ برای دانش‌آموزان دوره اول متوسطه | دبیر: ابراهیم اسحقی</p>
-
-<script>
-  function showTab(tabId, btn) {
-    // پنهان کردن همه تب‌ها
-    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-    // نمایش تب انتخاب‌شده
-    document.getElementById('tab-' + tabId).classList.add('active');
-    btn.classList.add('active');
-  }
-</script>
+  <p class="footer-note">ساخته شده با ❤️ برای دانش‌آموزان عزیز</p>
 
 </body>
 </html>
