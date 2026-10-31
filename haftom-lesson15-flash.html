@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>فلش کارت - درس ۱۵: گردشگری چیست؟</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; font-family:'Vazirmatn',sans-serif; }
+  body {
+    background-color: #f4f7f6;
+    background-image: radial-gradient(#d1e0e0 1px, transparent 1px);
+    background-size: 20px 20px;
+    color: #2c3e50; padding: 30px 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh;
+  }
+  .container {
+    background: #fff; width: 100%; max-width: 800px; border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08); padding: 35px; border: 1px solid #eef2f5;
+    text-align: center;
+  }
+  
+  .header { margin-bottom: 30px; border-bottom: 2px dashed #eef2f5; padding-bottom: 20px; }
+  .header h1 { color: #00acc1; font-size: 1.6rem; margin-bottom: 8px; }
+  .header p { color: #7f8c8d; font-size: 0.95rem; }
+
+  /* ===== بخش فلش کارت ===== */
+  .flashcard-container {
+    perspective: 1000px;
+    width: 100%;
+    height: 300px;
+    margin-bottom: 30px;
+    cursor: pointer;
+  }
+
+  .flashcard {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+  }
+
+  .flashcard.flipped {
+    transform: rotateY(180deg);
+  }
+
+  .flashcard-front, .flashcard-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+  }
+
+  .flashcard-front {
+    background: linear-gradient(135deg, #00acc1, #00838f);
+    color: #fff;
+  }
+
+  .flashcard-back {
+    background: linear-gradient(135deg, #ecf0f1, #bdc3c7);
+    color: #2c3e50;
+    transform: rotateY(180deg);
+  }
+
+  .card-content {
+    font-size: 1.3rem;
+    font-weight: 900;
+    line-height: 1.8;
+  }
+
+  .card-label {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 0.8rem;
+    background: rgba(255,255,255,0.2);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-weight: 700;
+  }
+  .flashcard-back .card-label {
+    background: rgba(0,0,0,0.05);
+    color: #7f8c8d;
+  }
+
+  .click-hint {
+    position: absolute;
+    bottom: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.8rem;
+    opacity: 0.7;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  /* ===== کنترل‌ها ===== */
+  .controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+  }
+
+  .nav-btn {
+    background: #00acc1; color: #fff; border: none; padding: 12px 25px;
+    border-radius: 30px; font-weight: 700; font-family: inherit;
+    font-size: 1rem; cursor: pointer; transition: 0.3s;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .nav-btn:hover { background: #00838f; transform: translateY(-2px); }
+  .nav-btn:disabled { background: #bdc3c7; cursor: not-allowed; transform: none; }
+
+  .counter {
+    font-weight: 900; font-size: 1.1rem; color: #7f8c8d;
+    background: #ecf0f1; padding: 8px 20px; border-radius: 30px;
+  }
+
+  .back-home {
+    display: inline-block; margin-top: 30px; background: #2c3e50; color: #fff;
+    text-decoration: none; padding: 10px 25px; border-radius: 30px; font-weight: 700; transition: 0.3s;
+  }
+  .back-home:hover { background: #1a252f; }
+
+  @media(max-width:600px) {
+    .container { padding: 20px; }
+    .flashcard-container { height: 400px; }
+    .card-content { font-size: 1.1rem; }
+    .controls { flex-direction: column; gap: 15px; }
+    .nav-btn { width: 100%; justify-content: center; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  
+  <div class="header">
+    <h1>🎴 فلش کارت‌های درس ۱۵</h1>
+    <p>گردشگری چیست؟ — مطالعات اجتماعی پایه هفتم</p>
+  </div>
+
+  <!-- فلش کارت -->
+  <div class="flashcard-container" onclick="flipCard()">
+    <div class="flashcard" id="flashcard">
+      <div class="flashcard-front">
+        <span class="card-label">سوال</span>
+        <div class="card-content" id="question-text">سوال اینجا قرار می‌گیرد</div>
+        <span class="click-hint">👆 برای دیدن جواب کلیک کنید</span>
+      </div>
+      <div class="flashcard-back">
+        <span class="card-label">جواب</span>
+        <div class="card-content" id="answer-text">جواب اینجا قرار می‌گیرد</div>
+        <span class="click-hint">👆 برای دیدن سوال کلیک کنید</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- کنترل‌ها -->
+  <div class="controls">
+    <button class="nav-btn" id="prev-btn" onclick="prevCard()">▶ کارت قبلی</button>
+    <div class="counter" id="counter">۱ از ۱۰</div>
+    <button class="nav-btn" id="next-btn" onclick="nextCard()">کارت بعدی ◀</button>
+  </div>
+
+  <a href="haftom.html" class="back-home">🔙 بازگشت به صفحه دروس</a>
+
+</div>
+
+<script>
+  // ==========================================
+  // بانک ۱۰ فلش کارت درس ۱۵ (گردشگری چیست؟)
+  // ==========================================
+  const flashcards = [
+    {
+      q: "گردشگر را تعریف کنید.",
+      a: "به کسانی می‌گویند که محل اقامت یا کار خود را به طور موقت ترک می‌کنند و برای استراحت یا گردش و دیدن یا مطالعهٔ مکان‌های تاریخی و طبیعی به سفر می‌روند."
+    },
+    {
+      q: "زائر به چه کسی گفته می‌شود؟",
+      a: "به کسانی که به سفرهای زیارتی می‌روند."
+    },
+    {
+      q: "چهار نوع گردشگری را نام ببرید.",
+      a: "۱. گردشگری تفریحی ۲. گردشگری زیارتی ۳. گردشگری تاریخی-فرهنگی ۴. گردشگری علمی (و گردش طبیعت/اکوتوریسم)."
+    },
+    {
+      q: "گردش طبیعت (اکوتوریسم) چیست؟",
+      a: "سفر به مناطق طبیعی بدون آسیب رساندن به محیط زیست."
+    },
+    {
+      q: "اهمیت اقتصادی گردشگری را توضیح دهید.",
+      a: "گردشگری با ایجاد شغل‌های مختلف مانند هتل‌داری، فروش صنایع دستی و دفاتر حمل و نقل، به افزایش درآمد مردم یک منطقه کمک می‌کند."
+    },
+    {
+      q: "چند مورد از شغل‌های ایجاد شده در اثر گردشگری را نام ببرید.",
+      a: "هتل‌داری، دفاتر فروش بلیت، دفاتر حمل و نقل، فروش صنایع دستی و غذاهای محلی."
+    },
+    {
+      q: "چرا در سفرها باید نقشه همراه داشته باشیم؟",
+      a: "نقشه به ما کمک می‌کند تا مکان‌های جدید را بهتر پیدا کنیم و سریع‌تر خود را به آنجا برسانیم و از اشتباه در مسیر جلوگیری کنیم."
+    },
+    {
+      q: "راهنمای نقشه چیست؟",
+      a: "نشانه‌ها و علامت‌هایی که برای درک نقشه به کار می‌روند (مانند نشانه پارک، مرکز خرید، هتل، پمپ بنزین و ایستگاه راه‌آهن)."
+    },
+    {
+      q: "نقشه راه چه اطلاعاتی به ما می‌دهد؟",
+      a: "جاده‌های اصلی و فرعی و مکان‌های خدماتی مانند رستوران‌ها، پمپ بنزین‌ها، تعمیرگاه‌ها و نمازخانه‌ها را نشان می‌دهد."
+    },
+    {
+      q: "چرا با گردشگران خارجی باید با احترام برخورد کنیم؟",
+      a: "چون بر اساس فرهنگ و ارزش‌های دینی ما، مهمان عزیز هستند و باید آن‌ها را با فرهنگ، تمدن و تاریخ خود آشنا کنیم."
+    }
+  ];
+
+  let currentIndex = 0;
+  const flashcardElement = document.getElementById('flashcard');
+  const questionText = document.getElementById('question-text');
+  const answerText = document.getElementById('answer-text');
+  const counter = document.getElementById('counter');
+  const prevBtn = document.getElementById('prev-btn');
+  const nextBtn = document.getElementById('next-btn');
+
+  function updateCard() {
+    flashcardElement.classList.remove('flipped');
+    
+    setTimeout(() => {
+      questionText.innerText = flashcards[currentIndex].q;
+      answerText.innerText = flashcards[currentIndex].a;
+      
+      const persianNumbers = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+      const currentPersian = String(currentIndex + 1).replace(/\d/g, d => persianNumbers[d]);
+      const totalPersian = String(flashcards.length).replace(/\d/g, d => persianNumbers[d]);
+      counter.innerText = `${currentPersian} از ${totalPersian}`;
+      
+      prevBtn.disabled = currentIndex === 0;
+      nextBtn.disabled = currentIndex === flashcards.length - 1;
+    }, 150);
+  }
+
+  function flipCard() {
+    flashcardElement.classList.toggle('flipped');
+  }
+
+  function nextCard() {
+    if (currentIndex < flashcards.length - 1) {
+      currentIndex++;
+      updateCard();
+    }
+  }
+
+  function prevCard() {
+    if (currentIndex > 0) {
+      currentIndex--;
+      updateCard();
+    }
+  }
+
+  updateCard();
+</script>
+
+</body>
+</html>
