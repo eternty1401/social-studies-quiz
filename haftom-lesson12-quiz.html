@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>آزمون تستی درس ۱۲: حفاظت از زیستگاه‌های ایران</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; font-family:'Vazirmatn',sans-serif; }
+  body {
+    background-color: #f4f7f6;
+    background-image: radial-gradient(#d1e0e0 1px, transparent 1px);
+    background-size: 20px 20px;
+    color: #2c3e50; padding: 30px 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh;
+  }
+  .container {
+    background: #fff; width: 100%; max-width: 800px; border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08); padding: 35px; border: 1px solid #eef2f5;
+  }
+  
+  /* صفحه شروع */
+  #start-section { text-align: center; padding: 20px 0; }
+  #start-section h1 { color: #2e7d32; font-size: 1.6rem; margin-bottom: 15px; }
+  #start-section p { color: #7f8c8d; margin-bottom: 30px; line-height: 1.8; }
+  .name-input {
+    width: 100%; max-width: 400px; padding: 15px; margin-bottom: 20px;
+    border: 2px solid #e2e8f0; border-radius: 12px; font-family: inherit;
+    font-size: 1rem; text-align: center; outline: none; transition: 0.3s;
+  }
+  .name-input:focus { border-color: #2e7d32; box-shadow: 0 0 10px rgba(46,125,50,0.2); }
+  .start-btn {
+    background: #2ecc71; color: #fff; border: none; padding: 15px 40px;
+    border-radius: 12px; font-size: 1.1rem; font-weight: 900; font-family: inherit;
+    cursor: pointer; transition: 0.3s; box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);
+  }
+  .start-btn:hover { background: #27ae60; transform: translateY(-2px); }
+
+  /* هدر و تایمر */
+  .header-top { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px dashed #eef2f5; padding-bottom: 15px; margin-bottom: 25px; }
+  .header-title h1 { color: #2e7d32; font-size: 1.4rem; }
+  .header-title p { color: #7f8c8d; font-size: 0.85rem; margin-top: 5px; }
+  .timer-box {
+    background: #fdedec; color: #e74c3c; padding: 8px 18px; border-radius: 50px;
+    font-weight: 900; font-size: 1.1rem; border: 1px solid #fadbd8;
+    display: flex; align-items: center; gap: 8px; direction: ltr;
+  }
+  .timer-box.warning { background: #fef9e7; color: #f39c12; border-color: #fae5d3; animation: pulse 1s infinite; }
+  @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+
+  /* سوالات */
+  .question-box {
+    background: #fafbfc; border: 1px solid #eef2f5; border-radius: 12px;
+    padding: 20px; margin-bottom: 20px;
+  }
+  .q-title { font-weight: 900; font-size: 1.05rem; margin-bottom: 15px; line-height: 1.6; }
+  
+  .options { display: flex; flex-direction: column; gap: 10px; }
+  .option-label {
+    display: flex; align-items: center; gap: 10px; padding: 12px 15px;
+    background: #fff; border: 1px solid #e2e8f0; border-radius: 10px;
+    cursor: pointer; transition: 0.2s; font-size: 0.95rem;
+  }
+  .option-label:hover { background: #e8f5e9; border-color: #2e7d32; }
+  .option-label input[type="radio"] { display: none; }
+  .option-label.selected { background: #e8f5e9; border-color: #2e7d32; font-weight: 700; color: #1b5e20; }
+  
+  .submit-btn {
+    display: block; width: 100%; padding: 15px; margin-top: 30px;
+    background: #2e7d32; color: #fff; border: none; border-radius: 12px;
+    font-size: 1.1rem; font-weight: 900; font-family: inherit; cursor: pointer;
+    transition: 0.3s;
+  }
+  .submit-btn:hover { background: #1b5e20; }
+
+  /* کارنامه */
+  .result-container { display: none; text-align: center; }
+  .student-name-display {
+    font-size: 1.2rem; font-weight: 900; color: #2c3e50; margin-bottom: 20px;
+    background: #ecf0f1; padding: 10px 20px; border-radius: 10px; display: inline-block;
+  }
+  .score-circle {
+    width: 150px; height: 150px; border-radius: 50%; margin: 0 auto 20px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    border: 8px solid #ecf0f1;
+  }
+  .score-circle.excellent { border-color: #2ecc71; color: #2ecc71; }
+  .score-circle.good { border-color: #f39c12; color: #f39c12; }
+  .score-circle.fail { border-color: #e74c3c; color: #e74c3c; }
+  .score-num { font-size: 2.8rem; font-weight: 900; line-height: 1; }
+  .score-text { font-size: 0.9rem; color: #7f8c8d; margin-top: 5px; font-weight: 700; }
+  .result-stats { display: flex; justify-content: center; gap: 15px; margin-bottom: 30px; }
+  .stat-box { padding: 15px 25px; border-radius: 10px; font-weight: 700; font-size: 0.95rem; }
+  .stat-box.correct { color: #2ecc71; background: #e8f8f5; }
+  .stat-box.wrong { color: #e74c3c; background: #fdedec; }
+  
+  .review-btn {
+    display: inline-block; background: #3498db; color: #fff; text-decoration: none;
+    padding: 12px 30px; border-radius: 30px; font-weight: 700; border: none; cursor: pointer;
+    font-size: 1rem;
+  }
+
+  @media(max-width:600px) {
+    .container { padding: 20px; }
+    .header-top { flex-direction: column; gap: 10px; text-align: center; }
+    .result-stats { flex-direction: column; gap: 10px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  
+  <!-- صفحه شروع -->
+  <div id="start-section">
+    <h1>📝 آزمون تستی درس ۱۲</h1>
+    <p>حفاظت از زیستگاه‌های ایران — مطالعات اجتماعی پایه هفتم<br>لطفاً نام و نام خانوادگی خود را وارد کنید تا آزمون آغاز شود.</p>
+    <input type="text" id="student-name" class="name-input" placeholder="مثلاً: علی محمدی">
+    <br>
+    <button class="start-btn" onclick="startQuiz()">شروع آزمون</button>
+  </div>
+
+  <!-- بخش آزمون -->
+  <div id="quiz-section" style="display: none;">
+    <div class="header-top">
+      <div class="header-title">
+        <h1>📝 آزمون تستی درس ۱۲</h1>
+        <p>۱۵ سوال تصادفی از بانک ۴۰ سوالی</p>
+      </div>
+      <div class="timer-box" id="timer-display">⏱ ۱۰:۰۰</div>
+    </div>
+    
+    <form id="quiz-form">
+      <div id="questions-container"></div>
+      <button type="submit" class="submit-btn" id="submit-btn">ثبت پاسخ‌ها و مشاهده کارنامه</button>
+    </form>
+  </div>
+
+  <!-- بخش کارنامه -->
+  <div id="result-section" class="result-container">
+    <h2 style="color:#2c3e50; margin-bottom:20px; font-weight:900;">🎓 کارنامه شما</h2>
+    <div class="student-name-display" id="display-student-name">نام دانش‌آموز</div>
+    
+    <div id="score-circle" class="score-circle">
+      <div class="score-num" id="score-display">0</div>
+      <div class="score-text">از ۱۰۰</div>
+    </div>
+    <p id="result-message" style="font-size:1.1rem; font-weight:700; margin-bottom:25px;"></p>
+    <div class="result-stats">
+      <div class="stat-box correct" id="stat-correct">تعداد درست: ۰</div>
+      <div class="stat-box wrong" id="stat-wrong">تعداد غلط: ۰</div>
+    </div>
+    <a href="haftom.html" class="review-btn" style="background:#3498db; text-decoration:none;">🔙 بازگشت به دروس</a>
+  </div>
+
+</div>
+
+<script>
+  // ==========================================
+  // بانک ۴۰ سوالی درس ۱۲ (حفاظت از زیستگاه‌های ایران)
+  // ==========================================
+  const questionBank = [
+    { q: "حدود چند گونهٔ گیاهی در ایران شناسایی و نام‌گذاری شده است؟", options: ["۹۰۰۰ گونه", "۱۰۰۰ گونه", "۵۰۰۰ گونه", "۱۵۰۰۰ گونه"], answer: 0 },
+    { q: "حشرات ایران را حدوداً چند گونه تخمین زده‌اند؟", options: ["۶۰,۰۰۰ گونه", "۱۰,۰۰۰ گونه", "۳۰,۰۰۰ گونه", "۱۰۰,۰۰۰ گونه"], answer: 0 },
+    { q: "کدام یک از گونه‌های گیاهی منحصربه‌فرد ایران است؟", options: ["سوسن چلچراغ", "بلوط", "کاج", "چنار"], answer: 0 },
+    { q: "لاله واژگون در کدام منطقه می‌روید؟", options: ["دشت لاله چهارمحال و بختیاری", "جنگل‌های گیلان", "کویر لوت", "سواحل جنوب"], answer: 0 },
+    { q: "کهنسال‌ترین موجود زنده ایران (درخت سرو) در کجا قرار دارد؟", options: ["ابرکوه، یزد", "شیراز", "یزد مرکزی", "کرمان"], answer: 0 },
+    { q: "کدام یک از گونه‌های جانوری ایران در خطر انقراض است؟", options: ["یوزپلنگ ایرانی", "گربه اهلی", "مرغ خانگی", "اسب"], answer: 0 },
+    { q: "یوزپلنگ ایرانی در کدام مناطق ایران زندگی می‌کند؟", options: ["شاهرود، طبس، بافق، زرند و نائین", "سواحل خزر", "جنگل‌های گیلان", "دشت خوزستان"], answer: 0 },
+    { q: "سرعت دویدن یوزپلنگ ایرانی چقدر است؟", options: ["۱۰۰ کیلومتر در ساعت", "۵۰ کیلومتر در ساعت", "۱۵۰ کیلومتر در ساعت", "۲۰۰ کیلومتر در ساعت"], answer: 0 },
+    { q: "گاندو (تمساح ایرانی) در کدام مناطق زندگی می‌کند؟", options: ["چابهار و ایرانشهر", "شمال ایران", "مرکز ایران", "غرب ایران"], answer: 0 },
+    { q: "طول گاندو تقریباً چقدر است؟", options: ["حدود ۳ متر", "حدود ۱ متر", "حدود ۵ متر", "حدود ۲ متر"], answer: 0 },
+    { q: "هوبره چه نوع پرنده‌ای است؟", options: ["پرنده مهاجر", "پرنده بومی", "پرنده شکاری", "پرنده آبزی"], answer: 0 },
+    { q: "گورخر ایرانی در کدام مناطق زندگی می‌کند؟", options: ["نواحی داخلی و اطراف بیابان‌های ایران", "سواحل خزر", "جنگل‌های گیلان", "کوه‌های البرز"], answer: 0 },
+    { q: "نوع نسل کدام یک از حیوانات زیر در ایران منقرض شده است؟", options: ["ببر مازندران", "یوزپلنگ ایرانی", "گاندو", "هوبره"], answer: 0 },
+    { q: "شیر ایرانی حدوداً چند سال پیش در دزفول مشاهده شده است؟", options: ["حدود ۷۰ سال پیش", "حدود ۱۰ سال پیش", "حدود ۲۰۰ سال پیش", "حدود ۵۰۰ سال پیش"], answer: 0 },
+    { q: "مهم‌ترین عامل تخریب زیستگاه‌ها چیست؟", options: ["فعالیت‌های نادرست انسان", "بلایای طبیعی", "تغییرات اقلیمی", "باران‌های اسیدی"], answer: 0 },
+    { q: "کدام یک از عوامل تخریب زیستگاه است؟", options: ["قطع درختان برای تأمین سوخت", "کاشت درخت", "حفاظت از حیوانات", "بازیافت زباله"], answer: 0 },
+    { q: "شکار بیش از حد چه پیامدی دارد؟", options: ["کاهش گونه‌ها و خطر انقراض", "افزایش گونه‌ها", "بهبود تعادل طبیعت", "افزایش جمعیت"], answer: 0 },
+    { q: "طبق آیه ۴۹ سوره قمر، خداوند چه چیزی را فرموده است؟", options: ["ما همه چیز را به اندازه (با نظم) آفریدیم", "همه چیز را بی‌نظم آفریدیم", "فقط برخی چیزها را آفریدیم", "انسان را برترین موجود آفریدیم"], answer: 0 },
+    { q: "چرا حفاظت از زیستگاه‌ها به معنای سپاسگزاری از نعمت‌های خداوند است؟", options: ["چون محیط زندگی را خداوند با تنوع و زیبایی آفریده است", "چون زیستگاه‌ها توسط انسان ساخته شده‌اند", "چون زیستگاه‌ها ارزش مادی دارند", "چون حیوانات به انسان خدمت می‌کنند"], answer: 0 },
+    { q: "چرا انسان‌ها حق ندارند گیاهان و حیوانات را نابود کنند؟", options: ["چون آنها نیز حق حیات دارند و مخلوق خداوند هستند", "چون دولت اجازه نمی‌دهد", "چون مالیات دارند", "چون فقط برای انسان مفیدند"], answer: 0 },
+    { q: "وابستگی موجودات زنده به یکدیگر چه نتیجه‌ای دارد؟", options: ["نابودی یک گونه باعث کاهش گونه‌های دیگر و برهم خوردن تعادل می‌شود", "افزایش گونه‌ها", "بهبود تعادل طبیعت", "بی‌تأثیری بر گونه‌های دیگر"], answer: 0 },
+    { q: "یکی از فواید مهم گیاهان چیست؟", options: ["خاصیت دارویی برای درمان بیماری‌ها", "تولید زباله", "آسیب به محیط زیست", "افزایش آلودگی"], answer: 0 },
+    { q: "ایران در زمینه کدام نوع گیاهان یکی از کشورهای پرمحصول است؟", options: ["گیاهان دارویی", "گیاهان زینتی", "گیاهان بیابانی", "گیاهان آبزی"], answer: 0 },
+    { q: "کدام سازمان در ایران مسئول حفاظت از زیستگاه‌های طبیعی است؟", options: ["سازمان حفاظت از محیط زیست", "شهرداری", "وزارت آموزش و پرورش", "سازمان بیمه"], answer: 0 },
+    { q: "شغل مهم در سازمان حفاظت از محیط زیست چیست؟", options: ["محیط‌بانی", "معلمی", "پزشکی", "مهندسی عمران"], answer: 0 },
+    { q: "وظیفه محیط‌بانان چیست؟", options: ["بازدید از منطقه و شناسایی تخریب‌ها و گزارش به سازمان", "ساخت جاده", "قطعی درختان", "شکار حیوانات"], answer: 0 },
+    { q: "حفاظت از محیط زیست وظیفه چه کسانی است؟", options: ["همهٔ ما (دولت و مردم)", "فقط دولت", "فقط محیط‌بانان", "فقط دانش‌آموزان"], answer: 0 },
+    { q: "کدام یک از کارهایی که ما می‌توانیم برای حفاظت از محیط زیست انجام دهیم؟", options: ["کاشت درخت و گل", "قطعی درختان", "شکار حیوانات", "روشن کردن آتش در جنگل"], answer: 0 },
+    { q: "استفاده از کاغذ چه تأثیری بر محیط زیست دارد؟", options: ["استفاده از کاغذ مساوی است با بریدن درختان جنگلی", "کاغذ به محیط زیست کمک می‌کند", "کاغذ به درختان آسیب نمی‌زند", "کاغذ از آب تولید می‌شود"], answer: 0 },
+    { q: "چرا نباید وسایل تزیینی که از پوست و اعضای بدن حیوانات وحشی درست شده‌اند بخریم؟", options: ["چون به شکار بیشتر حیوانات وحشی دامن می‌زند", "چون گران هستند", "چون کیفیت پایینی دارند", "چون در همه جا یافت می‌شوند"], answer: 0 },
+    { q: "منطقه حفاظت‌شده چیست؟", options: ["منطقه‌ای که برای حفظ گیاهان و جانوران مقررات خاصی دارد", "منطقه‌ای برای ساخت و ساز", "منطقه‌ای برای شکار", "منطقه‌ای برای کشاورزی"], answer: 0 },
+    { q: "در منطقه حفاظت‌شده چه کارهایی ممنوع است؟", options: ["شکار، صید، قطع درختان و از بین بردن گیاهان", "بازدید گردشگران", "مطالعه علمی", "کاشت درخت"], answer: 0 },
+    { q: "کدام یک از مناطق حفاظت‌شده ایران است؟", options: ["جنگل‌های حرا در خلیج فارس", "دشت لوت", "کویر مرکزی", "دشت کویر"], answer: 0 },
+    { q: "طبق اصل ۵۰ قانون اساسی، حفاظت از محیط زیست چه حکمی دارد؟", options: ["وظیفهٔ عمومی تلقی می‌گردد", "فقط وظیفهٔ دولت است", "اختیاری است", "فقط برای نسل امروز است"], answer: 0 },
+    { q: "کدام یک از موارد زیر از دلایل حفاظت از زیستگاه‌ها نیست؟", options: ["افزایش آلودگی هوا", "سپاسگزاری از نعمت‌های خداوند", "لذت بردن از زیبایی‌ها", "حق حیات موجودات زنده"], answer: 0 },
+    { q: "چرا محیط‌بانان شجاع و متعهد، در سال‌های گذشته جان خود را فدا کرده‌اند؟", options: ["برای حفظ محیط زیست کشور", "برای ساخت جاده", "برای شکار حیوانات", "برای قطع درختان"], answer: 0 },
+    { q: "اگر در محل زندگی خود شاهد آلودگی مهم زیست‌محیطی بودیم، چه باید بکنیم؟", options: ["با مسئولان سازمان حفاظت محیط زیست یا شهرداری تماس بگیریم", "بی‌توجهی کنیم", "خودمان آلودگی را بیشتر کنیم", "به دوستان اطلاع دهیم"], answer: 0 },
+    { q: "کدام یک از کارهای زیر موجب تخریب زیستگاه می‌شود؟", options: ["روشن کردن آتش در جنگل", "کاشت درخت", "بازیافت زباله", "تفکیک زباله"], answer: 0 },
+    { q: "چرا نابودی یک گونهٔ جانوری، بر گونه‌های دیگر تأثیر می‌گذارد؟", options: ["چون موجودات زنده به یکدیگر وابسته‌اند", "چون حیوانات به انسان خدمت می‌کنند", "چون حیوانات به کشاورزی کمک می‌کنند", "چون حیوانات مالیات می‌دهند"], answer: 0 },
+    { q: "کدام یک از این گیاهان در ناحیه گرم و خشک رشد می‌کند؟", options: ["تاغ و گز", "سوسن چلچراغ", "لاله واژگون", "درخت بلوط"], answer: 0 }
+  ];
+
+  const numQuestionsToShow = 15; 
+  const totalTime = 600; // ۱۰ دقیقه
+  
+  let selectedQuestions = [];
+  let timerInterval;
+  let timeLeft = totalTime;
+  let studentName = "";
+
+  function shuffle(array) {
+    let currentIndex = array.length, randomIndex;
+    while (currentIndex != 0) {
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex--;
+      [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+    }
+    return array;
+  }
+
+  function startQuiz() {
+    studentName = document.getElementById('student-name').value.trim();
+    if (studentName === "") {
+      alert("لطفاً نام و نام خانوادگی خود را وارد کنید.");
+      return;
+    }
+    
+    document.getElementById('start-section').style.display = 'none';
+    document.getElementById('quiz-section').style.display = 'block';
+    
+    initQuiz();
+  }
+
+  function initQuiz() {
+    const shuffledBank = shuffle([...questionBank]);
+    selectedQuestions = shuffledBank.slice(0, numQuestionsToShow);
+
+    const container = document.getElementById('questions-container');
+    container.innerHTML = '';
+
+    selectedQuestions.forEach((item, index) => {
+      const correctAnswerText = item.options[item.answer];
+      const shuffledOptions = shuffle([...item.options]);
+      const newCorrectIndex = shuffledOptions.indexOf(correctAnswerText);
+      
+      selectedQuestions[index].options = shuffledOptions;
+      selectedQuestions[index].answer = newCorrectIndex;
+
+      let optionsHTML = '';
+      shuffledOptions.forEach((opt, i) => {
+        optionsHTML += `
+          <label class="option-label" onclick="selectOption(this)">
+            <input type="radio" name="q${index}" value="${i}">
+            <span>${opt}</span>
+          </label>
+        `;
+      });
+
+      const qBox = document.createElement('div');
+      qBox.className = 'question-box';
+      qBox.innerHTML = `
+        <div class="q-title">${index + 1}. ${item.q}</div>
+        <div class="options">${optionsHTML}</div>
+      `;
+      container.appendChild(qBox);
+    });
+
+    startTimer();
+  }
+
+  function startTimer() {
+    const display = document.getElementById('timer-display');
+    
+    timerInterval = setInterval(() => {
+      timeLeft--;
+      const minutes = Math.floor(timeLeft / 60);
+      const seconds = timeLeft % 60;
+      
+      display.innerHTML = `⏱ ${minutes < 10 ? '0'+minutes : minutes}:${seconds < 10 ? '0'+seconds : seconds}`;
+
+      if (timeLeft <= 60) {
+        display.classList.add('warning');
+      }
+      
+      if (timeLeft <= 0) {
+        clearInterval(timerInterval);
+        display.innerHTML = `⏱ ۰۰:۰۰`;
+        document.getElementById('quiz-form').dispatchEvent(new Event('submit'));
+      }
+    }, 1000);
+  }
+
+  function selectOption(label) {
+    const name = label.querySelector('input').name;
+    document.querySelectorAll(`input[name="${name}"]`).forEach(input => {
+      input.parentElement.classList.remove('selected');
+    });
+    label.classList.add('selected');
+    label.querySelector('input').checked = true;
+  }
+
+  document.getElementById('quiz-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    clearInterval(timerInterval);
+
+    let correctCount = 0;
+    let wrongCount = 0;
+
+    selectedQuestions.forEach((item, index) => {
+      const selected = document.querySelector(`input[name="q${index}"]:checked`);
+      if (!selected) {
+        wrongCount++; 
+      } else if (parseInt(selected.value) === item.answer) {
+        correctCount++;
+      } else {
+        wrongCount++;
+      }
+    });
+
+    const score = Math.round((correctCount / selectedQuestions.length) * 100);
+
+    document.getElementById('quiz-section').style.display = 'none';
+    document.getElementById('result-section').style.display = 'block';
+
+    document.getElementById('display-student-name').innerText = `دانش‌آموز: ${studentName}`;
+    
+    document.getElementById('score-display').innerText = score;
+    document.getElementById('stat-correct').innerText = `تعداد درست: ${correctCount}`;
+    document.getElementById('stat-wrong').innerText = `تعداد غلط: ${wrongCount}`;
+
+    const circle = document.getElementById('score-circle');
+    const msg = document.getElementById('result-message');
+    
+    circle.className = 'score-circle';
+    if (score >= 80) {
+      circle.classList.add('excellent');
+      msg.innerText = "🌟 عالی بود! شما درس را به خوبی یاد گرفته‌اید.";
+      msg.style.color = "#2ecc71";
+    } else if (score >= 50) {
+      circle.classList.add('good');
+      msg.innerText = "👍 خوب بود، اما با کمی مطالعه بیشتر می‌توانید بهتر شوید.";
+      msg.style.color = "#f39c12";
+    } else {
+      circle.classList.add('fail');
+      msg.innerText = "📚 نیاز به مطالعه بیشتر دارید. ناامید نشوید و درسنامه را دوباره بخوانید.";
+      msg.style.color = "#e74c3c";
+    }
+    
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+</script>
+
+</body>
+</html>
