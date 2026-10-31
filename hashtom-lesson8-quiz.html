@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>آزمون تستی درس ۸ - رسانه‌ها در زندگی ما</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Vazirmatn', Tahoma, sans-serif; background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; direction: rtl; }
+  .card { background: #fff; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); max-width: 700px; width: 100%; padding: 35px 30px; }
+  .hidden { display: none !important; }
+
+  .start-screen h1 { font-size: 1.5rem; color: #0f766e; text-align: center; margin-bottom: 10px; }
+  .start-screen p { text-align: center; color: #64748b; margin-bottom: 25px; }
+  .start-screen input { width: 100%; padding: 14px 18px; border: 2px solid #cbd5e1; border-radius: 10px; font-family: inherit; font-size: 1rem; margin-bottom: 18px; }
+  .start-screen input:focus { outline: none; border-color: #11998e; }
+  .start-btn { width: 100%; padding: 15px; background: linear-gradient(135deg, #11998e, #38ef7d); color: #fff; border: none; border-radius: 10px; font-family: inherit; font-size: 1.05rem; font-weight: 700; cursor: pointer; transition: transform 0.2s; }
+  .start-btn:hover { transform: translateY(-2px); }
+
+  .quiz-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; font-size: 0.9rem; color: #475569; font-weight: 600; }
+  .timer-box { background: #fff3e0; color: #e65100; padding: 6px 14px; border-radius: 20px; font-weight: 700; }
+  .timer-box.warning { background: #ffebee; color: #c62828; animation: pulse 0.6s infinite; }
+  @keyframes pulse { 50% { opacity: 0.6; } }
+
+  .progress-bar { height: 8px; background: #e2e8f0; border-radius: 10px; margin-bottom: 25px; overflow: hidden; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, #11998e, #38ef7d); border-radius: 10px; transition: width 0.3s; width: 0%; }
+
+  .question { font-size: 1.15rem; font-weight: 700; color: #1e293b; margin-bottom: 22px; line-height: 1.8; }
+  .options { display: flex; flex-direction: column; gap: 12px; }
+  .option { padding: 14px 18px; border: 2px solid #e2e8f0; border-radius: 12px; cursor: pointer; font-size: 0.97rem; transition: all 0.2s; background: #f8fafc; }
+  .option:hover { border-color: #11998e; background: #e6fffa; }
+  .option.correct { background: #d4edda; border-color: #28a745; color: #155724; font-weight: 700; }
+  .option.wrong { background: #f8d7da; border-color: #dc3545; color: #721c24; }
+  .option.disabled { pointer-events: none; }
+
+  .result-screen { text-align: center; }
+  .result-screen h1 { font-size: 1.6rem; margin-bottom: 20px; }
+  .result-name { font-size: 1.1rem; color: #475569; margin-bottom: 15px; }
+  .score-circle { width: 160px; height: 160px; border-radius: 50%; margin: 0 auto 25px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #fff; font-weight: 700; box-shadow: 0 8px 25px rgba(0,0,0,0.2); }
+  .score-circle .score-num { font-size: 2.8rem; line-height: 1; }
+  .score-circle .score-label { font-size: 0.85rem; margin-top: 5px; opacity: 0.9; }
+  .result-details { display: flex; justify-content: center; gap: 25px; margin-bottom: 25px; font-size: 1rem; }
+  .result-details div { background: #f8fafc; padding: 12px 20px; border-radius: 10px; }
+  .result-details .num { font-size: 1.4rem; font-weight: 700; display: block; }
+  .result-details .lbl { font-size: 0.8rem; color: #64748b; }
+  .restart-btn { padding: 13px 30px; background: linear-gradient(135deg, #11998e, #38ef7d); color: #fff; border: none; border-radius: 10px; font-family: inherit; font-size: 1rem; font-weight: 700; cursor: pointer; }
+  .back-link { display: block; margin-top: 15px; color: #64748b; text-decoration: none; font-size: 0.9rem; }
+  .back-link:hover { color: #11998e; }
+</style>
+</head>
+<body>
+
+<div class="card">
+
+  <div class="start-screen" id="startScreen">
+    <h1>📝 آزمون تستی درس ۸</h1>
+    <p>رسانه‌ها در زندگی ما — ۱۵ سوال | هر سوال ۳۰ ثانیه</p>
+    <input type="text" id="studentName" placeholder="نام و نام خانوادگی خود را وارد کنید" maxlength="40">
+    <button class="start-btn" onclick="startQuiz()">شروع آزمون</button>
+    <a href="hashtom-lesson8-note.html" class="back-link">🔙 بازگشت به درسنامه</a>
+  </div>
+
+  <div id="quizScreen" class="hidden">
+    <div class="quiz-header">
+      <span id="qCounter">سوال ۱ از ۱۵</span>
+      <span class="timer-box" id="timerBox">⏱ ۳۰</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="question" id="questionText"></div>
+    <div class="options" id="optionsBox"></div>
+  </div>
+
+  <div class="result-screen hidden" id="resultScreen">
+    <h1>🎉 کارنامه آزمون</h1>
+    <div class="result-name" id="resultName"></div>
+    <div class="score-circle" id="scoreCircle">
+      <span class="score-num" id="scoreNum">0</span>
+      <span class="score-label">از ۲۰</span>
+    </div>
+    <div class="result-details">
+      <div><span class="num" id="correctCount">0</span><span class="lbl">پاسخ درست</span></div>
+      <div><span class="num" id="wrongCount">0</span><span class="lbl">پاسخ غلط</span></div>
+    </div>
+    <button class="restart-btn" onclick="location.reload()">🔄 آزمون مجدد</button>
+    <a href="hashtom.html" class="back-link">🔙 بازگشت به صفحه اصلی</a>
+  </div>
+
+</div>
+
+<script>
+const questions = [
+  { q: "با پست الکترونیک (ایمیل) چه کاری می‌توان انجام داد؟",
+    o: ["فقط ارسال نامهٔ متنی", "ارسال نامهٔ متنی، صوتی و تصویری به همراه فایل", "فقط دریافت نامه", "فقط تماشای فیلم"],
+    a: 1 },
+  { q: "پرداخت قبض آب و برق از طریق اینترنت، نمونه‌ای از کدام کاربرد فناوری اطلاعات است؟",
+    o: ["آموزش از راه دور", "دولت الکترونیکی", "عملیات بانکی", "تبلیغات"],
+    a: 1 },
+  { q: "استفاده از تلویزیون‌های مداربسته در فرودگاه‌ها و فروشگاه‌ها، نمونه‌ای از کدام کاربرد است؟",
+    o: ["امنیت و نظارت", "آموزش", "کار و کسب", "دولت الکترونیکی"],
+    a: 0 },
+  { q: "کدام گزینه از کاربردهای فناوری اطلاعات در آموزش است؟",
+    o: ["پرداخت مالیات", "ویدئو کنفرانس و تدریس از راه دور", "خرید اینترنتی", "کنترل ترافیک"],
+    a: 1 },
+  { q: "طبق درس، دربارهٔ اطلاعاتی که در اینترنت وجود دارد، چه باید کرد؟",
+    o: ["به همهٔ آن‌ها اعتماد کرد", "فقط به عکس‌ها اعتماد کرد", "دربارهٔ درستی منبع آن‌ها تحقیق و پرس‌وجو کرد", "هیچ‌کدام را نباید باور کرد"],
+    a: 2 },
+  { q: "رسانه یکی از وسایل تولید و پخش چه چیزی است؟",
+    o: ["کالا", "خبر", "پول", "بازی"],
+    a: 1 },
+  { q: "کدام‌یک از آثار منفی رسانه‌هاست؟",
+    o: ["افزایش مطالعهٔ کتاب", "ترویج خشونت در فیلم‌ها", "افزایش ارتباط چهره‌به‌چهره", "کاهش وقت تماشای تلویزیون"],
+    a: 1 },
+  { q: "آگهی‌های بازرگانی سعی می‌کنند چه چیزی را به افراد جامعه انتقال دهند؟",
+    o: ["راه و روش خوردن، خریدن و سرگرمی", "روش مطالعهٔ درست", "روش ورزش کردن", "روش حفظ محیط زیست"],
+    a: 0 },
+  { q: "در بسیاری از بازی‌های رایانه‌ای، برنده‌شدن به چه معناست؟",
+    o: ["کمک به دیگران", "حل معما", "زدن و کشتن", "ساختن و آبادانی"],
+    a: 2 },
+  { q: "استفاده از تلفن همراه و پیامک به جای دید و بازدید، موجب چه چیزی شده است؟",
+    o: ["افزایش صمیمیت خانوادگی", "کم‌شدن ارتباط چهره‌به‌چهره", "افزایش گفت‌وگو در خانواده", "کاهش استفاده از اینترنت"],
+    a: 1 },
+  { q: "طبق نکات امنیتی درس، عکس‌ها و فیلم‌های خانوادگی را چگونه باید مدیریت کرد؟",
+    o: ["می‌توان در اینترنت منتشر کرد", "فقط برای دوستان ارسال کرد", "هرگز وارد اینترنت نکنیم و حتی برای دوستان نفرستیم", "فقط در شبکه‌های اجتماعی گذاشت"],
+    a: 2 },
+  { q: "رمز عبور پست الکترونیک یا رمز کارت بانکی والدین را چگونه باید حفظ کرد؟",
+    o: ["می‌توان به دوستان گفت", "می‌توان در شبکه‌های اجتماعی نوشت", "باید فاش نکنیم", "می‌توان به وبگاه‌ها داد"],
+    a: 2 },
+  { q: "اعتیاد به بازی‌های رایانه‌ای یا اینترنت چه اثری دارد؟",
+    o: ["بهبود تحصیل", "اختلال در زندگی و تحصیل", "افزایش ارتباط خانوادگی", "کاهش خشونت"],
+    a: 1 },
+  { q: "طبق درس، اخبار سیاسی را از کدام منابع باید به دست آورد؟",
+    o: ["هر وبگاهی که خبر منتشر می‌کند", "شبکه‌های اجتماعی ناشناس", "منابع معتبر خبری مانند خبرگزاری جمهوری اسلامی", "پیامک‌های ناشناس"],
+    a: 2 },
+  { q: "طبق درس، خریدهای اینترنتی را چگونه باید انجام داد؟",
+    o: ["به‌تنهایی و بدون مشورت", "با مشاورهٔ بزرگ‌ترها", "فقط از وبگاه‌های ناشناس", "بدون بررسی قیمت"],
+    a: 1 }
+];
+
+const TIME_PER_Q = 30;
+let current = 0, correct = 0, wrong = 0, timerInterval, timeLeft, studentName = "", answered = false;
+
+function startQuiz() {
+  studentName = document.getElementById('studentName').value.trim();
+  if (!studentName) { alert('لطفاً نام خود را وارد کنید.'); return; }
+  document.getElementById('startScreen').classList.add('hidden');
+  document.getElementById('quizScreen').classList.remove('hidden');
+  current = 0; correct = 0; wrong = 0;
+  showQuestion();
+}
+function showQuestion() {
+  answered = false;
+  const q = questions[current];
+  document.getElementById('qCounter').textContent = `سوال ${current + 1} از ${questions.length}`;
+  document.getElementById('progressFill').style.width = `${(current / questions.length) * 100}%`;
+  document.getElementById('questionText').textContent = q.q;
+
+  const box = document.getElementById('optionsBox');
+  box.innerHTML = '';
+  q.o.forEach((opt, i) => {
+    const div = document.createElement('div');
+    div.className = 'option';
+    div.textContent = opt;
+    div.onclick = () => selectAnswer(i);
+    box.appendChild(div);
+  });
+
+  startTimer();
+}
+
+function startTimer() {
+  clearInterval(timerInterval);
+  timeLeft = TIME_PER_Q;
+  updateTimerDisplay();
+  timerInterval = setInterval(() => {
+    timeLeft--;
+    updateTimerDisplay();
+    if (timeLeft <= 0) {
+      clearInterval(timerInterval);
+      if (!answered) selectAnswer(-1);
+    }
+  }, 1000);
+}
+
+function updateTimerDisplay() {
+  const box = document.getElementById('timerBox');
+  box.textContent = `⏱ ${timeLeft}`;
+  if (timeLeft <= 10) box.classList.add('warning');
+  else box.classList.remove('warning');
+}
+
+function selectAnswer(index) {
+  if (answered) return;
+  answered = true;
+  clearInterval(timerInterval);
+  const q = questions[current];
+  const options = document.querySelectorAll('.option');
+
+  options.forEach(o => o.classList.add('disabled'));
+
+  if (index === q.a) {
+    options[index].classList.add('correct');
+    correct++;
+  } else {
+    if (index >= 0) options[index].classList.add('wrong');
+    options[q.a].classList.add('correct');
+    wrong++;
+  }
+
+  setTimeout(() => {
+    current++;
+    if (current < questions.length) showQuestion();
+    else showResult();
+  }, 1200);
+}
+
+function showResult() {
+  document.getElementById('quizScreen').classList.add('hidden');
+  document.getElementById('resultScreen').classList.remove('hidden');
+
+  const score = Math.round((correct / questions.length) * 20);
+  document.getElementById('resultName').textContent = `دانش‌آموز: ${studentName}`;
+  document.getElementById('scoreNum').textContent = score;
+  document.getElementById('correctCount').textContent = correct;
+  document.getElementById('wrongCount').textContent = wrong;
+
+  const circle = document.getElementById('scoreCircle');
+  if (score >= 17) circle.style.background = 'linear-gradient(135deg, #28a745, #20c997)';
+  else if (score >= 12) circle.style.background = 'linear-gradient(135deg, #f39c12, #f1c40f)';
+  else circle.style.background = 'linear-gradient(135deg, #dc3545, #e74c3c)';
+}
+</script>
+
+</body>
+</html>
