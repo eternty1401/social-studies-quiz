@@ -55,7 +55,7 @@
   .lesson-content {
     max-height: 0; overflow: hidden; transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1); background: #fafbfc;
   }
-  .lesson-item.active .lesson-content { max-height: 400px; border-top: 1px solid #eef2f5; }
+  .lesson-item.active .lesson-content { max-height: 500px; border-top: 1px solid #eef2f5; }
   .buttons-grid { padding: 20px 25px; display:grid; grid-template-columns: repeat(2, 1fr); gap:12px; }
   .action-btn {
     display:flex; align-items:center; justify-content: center; gap:8px; padding: 12px 15px; border-radius: 12px;
@@ -66,7 +66,29 @@
   .btn-quiz:hover { border-color: #3498db; color: #3498db; background: #ebf5fb; }
   .btn-essay:hover { border-color: #e74c3c; color: #e74c3c; background: #fdedec; }
   .btn-files:hover { border-color: #9b59b6; color: #9b59b6; background: #f4ecf7; }
+  .btn-flash:hover { border-color: #2ecc71; color: #2ecc71; background: #e8f8f5; }
   .action-icon { font-size:1.2rem; }
+
+  /* استایل بخش ویژه */
+  .special-box {
+    background: #fff; border-radius: 20px; margin: 40px 0;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1); border: 2px solid #2980b9; overflow: hidden;
+  }
+  .special-title {
+    background: #2980b9; color: #fff; padding: 20px; font-size: 1.3rem; font-weight: 900; text-align: center;
+  }
+  .special-content { padding: 20px; }
+  .special-btn {
+    display: flex; align-items: center; justify-content: center; gap: 10px; text-decoration: none;
+    padding: 15px; margin-bottom: 15px; border-radius: 12px; font-weight: 900; font-size: 1.1rem;
+    transition: 0.3s; border: 2px solid transparent;
+  }
+  .special-btn:last-child { margin-bottom: 0; }
+  .special-btn.pdf { background: #e74c3c; color: #fff; }
+  .special-btn.pdf:hover { background: #c0392b; transform: translateY(-3px); }
+  .special-btn.flash { background: #2ecc71; color: #fff; }
+  .special-btn.flash:hover { background: #27ae60; transform: translateY(-3px); }
+
   .footer-note { margin-top:40px; font-size:0.85rem; color:#95a5a6; text-align:center; }
   @media(max-width:600px){
     h1 { font-size:1.7rem; } .buttons-grid { grid-template-columns: 1fr; padding: 15px; }
@@ -100,6 +122,7 @@
             <a href="haftom-lesson1-quiz.html" class="action-btn btn-quiz"><span class="action-icon">📝</span> آزمون تستی</a>
             <a href="haftom-lesson1-essay.html" class="action-btn btn-essay"><span class="action-icon">✍️</span> آزمون تشریحی</a>
             <a href="haftom-lesson1-files.html" class="action-btn btn-files"><span class="action-icon">📂</span> فایل‌ها و عکس‌ها</a>
+            <a href="haftom-lesson1-flash.html" class="action-btn btn-flash"><span class="action-icon">🎴</span> فلش کارت</a>
           </div>
         </div>
       </div>
@@ -115,6 +138,7 @@
             <a href="haftom-lesson2-quiz.html" class="action-btn btn-quiz"><span class="action-icon">📝</span> آزمون تستی</a>
             <a href="haftom-lesson2-essay.html" class="action-btn btn-essay"><span class="action-icon">✍️</span> آزمون تشریحی</a>
             <a href="haftom-lesson2-files.html" class="action-btn btn-files"><span class="action-icon">📂</span> فایل‌ها و عکس‌ها</a>
+            <a href="haftom-lesson2-flash.html" class="action-btn btn-flash"><span class="action-icon">🎴</span> فلش کارت</a>
           </div>
         </div>
       </div>
@@ -135,6 +159,7 @@
             <a href="haftom-lesson3-quiz.html" class="action-btn btn-quiz"><span class="action-icon">📝</span> آزمون تستی</a>
             <a href="haftom-lesson3-essay.html" class="action-btn btn-essay"><span class="action-icon">✍️</span> آزمون تشریحی</a>
             <a href="haftom-lesson3-files.html" class="action-btn btn-files"><span class="action-icon">📂</span> فایل‌ها و عکس‌ها</a>
+            <a href="haftom-lesson3-flash.html" class="action-btn btn-flash"><span class="action-icon">🎴</span> فلش کارت</a>
           </div>
         </div>
       </div>
@@ -150,6 +175,7 @@
             <a href="haftom-lesson4-quiz.html" class="action-btn btn-quiz"><span class="action-icon">📝</span> آزمون تستی</a>
             <a href="haftom-lesson4-essay.html" class="action-btn btn-essay"><span class="action-icon">✍️</span> آزمون تشریحی</a>
             <a href="haftom-lesson4-files.html" class="action-btn btn-files"><span class="action-icon">📂</span> فایل‌ها و عکس‌ها</a>
+            <a href="haftom-lesson4-flash.html" class="action-btn btn-flash"><span class="action-icon">🎴</span> فلش کارت</a>
           </div>
         </div>
       </div>
@@ -170,6 +196,7 @@
             <a href="haftom-lesson5-quiz.html" class="action-btn btn-quiz"><span class="action-icon">📝</span> آزمون تستی</a>
             <a href="haftom-lesson5-essay.html" class="action-btn btn-essay"><span class="action-icon">✍️</span> آزمون تشریحی</a>
             <a href="haftom-lesson5-files.html" class="action-btn btn-files"><span class="action-icon">📂</span> فایل‌ها و عکس‌ها</a>
+            <a href="haftom-lesson5-flash.html" class="action-btn btn-flash"><span class="action-icon">🎴</span> فلش کارت</a>
           </div>
         </div>
       </div>
@@ -185,6 +212,7 @@
             <a href="haftom-lesson6-quiz.html" class="action-btn btn-quiz"><span class="action-icon">📝</span> آزمون تستی</a>
             <a href="haftom-lesson6-essay.html" class="action-btn btn-essay"><span class="action-icon">✍️</span> آزمون تشریحی</a>
             <a href="haftom-lesson6-files.html" class="action-btn btn-files"><span class="action-icon">📂</span> فایل‌ها و عکس‌ها</a>
+            <a href="haftom-lesson6-flash.html" class="action-btn btn-flash"><span class="action-icon">🎴</span> فلش کارت</a>
           </div>
         </div>
       </div>
@@ -205,6 +233,7 @@
             <a href="haftom-lesson7-quiz.html" class="action-btn btn-quiz"><span class="action-icon">📝</span> آزمون تستی</a>
             <a href="haftom-lesson7-essay.html" class="action-btn btn-essay"><span class="action-icon">✍️</span> آزمون تشریحی</a>
             <a href="haftom-lesson7-files.html" class="action-btn btn-files"><span class="action-icon">📂</span> فایل‌ها و عکس‌ها</a>
+            <a href="haftom-lesson7-flash.html" class="action-btn btn-flash"><span class="action-icon">🎴</span> فلش کارت</a>
           </div>
         </div>
       </div>
@@ -220,6 +249,7 @@
             <a href="haftom-lesson8-quiz.html" class="action-btn btn-quiz"><span class="action-icon">📝</span> آزمون تستی</a>
             <a href="haftom-lesson8-essay.html" class="action-btn btn-essay"><span class="action-icon">✍️</span> آزمون تشریحی</a>
             <a href="haftom-lesson8-files.html" class="action-btn btn-files"><span class="action-icon">📂</span> فایل‌ها و عکس‌ها</a>
+            <a href="haftom-lesson8-flash.html" class="action-btn btn-flash"><span class="action-icon">🎴</span> فلش کارت</a>
           </div>
         </div>
       </div>
@@ -240,6 +270,7 @@
             <a href="haftom-lesson9-quiz.html" class="action-btn btn-quiz"><span class="action-icon">📝</span> آزمون تستی</a>
             <a href="haftom-lesson9-essay.html" class="action-btn btn-essay"><span class="action-icon">✍️</span> آزمون تشریحی</a>
             <a href="haftom-lesson9-files.html" class="action-btn btn-files"><span class="action-icon">📂</span> فایل‌ها و عکس‌ها</a>
+            <a href="haftom-lesson9-flash.html" class="action-btn btn-flash"><span class="action-icon">🎴</span> فلش کارت</a>
           </div>
         </div>
       </div>
@@ -255,11 +286,13 @@
             <a href="haftom-lesson10-quiz.html" class="action-btn btn-quiz"><span class="action-icon">📝</span> آزمون تستی</a>
             <a href="haftom-lesson10-essay.html" class="action-btn btn-essay"><span class="action-icon">✍️</span> آزمون تشریحی</a>
             <a href="haftom-lesson10-files.html" class="action-btn btn-files"><span class="action-icon">📂</span> فایل‌ها و عکس‌ها</a>
+            <a href="haftom-lesson10-flash.html" class="action-btn btn-flash"><span class="action-icon">🎴</span> فلش کارت</a>
           </div>
         </div>
       </div>
     </div>
-        <!-- ================= فصل ۶ ================= -->
+
+    <!-- ================= فصل ۶ ================= -->
     <div class="chapter-box">
       <div class="chapter-title">🌲 فصل ۶: از زیستگاه‌های ایران حفاظت کنیم</div>
       
@@ -274,6 +307,7 @@
             <a href="haftom-lesson11-quiz.html" class="action-btn btn-quiz"><span class="action-icon">📝</span> آزمون تستی</a>
             <a href="haftom-lesson11-essay.html" class="action-btn btn-essay"><span class="action-icon">✍️</span> آزمون تشریحی</a>
             <a href="haftom-lesson11-files.html" class="action-btn btn-files"><span class="action-icon">📂</span> فایل‌ها و عکس‌ها</a>
+            <a href="haftom-lesson11-flash.html" class="action-btn btn-flash"><span class="action-icon">🎴</span> فلش کارت</a>
           </div>
         </div>
       </div>
@@ -289,116 +323,134 @@
             <a href="haftom-lesson12-quiz.html" class="action-btn btn-quiz"><span class="action-icon">📝</span> آزمون تستی</a>
             <a href="haftom-lesson12-essay.html" class="action-btn btn-essay"><span class="action-icon">✍️</span> آزمون تشریحی</a>
             <a href="haftom-lesson12-files.html" class="action-btn btn-files"><span class="action-icon">📂</span> فایل‌ها و عکس‌ها</a>
+            <a href="haftom-lesson12-flash.html" class="action-btn btn-flash"><span class="action-icon">🎴</span> فلش کارت</a>
           </div>
         </div>
       </div>
     </div>
 
+    <!-- ================= بخش ویژه: نمونه سوالات نوبت اول ================= -->
+    <div class="special-box">
+      <div class="special-title">📝 ویژه آزمون نوبت اول (درس ۱ تا ۱۲)</div>
+      <div class="special-content">
+        <a href="haftom-exam-term1-pdf.html" class="special-btn pdf">
+          <span>📄</span> دانلود نمونه سوالات امتحانی (PDF)
+        </a>
+        <a href="haftom-exam-term1-flash.html" class="special-btn flash">
+          <span>🎴</span> فلش کارت‌های مهم درس‌های ۱ تا ۱۲
+        </a>
+      </div>
+    </div>
     <!-- ================= فصل ۷ ================= -->
-    <div class="chapter-box">
-      <div class="chapter-title">👥 فصل ۷: جمعیت و منابع</div>
-      
-      <div class="lesson-item" onclick="toggleLesson(this)">
-        <div class="lesson-header">
-          <div class="lesson-title-wrap"><div class="lesson-num">۱۳</div><div class="lesson-name">جمعیت ایران</div></div>
-          <div class="toggle-icon">▼</div>
-        </div>
-        <div class="lesson-content">
-          <div class="buttons-grid" onclick="event.stopPropagation()">
-            <a href="haftom-lesson13-note.html" class="action-btn btn-note"><span class="action-icon">📖</span> درسنامه</a>
-            <a href="haftom-lesson13-quiz.html" class="action-btn btn-quiz"><span class="action-icon">📝</span> آزمون تستی</a>
-            <a href="haftom-lesson13-essay.html" class="action-btn btn-essay"><span class="action-icon">✍️</span> آزمون تشریحی</a>
-            <a href="haftom-lesson13-files.html" class="action-btn btn-files"><span class="action-icon">📂</span> فایل‌ها و عکس‌ها</a>
-          </div>
-        </div>
-      </div>
-
-      <div class="lesson-item" onclick="toggleLesson(this)">
-        <div class="lesson-header">
-          <div class="lesson-title-wrap"><div class="lesson-num">۱۴</div><div class="lesson-name">منابع آب و خاک</div></div>
-          <div class="toggle-icon">▼</div>
-        </div>
-        <div class="lesson-content">
-          <div class="buttons-grid" onclick="event.stopPropagation()">
-            <a href="haftom-lesson14-note.html" class="action-btn btn-note"><span class="action-icon">📖</span> درسنامه</a>
-            <a href="haftom-lesson14-quiz.html" class="action-btn btn-quiz"><span class="action-icon">📝</span> آزمون تستی</a>
-            <a href="haftom-lesson14-essay.html" class="action-btn btn-essay"><span class="action-icon">✍️</span> آزمون تشریحی</a>
-            <a href="haftom-lesson14-files.html" class="action-btn btn-files"><span class="action-icon">📂</span> فایل‌ها و عکس‌ها</a>
-          </div>
-        </div>
+<div class="chapter-box">
+  <div class="chapter-title">👥 فصل ۷: جمعیت و منابع</div>
+  
+  <div class="lesson-item" onclick="toggleLesson(this)">
+    <div class="lesson-header">
+      <div class="lesson-title-wrap"><div class="lesson-num">۱۳</div><div class="lesson-name">جمعیت ایران</div></div>
+      <div class="toggle-icon">▼</div>
+    </div>
+    <div class="lesson-content">
+      <div class="buttons-grid" onclick="event.stopPropagation()">
+        <a href="haftom-lesson13-note.html" class="action-btn btn-note"><span class="action-icon">📖</span> درسنامه</a>
+        <a href="haftom-lesson13-quiz.html" class="action-btn btn-quiz"><span class="action-icon">📝</span> آزمون تستی</a>
+        <a href="haftom-lesson13-essay.html" class="action-btn btn-essay"><span class="action-icon">✍️</span> آزمون تشریحی</a>
+        <a href="haftom-lesson13-files.html" class="action-btn btn-files"><span class="action-icon">📂</span> فایل‌ها و عکس‌ها</a>
+        <a href="haftom-lesson13-flash.html" class="action-btn btn-flash"><span class="action-icon">🎴</span> فلش کارت</a>
       </div>
     </div>
+  </div>
 
-    <!-- ================= فصل ۸ ================= -->
-    <div class="chapter-box">
-      <div class="chapter-title">✈️ فصل ۸: گردشگری در ایران</div>
-      
-      <div class="lesson-item" onclick="toggleLesson(this)">
-        <div class="lesson-header">
-          <div class="lesson-title-wrap"><div class="lesson-num">۱۵</div><div class="lesson-name">گردشگری چیست؟</div></div>
-          <div class="toggle-icon">▼</div>
-        </div>
-        <div class="lesson-content">
-          <div class="buttons-grid" onclick="event.stopPropagation()">
-            <a href="haftom-lesson15-note.html" class="action-btn btn-note"><span class="action-icon">📖</span> درسنامه</a>
-            <a href="haftom-lesson15-quiz.html" class="action-btn btn-quiz"><span class="action-icon">📝</span> آزمون تستی</a>
-            <a href="haftom-lesson15-essay.html" class="action-btn btn-essay"><span class="action-icon">✍️</span> آزمون تشریحی</a>
-            <a href="haftom-lesson15-files.html" class="action-btn btn-files"><span class="action-icon">📂</span> فایل‌ها و عکس‌ها</a>
-          </div>
-        </div>
-      </div>
-
-      <div class="lesson-item" onclick="toggleLesson(this)">
-        <div class="lesson-header">
-          <div class="lesson-title-wrap"><div class="lesson-num">۱۶</div><div class="lesson-name">جاذبه‌های گردشگری ایران</div></div>
-          <div class="toggle-icon">▼</div>
-        </div>
-        <div class="lesson-content">
-          <div class="buttons-grid" onclick="event.stopPropagation()">
-            <a href="haftom-lesson16-note.html" class="action-btn btn-note"><span class="action-icon">📖</span> درسنامه</a>
-            <a href="haftom-lesson16-quiz.html" class="action-btn btn-quiz"><span class="action-icon">📝</span> آزمون تستی</a>
-            <a href="haftom-lesson16-essay.html" class="action-btn btn-essay"><span class="action-icon">✍️</span> آزمون تشریحی</a>
-            <a href="haftom-lesson16-files.html" class="action-btn btn-files"><span class="action-icon">📂</span> فایل‌ها و عکس‌ها</a>
-          </div>
-        </div>
+  <div class="lesson-item" onclick="toggleLesson(this)">
+    <div class="lesson-header">
+      <div class="lesson-title-wrap"><div class="lesson-num">۱۴</div><div class="lesson-name">منابع آب و خاک</div></div>
+      <div class="toggle-icon">▼</div>
+    </div>
+    <div class="lesson-content">
+      <div class="buttons-grid" onclick="event.stopPropagation()">
+        <a href="haftom-lesson14-note.html" class="action-btn btn-note"><span class="action-icon">📖</span> درسنامه</a>
+        <a href="haftom-lesson14-quiz.html" class="action-btn btn-quiz"><span class="action-icon">📝</span> آزمون تستی</a>
+        <a href="haftom-lesson14-essay.html" class="action-btn btn-essay"><span class="action-icon">✍️</span> آزمون تشریحی</a>
+        <a href="haftom-lesson14-files.html" class="action-btn btn-files"><span class="action-icon">📂</span> فایل‌ها و عکس‌ها</a>
+        <a href="haftom-lesson14-flash.html" class="action-btn btn-flash"><span class="action-icon">🎴</span> فلش کارت</a>
       </div>
     </div>
+  </div>
+</div>
 
-    <!-- ================= فصل ۹ ================= -->
-    <div class="chapter-box">
-      <div class="chapter-title">🏺 فصل ۹: سرزمین ما، کاوش در گذشته‌های دور</div>
-      
-      <div class="lesson-item" onclick="toggleLesson(this)">
-        <div class="lesson-header">
-          <div class="lesson-title-wrap"><div class="lesson-num">۱۷</div><div class="lesson-name">میراث فرهنگی و تاریخ</div></div>
-          <div class="toggle-icon">▼</div>
-        </div>
-        <div class="lesson-content">
-          <div class="buttons-grid" onclick="event.stopPropagation()">
-            <a href="haftom-lesson17-note.html" class="action-btn btn-note"><span class="action-icon">📖</span> درسنامه</a>
-            <a href="haftom-lesson17-quiz.html" class="action-btn btn-quiz"><span class="action-icon">📝</span> آزمون تستی</a>
-            <a href="haftom-lesson17-essay.html" class="action-btn btn-essay"><span class="action-icon">✍️</span> آزمون تشریحی</a>
-            <a href="haftom-lesson17-files.html" class="action-btn btn-files"><span class="action-icon">📂</span> فایل‌ها و عکس‌ها</a>
-          </div>
-        </div>
-      </div>
-
-      <div class="lesson-item" onclick="toggleLesson(this)">
-        <div class="lesson-header">
-          <div class="lesson-title-wrap"><div class="lesson-num">۱۸</div><div class="lesson-name">قدیمی‌ترین سکونتگاه‌های ایران</div></div>
-          <div class="toggle-icon">▼</div>
-        </div>
-        <div class="lesson-content">
-          <div class="buttons-grid" onclick="event.stopPropagation()">
-            <a href="haftom-lesson18-note.html" class="action-btn btn-note"><span class="action-icon">📖</span> درسنامه</a>
-            <a href="haftom-lesson18-quiz.html" class="action-btn btn-quiz"><span class="action-icon">📝</span> آزمون تستی</a>
-            <a href="haftom-lesson18-essay.html" class="action-btn btn-essay"><span class="action-icon">✍️</span> آزمون تشریحی</a>
-            <a href="haftom-lesson18-files.html" class="action-btn btn-files"><span class="action-icon">📂</span> فایل‌ها و عکس‌ها</a>
-          </div>
-        </div>
+<!-- ================= فصل ۸ ================= -->
+<div class="chapter-box">
+  <div class="chapter-title">✈️ فصل ۸: گردشگری در ایران</div>
+  
+  <div class="lesson-item" onclick="toggleLesson(this)">
+    <div class="lesson-header">
+      <div class="lesson-title-wrap"><div class="lesson-num">۱۵</div><div class="lesson-name">گردشگری چیست؟</div></div>
+      <div class="toggle-icon">▼</div>
+    </div>
+    <div class="lesson-content">
+      <div class="buttons-grid" onclick="event.stopPropagation()">
+        <a href="haftom-lesson15-note.html" class="action-btn btn-note"><span class="action-icon">📖</span> درسنامه</a>
+        <a href="haftom-lesson15-quiz.html" class="action-btn btn-quiz"><span class="action-icon">📝</span> آزمون تستی</a>
+        <a href="haftom-lesson15-essay.html" class="action-btn btn-essay"><span class="action-icon">✍️</span> آزمون تشریحی</a>
+        <a href="haftom-lesson15-files.html" class="action-btn btn-files"><span class="action-icon">📂</span> فایل‌ها و عکس‌ها</a>
+        <a href="haftom-lesson15-flash.html" class="action-btn btn-flash"><span class="action-icon">🎴</span> فلش کارت</a>
       </div>
     </div>
+  </div>
 
+  <div class="lesson-item" onclick="toggleLesson(this)">
+    <div class="lesson-header">
+      <div class="lesson-title-wrap"><div class="lesson-num">۱۶</div><div class="lesson-name">جاذبه‌های گردشگری ایران</div></div>
+      <div class="toggle-icon">▼</div>
+    </div>
+    <div class="lesson-content">
+      <div class="buttons-grid" onclick="event.stopPropagation()">
+        <a href="haftom-lesson16-note.html" class="action-btn btn-note"><span class="action-icon">📖</span> درسنامه</a>
+        <a href="haftom-lesson16-quiz.html" class="action-btn btn-quiz"><span class="action-icon">📝</span> آزمون تستی</a>
+        <a href="haftom-lesson16-essay.html" class="action-btn btn-essay"><span class="action-icon">✍️</span> آزمون تشریحی</a>
+        <a href="haftom-lesson16-files.html" class="action-btn btn-files"><span class="action-icon">📂</span> فایل‌ها و عکس‌ها</a>
+        <a href="haftom-lesson16-flash.html" class="action-btn btn-flash"><span class="action-icon">🎴</span> فلش کارت</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= فصل ۹ ================= -->
+<div class="chapter-box">
+  <div class="chapter-title">🏺 فصل ۹: سرزمین ما، کاوش در گذشته‌های دور</div>
+  
+  <div class="lesson-item" onclick="toggleLesson(this)">
+    <div class="lesson-header">
+      <div class="lesson-title-wrap"><div class="lesson-num">۱۷</div><div class="lesson-name">میراث فرهنگی و تاریخ</div></div>
+      <div class="toggle-icon">▼</div>
+    </div>
+    <div class="lesson-content">
+      <div class="buttons-grid" onclick="event.stopPropagation()">
+        <a href="haftom-lesson17-note.html" class="action-btn btn-note"><span class="action-icon">📖</span> درسنامه</a>
+        <a href="haftom-lesson17-quiz.html" class="action-btn btn-quiz"><span class="action-icon">📝</span> آزمون تستی</a>
+        <a href="haftom-lesson17-essay.html" class="action-btn btn-essay"><span class="action-icon">✍️</span> آزمون تشریحی</a>
+        <a href="haftom-lesson17-files.html" class="action-btn btn-files"><span class="action-icon">📂</span> فایل‌ها و عکس‌ها</a>
+        <a href="haftom-lesson17-flash.html" class="action-btn btn-flash"><span class="action-icon">🎴</span> فلش کارت</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="lesson-item" onclick="toggleLesson(this)">
+    <div class="lesson-header">
+      <div class="lesson-title-wrap"><div class="lesson-num">۱۸</div><div class="lesson-name">قدیمی‌ترین سکونتگاه‌های ایران</div></div>
+      <div class="toggle-icon">▼</div>
+    </div>
+    <div class="lesson-content">
+      <div class="buttons-grid" onclick="event.stopPropagation()">
+        <a href="haftom-lesson18-note.html" class="action-btn btn-note"><span class="action-icon">📖</span> درسنامه</a>
+        <a href="haftom-lesson18-quiz.html" class="action-btn btn-quiz"><span class="action-icon">📝</span> آزمون تستی</a>
+        <a href="haftom-lesson18-essay.html" class="action-btn btn-essay"><span class="action-icon">✍️</span> آزمون تشریحی</a>
+        <a href="haftom-lesson18-files.html" class="action-btn btn-files"><span class="action-icon">📂</span> فایل‌ها و عکس‌ها</a>
+        <a href="haftom-lesson18-flash.html" class="action-btn btn-flash"><span class="action-icon">🎴</span> فلش کارت</a>
+      </div>
+    </div>
+  </div>
+</div>
     <!-- ================= فصل ۱۰ ================= -->
     <div class="chapter-box">
       <div class="chapter-title">👑 فصل ۱۰: شکل‌گیری امپراتوری‌های بزرگ در ایران باستان</div>
@@ -414,6 +466,7 @@
             <a href="haftom-lesson19-quiz.html" class="action-btn btn-quiz"><span class="action-icon">📝</span> آزمون تستی</a>
             <a href="haftom-lesson19-essay.html" class="action-btn btn-essay"><span class="action-icon">✍️</span> آزمون تشریحی</a>
             <a href="haftom-lesson19-files.html" class="action-btn btn-files"><span class="action-icon">📂</span> فایل‌ها و عکس‌ها</a>
+            <a href="haftom-lesson19-flash.html" class="action-btn btn-flash"><span class="action-icon">🎴</span> فلش کارت</a>
           </div>
         </div>
       </div>
@@ -429,6 +482,7 @@
             <a href="haftom-lesson20-quiz.html" class="action-btn btn-quiz"><span class="action-icon">📝</span> آزمون تستی</a>
             <a href="haftom-lesson20-essay.html" class="action-btn btn-essay"><span class="action-icon">✍️</span> آزمون تشریحی</a>
             <a href="haftom-lesson20-files.html" class="action-btn btn-files"><span class="action-icon">📂</span> فایل‌ها و عکس‌ها</a>
+            <a href="haftom-lesson20-flash.html" class="action-btn btn-flash"><span class="action-icon">🎴</span> فلش کارت</a>
           </div>
         </div>
       </div>
@@ -449,6 +503,7 @@
             <a href="haftom-lesson21-quiz.html" class="action-btn btn-quiz"><span class="action-icon">📝</span> آزمون تستی</a>
             <a href="haftom-lesson21-essay.html" class="action-btn btn-essay"><span class="action-icon">✍️</span> آزمون تشریحی</a>
             <a href="haftom-lesson21-files.html" class="action-btn btn-files"><span class="action-icon">📂</span> فایل‌ها و عکس‌ها</a>
+            <a href="haftom-lesson21-flash.html" class="action-btn btn-flash"><span class="action-icon">🎴</span> فلش کارت</a>
           </div>
         </div>
       </div>
@@ -464,6 +519,7 @@
             <a href="haftom-lesson22-quiz.html" class="action-btn btn-quiz"><span class="action-icon">📝</span> آزمون تستی</a>
             <a href="haftom-lesson22-essay.html" class="action-btn btn-essay"><span class="action-icon">✍️</span> آزمون تشریحی</a>
             <a href="haftom-lesson22-files.html" class="action-btn btn-files"><span class="action-icon">📂</span> فایل‌ها و عکس‌ها</a>
+            <a href="haftom-lesson22-flash.html" class="action-btn btn-flash"><span class="action-icon">🎴</span> فلش کارت</a>
           </div>
         </div>
       </div>
@@ -484,6 +540,7 @@
             <a href="haftom-lesson23-quiz.html" class="action-btn btn-quiz"><span class="action-icon">📝</span> آزمون تستی</a>
             <a href="haftom-lesson23-essay.html" class="action-btn btn-essay"><span class="action-icon">✍️</span> آزمون تشریحی</a>
             <a href="haftom-lesson23-files.html" class="action-btn btn-files"><span class="action-icon">📂</span> فایل‌ها و عکس‌ها</a>
+            <a href="haftom-lesson23-flash.html" class="action-btn btn-flash"><span class="action-icon">🎴</span> فلش کارت</a>
           </div>
         </div>
       </div>
@@ -499,6 +556,7 @@
             <a href="haftom-lesson24-quiz.html" class="action-btn btn-quiz"><span class="action-icon">📝</span> آزمون تستی</a>
             <a href="haftom-lesson24-essay.html" class="action-btn btn-essay"><span class="action-icon">✍️</span> آزمون تشریحی</a>
             <a href="haftom-lesson24-files.html" class="action-btn btn-files"><span class="action-icon">📂</span> فایل‌ها و عکس‌ها</a>
+            <a href="haftom-lesson24-flash.html" class="action-btn btn-flash"><span class="action-icon">🎴</span> فلش کارت</a>
           </div>
         </div>
       </div>
