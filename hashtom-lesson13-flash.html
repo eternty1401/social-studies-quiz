@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>فلش کارت - درس ۱۳: غزنویان، سلجوقیان و خوارزمشاهیان</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; font-family:'Vazirmatn',sans-serif; }
+  body {
+    background-color: #f4f7f6;
+    background-image: radial-gradient(#d1e0e0 1px, transparent 1px);
+    background-size: 20px 20px;
+    color: #2c3e50; padding: 30px 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh;
+  }
+  .container { background: #fff; width: 100%; max-width: 800px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); padding: 35px; border: 1px solid #eef2f5; text-align: center; }
+  .header { margin-bottom: 30px; border-bottom: 2px dashed #eef2f5; padding-bottom: 20px; }
+  .header h1 { color: #00acc1; font-size: 1.6rem; margin-bottom: 8px; }
+  .header p { color: #7f8c8d; font-size: 0.95rem; }
+  .flashcard-container { perspective: 1000px; width: 100%; height: 300px; margin-bottom: 30px; cursor: pointer; }
+  .flashcard { position: relative; width: 100%; height: 100%; text-align: center; transition: transform 0.6s; transform-style: preserve-3d; }
+  .flashcard.flipped { transform: rotateY(180deg); }
+  .flashcard-front, .flashcard-back { position: absolute; width: 100%; height: 100%; -webkit-backface-visibility: hidden; backface-visibility: hidden; border-radius: 20px; display: flex; align-items: center; justify-content: center; padding: 30px; box-shadow: 0 8px 25px rgba(0,0,0,0.1); }
+  .flashcard-front { background: linear-gradient(135deg, #00acc1, #00838f); color: #fff; }
+  .flashcard-back { background: linear-gradient(135deg, #ecf0f1, #bdc3c7); color: #2c3e50; transform: rotateY(180deg); }
+  .card-content { font-size: 1.2rem; font-weight: 900; line-height: 1.9; }
+  .card-label { position: absolute; top: 15px; right: 20px; font-size: 0.8rem; background: rgba(255,255,255,0.2); padding: 4px 12px; border-radius: 20px; font-weight: 700; }
+  .flashcard-back .card-label { background: rgba(0,0,0,0.05); color: #7f8c8d; }
+  .click-hint { position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%); font-size: 0.8rem; opacity: 0.7; display: flex; align-items: center; gap: 5px; }
+  .controls { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; }
+  .nav-btn { background: #00acc1; color: #fff; border: none; padding: 12px 25px; border-radius: 30px; font-weight: 700; font-family: inherit; font-size: 1rem; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 8px; }
+  .nav-btn:hover { background: #00838f; transform: translateY(-2px); }
+  .nav-btn:disabled { background: #bdc3c7; cursor: not-allowed; transform: none; }
+  .counter { font-weight: 900; font-size: 1.1rem; color: #7f8c8d; background: #ecf0f1; padding: 8px 20px; border-radius: 30px; }
+  .back-home { display: inline-block; margin-top: 30px; background: #2c3e50; color: #fff; text-decoration: none; padding: 10px 25px; border-radius: 30px; font-weight: 700; transition: 0.3s; }
+  .back-home:hover { background: #1a252f; }
+  @media(max-width:600px) { .container { padding: 20px; } .flashcard-container { height: 420px; } .card-content { font-size: 1.05rem; } .controls { flex-direction: column; gap: 15px; } .nav-btn { width: 100%; justify-content: center; } }
+</style>
+</head>
+<body>
+
+<div class="container">
+  
+  <div class="header">
+    <h1>🎴 فلش کارت‌های درس ۱۳</h1>
+    <p>غزنویان، سلجوقیان و خوارزمشاهیان — مطالعات اجتماعی پایه هشتم</p>
+  </div>
+
+  <div class="flashcard-container" onclick="flipCard()">
+    <div class="flashcard" id="flashcard">
+      <div class="flashcard-front">
+        <span class="card-label">سوال</span>
+        <div class="card-content" id="question-text">سوال اینجا قرار می‌گیرد</div>
+        <span class="click-hint">👆 برای دیدن جواب کلیک کنید</span>
+      </div>
+      <div class="flashcard-back">
+        <span class="card-label">جواب</span>
+        <div class="card-content" id="answer-text">جواب اینجا قرار می‌گیرد</div>
+        <span class="click-hint">👆 برای دیدن سوال کلیک کنید</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button class="nav-btn" id="prev-btn" onclick="prevCard()">▶ کارت قبلی</button>
+    <div class="counter" id="counter">۱ از ۱۵</div>
+    <button class="nav-btn" id="next-btn" onclick="nextCard()">کارت بعدی ◀</button>
+  </div>
+
+  <a href="hashtom.html" class="back-home">🔙 بازگشت به صفحه دروس</a>
+
+</div>
+
+<script>
+  const flashcards = [
+    {
+      q: "غزنویان چه تبار بودند و نامشان از کجا گرفته شده است؟",
+      a: "ترک‌تبار بودند و چون حکومت خود را از شهر غزنین (غزنه) آغاز کردند، به این نام مشهور شدند."
+    },
+    {
+      q: "سلطان محمود غزنوی چگونه خراسان را تصرف کرد؟",
+      a: "هنگامی که حکومت سامانیان به نهایت ضعف رسید، سلطان محمود که حاکم غزنه بود، خراسان را تصرف کرد. خلیفهٔ عباسی نیز حکومت او را به رسمیت شناخت."
+    },
+    {
+      q: "انگیزهٔ اصلی سلطان محمود از لشکرکشی به هندوستان چه بود؟",
+      a: "اگرچه بهانهٔ رواج اسلام بود، اما در اصل به طمع ثروت هنگفتی بود که در هندوستان وجود داشت."
+    },
+    {
+      q: "سلطان محمود غزنوی در هندوستان چه کاری کرد؟",
+      a: "مناطقی از هندوستان را تصرف کرد، معبد سومَنات را خراب کرد، اسیران زیادی با خود به غزنه برد و ثروت و غنائم زیادی به دست آورد."
+    },
+    {
+      q: "قدرت حکومت غزنویان بر چه پایه‌ای استوار بود؟",
+      a: "بر نیروی نظامی. آنها از محبوبیت و مقبولیتی که صفاریان و سامانیان و آل‌بویه در بین تودهٔ مردم داشتند، بی‌بهره بودند."
+    },
+    {
+      q: "رابطهٔ غزنویان با خلفای عباسی چگونه بود؟",
+      a: "دوستانه بود و سلاطین غزنوی به‌ویژه سلطان محمود، خود را مطیع و تابع خلافتی عباسی می‌دانستند."
+    },
+    {
+      q: "سلجوقیان چه کسانی بودند و بنیان‌گذار حکومتشان چه کسی بود؟",
+      a: "طایفه‌ای از ترکان که پس از پذیرش اسلام به ماوراءالنهر مهاجرت کردند. طُغرِل (نوهٔ سلجوق) پس از شکست سلطان مسعود غزنوی در نیشابور بر تخت نشست و بنیان‌گذار حکومت سلجوقیان شد."
+    },
+    {
+      q: "طغرل پس از تسخیر بغداد چه اقداماتی انجام داد؟",
+      a: "حکومت شیعه‌مذهب آل‌بویه را برانداخت و خطری را که از جانب خلیفهٔ فاطمی مصر متوجه خلافت عباسی بود، از میان برداشت."
+    },
+    {
+      q: "خلیفهٔ عباسی به طغرل چه لقبی داد؟",
+      a: "لقب «سلطان رکن‌الدین» و حکومت او را بر ایران و عراق تأیید کرد."
+    },
+    {
+      q: "نبرد مالزگرد چه بود و چه نتیجه‌ای داشت؟",
+      a: "در سال ۴۶۳ هجری بین آلب‌ارسالن (سلجوقی) و قوای رومیان رخ داد. رومیان شکست سختی خوردند و امپراتور روم شرقی اسیر شد. در نتیجه، بخش‌های وسیعی از آسیای صغیر به تصرف سپاهیان سلجوقی درآمد."
+    },
+    {
+      q: "دوران حکومت ملکشاه چگونه بود؟",
+      a: "حکومت سلجوقیان به اوج قدرت رسید؛ محدودهٔ جغرافیایی ایران از ماوراءالنهر در شرق تا دریای مدیترانه در غرب گسترش یافت و اصفهان (پایتخت) به شهری بزرگ و آباد تبدیل شد."
+    },
+    {
+      q: "قلعهٔ الموت کجا قرار دارد و چه ویژگی مهمی دارد؟",
+      a: "در بلندی در مجاورت روستای گازرخان در استان قزوین. به «دژ حسن صباح» معروف است و از شاهکارهای معماری بوده است. مرکز اسماعیلیان در دورهٔ سلجوقی بود و بعدها در زمان هالکوخان مغول به آتش کشیده شد."
+    },
+    {
+      q: "اسماعیلیان چه کسانی بودند؟",
+      a: "از فرقه‌های شیعه بودند که بعد از امام جعفر صادق ﷺ به امامت پسرش اسماعیل اعتقاد داشتند. در دورهٔ سلجوقیان به رهبری حسن صباح در قلعه‌های کوهستانی مستقر بودند و با حکومت سلجوقی مبارزه می‌کردند."
+    },
+    {
+      q: "خوارزمشاهیان چگونه به قدرت رسیدند؟",
+      a: "نخست نشاندهٔ سلجوقیان بودند. وقتی حکومت سلجوقی ضعیف شد، از فرمانبری سرپیچی کردند و یکی از فرمانروایان خوارزم، آخرین سلطان سلجوقی را شکست داد و بر بخش‌های زیادی از ایران چیره شد."
+    },
+    {
+      q: "جنگ‌های صلیبی چه بودند و چه نتیجه‌ای داشتند؟",
+      a: "جنگ‌هایی حدود دویست سال بین مسیحیان و مسلمانان. سرانجام با پیروزی سیاسی و نظامی مسلمانان و شکست اروپاییان به پایان رسید. اما اروپاییان با پیشرفت‌های علمی و تمدنی مسلمانان آشنا شدند و آثار علمی مسلمانان را به زبان لاتین ترجمه کردند."
+    }
+  ];
+
+  let currentIndex = 0;
+  const flashcardElement = document.getElementById('flashcard');
+  const questionText = document.getElementById('question-text');
+  const answerText = document.getElementById('answer-text');
+  const counter = document.getElementById('counter');
+  const prevBtn = document.getElementById('prev-btn');
+  const nextBtn = document.getElementById('next-btn');
+
+  function updateCard() {
+    flashcardElement.classList.remove('flipped');
+    setTimeout(() => {
+      questionText.innerText = flashcards[currentIndex].q;
+      answerText.innerText = flashcards[currentIndex].a;
+      const persianNumbers = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+      const cur = String(currentIndex + 1).replace(/\d/g, d => persianNumbers[d]);
+      const tot = String(flashcards.length).replace(/\d/g, d => persianNumbers[d]);
+      counter.innerText = `${cur} از ${tot}`;
+      prevBtn.disabled = currentIndex === 0;
+      nextBtn.disabled = currentIndex === flashcards.length - 1;
+    }, 150);
+  }
+
+  function flipCard() { flashcardElement.classList.toggle('flipped'); }
+  function nextCard() { if (currentIndex < flashcards.length - 1) { currentIndex++; updateCard(); } }
+  function prevCard() { if (currentIndex > 0) { currentIndex--; updateCard(); } }
+  updateCard();
+</script>
+
+</body>
+</html>
