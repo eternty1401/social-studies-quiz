@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>فلش کارت - درس ۱۸: ویژگی‌های انسانی و اقتصادی آسیا</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; font-family:'Vazirmatn',sans-serif; }
+  body { background-color: #f4f7f6; background-image: radial-gradient(#d1e0e0 1px, transparent 1px); background-size: 20px 20px; color: #2c3e50; padding: 30px 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+  .container { background: #fff; width: 100%; max-width: 800px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); padding: 35px; border: 1px solid #eef2f5; text-align: center; }
+  .header { margin-bottom: 30px; border-bottom: 2px dashed #eef2f5; padding-bottom: 20px; }
+  .header h1 { color: #00acc1; font-size: 1.6rem; margin-bottom: 8px; }
+  .header p { color: #7f8c8d; font-size: 0.95rem; }
+  .flashcard-container { perspective: 1000px; width: 100%; height: 300px; margin-bottom: 30px; cursor: pointer; }
+  .flashcard { position: relative; width: 100%; height: 100%; text-align: center; transition: transform 0.6s; transform-style: preserve-3d; }
+  .flashcard.flipped { transform: rotateY(180deg); }
+  .flashcard-front, .flashcard-back { position: absolute; width: 100%; height: 100%; -webkit-backface-visibility: hidden; backface-visibility: hidden; border-radius: 20px; display: flex; align-items: center; justify-content: center; padding: 30px; box-shadow: 0 8px 25px rgba(0,0,0,0.1); }
+  .flashcard-front { background: linear-gradient(135deg, #00acc1, #00838f); color: #fff; }
+  .flashcard-back { background: linear-gradient(135deg, #ecf0f1, #bdc3c7); color: #2c3e50; transform: rotateY(180deg); }
+  .card-content { font-size: 1.2rem; font-weight: 900; line-height: 1.9; }
+  .card-label { position: absolute; top: 15px; right: 20px; font-size: 0.8rem; background: rgba(255,255,255,0.2); padding: 4px 12px; border-radius: 20px; font-weight: 700; }
+  .flashcard-back .card-label { background: rgba(0,0,0,0.05); color: #7f8c8d; }
+  .click-hint { position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%); font-size: 0.8rem; opacity: 0.7; display: flex; align-items: center; gap: 5px; }
+  .controls { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; }
+  .nav-btn { background: #00acc1; color: #fff; border: none; padding: 12px 25px; border-radius: 30px; font-weight: 700; font-family: inherit; font-size: 1rem; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 8px; }
+  .nav-btn:hover { background: #00838f; transform: translateY(-2px); }
+  .nav-btn:disabled { background: #bdc3c7; cursor: not-allowed; transform: none; }
+  .counter { font-weight: 900; font-size: 1.1rem; color: #7f8c8d; background: #ecf0f1; padding: 8px 20px; border-radius: 30px; }
+  .back-home { display: inline-block; margin-top: 30px; background: #2c3e50; color: #fff; text-decoration: none; padding: 10px 25px; border-radius: 30px; font-weight: 700; transition: 0.3s; }
+  .back-home:hover { background: #1a252f; }
+  @media(max-width:600px) { .container { padding: 20px; } .flashcard-container { height: 420px; } .card-content { font-size: 1.05rem; } .controls { flex-direction: column; gap: 15px; } .nav-btn { width: 100%; justify-content: center; } }
+</style>
+</head>
+<body>
+
+<div class="container">
+  
+  <div class="header">
+    <h1>🎴 فلش کارت‌های درس ۱۸</h1>
+    <p>ویژگی‌های انسانی و اقتصادی آسیا — مطالعات اجتماعی پایه هشتم</p>
+  </div>
+
+  <div class="flashcard-container" onclick="flipCard()">
+    <div class="flashcard" id="flashcard">
+      <div class="flashcard-front">
+        <span class="card-label">سوال</span>
+        <div class="card-content" id="question-text">سوال اینجا قرار می‌گیرد</div>
+        <span class="click-hint">👆 برای دیدن جواب کلیک کنید</span>
+      </div>
+      <div class="flashcard-back">
+        <span class="card-label">جواب</span>
+        <div class="card-content" id="answer-text">جواب اینجا قرار می‌گیرد</div>
+        <span class="click-hint">👆 برای دیدن سوال کلیک کنید</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button class="nav-btn" id="prev-btn" onclick="prevCard()">▶ کارت قبلی</button>
+    <div class="counter" id="counter">۱ از ۱۵</div>
+    <button class="nav-btn" id="next-btn" onclick="nextCard()">کارت بعدی ◀</button>
+  </div>
+
+  <a href="hashtom.html" class="back-home">🔙 بازگشت به صفحه دروس</a>
+
+</div>
+
+<script>
+  const flashcards = [
+    {
+      q: "چند درصد از جمعیت جهان در آسیا زندگی می‌کند؟",
+      a: "حدود ۶۰ درصد جمعیت جهان در آسیا زندگی می‌کنند."
+    },
+    {
+      q: "پرجمعیت‌ترین کشورهای جهان کدام‌اند و در کدام منطقهٔ آسیا هستند؟",
+      a: "چین و هند (با بیش از ۲/۵ میلیارد نفر مجموعاً) در منطقهٔ جنوب و جنوب شرقی آسیا. این دو کشور تنها کشورهای جهان‌اند که هر یک بیش از یک میلیارد نفر جمعیت دارند."
+    },
+    {
+      q: "متراکم‌ترین منطقهٔ جهان از نظر جمعیت کجاست؟",
+      a: "جزیرهٔ جاوه در اندونزی. در این جزیرهٔ کوچک، ۱۴۱ میلیون نفر (به اندازهٔ جمعیت کشور روسیه) سکونت دارند."
+    },
+    {
+      q: "نژادهای اصلی مردم آسیا کدام‌اند؟",
+      a: "بیشتر جمعیت آسیا از نژاد زردپوست و بقیه سفیدپوست هستند. در جنوب آسیا تیره‌پوست‌های سیاه و دورگه‌ها نیز زندگی می‌کنند."
+    },
+    {
+      q: "چند نمونه از زبان‌های مهم آسیا را نام ببرید.",
+      a: "چینی، هندی، عربی، فارسی، ترکی، ژاپنی، کره‌ای. مردم آسیا به صدها زبان و لهجه حرف می‌زنند."
+    },
+    {
+      q: "چرا آسیا را مهد ادیان بزرگ جهان می‌نامند؟",
+      a: "زیرا سه دین بزرگ الهی (یهود، مسیحیت و اسلام) در آسیا ظهور کرده‌اند. علاوه بر آن، آیین‌هایی چون بودا و برهمایی نیز در آسیا خاستگاه دارند."
+    },
+    {
+      q: "حدود چند درصد از مسلمانان جهان در آسیا زندگی می‌کنند؟",
+      a: "حدود ۶۰ درصد (حدود ۱/۸ میلیارد نفر)."
+    },
+    {
+      q: "خاستگاه آیین بودا کجاست و در کدام کشورها رواج یافته است؟",
+      a: "خاستگاه اصلی آن شمال هند است و در کشورهای شرق آسیا چون چین، ژاپن، کره و تایلند نیز انتشار یافته است."
+    },
+    {
+      q: "آیین برهمایی در کدام منطقهٔ آسیا رواج دارد؟",
+      a: "در شبه‌جزیرهٔ هند. البته بیش از ۱۰ درصد از جمعیت ۱/۳ میلیارد نفری هند، مسلمان هستند."
+    },
+    {
+      q: "مهم‌ترین محصول کشاورزی آسیا چیست و چه جایگاهی دارد؟",
+      a: "برنج. غذای اصلی مردم آسیا را تشکیل می‌دهد و ۹۰ درصد برنج جهان در آسیا تولید و در همین قاره مصرف می‌شود."
+    },
+    {
+      q: "کشت برنج در آسیا به چه روش‌هایی انجام می‌شود؟",
+      a: "کشت برنج در آسیا به‌صورت پلکانی روی تپه‌ها و کوه‌ها نیز انجام می‌شود، علاوه بر کشت در دشت‌ها و جلگه‌ها."
+    },
+    {
+      q: "ببرهای اقتصادی آسیا کدام‌اند؟",
+      a: "چهار کشور/منطقهٔ کرهٔ جنوبی، تایوان، هنگ‌کنگ (بخشی از چین امروزی) و سنگاپور که صادرات را هدف اقتصادی خود قرار دادند و درآمد بسیار زیادی به دست آوردند."
+    },
+    {
+      q: "چین چگونه توانست در دو دههٔ اخیر به یک قدرت اقتصادی تبدیل شود؟",
+      a: "با برنامه‌ریزی‌های جدید و توجه به توان داخلی، میزان تولیدات و صادرات کالاهای خود را به شدت افزایش داد و از این راه درآمد اقتصادی و وضع زندگی مردم خود را بهتر کرد. امروزه تقریباً انواع کالاهای اقتصادی جهان در چین تولید می‌شود."
+    },
+    {
+      q: "پرجمعیت‌ترین شهرهای آسیا کدام‌اند؟",
+      a: "توکیو (ژاپن)، بمبئی (هند)، بندر شانگهای (چین، با بیش از ۲۳ میلیون نفر) و تهران. امروزه شهرهای با جمعیت بیش از ده میلیون نفر در آسیا بیشتر از سایر قاره‌ها هستند."
+    },
+    {
+      q: "جاذبه‌های گردشگری آسیا چه هستند و چه نقشی در اقتصاد این قاره دارند؟",
+      a: "آسیا جاذبه‌های طبیعی و جاذبه‌های تاریخی و فرهنگی بسیار زیادی دارد. همه ساله تعداد زیادی از گردشگران از سراسر دنیا به کشورهای آسیایی سفر می‌کنند و تعدادی از کشورهای آسیایی از راه جذب گردشگران، درآمد خوبی به دست می‌آورند."
+    }
+  ];
+
+  let currentIndex = 0;
+  const flashcardElement = document.getElementById('flashcard');
+  const questionText = document.getElementById('question-text');
+  const answerText = document.getElementById('answer-text');
+  const counter = document.getElementById('counter');
+  const prevBtn = document.getElementById('prev-btn');
+  const nextBtn = document.getElementById('next-btn');
+
+  function updateCard() {
+    flashcardElement.classList.remove('flipped');
+    setTimeout(() => {
+      questionText.innerText = flashcards[currentIndex].q;
+      answerText.innerText = flashcards[currentIndex].a;
+      const persianNumbers = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+      const cur = String(currentIndex + 1).replace(/\d/g, d => persianNumbers[d]);
+      const tot = String(flashcards.length).replace(/\d/g, d => persianNumbers[d]);
+      counter.innerText = `${cur} از ${tot}`;
+      prevBtn.disabled = currentIndex === 0;
+      nextBtn.disabled = currentIndex === flashcards.length - 1;
+    }, 150);
+  }
+
+  function flipCard() { flashcardElement.classList.toggle('flipped'); }
+  function nextCard() { if (currentIndex < flashcards.length - 1) { currentIndex++; updateCard(); } }
+  function prevCard() { if (currentIndex > 0) { currentIndex--; updateCard(); } }
+  updateCard();
+</script>
+
+</body>
+</html>
