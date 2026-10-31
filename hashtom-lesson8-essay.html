@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>آزمون تشریحی درس ۸ - رسانه‌ها در زندگی ما</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Vazirmatn', Tahoma, sans-serif; background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; direction: rtl; }
+  .card { background: #fff; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); max-width: 720px; width: 100%; padding: 35px 30px; }
+  .hidden { display: none !important; }
+
+  .start-screen h1 { font-size: 1.5rem; color: #4338ca; text-align: center; margin-bottom: 10px; }
+  .start-screen p { text-align: center; color: #64748b; margin-bottom: 25px; }
+  .start-screen input { width: 100%; padding: 14px 18px; border: 2px solid #cbd5e1; border-radius: 10px; font-family: inherit; font-size: 1rem; margin-bottom: 18px; }
+  .start-screen input:focus { outline: none; border-color: #4338ca; }
+  .start-btn { width: 100%; padding: 15px; background: linear-gradient(135deg, #6a11cb, #2575fc); color: #fff; border: none; border-radius: 10px; font-family: inherit; font-size: 1.05rem; font-weight: 700; cursor: pointer; transition: transform 0.2s; }
+  .start-btn:hover { transform: translateY(-2px); }
+
+  .quiz-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; font-size: 0.9rem; color: #475569; font-weight: 600; }
+  .timer-box { background: #eef2ff; color: #4338ca; padding: 6px 14px; border-radius: 20px; font-weight: 700; }
+  .timer-box.warning { background: #ffebee; color: #c62828; animation: pulse 0.6s infinite; }
+  @keyframes pulse { 50% { opacity: 0.6; } }
+
+  .progress-bar { height: 8px; background: #e2e8f0; border-radius: 10px; margin-bottom: 25px; overflow: hidden; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, #6a11cb, #2575fc); border-radius: 10px; transition: width 0.3s; width: 0%; }
+
+  .question { font-size: 1.15rem; font-weight: 700; color: #1e293b; margin-bottom: 20px; line-height: 1.9; }
+  .answer-area { width: 100%; min-height: 160px; padding: 15px; border: 2px solid #e2e8f0; border-radius: 12px; font-family: inherit; font-size: 0.97rem; line-height: 1.8; resize: vertical; background: #f8fafc; }
+  .answer-area:focus { outline: none; border-color: #4338ca; background: #fff; }
+  .submit-btn { width: 100%; margin-top: 18px; padding: 14px; background: linear-gradient(135deg, #6a11cb, #2575fc); color: #fff; border: none; border-radius: 10px; font-family: inherit; font-size: 1rem; font-weight: 700; cursor: pointer; }
+  .submit-btn:hover { opacity: 0.92; }
+
+  .result-screen { text-align: center; }
+  .result-screen h1 { font-size: 1.6rem; margin-bottom: 20px; color: #4338ca; }
+  .result-name { font-size: 1.1rem; color: #475569; margin-bottom: 15px; }
+  .result-badge { width: 150px; height: 150px; border-radius: 50%; margin: 0 auto 22px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #fff; font-weight: 700; box-shadow: 0 8px 25px rgba(0,0,0,0.2); background: linear-gradient(135deg, #6a11cb, #2575fc); }
+  .result-badge .big { font-size: 2.2rem; line-height: 1; }
+  .result-badge .small { font-size: 0.8rem; margin-top: 6px; opacity: 0.9; }
+  .result-note { background: #f8fafc; padding: 15px 18px; border-radius: 12px; color: #475569; font-size: 0.92rem; line-height: 1.9; margin-bottom: 22px; text-align: justify; }
+  .restart-btn { padding: 13px 30px; background: linear-gradient(135deg, #6a11cb, #2575fc); color: #fff; border: none; border-radius: 10px; font-family: inherit; font-size: 1rem; font-weight: 700; cursor: pointer; }
+  .back-link { display: block; margin-top: 15px; color: #64748b; text-decoration: none; font-size: 0.9rem; }
+  .back-link:hover { color: #4338ca; }
+
+  .saved-answers { text-align: right; background: #eef2ff; border-radius: 12px; padding: 14px 18px; margin-bottom: 20px; font-size: 0.88rem; color: #3730a3; max-height: 220px; overflow-y: auto; }
+  .saved-answers h3 { font-size: 0.95rem; margin-bottom: 10px; }
+  .saved-answers .qa { padding: 8px 0; border-bottom: 1px dashed #c7d2fe; }
+  .saved-answers .qa:last-child { border-bottom: none; }
+  .saved-answers .q-label { font-weight: 700; }
+  .saved-answers .a-label { color: #475569; margin-top: 4px; }
+</style>
+</head>
+<body>
+
+<div class="card">
+
+  <div class="start-screen" id="startScreen">
+    <h1>✍️ آزمون تشریحی درس ۸</h1>
+    <p>رسانه‌ها در زندگی ما — ۱۵ سوال | هر سوال ۲ دقیقه</p>
+    <input type="text" id="studentName" placeholder="نام و نام خانوادگی خود را وارد کنید" maxlength="40">
+    <button class="start-btn" onclick="startQuiz()">شروع آزمون</button>
+    <a href="hashtom-lesson8-note.html" class="back-link">🔙 بازگشت به درسنامه</a>
+  </div>
+
+  <div id="quizScreen" class="hidden">
+    <div class="quiz-header">
+      <span id="qCounter">سوال ۱ از ۱۵</span>
+      <span class="timer-box" id="timerBox">⏱ ۲:۰۰</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="question" id="questionText"></div>
+    <textarea class="answer-area" id="answerBox" placeholder="پاسخ خود را اینجا بنویسید..."></textarea>
+    <button class="submit-btn" onclick="submitAnswer()">ثبت پاسخ و سوال بعدی ➜</button>
+  </div>
+
+  <div class="result-screen hidden" id="resultScreen">
+    <h1>🎉 پایان آزمون تشریحی</h1>
+    <div class="result-name" id="resultName"></div>
+    <div class="result-badge">
+      <span class="big" id="answeredCount">0</span>
+      <span class="small">از ۱۵ پاسخ داده‌شده</span>
+    </div>
+    <div class="result-note" id="resultNote"></div>
+    <div class="saved-answers" id="savedAnswers"></div>
+    <button class="restart-btn" onclick="location.reload()">🔄 آزمون مجدد</button>
+    <a href="hashtom.html" class="back-link">🔙 بازگشت به صفحه اصلی</a>
+  </div>
+
+</div>
+
+<script>
+const questions = [
+  "چهار نمونه از کاربردهای فناوری اطلاعات و ارتباطات در زندگی روزمره را نام ببرید و هر یک را با یک مثال توضیح دهید.",
+  "«دولت الکترونیکی» چیست؟ سه خدمتی را که از طریق دولت الکترونیکی ارائه می‌شود، بنویسید.",
+  "چرا باید دربارهٔ اطلاعاتی که در اینترنت به دست می‌آوریم، تحقیق و پرس‌وجو کنیم؟ توضیح دهید.",
+  "رسانه‌های ارتباط جمعی چگونه بر فرهنگ عمومی جامعه تأثیر می‌گذارند؟ توضیح دهید.",
+  "دو مورد از آثار منفی رسانه‌ها را نام ببرید و توضیح دهید.",
+  "چرا آگهی‌های بازرگانی می‌توانند بر فرهنگ عمومی اثر منفی بگذارند؟ توضیح دهید.",
+  "بازی‌های رایانه‌ای چه تأثیراتی می‌توانند بر نوجوانان داشته باشند؟ دو مورد را بنویسید.",
+  "استفاده از تلفن همراه و پیامک چه تأثیری بر ارتباطات خانوادگی گذاشته است؟ توضیح دهید.",
+  "چرا نباید عکس‌ها و فیلم‌های خانوادگی را در اینترنت منتشر کرد؟ توضیح دهید.",
+  "چرا اعتیاد به بازی‌های رایانه‌ای و اینترنت برای دانش‌آموزان مضر است؟ دو دلیل بیاورید.",
+  "دو مورد از خطرات ارتباط با افراد ناشناس در فضای مجازی را بنویسید.",
+  "چرا خرید اینترنتی باید با مشاورهٔ بزرگ‌ترها انجام شود؟ توضیح دهید.",
+  "در صورت برخورد با شبهات دینی و اعتقادی در فضای مجازی، چه باید کرد؟",
+  "اخبار سیاسی را از چه منابعی باید به دست آورد و چرا؟",
+  "سه نکتهٔ امنیتی مهم را که در استفاده از فضای مجازی باید رعایت کرد، بنویسید."
+];
+
+const TIME_PER_Q = 120;
+let current = 0, timerInterval, timeLeft, studentName = "", answers = [];
+
+function startQuiz() {
+  studentName = document.getElementById('studentName').value.trim();
+  if (!studentName) { alert('لطفاً نام خود را وارد کنید.'); return; }
+  document.getElementById('startScreen').classList.add('hidden');
+  document.getElementById('quizScreen').classList.remove('hidden');
+  current = 0; answers = [];
+  showQuestion();
+}
+function showQuestion() {
+  const q = questions[current];
+  document.getElementById('qCounter').textContent = `سوال ${current + 1} از ${questions.length}`;
+  document.getElementById('progressFill').style.width = `${(current / questions.length) * 100}%`;
+  document.getElementById('questionText').textContent = q;
+  document.getElementById('answerBox').value = '';
+  document.getElementById('answerBox').focus();
+  startTimer();
+}
+
+function startTimer() {
+  clearInterval(timerInterval);
+  timeLeft = TIME_PER_Q;
+  updateTimerDisplay();
+  timerInterval = setInterval(() => {
+    timeLeft--;
+    updateTimerDisplay();
+    if (timeLeft <= 0) {
+      clearInterval(timerInterval);
+      submitAnswer();
+    }
+  }, 1000);
+}
+
+function updateTimerDisplay() {
+  const box = document.getElementById('timerBox');
+  const m = Math.floor(timeLeft / 60);
+  const s = timeLeft % 60;
+  box.textContent = `⏱ ${m}:${s.toString().padStart(2, '0')}`;
+  if (timeLeft <= 20) box.classList.add('warning');
+  else box.classList.remove('warning');
+}
+
+function submitAnswer() {
+  clearInterval(timerInterval);
+  const answer = document.getElementById('answerBox').value.trim();
+  answers.push({ q: questions[current], a: answer || '(بدون پاسخ)' });
+  current++;
+  if (current < questions.length) showQuestion();
+  else showResult();
+}
+
+function showResult() {
+  document.getElementById('quizScreen').classList.add('hidden');
+  document.getElementById('resultScreen').classList.remove('hidden');
+
+  document.getElementById('resultName').textContent = `دانش‌آموز: ${studentName}`;
+  document.getElementById('answeredCount').textContent = answers.filter(x => x.a !== '(بدون پاسخ)').length;
+
+  document.getElementById('resultNote').innerHTML =
+    'پاسخ‌های تشریحی شما ذخیره شد. این آزمون به‌صورت خودکار تصحیح نمی‌شود؛ ' +
+    'برای دریافت نمره، پاسخ‌های زیر را به معلم ارائه دهید. ' +
+    'تصحیح تشریحی بر اساس میزان درستی، کامل بودن و دقت پاسخ‌ها انجام می‌شود.';
+
+  const list = document.getElementById('savedAnswers');
+  let html = '<h3>📋 پاسخ‌های شما:</h3>';
+  answers.forEach((item, i) => {
+    html += `<div class="qa"><div class="q-label">${i + 1}. ${item.q}</div><div class="a-label">✏️ ${item.a}</div></div>`;
+  });
+  list.innerHTML = html;
+}
+</script>
+
+</body>
+</html>
