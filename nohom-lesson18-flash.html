@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>فلش کارت درس ۱۸ | مطالعات اجتماعی پایه نهم</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; font-family:'Vazirmatn',sans-serif; }
+  body { min-height:100vh; background-color:#f4f7f6; background-image:radial-gradient(#d1e0e0 1px, transparent 1px); background-size:20px 20px; color:#2c3e50; padding:30px 20px; display:flex; flex-direction:column; align-items:center; }
+  .container { width:100%; max-width:700px; }
+  .back-btn { display:inline-flex; align-items:center; gap:8px; text-decoration:none; color:#34495e; font-size:0.9rem; background:#fff; padding:8px 18px; border-radius:50px; margin-bottom:20px; transition:0.3s; border:1px solid #dcdde1; box-shadow:0 4px 10px rgba(0,0,0,0.05); font-weight:700; }
+  .back-btn:hover { background:#f8f9fa; transform:translateY(-2px); box-shadow:0 6px 15px rgba(0,0,0,0.1); }
+  .header-card { background:linear-gradient(135deg,#00acc1 0%,#00838f 100%); color:#fff; border-radius:20px; padding:30px 25px; text-align:center; box-shadow:0 10px 30px rgba(0,172,193,0.25); margin-bottom:25px; position:relative; overflow:hidden; }
+  .header-card::before { content:""; position:absolute; top:-60px; left:-60px; width:180px; height:180px; background:rgba(255,255,255,0.08); border-radius:50%; }
+  .header-badge { display:inline-block; background:rgba(255,255,255,0.22); padding:6px 16px; border-radius:50px; font-size:0.82rem; font-weight:700; margin-bottom:12px; }
+  .header-card h1 { font-size:1.4rem; font-weight:900; margin-bottom:8px; }
+  .header-card .subtitle { font-size:0.92rem; opacity:0.95; }
+  .counter-bar { display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; }
+  .counter-badge { background:#e0f7fa; color:#00838f; padding:8px 18px; border-radius:50px; font-weight:900; font-size:0.95rem; }
+  .hint-text { font-size:0.82rem; color:#7f8c8d; }
+  .flash-scene { perspective:1500px; width:100%; height:340px; margin-bottom:22px; }
+  .flash-card { width:100%; height:100%; position:relative; transform-style:preserve-3d; transition:transform 0.7s cubic-bezier(0.4,0,0.2,1); cursor:pointer; }
+  .flash-card.flipped { transform:rotateY(180deg); }
+  .card-face { position:absolute; inset:0; backface-visibility:hidden; -webkit-backface-visibility:hidden; border-radius:22px; padding:35px 28px; display:flex; flex-direction:column; justify-content:center; align-items:center; box-shadow:0 12px 40px rgba(0,0,0,0.12); text-align:center; overflow-y:auto; }
+  .card-front { background:linear-gradient(135deg,#00acc1,#00838f); color:#fff; }
+  .card-back { background:linear-gradient(135deg,#ffffff,#e0f7fa); color:#2c3e50; transform:rotateY(180deg); border:2px solid #00acc1; }
+  .face-label { position:absolute; top:16px; right:20px; background:rgba(255,255,255,0.25); padding:5px 14px; border-radius:50px; font-size:0.75rem; font-weight:800; }
+  .card-back .face-label { background:rgba(0,172,193,0.15); color:#00838f; }
+  .card-text { font-size:1.15rem; font-weight:800; line-height:1.9; max-width:100%; padding-top:10px; }
+  .card-back .card-text { font-size:1rem; font-weight:500; color:#2c3e50; line-height:2; text-align:right; }
+  .flip-hint { position:absolute; bottom:16px; left:50%; transform:translateX(-50%); font-size:0.78rem; opacity:0.75; font-weight:700; display:flex; align-items:center; gap:6px; white-space:nowrap; }
+  .nav-buttons { display:flex; gap:12px; margin-bottom:15px; }
+  .nav-btn { flex:1; padding:14px; border:none; border-radius:12px; font-size:0.98rem; font-weight:900; font-family:inherit; cursor:pointer; transition:0.25s; display:flex; align-items:center; justify-content:center; gap:8px; }
+  .nav-btn.prev { background:#fff; color:#00838f; border:2px solid #00acc1; }
+  .nav-btn.prev:hover:not(:disabled) { background:#e0f7fa; transform:translateY(-2px); }
+  .nav-btn.next { background:linear-gradient(135deg,#00acc1,#00838f); color:#fff; box-shadow:0 6px 18px rgba(0,172,193,0.3); }
+  .nav-btn.next:hover:not(:disabled) { transform:translateY(-2px); box-shadow:0 10px 25px rgba(0,172,193,0.4); }
+  .nav-btn:disabled { opacity:0.35; cursor:not-allowed; transform:none !important; box-shadow:none !important; }
+  .progress-bar { width:100%; height:8px; background:#e0f2f2; border-radius:50px; overflow:hidden; margin-bottom:20px; }
+  .progress-fill { height:100%; background:linear-gradient(90deg,#00acc1,#00838f); border-radius:50px; transition:width 0.4s ease; }
+  .bottom-back { display:flex; justify-content:center; margin-top:10px; }
+  @media(max-width:600px){ .header-card h1 { font-size:1.15rem; } .flash-scene { height:300px; } .card-text { font-size:1rem; } .card-back .card-text { font-size:0.92rem; } .card-face { padding:30px 20px; } }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <a href="nohom.html" class="back-btn">➡ بازگشت به صفحهٔ دروس</a>
+
+  <div class="header-card">
+    <div class="header-badge">🎴 فلش کارت</div>
+    <h1>درس ۱۸: هویت</h1>
+    <p class="subtitle">فصل ۹ — فرهنگ و هویت</p>
+  </div>
+
+  <div class="counter-bar">
+    <div class="counter-badge" id="counter">کارت ۱ از ۱۵</div>
+    <div class="hint-text">👆 روی کارت کلیک کن تا برگردد</div>
+  </div>
+
+  <div class="flash-scene">
+    <div class="flash-card" id="flashCard">
+      <div class="card-face card-front">
+        <div class="face-label">سوال</div>
+        <div class="card-text" id="frontText"></div>
+        <div class="flip-hint">🔄 برای دیدن پاسخ کلیک کن</div>
+      </div>
+      <div class="card-face card-back">
+        <div class="face-label">پاسخ</div>
+        <div class="card-text" id="backText"></div>
+        <div class="flip-hint">🔄 برای دیدن سوال کلیک کن</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="progress-bar">
+    <div class="progress-fill" id="progressFill"></div>
+  </div>
+
+  <div class="nav-buttons">
+    <button class="nav-btn prev" id="prevBtn">→ کارت قبلی</button>
+    <button class="nav-btn next" id="nextBtn">کارت بعدی ←</button>
+  </div>
+
+  <div class="bottom-back">
+    <a href="nohom.html" class="back-btn" style="margin:0;">➡ بازگشت به فهرست دروس</a>
+  </div>
+
+</div>
+
+<script>
+const cards = [
+  { q: "هویت چیست؟", a: "احساس و آگاهی و شناخت از خود. هویت در واقع همان پاسخ به پرسش «کیستی» است." },
+  { q: "هویت فردی شامل چه ویژگی‌هایی است؟", a: "ویژگی‌های جسمانی (مانند جنسیت، قد، وزن، سن و گروه خونی) و ویژگی‌های غیرجسمانی یا روانی (مانند صبوری، زودرنجی، داشتن پشتکار، امیدواری)." },
+  { q: "هویت اجتماعی چیست؟", a: "افراد با عضویت در گروه‌های اجتماعی و آشناشدن با ارزش‌ها و عقاید جامعه، هویت اجتماعی خویش را به دست می‌آورند. برای مثال، با عضویت در خانواده، فرزند و با عضویت در مدرسه، دانش‌آموز محسوب می‌شویم." },
+  { q: "چه ویژگی‌های هویتی ثابت‌اند؟", a: "برخی ویژگی‌ها مانند سن و تاریخ تولد یا مکان تولد. ما نمی‌توانیم این ویژگی‌ها را تغییر دهیم." },
+  { q: "چه ویژگی‌های هویتی قابل تغییرند؟", a: "برخی ویژگی‌های هویتی همواره در حال تغییرند؛ مانند سواد، سطح تحصیلات، اخلاق و تقوا. ما نسبت به ویژگی‌هایی که قابل تغییرند و می‌توانیم در انتخاب آنها نقش داشته باشیم، مسئول هستیم." },
+  { q: "هویت ملی چیست؟", a: "یکی از مراتب هویت اجتماعی که به یک ملت مربوط می‌شود." },
+  { q: "ملت چیست؟", a: "جمعیتی که در قلمرو یک سرزمین مشخص مستقر شده و دارای اشتراکات تاریخی، زبانی، مذهبی، اقتصادی و آرمان‌های مشترک است." },
+  { q: "عناصر مهم هویت یک ملت کدام‌اند؟", a: "فرهنگ، تاریخ (زمان) و سرزمین (مکان)." },
+  { q: "عناصر مهم هویت ایرانی کدام‌اند؟", a: "سرزمین (ایران)، دین اسلام، تاریخ کهن و میراث فرهنگی غنی، زبان مشترک فارسی، و آرمان‌های انقلاب اسلامی." },
+  { q: "سرزمین چه نقشی در هویت ایرانی دارد؟", a: "سرزمین از مهم‌ترین عناصر شکل‌دهندهٔ هویت ملی است. مردم ایران از گذشته‌های دور در سرزمینی که فلات ایران نامیده می‌شود و ایران امروزی قسمت عمده آن است، ساکن شده‌اند. در متون کهن ایران باستان از سرزمین ما به «ایران‌شهر» و «ایران‌زمین» یاد شده است." },
+  { q: "دین در هویت ایرانی چه جایگاهی دارد؟", a: "دین از ارکان مهم هویت است. بیش از ۹۸ درصد مردم ایران مسلمان‌اند و فرهنگ، عقاید، ارزش‌ها، نظام سیاسی و قوانین امروز ما از دین اسلام نشئت می‌گیرد." },
+  { q: "اقلیت‌های دینی در ایران چه جایگاهی دارند؟", a: "اقلیت‌های دینی زردشتی، مسیحی و کلیمی ضمن پیروی از دین خود، هویت و فرهنگ ایرانی را حفظ نموده و همواره از سرزمین ایران در برابر هجوم بیگانگان دفاع کرده‌اند." },
+  { q: "نقش تاریخ و میراث فرهنگی در هویت ایرانی چیست؟", a: "تاریخ و سرنوشت مشترک از دیگر عناصر مهم هویت ملی است. ایران جایگاه تمدن‌های ریشه‌دار تاریخی بوده و بیش از چند هزار سال قدمت دارد. پس از ورود اسلام، عقاید و ارزش‌های اسلامی سبب دگرگونی بزرگی در فرهنگ ایرانیان شد." },
+  { q: "نقش زبان فارسی در هویت ایرانی چیست؟", a: "زبان و خط مشترک، عنصر مهم دیگری است که در تکوین هویت ملی نقش دارد. زبان فارسی ریشه در تمدن ایران باستان دارد و در دوران پس از اسلام نیز تداوم یافت. دانشمندان و بزرگان دورهٔ اسلامی صدها اثر علمی و ادبی به این زبان پدید آورده‌اند. زبان فارسی همواره عامل وحدت اقوام ایرانی بوده است." },
+  { q: "امت اسلامی چیست؟", a: "جمعیت بزرگی از مسلمانان که میان آنها با مرزهای جغرافیایی و سیاسی، فاصله نمی‌افتد. افراد یک امت با انسجام، اتحاد، همدلی و همکاری، یک پیکرهٔ واحد را تشکیل می‌دهند و در سرنوشت و آینده یکدیگر شریک هستند. یکی از اهداف پیامبر اسلام پس از بعثت، تشکیل امت واحد اسلامی بود." }
+];
+
+const faDigits = "۰۱۲۳۴۵۶۷۸۹";
+const toFa = n => String(n).replace(/\d/g, d => faDigits[d]);
+
+let current = 0;
+const total = cards.length;
+const flashCard = document.getElementById("flashCard");
+const frontText = document.getElementById("frontText");
+const backText = document.getElementById("backText");
+const counter = document.getElementById("counter");
+const progressFill = document.getElementById("progressFill");
+const prevBtn = document.getElementById("prevBtn");
+const nextBtn = document.getElementById("nextBtn");
+
+function render() {
+  flashCard.classList.remove("flipped");
+  setTimeout(() => {
+    frontText.textContent = cards[current].q;
+    backText.textContent = cards[current].a;
+    counter.textContent = `کارت ${toFa(current + 1)} از ${toFa(total)}`;
+    progressFill.style.width = `${((current + 1) / total) * 100}%`;
+    prevBtn.disabled = current === 0;
+    nextBtn.disabled = current === total - 1;
+  }, 150);
+}
+
+flashCard.addEventListener("click", () => flashCard.classList.toggle("flipped"));
+prevBtn.addEventListener("click", () => { if (current > 0) { current--; render(); } });
+nextBtn.addEventListener("click", () => { if (current < total - 1) { current++; render(); } });
+render();
+</script>
+
+</body>
+</html>
