@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ماجرای درس اول - من حق دارم</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Vazirmatn',Tahoma,sans-serif}
+body{min-height:100vh;background:linear-gradient(135deg,#0a1929 0%,#1e3a5f 50%,#0a1929 100%);background-size:200% 200%;animation:bgShift 12s ease infinite;display:flex;align-items:center;justify-content:center;padding:20px;color:#fff;overflow-x:hidden;position:relative}
+@keyframes bgShift{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background-image:radial-gradient(circle at 20% 30%,rgba(100,200,255,.12) 0%,transparent 50%),radial-gradient(circle at 80% 70%,rgba(100,255,200,.1) 0%,transparent 50%);pointer-events:none}
+body::after{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background-image:repeating-linear-gradient(0deg,transparent,transparent 30px,rgba(100,200,255,.02) 30px,rgba(100,200,255,.02) 31px),repeating-linear-gradient(90deg,transparent,transparent 30px,rgba(100,200,255,.02) 30px,rgba(100,200,255,.02) 31px);pointer-events:none}
+.container{width:100%;max-width:720px;background:rgba(10,25,40,.75);backdrop-filter:blur(25px);border:2px solid rgba(100,200,255,.3);border-radius:28px;padding:32px;box-shadow:0 25px 70px rgba(0,0,0,.7),inset 0 1px 0 rgba(255,255,255,.1),0 0 80px rgba(100,200,255,.15);position:relative;z-index:1}
+.header{text-align:center;margin-bottom:24px}
+.header h1{font-size:2rem;font-weight:900;background:linear-gradient(90deg,#64c8ff,#64ffc8,#64c8ff);background-size:200% 100%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px;animation:titleShift 4s linear infinite;filter:drop-shadow(0 0 20px rgba(100,200,255,.5))}
+@keyframes titleShift{0%{background-position:0% 50%}100%{background-position:200% 50%}}
+.header p{color:#8ab4d0;font-size:.9rem}
+.stats{display:flex;justify-content:space-between;gap:10px;margin-bottom:24px;flex-wrap:wrap}
+.stat-box{flex:1;min-width:100px;background:linear-gradient(135deg,rgba(100,200,255,.1),rgba(100,255,200,.1));border:1px solid rgba(100,200,255,.3);border-radius:14px;padding:12px;text-align:center;transition:all .3s ease}
+.stat-box:hover{transform:translateY(-3px);box-shadow:0 8px 25px rgba(100,200,255,.3)}
+.stat-box .label{font-size:.75rem;color:#8ab4d0;margin-bottom:4px}
+.stat-box .value{font-size:1.35rem;font-weight:900;background:linear-gradient(90deg,#64c8ff,#64ffc8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 10px rgba(100,200,255,.5))}
+.timer-box .value{background:linear-gradient(90deg,#64c8ff,#ffd700);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.progress-bar{width:100%;height:10px;background:rgba(0,0,0,.5);border-radius:10px;margin-bottom:24px;overflow:hidden;border:1px solid rgba(100,200,255,.3)}
+.progress-fill{height:100%;background:linear-gradient(90deg,#64c8ff,#64ffc8,#ffd700);background-size:200% 100%;border-radius:10px;transition:width .5s ease;animation:titleShift 3s linear infinite;box-shadow:0 0 20px rgba(100,200,255,.7)}
+.question-box{background:linear-gradient(135deg,rgba(100,200,255,.1),rgba(100,255,200,.08));border:1px solid rgba(100,200,255,.35);border-radius:18px;padding:22px;margin-bottom:22px;text-align:center;position:relative;overflow:hidden}
+.question-box::before{content:'📖';position:absolute;top:-8px;left:-8px;font-size:3rem;opacity:.12;animation:floatSlow 5s ease infinite}
+.question-box::after{content:'✨';position:absolute;bottom:-8px;right:-8px;font-size:3rem;opacity:.12;animation:floatSlow 5s ease infinite 2.5s}
+@keyframes floatSlow{0%,100%{transform:translateY(0) rotate(-5deg)}50%{transform:translateY(-12px) rotate(5deg)}}
+.question-box .q-label{color:#64c8ff;font-size:.85rem;margin-bottom:10px;font-weight:700;letter-spacing:1px;text-shadow:0 0 10px rgba(100,200,255,.5)}
+.question-box .q-text{font-size:1.15rem;line-height:1.9;font-weight:700;color:#e0f0ff}
+.letters-area{display:flex;flex-wrap:wrap;justify-content:center;gap:9px;margin-bottom:22px;min-height:65px}
+.letter-tile{width:50px;height:50px;display:flex;align-items:center;justify-content:center;font-size:1.45rem;font-weight:900;background:linear-gradient(135deg,#1e3a5f,#0a1929);border:2px solid rgba(100,200,255,.4);border-radius:12px;cursor:pointer;transition:all .2s ease;user-select:none;color:#e0f0ff;box-shadow:0 4px 10px rgba(0,0,0,.5)}
+.letter-tile:hover:not(.used){transform:translateY(-4px) scale(1.05);border-color:#64c8ff;box-shadow:0 8px 25px rgba(100,200,255,.5);background:linear-gradient(135deg,#2e5a8f,#1e3a5f)}
+.letter-tile.used{opacity:.15;pointer-events:none;transform:scale(.85)}
+.answer-area{display:flex;flex-wrap:wrap;justify-content:center;gap:9px;min-height:65px;padding:16px;background:rgba(0,0,0,.5);border:2px dashed rgba(100,200,255,.5);border-radius:16px;margin-bottom:22px;align-items:center}
+.answer-tile{width:50px;height:50px;display:flex;align-items:center;justify-content:center;font-size:1.45rem;font-weight:900;background:linear-gradient(135deg,#64c8ff,#64ffc8);border-radius:12px;cursor:pointer;color:#0a1929;transition:all .2s ease;animation:popIn .25s ease;box-shadow:0 4px 15px rgba(100,200,255,.5)}
+.answer-tile:hover{transform:scale(1.12) rotate(-3deg);box-shadow:0 0 25px rgba(100,255,200,.8)}
+@keyframes popIn{0%{transform:scale(0) rotate(180deg)}70%{transform:scale(1.2) rotate(-10deg)}100%{transform:scale(1) rotate(0)}}
+.placeholder-text{color:#5a7a90;font-size:.95rem;font-style:italic}
+.buttons{display:flex;gap:10px;flex-wrap:wrap}
+.btn{flex:1;min-width:120px;padding:15px 20px;border:none;border-radius:14px;font-size:1rem;font-weight:800;cursor:pointer;transition:all .2s ease;font-family:'Vazirmatn',sans-serif;letter-spacing:.5px}
+.btn:active{transform:scale(.96)}
+.btn-primary{background:linear-gradient(135deg,#64c8ff,#64ffc8);color:#0a1929;box-shadow:0 5px 20px rgba(100,200,255,.4)}
+.btn-primary:hover{box-shadow:0 8px 30px rgba(100,255,200,.7);transform:translateY(-2px)}
+.btn-secondary{background:rgba(255,215,0,.15);color:#ffd700;border:1px solid rgba(255,215,0,.4)}
+.btn-secondary:hover{background:rgba(255,215,0,.25);box-shadow:0 5px 20px rgba(255,215,0,.4)}
+.btn-danger{background:rgba(255,100,150,.15);color:#ff64a0;border:1px solid rgba(255,100,150,.4)}
+.btn-danger:hover{background:rgba(255,100,150,.25);box-shadow:0 5px 20px rgba(255,100,150,.4)}
+.btn:disabled{opacity:.35;cursor:not-allowed;transform:none!important}
+.hint-box{margin-top:16px;padding:14px;background:rgba(255,215,0,.12);border:1px solid rgba(255,215,0,.4);border-radius:12px;color:#ffd700;font-size:.92rem;text-align:center;display:none;animation:slideDown .3s ease;font-weight:600}
+@keyframes slideDown{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+.message-box{margin-top:16px;padding:14px;border-radius:12px;text-align:center;font-weight:800;display:none;animation:slideDown .3s ease}
+.message-success{background:rgba(100,255,180,.15);border:1px solid rgba(100,255,180,.5);color:#64ffb4;box-shadow:0 0 20px rgba(100,255,180,.3)}
+.message-error{background:rgba(255,100,150,.15);border:1px solid rgba(255,100,150,.5);color:#ff64a0}
+.screen{display:none}
+.screen.active{display:block;animation:fadeIn .4s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.start-screen{text-align:center;padding:20px 0}
+.start-screen .emoji{font-size:5.5rem;margin-bottom:20px;animation:float 3s ease-in-out infinite;filter:drop-shadow(0 0 30px rgba(100,200,255,.6))}
+@keyframes float{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-15px) rotate(5deg)}}
+.start-title{font-size:2.2rem;font-weight:900;background:linear-gradient(90deg,#64c8ff,#64ffc8,#64c8ff);background-size:200% 100%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:15px;animation:titleShift 3s linear infinite;filter:drop-shadow(0 0 25px rgba(100,200,255,.5))}
+.start-screen p{color:#8ab4d0;line-height:1.9;margin-bottom:22px;font-size:1rem}
+.rules-list{text-align:right;background:rgba(100,200,255,.06);border:1px solid rgba(100,200,255,.2);border-radius:14px;padding:18px 28px;margin-bottom:28px;list-style:none}
+.rules-list li{padding:8px 0;color:#c0e0f0;font-size:.95rem;border-bottom:1px dashed rgba(100,200,255,.15)}
+.rules-list li:last-child{border-bottom:none}
+.rules-list li::before{content:'📚 ';margin-left:6px}
+.start-btn{width:100%;font-size:1.25rem;padding:18px;background:linear-gradient(135deg,#64c8ff,#64ffc8,#ffd700);background-size:200% 200%;animation:titleShift 3s ease infinite;color:#0a1929}
+.end-screen{text-align:center;padding:20px 0}
+.end-screen .trophy{font-size:5.5rem;margin-bottom:15px;animation:bounce 1.2s ease infinite;filter:drop-shadow(0 0 30px rgba(255,215,0,.7))}
+@keyframes bounce{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-20px) scale(1.1)}}
+.end-screen h2{font-size:1.9rem;color:#64ffc8;margin-bottom:10px;text-shadow:0 0 25px rgba(100,255,200,.6)}
+.final-score{font-size:3.2rem;font-weight:900;background:linear-gradient(90deg,#64c8ff,#64ffc8,#ffd700);background-size:200% 100%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin:18px 0;animation:titleShift 4s linear infinite;filter:drop-shadow(0 0 25px rgba(100,200,255,.5))}
+.rank-badge{display:inline-block;padding:12px 35px;background:linear-gradient(135deg,#64c8ff,#64ffc8);color:#0a1929;border-radius:35px;font-weight:900;font-size:1.15rem;margin-bottom:22px;box-shadow:0 8px 30px rgba(100,200,255,.5)}
+.timer-critical{animation:pulse .5s ease infinite;color:#ff4466!important}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-12px)}40%{transform:translateX(12px)}60%{transform:translateX(-8px)}80%{transform:translateX(8px)}}
+@media(max-width:500px){.container{padding:20px 15px}.header h1{font-size:1.6rem}.letter-tile,.answer-tile{width:42px;height:42px;font-size:1.15rem}.question-box .q-text{font-size:1rem}.start-title{font-size:1.7rem}}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<!-- صفحه شروع -->
+<div class="screen active" id="startScreen">
+  <div class="start-screen">
+    <div class="emoji">📖</div>
+    <div class="start-title">درس اول: من حق دارم</div>
+    <p>مطالعات اجتماعی هفتم — فصل حقوق و مسئولیت</p>
+    <ul class="rules-list">
+      <li>۱۰ سوال فقط از درس اول</li>
+      <li>حروف پاسخ را مرتب کن تا کلمه ساخته شود</li>
+      <li>هر مرحله ۲ دقیقه زمان داری</li>
+      <li>از راهنمایی و ۵۰:۵۰ استفاده کن</li>
+      <li>سریع‌تر جواب بده، امتیاز بیشتر بگیر</li>
+    </ul>
+    <button class="btn btn-primary start-btn" id="startBtn">🚀 شروع بازی</button>
+  </div>
+</div>
+
+<!-- صفحه بازی -->
+<div class="screen" id="gameScreen">
+  <div class="header"><h1 id="stageTitle">مرحله ۱</h1></div>
+  <div class="stats">
+    <div class="stat-box"><div class="label">امتیاز</div><div class="value" id="scoreDisplay">۰</div></div>
+    <div class="stat-box timer-box"><div class="label">زمان</div><div class="value" id="timerDisplay">۱۲۰</div></div>
+    <div class="stat-box"><div class="label">مرحله</div><div class="value" id="progressDisplay">۱/۱۰</div></div>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+  <div class="question-box">
+    <div class="q-label">📖 سوال از درس اول</div>
+    <div class="q-text" id="questionText"></div>
+  </div>
+  <div class="letters-area" id="lettersArea"></div>
+  <div class="answer-area" id="answerArea"><span class="placeholder-text">حروف را اینجا بچین...</span></div>
+  <div class="hint-box" id="hintBox"></div>
+  <div class="message-box" id="messageBox"></div>
+  <div class="buttons" style="margin-top:15px">
+    <button class="btn btn-secondary" onclick="showHint()" id="hintBtn">💡 راهنمایی</button>
+    <button class="btn btn-danger" onclick="useFiftyFifty()" id="fiftyBtn">✂️ ۵۰:۵۰</button>
+    <button class="btn btn-primary" onclick="checkAnswer()" id="checkBtn">✅ بررسی</button>
+  </div>
+</div>
+
+<!-- صفحه پایان -->
+<div class="screen" id="endScreen">
+  <div class="end-screen">
+    <div class="trophy" id="trophyEmoji">🏆</div>
+    <h2 id="endTitle">آفرین!</h2>
+    <div class="final-score" id="finalScore">۰</div>
+    <div class="rank-badge" id="rankBadge">استاد درس اول</div>
+    <p style="color:#8ab4d0;margin-bottom:22px" id="endMessage"></p>
+    <button class="btn btn-primary" style="width:100%" onclick="restartGame()">🔄 بازی دوباره</button>
+  </div>
+</div>
+
+</div>
+
+<script>
+// ==========================================
+// ۱۰ سوال فقط از درس اول: من حق دارم
+// ==========================================
+var gameData = [
+{chapter:"درس ۱: من حق دارم",question:"به چیزهایی که یک انسان به دلیل مقام انسانی‌اش شایستگی داشتن آنها را دارد چه می‌گویند؟",answer:"حق",hint:"۳ حرفی — با «ح» شروع می‌شه",time:120,points:100},
+{chapter:"درس ۱: من حق دارم",question:"مهم‌ترین حق طبیعی هر انسان که در قرآن به آن اشاره شده چیست؟",answer:"حق حیات",display:"حق حیات",hint:"دو کلمه — «حق ____»",time:120,points:120},
+{chapter:"درس ۱: من حق دارم",question:"هر فرد حق دارد نام و نام خانوادگی و چه چیزی داشته باشد؟",answer:"شناسنامه",hint:"۸ حرفی — نشان‌دهنده هویت و تعلق به کشور",time:120,points:110},
+{chapter:"درس ۱: من حق دارم",question:"انسان‌ها حق دارند آزاد باشند؛ یعنی برده و بنده چه کسانی نباشند؟",answer:"انسانها",hint:"۷ حرفی — جمع «انسان»",time:120,points:120},
+{chapter:"درس ۱: من حق دارم",question:"هر فرد حق دارد در محیطی سالم، تمیز و چه چیزی زندگی کند؟",answer:"پاک",hint:"۳ حرفی — مخالف آلوده",time:120,points:100},
+{chapter:"درس ۱: من حق دارم",question:"هیچ کشوری حق ندارد مردم کشورهای دیگر را از داشتن سلامت و خدمات بهداشتی و درمانی محروم کند. این جمله درباره حق چه چیزی است؟",answer:"سلامت",hint:"۶ حرفی — بهداشت و درمان",time:120,points:130},
+{chapter:"درس ۱: من حق دارم",question:"در مدرسه، هر دانش‌آموز حق دارد به اندازه سایر دانش‌آموزان مورد توجه واقع شود و چه چیزی بین او و دیگران نباشد؟",answer:"تبعیض",hint:"۶ حرفی — رفتار نابرابر",time:120,points:130},
+{chapter:"درس ۱: من حق دارم",question:"هیچ‌کس حق ندارد به اموال عمومی مانند وسایل حمل و نقل عمومی چه چیزی وارد کند؟",answer:"خسارت",hint:"۶ حرفی — آسیب و زیان",time:120,points:120},
+{chapter:"درس ۱: من حق دارم",question:"همه حق دارند در کوچه و خیابان چه چیزی داشته باشند؟",answer:"امنیت",hint:"۶ حرفی — ایمنی و آرامش",time:120,points:120},
+{chapter:"درس ۱: من حق دارم",question:"طبق متن درس، انسان‌ها حق دارند راه زندگی خود را چگونه انتخاب کنند؟",answer:"آزاد",hint:"۴ حرفی — مخالف اسیر",time:120,points:110}
+];
+
+var currentStage=0,score=0,timer=null,timeLeft=0,currentLetters=[],selectedLetters=[],hintUsed=false,fiftyDone=false,correctCount=0;
+
+function toPersianNum(n){return n.toString().replace(/\d/g,function(d){return '۰۱۲۳۴۵۶۷۸۹'[parseInt(d)]})}
+function shuffleArray(arr){var a=arr.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
+function generateLetters(ans){var c=ans.replace(/\s+/g,''),l=[];for(var i=0;i<c.length;i++)l.push(c[i]);var s=shuffleArray(l),a=0;while(s.join('')===l.join('')&&a<50){s=shuffleArray(l);a++}return s}
+function showScreen(id){var ss=document.querySelectorAll('.screen');for(var i=0;i<ss.length;i++)ss[i].classList.remove('active');document.getElementById(id).classList.add('active')}
+
+function startGame(){currentStage=0;score=0;correctCount=0;showScreen('gameScreen');loadStage()}
+
+function loadStage(){
+  if(currentStage>=gameData.length){endGame();return}
+  var d=gameData[currentStage];
+  hintUsed=false;fiftyDone=false;selectedLetters=[];
+  document.getElementById('stageTitle').textContent=d.chapter;
+  document.getElementById('questionText').textContent=d.question;
+  currentLetters=generateLetters(d.answer);
+  renderLetters();renderAnswer();updateStats();
+  document.getElementById('hintBox').style.display='none';
+  var m=document.getElementById('messageBox');m.style.display='none';m.className='message-box';
+  document.getElementById('hintBtn').disabled=false;
+  document.getElementById('fiftyBtn').disabled=false;
+  document.getElementById('checkBtn').disabled=false;
+  startTimer(d.time);
+}
+
+function renderLetters(){
+  var a=document.getElementById('lettersArea');a.innerHTML='';
+  for(var i=0;i<currentLetters.length;i++){(function(idx){
+    var t=document.createElement('div');t.className='letter-tile';t.textContent=currentLetters[idx];t.setAttribute('data-index',idx);
+    t.onclick=function(){selectLetter(idx)};a.appendChild(t)
+  })(i)}
+}
+
+function selectLetter(i){
+  var t=document.querySelector('.letter-tile[data-index="'+i+'"]');
+  if(!t||t.classList.contains('used'))return;
+  t.classList.add('used');selectedLetters.push({letter:t.textContent,originalIndex:i});renderAnswer()
+}
+
+function renderAnswer(){
+  var a=document.getElementById('answerArea');a.innerHTML='';
+  if(selectedLetters.length===0){a.innerHTML='<span class="placeholder-text">حروف را اینجا بچین...</span>';return}
+  for(var i=0;i<selectedLetters.length;i++){(function(idx){
+    var t=document.createElement('div');t.className='answer-tile';t.textContent=selectedLetters[idx].letter;
+    t.onclick=function(){removeLetter(idx)};a.appendChild(t)
+  })(i)}
+}
+
+function removeLetter(i){
+  var it=selectedLetters[i];if(!it)return;
+  var t=document.querySelector('.letter-tile[data-index="'+it.originalIndex+'"]');
+  if(t)t.classList.remove('used');
+  selectedLetters.splice(i,1);renderAnswer()
+}
+
+function checkAnswer(){
+  var d=gameData[currentStage],ua='';
+  for(var i=0;i<selectedLetters.length;i++)ua+=selectedLetters[i].letter;
+  var ca=d.answer.replace(/\s+/g,''),m=document.getElementById('messageBox');
+  if(ua===ca){
+    stopTimer();correctCount++;var e=d.points,b='';
+    if(!hintUsed){e+=50;b+=' +۵۰ (بدون راهنمایی)'}
+    if(timeLeft>=90&&!hintUsed){e+=Math.round(d.points*0.5);b+=' +جایزه سرعت'}
+    score+=e;updateStats();
+    m.className='message-box message-success';
+    m.innerHTML='✅ آفرین! درست بود!<br>امتیاز: +'+toPersianNum(e)+(b?'<br><small>'+b+'</small>':'');
+    m.style.display='block';
+    document.getElementById('hintBtn').disabled=true;
+    document.getElementById('fiftyBtn').disabled=true;
+    document.getElementById('checkBtn').disabled=true;
+    setTimeout(function(){currentStage++;if(currentStage>=gameData.length)endGame();else loadStage()},1800)
+  }else{
+    score=Math.max(0,score-15);updateStats();
+    m.className='message-box message-error';
+    m.innerHTML='❌ اشتباه بود! دوباره تلاش کن.<br>(-۱۵ امتیاز)';
+    m.style.display='block';
+    var ar=document.getElementById('answerArea');ar.style.animation='shake .5s';
+    setTimeout(function(){ar.style.animation=''},500);
+    setTimeout(function(){m.style.display='none'},2000)
+  }
+}
+
+function showHint(){if(hintUsed)return;hintUsed=true;document.getElementById('hintBtn').disabled=true;
+  var hb=document.getElementById('hintBox');hb.textContent='💡 '+gameData[currentStage].hint;hb.style.display='block'}
+
+function useFiftyFifty(){
+  if(fiftyDone)return;fiftyDone=true;document.getElementById('fiftyBtn').disabled=true;
+  var d=gameData[currentStage],cc=d.answer.replace(/\s+/g,''),cl=cc.split('');
+  var av=[],tiles=document.querySelectorAll('.letter-tile:not(.used)');
+  for(var i=0;i<tiles.length;i++)av.push({index:parseInt(tiles[i].getAttribute('data-index')),letter:tiles[i].textContent});
+  var need=cl.slice(),keep=[];
+  for(var i=0;i<av.length;i++){var p=need.indexOf(av[i].letter);if(p>-1){keep.push(av[i].index);need.splice(p,1)}}
+  var rc=Math.floor(av.length/2),ex=[];
+  for(var i=0;i<av.length;i++)if(keep.indexOf(av[i].index)===-1)ex.push(av[i].index);
+  var rm=shuffleArray(ex).slice(0,rc);
+  for(var i=0;i<rm.length;i++){var t=document.querySelector('.letter-tile[data-index="'+rm[i]+'"]');if(t)t.classList.add('used')}
+  var m=document.getElementById('messageBox');m.className='message-box';
+  m.style.background='rgba(255,215,0,.12)';m.style.border='1px solid rgba(255,215,0,.4)';m.style.color='#ffd700';
+  m.textContent='✂️ نصف حروف اضافی حذف شد!';m.style.display='block';
+  setTimeout(function(){m.style.display='none'},1500)
+}
+
+function startTimer(s){stopTimer();timeLeft=s;updateTimerDisplay();
+  timer=setInterval(function(){timeLeft--;updateTimerDisplay();
+    if(timeLeft<=15)document.getElementById('timerDisplay').classList.add('timer-critical');
+    if(timeLeft<=0){stopTimer();timeUp()}},1000)}
+
+function updateTimerDisplay(){document.getElementById('timerDisplay').textContent=toPersianNum(timeLeft);
+  if(timeLeft>15)document.getElementById('timerDisplay').classList.remove('timer-critical')}
+
+function stopTimer(){if(timer){clearInterval(timer);timer=null}document.getElementById('timerDisplay').classList.remove('timer-critical')}
+
+function timeUp(){
+  var d=gameData[currentStage],m=document.getElementById('messageBox');
+  m.className='message-box message-error';
+  m.innerHTML='⏰ زمان تمام شد! جواب: <b>'+(d.display||d.answer)+'</b>';
+  m.style.display='block';
+  document.getElementById('hintBtn').disabled=true;
+  document.getElementById('fiftyBtn').disabled=true;
+  document.getElementById('checkBtn').disabled=true;
+  setTimeout(function(){currentStage++;if(currentStage>=gameData.length)endGame();else loadStage()},2500)
+}
+
+function updateStats(){
+  document.getElementById('scoreDisplay').textContent=toPersianNum(score);
+  document.getElementById('progressDisplay').textContent=toPersianNum(currentStage+1)+'/'+toPersianNum(gameData.length);
+  document.getElementById('progressFill').style.width=(currentStage/gameData.length*100)+'%'
+}
+
+function endGame(){
+  stopTimer();showScreen('endScreen');
+  document.getElementById('finalScore').textContent=toPersianNum(score);
+  var rank,emoji,msg;
+  if(score>=1300){rank='🏆 استاد درس اول';emoji='🏆';msg='فوق‌العاده! درس اول رو کامل یاد گرفتی!'}
+  else if(score>=900){rank='🥇 دانش‌آموز ماهر';emoji='🥇';msg='عالی بود! تسلط خوبی روی درس اول داری.'}
+  else if(score>=500){rank='🥈 کوشا';emoji='🥈';msg='خوب بود! با کمی مرور بیشتر عالی می‌شی.'}
+  else{rank='📚 تازه‌کار';emoji='📚';msg='نگران نباش! درس اول رو دوباره بخون و بازم تلاش کن.'}
+  document.getElementById('rankBadge').textContent=rank;
+  document.getElementById('trophyEmoji').textContent=emoji;
+  document.getElementById('endMessage').textContent=msg;
+}
+
+function restartGame(){showScreen('startScreen')}
+
+document.getElementById('startBtn').addEventListener('click',startGame);
+</script>
+</body>
+</html>
