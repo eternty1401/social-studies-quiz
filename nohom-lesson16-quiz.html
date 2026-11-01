@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>آزمون تستی درس ۱۶ | مطالعات اجتماعی پایه نهم</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; font-family:'Vazirmatn',sans-serif; }
+  body { min-height:100vh; background-color:#f4f7f6; background-image:radial-gradient(#d1e0e0 1px, transparent 1px); background-size:20px 20px; color:#2c3e50; padding:30px 20px; display:flex; flex-direction:column; align-items:center; }
+  .container { width:100%; max-width:800px; }
+  .back-btn { display:inline-flex; align-items:center; gap:8px; text-decoration:none; color:#34495e; font-size:0.9rem; background:#fff; padding:8px 18px; border-radius:50px; margin-bottom:20px; transition:0.3s; border:1px solid #dcdde1; box-shadow:0 4px 10px rgba(0,0,0,0.05); font-weight:700; }
+  .back-btn:hover { background:#f8f9fa; transform:translateY(-2px); box-shadow:0 6px 15px rgba(0,0,0,0.1); }
+  .card { background:#fff; border-radius:20px; padding:35px 28px; box-shadow:0 8px 30px rgba(0,0,0,0.08); border-top:6px solid #00acc1; margin-bottom:20px; }
+  .header-card { background:linear-gradient(135deg,#00acc1 0%,#00838f 100%); color:#fff; border-radius:20px; padding:30px 25px; text-align:center; box-shadow:0 10px 30px rgba(0,172,193,0.25); margin-bottom:20px; position:relative; overflow:hidden; }
+  .header-card::before { content:""; position:absolute; top:-60px; left:-60px; width:180px; height:180px; background:rgba(255,255,255,0.08); border-radius:50%; }
+  .header-badge { display:inline-block; background:rgba(255,255,255,0.22); padding:6px 16px; border-radius:50px; font-size:0.82rem; font-weight:700; margin-bottom:12px; }
+  .header-card h1 { font-size:1.4rem; font-weight:900; margin-bottom:8px; }
+  .header-card .subtitle { font-size:0.95rem; opacity:0.95; }
+  .start-screen h2 { font-size:1.25rem; color:#00838f; margin-bottom:18px; text-align:center; font-weight:900; }
+  .info-list { background:#e0f7fa; border-radius:14px; padding:18px 22px; margin-bottom:20px; list-style:none; }
+  .info-list li { display:flex; align-items:center; gap:10px; font-size:0.95rem; padding:7px 0; font-weight:500; }
+  .info-list li .ico { font-size:1.2rem; }
+  .name-input { width:100%; padding:14px 18px; border:2px solid #d6eef0; border-radius:12px; font-size:1rem; font-family:inherit; margin-bottom:18px; outline:none; transition:0.25s; text-align:center; }
+  .name-input:focus { border-color:#00acc1; box-shadow:0 0 0 4px rgba(0,172,193,0.12); }
+  .btn-primary { width:100%; padding:15px; background:linear-gradient(135deg,#00acc1,#00838f); color:#fff; border:none; border-radius:12px; font-size:1.05rem; font-weight:900; font-family:inherit; cursor:pointer; transition:0.3s; box-shadow:0 6px 18px rgba(0,172,193,0.3); }
+  .btn-primary:hover { transform:translateY(-2px); box-shadow:0 10px 25px rgba(0,172,193,0.4); }
+  .quiz-topbar { display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; gap:15px; flex-wrap:wrap; }
+  .question-counter { background:#e0f7fa; color:#00838f; padding:8px 16px; border-radius:50px; font-weight:800; font-size:0.9rem; }
+  .timer-box { background:#fdedec; color:#e74c3c; padding:8px 18px; border-radius:50px; font-weight:900; font-size:1.1rem; display:flex; align-items:center; gap:8px; min-width:95px; justify-content:center; transition:0.3s; }
+  .timer-box.warning { background:#e74c3c; color:#fff; animation:pulseTimer 0.8s infinite; }
+  @keyframes pulseTimer { 0%,100% { transform:scale(1); } 50% { transform:scale(1.08); } }
+  .progress-bar { width:100%; height:10px; background:#e0f2f2; border-radius:50px; overflow:hidden; margin-bottom:22px; }
+  .progress-fill { height:100%; background:linear-gradient(90deg,#00acc1,#00838f); border-radius:50px; transition:width 0.4s ease; width:0%; }
+  .question-box h3 { font-size:1.1rem; color:#2c3e50; line-height:1.9; margin-bottom:22px; font-weight:800; }
+  .question-num { display:inline-block; background:#00acc1; color:#fff; width:32px; height:32px; border-radius:50%; text-align:center; line-height:32px; font-weight:900; font-size:0.95rem; margin-left:8px; }
+  .options-list { display:flex; flex-direction:column; gap:12px; }
+  .option-item { padding:14px 20px; background:#f8fdfd; border:2px solid #d6eef0; border-radius:14px; cursor:pointer; transition:0.22s; display:flex; align-items:center; gap:14px; font-size:0.98rem; font-weight:500; }
+  .option-item:hover { border-color:#00acc1; background:#e0f7fa; transform:translateX(-3px); }
+  .option-item .opt-letter { width:32px; height:32px; border-radius:8px; background:#e0f7fa; color:#00838f; display:flex; align-items:center; justify-content:center; font-weight:900; flex-shrink:0; transition:0.22s; }
+  .option-item.selected { border-color:#00acc1; background:#e0f7fa; box-shadow:0 0 0 3px rgba(0,172,193,0.15); }
+  .option-item.selected .opt-letter { background:#00acc1; color:#fff; }
+  .btn-next { width:100%; padding:14px; background:linear-gradient(135deg,#00acc1,#00838f); color:#fff; border:none; border-radius:12px; font-size:1rem; font-weight:900; font-family:inherit; cursor:pointer; transition:0.3s; margin-top:22px; box-shadow:0 6px 18px rgba(0,172,193,0.3); }
+  .btn-next:disabled { opacity:0.4; cursor:not-allowed; }
+  .btn-next:not(:disabled):hover { transform:translateY(-2px); box-shadow:0 10px 25px rgba(0,172,193,0.4); }
+  .result-screen { text-align:center; }
+  .result-title { font-size:1.4rem; font-weight:900; color:#00838f; margin-bottom:25px; }
+  .score-circle { width:170px; height:170px; border-radius:50%; display:flex; flex-direction:column; align-items:center; justify-content:center; margin:0 auto 25px; position:relative; box-shadow:0 10px 35px rgba(0,0,0,0.12); }
+  .score-circle .num { font-size:2.8rem; font-weight:900; line-height:1; }
+  .score-circle .percent { font-size:1rem; font-weight:700; opacity:0.85; margin-top:4px; }
+  .score-circle.green { background:linear-gradient(135deg,#2ecc71,#27ae60); color:#fff; }
+  .score-circle.orange { background:linear-gradient(135deg,#f39c12,#e67e22); color:#fff; }
+  .score-circle.red { background:linear-gradient(135deg,#e74c3c,#c0392b); color:#fff; }
+  .score-message { font-size:1.05rem; font-weight:700; margin-bottom:20px; color:#34495e; }
+  .score-details { display:flex; gap:15px; justify-content:center; margin-bottom:25px; flex-wrap:wrap; }
+  .stat-box { flex:1; min-width:130px; padding:16px; border-radius:14px; text-align:center; background:#f8fdfd; border:2px solid #eef2f5; }
+  .stat-box .stat-num { font-size:1.6rem; font-weight:900; }
+  .stat-box .stat-lbl { font-size:0.85rem; color:#7f8c8d; margin-top:4px; }
+  .stat-box.correct .stat-num { color:#2ecc71; }
+  .stat-box.wrong .stat-num { color:#e74c3c; }
+  .btn-secondary { width:100%; padding:14px; background:#fff; color:#00838f; border:2px solid #00acc1; border-radius:12px; font-size:1rem; font-weight:900; font-family:inherit; cursor:pointer; transition:0.3s; margin-bottom:10px; }
+  .btn-secondary:hover { background:#e0f7fa; transform:translateY(-2px); }
+  .review-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-wrap:wrap; gap:10px; }
+  .review-header h2 { color:#00838f; font-size:1.2rem; font-weight:900; }
+  .review-item { background:#f8fdfd; border-radius:14px; padding:18px 20px; margin-bottom:14px; border-right:5px solid #bdc3c7; }
+  .review-item.correct { border-right-color:#2ecc71; background:#f0fdf4; }
+  .review-item.wrong { border-right-color:#e74c3c; background:#fef5f4; }
+  .review-q { font-weight:800; margin-bottom:12px; font-size:0.95rem; line-height:1.8; }
+  .review-opt { padding:8px 14px; margin-bottom:6px; border-radius:10px; font-size:0.88rem; display:flex; align-items:center; gap:10px; }
+  .review-opt.correct-opt { background:#d5f5e3; color:#186a3b; font-weight:700; }
+  .review-opt.wrong-opt { background:#fadbd8; color:#922b21; font-weight:700; }
+  .review-opt.normal { background:#fff; color:#555; }
+  .review-badge { display:inline-block; padding:3px 10px; border-radius:6px; font-size:0.75rem; font-weight:800; margin-right:auto; }
+  .review-badge.green { background:#2ecc71; color:#fff; }
+  .review-badge.red { background:#e74c3c; color:#fff; }
+  .hidden { display:none !important; }
+  @media(max-width:600px){ .header-card h1 { font-size:1.1rem; } .card { padding:25px 18px; } .score-circle { width:140px; height:140px; } .score-circle .num { font-size:2.2rem; } }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <a href="nohom.html" class="back-btn">➡ بازگشت به صفحهٔ دروس</a>
+
+  <div class="header-card">
+    <div class="header-badge">📝 آزمون تستی</div>
+    <h1>درس ۱۶: ایران در دوران پس از پیروزی انقلاب اسلامی</h1>
+    <p class="subtitle">فصل ۸ — سقوط حکومت شاهنشاهی و شکل‌گیری نظام جمهوری اسلامی</p>
+  </div>
+
+  <div class="card start-screen" id="startScreen">
+    <h2>🎯 آماده‌ای؟</h2>
+    <ul class="info-list">
+      <li><span class="ico">📝</span> ۱۵ سوال چهارگزینه‌ای تصادفی</li>
+      <li><span class="ico">⏱️</span> هر سوال ۳۰ ثانیه فرصت دارد</li>
+      <li><span class="ico">🎲</span> سوال‌ها و گزینه‌ها هر بار به‌هم می‌ریزند</li>
+      <li><span class="ico">📊</span> در پایان، کارنامهٔ کامل دریافت می‌کنی</li>
+      <li><span class="ico">🔍</span> امکان مرور پاسخ‌ها بعد از آزمون</li>
+    </ul>
+    <input type="text" id="studentName" class="name-input" placeholder="نام و نام خانوادگی خود را وارد کنید">
+    <button class="btn-primary" id="startBtn">🚀 شروع آزمون</button>
+  </div>
+
+  <div class="card hidden" id="quizScreen">
+    <div class="quiz-topbar">
+      <div class="question-counter" id="questionCounter">سوال ۱ از ۱۵</div>
+      <div class="timer-box" id="timerBox">⏱️ <span id="timerText">۳۰</span> ثانیه</div>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="question-box">
+      <h3><span class="question-num" id="qNum">۱</span><span id="qText"></span></h3>
+      <div class="options-list" id="optionsList"></div>
+    </div>
+    <button class="btn-next" id="nextBtn" disabled>سوال بعدی ←</button>
+  </div>
+
+  <div class="card hidden result-screen" id="resultScreen">
+    <div class="result-title">🎓 کارنامهٔ آزمون</div>
+    <div class="score-circle" id="scoreCircle">
+      <div class="num" id="scoreNum">۰</div>
+      <div class="percent" id="scorePercent">۰٪</div>
+    </div>
+    <div class="score-message" id="scoreMessage"></div>
+    <div class="score-details">
+      <div class="stat-box correct"><div class="stat-num" id="correctCount">۰</div><div class="stat-lbl">پاسخ درست ✅</div></div>
+      <div class="stat-box wrong"><div class="stat-num" id="wrongCount">۰</div><div class="stat-lbl">پاسخ غلط ❌</div></div>
+    </div>
+    <button class="btn-primary" id="reviewBtn">🔍 مرور پاسخ‌ها</button>
+    <button class="btn-secondary" id="restartBtn">🔄 آزمون مجدد</button>
+    <a href="nohom.html" class="back-btn" style="width:100%; justify-content:center; margin-top:8px;">➡ بازگشت به دروس</a>
+  </div>
+
+  <div class="card hidden" id="reviewScreen">
+    <div class="review-header">
+      <h2>🔍 مرور پاسخ‌ها</h2>
+      <a href="nohom.html" class="back-btn" style="margin:0;">➡ بازگشت به دروس</a>
+    </div>
+    <div id="reviewList"></div>
+    <button class="btn-secondary" id="backToResultBtn" style="margin-top:20px;">🔙 بازگشت به کارنامه</button>
+  </div>
+
+</div>
+<script>
+const questionBank = [
+  { q: "همه‌پرسی تعیین نظام سیاسی ایران چه زمانی برگزار شد؟", o: ["۱۰ و ۱۱ فروردین ۱۳۵۸", "۱۲ فروردین ۱۳۵۸", "۲۲ بهمن ۱۳۵۷", "۱۲ بهمن ۱۳۵۷"], a: 0 },
+  { q: "در همه‌پرسی تعیین نظام سیاسی، چند درصد مردم به جمهوری اسلامی رأی دادند؟", o: ["۸۰٪", "۹۰٪", "۹۸/۲٪", "۱۰۰٪"], a: 2 },
+  { q: "روز جمهوری اسلامی چه روزی است؟", o: ["۲۲ بهمن", "۱۲ فروردین", "۱۲ بهمن", "۱۳ خرداد"], a: 1 },
+  { q: "مجلس خبرگان قانون اساسی از چند نماینده تشکیل شد؟", o: ["۵۰", "۶۰", "۷۵", "۱۰۰"], a: 2 },
+  { q: "قانون اساسی جمهوری اسلامی در چه ماهی به همه‌پرسی گذاشته شد؟", o: ["مرداد ۱۳۵۸", "آذر ۱۳۵۸", "بهمن ۱۳۵۸", "اسفند ۱۳۵۸"], a: 1 },
+  { q: "چند درصد مردم به قانون اساسی رأی مثبت دادند؟", o: ["۹۵٪", "۹۸/۲٪", "۹۹/۵٪", "۱۰۰٪"], a: 2 },
+  { q: "اولین دورهٔ انتخابات ریاست جمهوری چه زمانی برگزار شد؟", o: ["بهمن ۱۳۵۸", "اسفند ۱۳۵۸", "فروردین ۱۳۵۹", "مرداد ۱۳۵۸"], a: 0 },
+  { q: "اولین دورهٔ مجلس شورای اسلامی چه زمانی برگزار شد؟", o: ["بهمن ۱۳۵۸", "اسفند ۱۳۵۸", "فروردین ۱۳۵۹", "خرداد ۱۳۵۹"], a: 1 },
+  { q: "کدام‌یک از نهادهای انقلابی برای عمران و آبادانی روستاها تشکیل شد؟", o: ["کمیتهٔ انقلاب", "جهاد سازندگی", "نهضت سوادآموزی", "سازمان تبلیغات اسلامی"], a: 1 },
+  { q: "کدام نهاد انقلابی برای گسترش سواد تشکیل شد؟", o: ["کمیتهٔ امداد", "جهاد سازندگی", "نهضت سوادآموزی", "کمیتهٔ انقلاب"], a: 2 },
+  { q: "کمیتهٔ امداد امام خمینی برای چه هدفی تشکیل شد؟", o: ["برقراری نظم", "حمایت از قشرهای محروم", "عمران روستاها", "گسترش سواد"], a: 1 },
+  { q: "آیت‌الله مطهری در چه تاریخی به شهادت رسید؟", o: ["۱۲ اردیبهشت ۱۳۵۸", "۷ تیر ۱۳۶۰", "۸ شهریور ۱۳۶۰", "۱۳ خرداد ۱۳۶۸"], a: 0 },
+  { q: "آیت‌الله بهشتی و ۷۲ تن از یارانش در چه تاریخی به شهادت رسیدند؟", o: ["۱۲ اردیبهشت ۱۳۵۸", "۷ تیر ۱۳۶۰", "۸ شهریور ۱۳۶۰", "۱۳ خرداد ۱۳۶۸"], a: 1 },
+  { q: "شهادت رجایی و باهنر در چه تاریخی رخ داد؟", o: ["۱۲ اردیبهشت ۱۳۵۸", "۷ تیر ۱۳۶۰", "۸ شهریور ۱۳۶۰", "۱۳ خرداد ۱۳۶۸"], a: 2 },
+  { q: "سفارت آمریکا در ایران در چه تاریخی تسخیر شد؟", o: ["۱۳ آبان ۱۳۵۸", "۴ نوامبر ۱۹۷۹", "هر دو مورد", "هیچ‌کدام"], a: 2 },
+  { q: "حملهٔ نظامی آمریکا برای آزادی گروگان‌ها در کدام منطقه خنثی شد؟", o: ["طبس", "کرمان", "یزد", "بوشهر"], a: 0 },
+  { q: "جنگ تحمیلی در چه تاریخی آغاز شد؟", o: ["۳۱ شهریور ۱۳۵۹", "۲۲ بهمن ۱۳۵۷", "۱۳ آبان ۱۳۵۸", "۱۳ خرداد ۱۳۶۸"], a: 0 },
+  { q: "حملهٔ صدام به کدام شهر آغازگر جنگ تحمیلی بود؟", o: ["خرمشهر", "آبادان", "اهواز", "بغداد"], a: 0 },
+  { q: "جنگ تحمیلی چند سال طول کشید؟", o: ["۶ سال", "۷ سال", "۸ سال", "۹ سال"], a: 2 },
+  { q: "کدام‌یک از کشورها در جنگ تحمیلی از رژیم بعث عراق حمایت می‌کرد؟", o: ["آمریکا، شوروی، انگلستان، فرانسه", "فقط آمریکا", "فقط شوروی", "آلمان و ژاپن"], a: 0 },
+  { q: "امام خمینی در چه تاریخی رحلت کردند؟", o: ["۱۲ بهمن ۱۳۵۷", "۲۲ بهمن ۱۳۵۷", "۱۳ خرداد ۱۳۶۸", "۱۴ خرداد ۱۳۶۸"], a: 2 },
+  { q: "پس از رحلت امام خمینی، چه کسی به رهبری انتخاب شد؟", o: ["آیت‌الله خامنه‌ای", "آیت‌الله منتظری", "آیت‌الله هاشمی", "آیت‌الله خویی"], a: 0 },
+  { q: "آیت‌الله خامنه‌ای در چه تاریخی به رهبری انتخاب شدند؟", o: ["۱۴ خرداد ۱۳۶۸", "۱۳ خرداد ۱۳۶۸", "۱۵ خرداد ۱۳۶۸", "۲۲ بهمن ۱۳۶۸"], a: 0 },
+  { q: "مجلس خبرگان رهبری بر اساس چه چیزی رهبر را انتخاب می‌کند؟", o: ["ویژگی‌های تعیین‌شده در قانون اساسی", "رأی مردم", "توافق احزاب", "نظر رئیس‌جمهور"], a: 0 },
+  { q: "کدام‌یک از نهادهای انقلابی بعدها با شهربانی و ژاندارمری ادغام شد؟", o: ["کمیتهٔ انقلاب", "سپاه", "بسیج", "نهضت سوادآموزی"], a: 0 },
+  { q: "بسیج مستضعفان با چه هدفی تشکیل شد؟", o: ["دفاع از آرمان‌های انقلاب و مرز و بوم", "عمران روستاها", "گسترش سواد", "حمایت از محرومان"], a: 0 },
+  { q: "کدام‌یک از اقدامات دشمنان انقلاب در سال‌های نخست بود؟", o: ["ایجاد شورش و ناامنی در مناطق مرزی", "ترور شخصیت‌ها", "حملهٔ نظامی", "همه موارد"], a: 3 },
+  { q: "منافقین در دورهٔ پس از انقلاب چه جنایاتی مرتکب شدند؟", o: ["ترور شخصیت‌ها و مردم عادی", "کمک به مستضعفان", "عمران کشور", "همکاری با انقلاب"], a: 0 },
+  { q: "پس از جنگ تحمیلی، آزادگان ایرانی چه زمانی به میهن بازگشتند؟", o: ["بلافاصله پس از آتش‌بس", "دو سال بعد از اعلام آتش‌بس", "پنج سال بعد", "ده سال بعد"], a: 1 },
+  { q: "رئیس حکومت بعثی عراق در زمان حمله به ایران چه کسی بود؟", o: ["صدام", "ملک فیصل", "ملک حسین", "معمر قذافی"], a: 0 },
+  { q: "کدام‌یک از اهداف انقلاب اسلامی بود؟", o: ["از بین بردن وابستگی به بیگانگان", "تأمین حقوق مردم در چارچوب اسلام", "استقلال و آزادی", "همه موارد"], a: 3 },
+  { q: "پس از رحلت امام خمینی، چه نهادی رهبر جدید را انتخاب کرد؟", o: ["مجلس خبرگان رهبری", "مجلس شورای اسلامی", "شورای نگهبان", "هیئت وزیران"], a: 0 },
+  { q: "نقش مردم در برپایی نظام جمهوری اسلامی چه بود؟", o: ["با رأی و مشارکت در همه‌پرسی‌ها و انتخابات", "بدون نقش", "فقط در جنگ", "فقط در انتخابات محلی"], a: 0 },
+  { q: "هدف اصلی نهادهای انقلابی چه بود؟", o: ["دفاع از آرمان‌های انقلاب و خدمت به مردم", "کسب قدرت", "مقابله با ارتش", "توسعهٔ صنعت"], a: 0 },
+  { q: "چرا رژیم اشغالگر قدس با جمهوری اسلامی ایران خصومت دارد؟", o: ["به دلیل حمایت ایران از ملت فلسطین", "به دلیل اختلاف مرزی", "به دلیل نفت", "به دلیل جنگ"], a: 0 },
+  { q: "پس از پیروزی انقلاب اسلامی، ایران روابط خود را با کدام رژیم قطع کرد؟", o: ["رژیم اشغالگر قدس (اسرائیل)", "عربستان", "ترکیه", "عراق"], a: 0 },
+  { q: "کدام‌یک از عوامل دشمنی آمریکا با ایران پس از انقلاب است؟", o: ["قطع روابط با اسرائیل توسط ایران", "حمایت ایران از ملت فلسطین", "استقلال ایران", "همه موارد"], a: 3 },
+  { q: "اولین رئیس‌جمهور ایران در دورهٔ جمهوری اسلامی چه کسی بود؟", o: ["آیت‌الله خامنه‌ای", "آیت‌الله رجایی", "بنی‌صدر", "هاشمی رفسنجانی"], a: 2 },
+  { q: "دومین رئیس‌جمهور ایران چه کسی بود؟", o: ["آیت‌الله خامنه‌ای", "آیت‌الله رجایی", "بنی‌صدر", "هاشمی رفسنجانی"], a: 1 }
+];
+
+const TOTAL_QUESTIONS = 15;
+const TIME_PER_QUESTION = 30;
+const faDigits = "۰۱۲۳۴۵۶۷۸۹";
+let quizQuestions = [];
+let currentIndex = 0;
+let userAnswers = [];
+let timerInterval = null;
+let timeLeft = TIME_PER_QUESTION;
+let selectedOption = null;
+
+function toFa(num) { return String(num).replace(/\d/g, d => faDigits[d]); }
+function shuffleArray(arr) { const a = [...arr]; for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+
+document.getElementById("startBtn").addEventListener("click", () => {
+  const name = document.getElementById("studentName").value.trim();
+  if (!name) { document.getElementById("studentName").focus(); document.getElementById("studentName").style.borderColor = "#e74c3c"; document.getElementById("studentName").placeholder = "⚠️ لطفاً نام خود را وارد کنید"; return; }
+  const picked = shuffleArray(questionBank).slice(0, TOTAL_QUESTIONS);
+  quizQuestions = picked.map(q => { const opts = q.o.map((text, i) => ({ text, isCorrect: i === q.a })); const shuffled = shuffleArray(opts); return { q: q.q, options: shuffled, correctIndex: shuffled.findIndex(o => o.isCorrect) }; });
+  currentIndex = 0; userAnswers = new Array(TOTAL_QUESTIONS).fill(null);
+  document.getElementById("startScreen").classList.add("hidden");
+  document.getElementById("quizScreen").classList.remove("hidden");
+  renderQuestion();
+});
+
+function renderQuestion() {
+  if (currentIndex >= TOTAL_QUESTIONS) { finishQuiz(); return; }
+  selectedOption = null;
+  const q = quizQuestions[currentIndex];
+  document.getElementById("questionCounter").textContent = `سوال ${toFa(currentIndex + 1)} از ${toFa(TOTAL_QUESTIONS)}`;
+  document.getElementById("qNum").textContent = toFa(currentIndex + 1);
+  document.getElementById("qText").textContent = q.q;
+  const letters = ["الف", "ب", "ج", "د"];
+  const list = document.getElementById("optionsList");
+  list.innerHTML = "";
+  q.options.forEach((opt, i) => {
+    const div = document.createElement("div");
+    div.className = "option-item";
+    div.innerHTML = `<span class="opt-letter">${letters[i]}</span><span>${opt.text}</span>`;
+    div.addEventListener("click", () => selectOption(i, div));
+    list.appendChild(div);
+  });
+  document.getElementById("nextBtn").disabled = true;
+  document.getElementById("nextBtn").textContent = currentIndex === TOTAL_QUESTIONS - 1 ? "پایان آزمون و مشاهدهٔ کارنامه ←" : "سوال بعدی ←";
+  document.getElementById("progressFill").style.width = `${(currentIndex / TOTAL_QUESTIONS) * 100}%`;
+  startTimer();
+}
+
+function selectOption(i, el) {
+  selectedOption = i;
+  document.querySelectorAll(".option-item").forEach(x => x.classList.remove("selected"));
+  el.classList.add("selected");
+  document.getElementById("nextBtn").disabled = false;
+}
+
+function startTimer() {
+  clearInterval(timerInterval);
+  timeLeft = TIME_PER_QUESTION;
+  updateTimerDisplay();
+  const timerBox = document.getElementById("timerBox");
+  timerBox.classList.remove("warning");
+  timerInterval = setInterval(() => {
+    timeLeft--;
+    updateTimerDisplay();
+    if (timeLeft <= 5 && timeLeft > 0) timerBox.classList.add("warning");
+    if (timeLeft <= 0) { clearInterval(timerInterval); userAnswers[currentIndex] = selectedOption; goNext(); }
+  }, 1000);
+}
+
+function updateTimerDisplay() { document.getElementById("timerText").textContent = toFa(Math.max(0, timeLeft)); }
+
+document.getElementById("nextBtn").addEventListener("click", () => {
+  if (selectedOption === null) return;
+  clearInterval(timerInterval);
+  userAnswers[currentIndex] = selectedOption;
+  goNext();
+});
+
+function goNext() {
+  currentIndex++;
+  if (currentIndex >= TOTAL_QUESTIONS) finishQuiz();
+  else renderQuestion();
+}
+
+function finishQuiz() {
+  clearInterval(timerInterval);
+  document.getElementById("quizScreen").classList.add("hidden");
+  document.getElementById("resultScreen").classList.remove("hidden");
+  let correct = 0;
+  quizQuestions.forEach((q, i) => { if (userAnswers[i] === q.correctIndex) correct++; });
+  const wrong = TOTAL_QUESTIONS - correct;
+  const percent = Math.round((correct / TOTAL_QUESTIONS) * 100);
+  document.getElementById("correctCount").textContent = toFa(correct);
+  document.getElementById("wrongCount").textContent = toFa(wrong);
+  document.getElementById("scoreNum").textContent = toFa(percent);
+  document.getElementById("scorePercent").textContent = "٪";
+  const circle = document.getElementById("scoreCircle");
+  circle.classList.remove("green", "orange", "red");
+  const msg = document.getElementById("scoreMessage");
+  if (percent >= 80) { circle.classList.add("green"); msg.textContent = "🌟 عالی بود! تسلط خوبی روی درس داری."; }
+  else if (percent >= 50) { circle.classList.add("orange"); msg.textContent = "⚠️ خوب بود، اما با کمی تلاش بیشتر می‌تونی عالی بشی!"; }
+  else { circle.classList.add("red"); msg.textContent = "📚 نیاز به مرور بیشتر داری. درسنامه رو یه بار دیگه بخون!"; }
+}
+
+document.getElementById("reviewBtn").addEventListener("click", () => {
+  document.getElementById("resultScreen").classList.add("hidden");
+  document.getElementById("reviewScreen").classList.remove("hidden");
+  const letters = ["الف", "ب", "ج", "د"];
+  const list = document.getElementById("reviewList");
+  list.innerHTML = "";
+  quizQuestions.forEach((q, i) => {
+    const userAns = userAnswers[i];
+    const isCorrect = userAns === q.correctIndex;
+    const item = document.createElement("div");
+    item.className = `review-item ${isCorrect ? "correct" : "wrong"}`;
+    let html = `<div class="review-q">${toFa(i + 1)}. ${q.q}</div>`;
+    q.options.forEach((opt, j) => {
+      let cls = "normal";
+      if (j === q.correctIndex) cls = "correct-opt";
+      else if (j === userAns) cls = "wrong-opt";
+      html += `<div class="review-opt ${cls}"><span>${letters[j]}) ${opt.text}</span>${j === q.correctIndex ? '<span class="review-badge green">درست</span>' : ''}${j === userAns && !isCorrect ? '<span class="review-badge red">پاسخ تو</span>' : ''}</div>`;
+    });
+    item.innerHTML = html;
+    list.appendChild(item);
+  });
+});
+
+document.getElementById("backToResultBtn").addEventListener("click", () => {
+  document.getElementById("reviewScreen").classList.add("hidden");
+  document.getElementById("resultScreen").classList.remove("hidden");
+});
+
+document.getElementById("restartBtn").addEventListener("click", () => {
+  document.getElementById("resultScreen").classList.add("hidden");
+  document.getElementById("startScreen").classList.remove("hidden");
+  document.getElementById("studentName").value = "";
+  document.getElementById("studentName").style.borderColor = "#d6eef0";
+  document.getElementById("studentName").placeholder = "نام و نام خانوادگی خود را وارد کنید";
+});
+</script>
+
+</body>
+</html>
