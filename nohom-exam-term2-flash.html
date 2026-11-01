@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>فلش کارت نوبت دوم | مطالعات اجتماعی پایه نهم</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; font-family:'Vazirmatn',sans-serif; }
+  body { min-height:100vh; background-color:#f4f7f6; background-image:radial-gradient(#d1e0e0 1px, transparent 1px); background-size:20px 20px; color:#2c3e50; padding:30px 20px; display:flex; flex-direction:column; align-items:center; }
+  .container { width:100%; max-width:700px; }
+  .back-btn { display:inline-flex; align-items:center; gap:8px; text-decoration:none; color:#34495e; font-size:0.9rem; background:#fff; padding:8px 18px; border-radius:50px; margin-bottom:20px; transition:0.3s; border:1px solid #dcdde1; box-shadow:0 4px 10px rgba(0,0,0,0.05); font-weight:700; }
+  .back-btn:hover { background:#f8f9fa; transform:translateY(-2px); box-shadow:0 6px 15px rgba(0,0,0,0.1); }
+  .header-card { background:linear-gradient(135deg,#8e44ad 0%,#5b2c6f 100%); color:#fff; border-radius:20px; padding:30px 25px; text-align:center; box-shadow:0 10px 30px rgba(142,68,173,0.25); margin-bottom:25px; position:relative; overflow:hidden; }
+  .header-card::before { content:""; position:absolute; top:-60px; left:-60px; width:180px; height:180px; background:rgba(255,255,255,0.08); border-radius:50%; }
+  .header-badge { display:inline-block; background:rgba(255,255,255,0.22); padding:6px 16px; border-radius:50px; font-size:0.82rem; font-weight:700; margin-bottom:12px; }
+  .header-card h1 { font-size:1.4rem; font-weight:900; margin-bottom:8px; }
+  .header-card .subtitle { font-size:0.92rem; opacity:0.95; }
+  .counter-bar { display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; }
+  .counter-badge { background:#f4ecf7; color:#8e44ad; padding:8px 18px; border-radius:50px; font-weight:900; font-size:0.95rem; }
+  .hint-text { font-size:0.82rem; color:#7f8c8d; }
+  .flash-scene { perspective:1500px; width:100%; height:340px; margin-bottom:22px; }
+  .flash-card { width:100%; height:100%; position:relative; transform-style:preserve-3d; transition:transform 0.7s cubic-bezier(0.4,0,0.2,1); cursor:pointer; }
+  .flash-card.flipped { transform:rotateY(180deg); }
+  .card-face { position:absolute; inset:0; backface-visibility:hidden; -webkit-backface-visibility:hidden; border-radius:22px; padding:35px 28px; display:flex; flex-direction:column; justify-content:center; align-items:center; box-shadow:0 12px 40px rgba(0,0,0,0.12); text-align:center; overflow-y:auto; }
+  .card-front { background:linear-gradient(135deg,#8e44ad,#5b2c6f); color:#fff; }
+  .card-back { background:linear-gradient(135deg,#ffffff,#f4ecf7); color:#2c3e50; transform:rotateY(180deg); border:2px solid #8e44ad; }
+  .face-label { position:absolute; top:16px; right:20px; background:rgba(255,255,255,0.25); padding:5px 14px; border-radius:50px; font-size:0.75rem; font-weight:800; }
+  .card-back .face-label { background:rgba(142,68,173,0.15); color:#8e44ad; }
+  .lesson-badge { position:absolute; top:16px; left:20px; background:rgba(255,255,255,0.3); padding:5px 12px; border-radius:50px; font-size:0.72rem; font-weight:800; }
+  .card-back .lesson-badge { background:rgba(142,68,173,0.2); color:#5b2c6f; }
+  .card-text { font-size:1.15rem; font-weight:800; line-height:1.9; max-width:100%; padding-top:10px; }
+  .card-back .card-text { font-size:1rem; font-weight:500; color:#2c3e50; line-height:2; text-align:right; }
+  .flip-hint { position:absolute; bottom:16px; left:50%; transform:translateX(-50%); font-size:0.78rem; opacity:0.75; font-weight:700; display:flex; align-items:center; gap:6px; white-space:nowrap; }
+  .nav-buttons { display:flex; gap:12px; margin-bottom:15px; }
+  .nav-btn { flex:1; padding:14px; border:none; border-radius:12px; font-size:0.98rem; font-weight:900; font-family:inherit; cursor:pointer; transition:0.25s; display:flex; align-items:center; justify-content:center; gap:8px; }
+  .nav-btn.prev { background:#fff; color:#8e44ad; border:2px solid #8e44ad; }
+  .nav-btn.prev:hover:not(:disabled) { background:#f4ecf7; transform:translateY(-2px); }
+  .nav-btn.next { background:linear-gradient(135deg,#8e44ad,#5b2c6f); color:#fff; box-shadow:0 6px 18px rgba(142,68,173,0.3); }
+  .nav-btn.next:hover:not(:disabled) { transform:translateY(-2px); box-shadow:0 10px 25px rgba(142,68,173,0.4); }
+  .nav-btn:disabled { opacity:0.35; cursor:not-allowed; transform:none !important; box-shadow:none !important; }
+  .progress-bar { width:100%; height:8px; background:#e8daef; border-radius:50px; overflow:hidden; margin-bottom:20px; }
+  .progress-fill { height:100%; background:linear-gradient(90deg,#8e44ad,#5b2c6f); border-radius:50px; transition:width 0.4s ease; }
+  .bottom-back { display:flex; justify-content:center; margin-top:10px; }
+  @media(max-width:600px){ .header-card h1 { font-size:1.15rem; } .flash-scene { height:300px; } .card-text { font-size:1rem; } .card-back .card-text { font-size:0.92rem; } .card-face { padding:30px 20px; } }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <a href="nohom.html" class="back-btn">➡ بازگشت به صفحهٔ دروس</a>
+
+  <div class="header-card">
+    <div class="header-badge">🎴 فلش کارت نوبت دوم</div>
+    <h1>مرور درس ۱۳ تا ۲۴</h1>
+    <p class="subtitle">۵۰ کارت کلیدی برای آمادگی آزمون نوبت دوم</p>
+  </div>
+
+  <div class="counter-bar">
+    <div class="counter-badge" id="counter">کارت ۱ از ۵۰</div>
+    <div class="hint-text">👆 روی کارت کلیک کن تا برگردد</div>
+  </div>
+
+  <div class="flash-scene">
+    <div class="flash-card" id="flashCard">
+      <div class="card-face card-front">
+        <div class="lesson-badge" id="frontLesson">درس ۱۳</div>
+        <div class="face-label">سوال</div>
+        <div class="card-text" id="frontText"></div>
+        <div class="flip-hint">🔄 برای دیدن پاسخ کلیک کن</div>
+      </div>
+      <div class="card-face card-back">
+        <div class="lesson-badge" id="backLesson">درس ۱۳</div>
+        <div class="face-label">پاسخ</div>
+        <div class="card-text" id="backText"></div>
+        <div class="flip-hint">🔄 برای دیدن سوال کلیک کن</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="progress-bar">
+    <div class="progress-fill" id="progressFill"></div>
+  </div>
+
+  <div class="nav-buttons">
+    <button class="nav-btn prev" id="prevBtn">→ کارت قبلی</button>
+    <button class="nav-btn next" id="nextBtn">کارت بعدی ←</button>
+  </div>
+
+  <div class="bottom-back">
+    <a href="nohom.html" class="back-btn" style="margin:0;">➡ بازگشت به فهرست دروس</a>
+  </div>
+
+</div>
+
+<script>
+const cards = [
+  { l: 13, q: "نهضت مشروطه در دوران کدام پادشاه آغاز شد؟", a: "مظفرالدین‌شاه قاجار." },
+  { l: 13, q: "فرمان مشروطه چه زمانی صادر شد؟", a: "مرداد ۱۲۸۵ ش." },
+  { l: 13, q: "از رهبران اصلی نهضت مشروطه چه کسانی بودند؟", a: "آیت‌الله طباطبایی، آیت‌الله بهبهانی و آیت‌الله شیخ فضل‌الله نوری." },
+  { l: 13, q: "چه عواملی موجب سرعت گرفتن نهضت مشروطه شد؟", a: "نفوذ بیگانگان، ضعف شاه، گرانی قند، توهین به مقدسات." },
+  { l: 13, q: "متمم قانون اساسی چه بود؟", a: "بخش تکمیلی قانون اساسی که با تلاش شیخ فضل‌الله نوری، نظارت فقیهان به آن اضافه شد." },
+  { l: 13, q: "محمدعلی‌شاه با حمایت کدام کشور مجلس را به توپ بست؟", a: "روسیه." },
+  { l: 13, q: "قرارداد ۱۹۰۷ چه بود؟", a: "تقسیم ایران میان روسیه و انگلستان." },
+  { l: 14, q: "قرارداد ۱۹۱۹ بین ایران و کدام کشور بسته شد؟", a: "انگلستان. هدف آن تثبیت نفوذ و سلطهٔ انگلستان در ایران بود." },
+  { l: 14, q: "کودتای ۱۲۹۹ با حمایت کدام کشور رخ داد؟", a: "انگلستان. رضاخان مهرهٔ نظامی و سیدضیاءالدین طباطبایی مهرهٔ سیاسی بود." },
+  { l: 14, q: "انتقال حکومت از قاجاریه به پهلوی در چه سالی رخ داد؟", a: "۱۳۰۴، با وجود مخالفت آیت‌الله مدرس." },
+  { l: 14, q: "واقعهٔ مسجد گوهرشاد چه بود؟", a: "اعتراض مردم مشهد به سیاست‌های ضد دینی رضاشاه که با گلوله‌بستن مردم سرکوب شد." },
+  { l: 14, q: "در جنگ جهانی دوم چه اتفاقی برای رضاشاه افتاد؟", a: "متفقین ایران را اشغال کردند و رضاشاه مجبور به کناره‌گیری و تبعید شد." },
+  { l: 14, q: "رهبران نهضت ملی شدن نفت چه کسانی بودند؟", a: "آیت‌الله کاشانی و دکتر محمد مصدق." },
+  { l: 14, q: "کودتای ۲۸ مرداد با طراحی کدام کشورها انجام شد؟", a: "انگلستان و آمریکا. منجر به سرنگونی دولت دکتر مصدق شد." },
+  { l: 15, q: "تصویب‌نامهٔ انجمن‌های ایالتی و ولایتی چه بود؟", a: "قانونی که در ۱۳۴۱ شرط مسلمان بودن را حذف کرد؛ با مخالفت امام خمینی لغو شد." },
+  { l: 15, q: "قیام ۱۵ خرداد ۱۳۴۲ چه بود؟", a: "قیام مردمی در اعتراض به دستگیری امام خمینی. با خشونت سرکوب شد." },
+  { l: 15, q: "کاپیتولاسیون چه بود؟", a: "مصونیت قضایی برای مأموران آمریکایی در ایران. امام خمینی آن را ذلت‌بار خواند." },
+  { l: 15, q: "امام خمینی در ۱۳ آبان ۱۳۴۳ به کدام کشور تبعید شد؟", a: "به ترکیه، سپس عراق و در نهایت فرانسه (نوفل لوشاتو)." },
+  { l: 15, q: "مقالهٔ توهین‌آمیز در کدام روزنامه و چه زمانی منتشر شد؟", a: "روزنامهٔ اطلاعات، دی ۱۳۵۶." },
+  { l: 15, q: "جمعهٔ سیاه چه بود؟", a: "۱۷ شهریور ۱۳۵۷ در میدان ژاله تهران که مأموران رژیم مردم را به خاک و خون کشیدند." },
+  { l: 15, q: "انقلاب اسلامی چه زمانی به پیروزی رسید؟", a: "۲۲ بهمن ۱۳۵۷. شعار اصلی: «استقلال، آزادی، جمهوری اسلامی»." },
+  { l: 16, q: "همه‌پرسی تعیین نظام سیاسی چه زمانی برگزار شد؟", a: "۱۰ و ۱۱ فروردین ۱۳۵۸. ۹۸/۲٪ مردم به جمهوری اسلامی رأی دادند." },
+  { l: 16, q: "روز جمهوری اسلامی چه روزی است؟", a: "۱۲ فروردین." },
+  { l: 16, q: "قانون اساسی جمهوری اسلامی چه زمانی تصویب شد؟", a: "آذر ۱۳۵۸ با رأی ۹۹/۵ درصدی ملت." },
+  { l: 16, q: "ترورهای منافقین چه کسانی را هدف قرار داد؟", a: "شخصیت‌های نظام مانند شهید مطهری، شهید بهشتی و ۷۲ تن، رجایی و باهنر." }
+];
+const cards2 = [
+  { l: 16, q: "سفارت آمریکا در ایران چه زمانی تسخیر شد؟", a: "۱۳ آبان ۱۳۵۸ توسط دانشجویان پیرو خط امام." },
+  { l: 16, q: "جنگ تحمیلی چه زمانی آغاز شد و چه سرانجامی داشت؟", a: "۳۱ شهریور ۱۳۵۹ با حملهٔ صدام به خرمشهر آغاز شد و پس از هشت سال با ناکامی صدام پایان یافت." },
+  { l: 16, q: "امام خمینی چه زمانی رحلت کردند؟", a: "۱۳ خرداد ۱۳۶۸." },
+  { l: 16, q: "پس از رحلت امام خمینی چه کسی به رهبری انتخاب شد؟", a: "آیت‌الله العظمی سید علی حسینی خامنه‌ای توسط مجلس خبرگان رهبری." },
+  { l: 17, q: "فرهنگ چیست؟", a: "شیوهٔ زندگی یک جامعه؛ شامل آداب و رسوم، باورها، پوشاک، تغذیه، قوانین و ..." },
+  { l: 17, q: "ویژگی مهم فرهنگ چیست؟", a: "آموختنی است و از راه آموزش و تربیت از نسلی به نسل دیگر منتقل می‌شود." },
+  { l: 17, q: "اجتماعی شدن (جامعه‌پذیری) چیست؟", a: "فرایند یادگیری زندگی در جامعه از تولد تا آخر عمر." },
+  { l: 17, q: "مهم‌ترین کانون اجتماعی شدن کدام است؟", a: "خانواده. پس از آن مدرسه، رسانه‌ها، دانشگاه و محل کار." },
+  { l: 17, q: "لایه‌های فرهنگ کدام‌اند؟", a: "نمادها، هنجارها، ارزش‌ها، عقاید." },
+  { l: 17, q: "تفاوت هنجار و ارزش چیست؟", a: "هنجار: رفتارهای پذیرفته‌شده و متداول. ارزش: اموری که خوب، مطلوب و مثبت تلقی می‌شوند." },
+  { l: 18, q: "هویت چیست؟", a: "احساس و آگاهی و شناخت از خود. پاسخ به پرسش «کیستی»." },
+  { l: 18, q: "هویت فردی شامل چه ویژگی‌هایی است؟", a: "ویژگی‌های جسمانی (جنسیت، قد، وزن، سن) و ویژگی‌های روانی (صبوری، پشتکار، امیدواری)." },
+  { l: 18, q: "هویت اجتماعی چگونه شکل می‌گیرد؟", a: "با عضویت در گروه‌های اجتماعی و آشنایی با ارزش‌ها و عقاید جامعه." },
+  { l: 18, q: "عناصر مهم هویت ایرانی کدام‌اند؟", a: "سرزمین، دین اسلام، تاریخ و میراث فرهنگی، زبان فارسی، آرمان‌های انقلاب اسلامی." },
+  { l: 18, q: "امت اسلامی چیست؟", a: "جمعیت بزرگی از مسلمانان که با انسجام، اتحاد، همدلی و هدف واحد، یک پیکرهٔ واحد را تشکیل می‌دهند." },
+  { l: 19, q: "کارکردهای خانواده کدام‌اند؟", a: "رشد و تعالی انسانی، فرزندآوری، حمایت و مراقبت، تربیت اعضای خانواده." },
+  { l: 19, q: "حدیث پیامبر (ص) دربارهٔ ازدواج چه می‌فرماید؟", a: "«هیچ بنیانی در اسلام گذارده نشده که نزد خداوند محبوب‌تر از ازدواج باشد.»" },
+  { l: 19, q: "چرا کاهش نرخ باروری در کشور خطرناک است؟", a: "زیرا کشور با خطر پیری جمعیت و جایگزین نشدن نسل روبه‌رو می‌شود." },
+  { l: 20, q: "عوامل مهم سازگاری و آرامش در خانواده کدام‌اند؟", a: "انتخاب صحیح همسر، سازگاری زن و شوهر، وجود فرزندان." },
+  { l: 20, q: "از دیدگاه اسلام، مهم‌ترین معیار همسرگزینی چیست؟", a: "ایمان و اعتقادات دینی، و اصالت خانواده." },
+  { l: 20, q: "صلهٔ ارحام چیست؟", a: "دیدار و کمک به خویشاوندان با مهر و محبت. «صِله» از وصل و «ارحام» یعنی خویشان." },
+  { l: 21, q: "چرا حکومت در جامعه ضروری است؟", a: "برای تنظیم امور، اجرای قوانین، حل اختلافات، امنیت، هماهنگی و دفاع از دشمنان." },
+  { l: 21, q: "ارکان حکومت جمهوری اسلامی کدام‌اند؟", a: "رهبری و سه قوهٔ مقننه، قضائیه و مجریه." },
+  { l: 21, q: "قوهٔ مقننه شامل چه نهادهایی است؟", a: "مجلس شورای اسلامی و شورای نگهبان. وظیفهٔ آن قانون‌گذاری است." },
+  { l: 21, q: "وظیفهٔ مجلس خبرگان رهبری چیست؟", a: "انتخاب رهبر جمهوری اسلامی." }
+];
+
+const cards3 = [
+  { l: 22, q: "شهروندی به چه معناست؟", a: "ارتباط متقابل مردم و حکومت که برای هر دو حقوق و تکالیفی ایجاد می‌کند." },
+  { l: 22, q: "مالیات و عوارض چه تفاوتی دارند؟", a: "مالیات: مبلغی که به صورت بالعوض به دولت پرداخت می‌شود. عوارض: مبلغی که در مقابل خدمت دولتی پرداخت می‌شود." },
+  { l: 22, q: "مهم‌ترین سند حقوقی حقوق و تکالیف شهروندی چیست؟", a: "قانون اساسی." },
+  { l: 22, q: "اصل چهلم قانون اساسی چه می‌گوید؟", a: "شهروندان مجاز نیستند برای استفاده از حقوق خود به حقوق دیگران و منافع عمومی زیان برسانند." },
+  { l: 23, q: "بهره‌وری چیست؟", a: "از بین کارهای ممکن، کار درست را انتخاب کنیم و آن را با روش مناسب انجام دهیم." },
+  { l: 23, q: "دو جزء مهم بهره‌وری کدام‌اند؟", a: "کارایی (انجام درست کار) و اثربخشی (انجام کار درست)." },
+  { l: 23, q: "راهکارهای افزایش بهره‌وری در زندگی فردی و خانوادگی کدام‌اند؟", a: "استفادهٔ مناسب از زمان، انضباط، اصالح عادت‌های مصرفی، آگاهی، تنظیم بودجه." },
+  { l: 23, q: "حدیث پیامبر (ص) دربارهٔ انجام کار چه می‌فرماید؟", a: "«خداوند دوست دارد اگر کسی از شما کاری انجام می‌دهد، آن را محکم و بی‌عیب انجام دهد.»" },
+  { l: 24, q: "چرخهٔ اقتصادی شامل چه مراحلی است؟", a: "تولید، توزیع و مصرف." },
+  { l: 24, q: "نهاده و ستانده را تعریف کنید.", a: "نهاده (ورودی): عواملی که در تولید به کار می‌روند. ستانده (خروجی): کال یا خدمتی که تولید می‌شود." },
+  { l: 24, q: "بهره‌وری سبز به چه معناست؟", a: "افزایش بهره‌وری با کمترین آسیب به محیط زیست." },
+  { l: 24, q: "اقتصاد مقاومتی به چه معناست؟", a: "در شرایط سخت روی پای خود بایستیم، از تولید ملی حمایت کنیم، از اسراف بپرهیزیم و از منابع حداکثر استفاده را بکنیم. محور اصلی آن بهره‌وری است." },
+  { l: 24, q: "استاندارد چه نقشی در بهره‌وری دارد؟", a: "موجب افزایش کیفیت و استفادهٔ درست از منابع می‌شود. سازمان ملی استاندارد ایران متولی آن است." }
+];
+
+const allCards = cards.concat(cards2, cards3);
+
+const faDigits = "۰۱۲۳۴۵۶۷۸۹";
+const toFa = n => String(n).replace(/\d/g, d => faDigits[d]);
+
+let current = 0;
+const total = allCards.length;
+const flashCard = document.getElementById("flashCard");
+const frontText = document.getElementById("frontText");
+const backText = document.getElementById("backText");
+const frontLesson = document.getElementById("frontLesson");
+const backLesson = document.getElementById("backLesson");
+const counter = document.getElementById("counter");
+const progressFill = document.getElementById("progressFill");
+const prevBtn = document.getElementById("prevBtn");
+const nextBtn = document.getElementById("nextBtn");
+
+function render() {
+  flashCard.classList.remove("flipped");
+  setTimeout(() => {
+    const c = allCards[current];
+    frontText.textContent = c.q;
+    backText.textContent = c.a;
+    frontLesson.textContent = `درس ${toFa(c.l)}`;
+    backLesson.textContent = `درس ${toFa(c.l)}`;
+    counter.textContent = `کارت ${toFa(current + 1)} از ${toFa(total)}`;
+    progressFill.style.width = `${((current + 1) / total) * 100}%`;
+    prevBtn.disabled = current === 0;
+    nextBtn.disabled = current === total - 1;
+  }, 150);
+}
+
+flashCard.addEventListener("click", () => flashCard.classList.toggle("flipped"));
+prevBtn.addEventListener("click", () => { if (current > 0) { current--; render(); } });
+nextBtn.addEventListener("click", () => { if (current < total - 1) { current++; render(); } });
+render();
+</script>
+
+</body>
+</html>
