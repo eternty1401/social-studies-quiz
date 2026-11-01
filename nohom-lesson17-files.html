@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>فایل‌ها و عکس‌ها — درس ۱۷ | مطالعات اجتماعی پایه نهم</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; font-family:'Vazirmatn',sans-serif; }
+  body { min-height:100vh; background-color:#f4f7f6; background-image:radial-gradient(#d1e0e0 1px, transparent 1px); background-size:20px 20px; color:#2c3e50; padding:30px 20px; display:flex; flex-direction:column; align-items:center; }
+  .container { width:100%; max-width:900px; }
+  .back-btn { display:inline-flex; align-items:center; gap:8px; text-decoration:none; color:#34495e; font-size:0.9rem; background:#fff; padding:8px 18px; border-radius:50px; margin-bottom:20px; transition:0.3s; border:1px solid #dcdde1; box-shadow:0 4px 10px rgba(0,0,0,0.05); font-weight:700; }
+  .back-btn:hover { background:#f8f9fa; transform:translateY(-2px); box-shadow:0 6px 15px rgba(0,0,0,0.1); }
+  .header-card { background:linear-gradient(135deg,#00acc1 0%,#00838f 100%); color:#fff; border-radius:20px; padding:30px 25px; text-align:center; box-shadow:0 10px 30px rgba(0,172,193,0.25); margin-bottom:25px; position:relative; overflow:hidden; }
+  .header-card::before { content:""; position:absolute; top:-60px; left:-60px; width:180px; height:180px; background:rgba(255,255,255,0.08); border-radius:50%; }
+  .header-badge { display:inline-block; background:rgba(255,255,255,0.22); padding:6px 16px; border-radius:50px; font-size:0.82rem; font-weight:700; margin-bottom:12px; }
+  .header-card h1 { font-size:1.4rem; font-weight:900; margin-bottom:8px; }
+  .header-card .subtitle { font-size:0.92rem; opacity:0.95; }
+  .section-title { font-size:1.15rem; font-weight:900; color:#00838f; margin:25px 0 16px; padding-right:14px; border-right:5px solid #00acc1; line-height:1.6; }
+  .gallery { display:grid; grid-template-columns:repeat(3, 1fr); gap:16px; margin-bottom:15px; }
+  .gallery-item { background:#fff; border-radius:16px; box-shadow:0 4px 15px rgba(0,0,0,0.06); overflow:hidden; cursor:pointer; transition:0.28s; border:2px solid #eef2f5; position:relative; }
+  .gallery-item:hover { transform:translateY(-5px); box-shadow:0 10px 30px rgba(0,172,193,0.2); border-color:#00acc1; }
+  .gallery-placeholder { aspect-ratio:4/3; background:linear-gradient(135deg,#e0f7fa,#f4fbfc); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px; color:#00838f; font-weight:800; }
+  .gallery-placeholder .plus-icon { width:60px; height:60px; border-radius:50%; background:rgba(0,172,193,0.12); display:flex; align-items:center; justify-content:center; font-size:2rem; font-weight:900; transition:0.3s; }
+  .gallery-item:hover .plus-icon { background:rgba(0,172,193,0.22); transform:scale(1.1); }
+  .gallery-placeholder .lbl { font-size:0.82rem; color:#5d8a92; font-weight:700; }
+  .files-list { display:flex; flex-direction:column; gap:14px; }
+  .file-item { background:#fff; border-radius:14px; padding:18px 22px; display:flex; align-items:center; gap:16px; box-shadow:0 4px 15px rgba(0,0,0,0.06); border:1.5px solid #eef2f5; transition:0.25s; }
+  .file-item:hover { border-color:#00acc1; box-shadow:0 8px 25px rgba(0,172,193,0.15); transform:translateY(-2px); }
+  .file-icon { width:50px; height:50px; border-radius:12px; background:linear-gradient(135deg,#e0f7fa,#b2ebf2); display:flex; align-items:center; justify-content:center; font-size:1.5rem; flex-shrink:0; }
+  .file-icon.pdf { background:linear-gradient(135deg,#fdedec,#f5b7b1); }
+  .file-icon.doc { background:linear-gradient(135deg,#ebf5fb,#aed6f1); }
+  .file-info { flex:1; }
+  .file-name { font-weight:800; font-size:0.98rem; color:#2c3e50; margin-bottom:5px; }
+  .file-meta { font-size:0.8rem; color:#7f8c8d; display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+  .file-meta span { display:flex; align-items:center; gap:4px; }
+  .file-btn { padding:10px 22px; border-radius:50px; border:none; font-family:inherit; font-size:0.88rem; font-weight:900; cursor:pointer; transition:0.25s; white-space:nowrap; }
+  .file-btn.soon { background:#f1f2f6; color:#95a5a6; cursor:default; }
+  .file-btn.download { background:linear-gradient(135deg,#00acc1,#00838f); color:#fff; box-shadow:0 5px 15px rgba(0,172,193,0.3); }
+  .file-btn.download:hover { transform:translateY(-2px); box-shadow:0 8px 22px rgba(0,172,193,0.4); }
+  .lightbox { position:fixed; inset:0; background:rgba(0,0,0,0.75); display:none; align-items:center; justify-content:center; z-index:1000; padding:20px; backdrop-filter:blur(4px); }
+  .lightbox.show { display:flex; animation:fadeInLb 0.3s ease; }
+  @keyframes fadeInLb { from { opacity:0; } to { opacity:1; } }
+  .lightbox-content { background:#fff; border-radius:18px; padding:35px 30px; text-align:center; max-width:380px; width:100%; box-shadow:0 20px 60px rgba(0,0,0,0.4); animation:popIn 0.35s cubic-bezier(0.4,0,0.2,1); }
+  @keyframes popIn { from { opacity:0; transform:scale(0.8); } to { opacity:1; transform:scale(1); } }
+  .lightbox-content .lb-icon { font-size:3rem; margin-bottom:15px; }
+  .lightbox-content h3 { color:#00838f; font-size:1.15rem; margin-bottom:10px; font-weight:900; }
+  .lightbox-content p { color:#7f8c8d; font-size:0.92rem; line-height:1.8; margin-bottom:20px; }
+  .lightbox-close { background:linear-gradient(135deg,#00acc1,#00838f); color:#fff; border:none; padding:10px 30px; border-radius:50px; font-family:inherit; font-size:0.92rem; font-weight:800; cursor:pointer; transition:0.25s; }
+  .lightbox-close:hover { transform:translateY(-2px); box-shadow:0 8px 22px rgba(0,172,193,0.4); }
+  .bottom-back { display:flex; justify-content:center; margin-top:28px; }
+  @media(max-width:600px){ .header-card h1 { font-size:1.15rem; } .gallery { grid-template-columns:1fr; } .file-item { flex-wrap:wrap; } .file-btn { width:100%; } }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <a href="nohom.html" class="back-btn">➡ بازگشت به صفحهٔ دروس</a>
+
+  <div class="header-card">
+    <div class="header-badge">📂 فایل‌ها و عکس‌ها</div>
+    <h1>درس ۱۷: فرهنگ</h1>
+    <p class="subtitle">فصل ۹ — فرهنگ و هویت</p>
+  </div>
+
+  <div class="section-title">🖼 گالری عکس</div>
+  <div class="gallery">
+    <div class="gallery-item" data-gallery="1">
+      <div class="gallery-placeholder"><div class="plus-icon">➕</div><div class="lbl">جای عکس ۱</div></div>
+    </div>
+    <div class="gallery-item" data-gallery="2">
+      <div class="gallery-placeholder"><div class="plus-icon">➕</div><div class="lbl">جای عکس ۲</div></div>
+    </div>
+    <div class="gallery-item" data-gallery="3">
+      <div class="gallery-placeholder"><div class="plus-icon">➕</div><div class="lbl">جای عکس ۳</div></div>
+    </div>
+  </div>
+
+  <div class="section-title">📁 فایل‌های قابل دانلود</div>
+  <div class="files-list">
+
+    <div class="file-item">
+      <div class="file-icon pdf">📄</div>
+      <div class="file-info">
+        <div class="file-name">نمونه سوالات تستی درس ۱۷</div>
+        <div class="file-meta"><span>📝 فرمت: PDF</span><span>📦 حجم: —</span></div>
+      </div>
+      <button class="file-btn soon" disabled>به‌زودی</button>
+    </div>
+
+    <div class="file-item">
+      <div class="file-icon doc">📝</div>
+      <div class="file-info">
+        <div class="file-name">کاربرگ تمرین درس ۱۷</div>
+        <div class="file-meta"><span>📝 فرمت: DOC</span><span>📦 حجم: —</span></div>
+      </div>
+      <button class="file-btn soon" disabled>به‌زودی</button>
+    </div>
+
+    <div class="file-item">
+      <div class="file-icon pdf">📄</div>
+      <div class="file-info">
+        <div class="file-name">خلاصهٔ درس ۱۷ (PDF)</div>
+        <div class="file-meta"><span>📝 فرمت: PDF</span><span>📦 حجم: —</span></div>
+      </div>
+      <button class="file-btn soon" disabled>به‌زودی</button>
+    </div>
+
+  </div>
+
+  <div class="bottom-back">
+    <a href="nohom.html" class="back-btn" style="margin:0;">➡ بازگشت به فهرست دروس</a>
+  </div>
+
+</div>
+
+<div class="lightbox" id="lightbox">
+  <div class="lightbox-content">
+    <div class="lb-icon">🖼</div>
+    <h3>هنوز عکسی اضافه نشده</h3>
+    <p>این بخش در آینده‌ای نزدیک با تصاویر مرتبط با درس ۱۷ تکمیل خواهد شد.</p>
+    <button class="lightbox-close" id="closeLb">باشه، متوجه شدم</button>
+  </div>
+</div>
+
+<script>
+  const lightbox = document.getElementById("lightbox");
+  const closeLb = document.getElementById("closeLb");
+  document.querySelectorAll(".gallery-item").forEach(item => { item.addEventListener("click", () => lightbox.classList.add("show")); });
+  closeLb.addEventListener("click", () => lightbox.classList.remove("show"));
+  lightbox.addEventListener("click", (e) => { if (e.target === lightbox) lightbox.classList.remove("show"); });
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape") lightbox.classList.remove("show"); });
+</script>
+
+</body>
+</html>
