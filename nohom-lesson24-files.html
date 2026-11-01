@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>فایل‌های قابل دانلود - درس ۲۴</title>
+    <style>
+        /* تنظیمات کلی صفحه و فونت */
+        body {
+            font-family: 'Vazirmatn', Tahoma, Arial, sans-serif;
+            background-color: #f7f9f9;
+            background-image: radial-gradient(#d1d5db 1px, transparent 1px);
+            background-size: 20px 20px;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* بخش گالری عکس‌ها */
+        .image-gallery {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 30px;
+            background-color: #eaf4f4;
+            padding: 15px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .image-gallery img {
+            width: 30%;
+            max-width: 150px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        /* استایل عنوان فایل‌ها */
+        .section-title {
+            display: flex;
+            align-items: center;
+            color: #1e7a8a;
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        
+        .section-title::before {
+            content: '';
+            display: inline-block;
+            width: 4px;
+            height: 24px;
+            background-color: #39a7b6;
+            margin-left: 10px;
+            border-radius: 2px;
+        }
+
+        /* استایل کارت‌های دانلود */
+        .download-card {
+            background-color: #ffffff;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .card-info h3 {
+            margin: 0 0 10px 0;
+            font-size: 1.1rem;
+            color: #222;
+        }
+
+        .card-meta {
+            display: flex;
+            gap: 15px;
+            font-size: 0.85rem;
+            color: #666;
+            align-items: center;
+        }
+
+        /* آیکون‌های انتهای کارت */
+        .icon-box {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 30px;
+        }
+        .icon-pink { background-color: #fce4e8; }
+        .icon-blue { background-color: #e0f0fc; }
+
+        /* دکمه‌ها */
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            text-align: center;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background-color: #258e9d;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #1a6c78;
+        }
+
+        .btn-secondary {
+            background-color: #f0f2f5;
+            color: #888;
+            cursor: not-allowed;
+        }
+
+        /* دکمه بازگشت */
+        .btn-back {
+            display: inline-block;
+            background-color: #ffffff;
+            color: #222;
+            border: 1px solid #ddd;
+            border-radius: 25px;
+            padding: 12px 30px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        
+        .back-container {
+            text-align: center;
+            margin-top: 30px;
+            margin-bottom: 50px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- ۱. بخش سه عکس (گالری) -->
+    <div class="image-gallery">
+        <!-- اسم عکس‌های درس ۲۴ رو اینجا بذار -->
+        <img src="image-d24-1.jpg" alt="عکس درس ۲۴" onerror="this.src='https://placehold.co/150x100/eaf4f4/666?text=عکس+۱'">
+        <img src="image-d24-2.jpg" alt="عکس درس ۲۴" onerror="this.src='https://placehold.co/150x100/eaf4f4/666?text=عکس+۲'">
+        <img src="image-d24-3.jpg" alt="عکس درس ۲۴" onerror="this.src='https://placehold.co/150x100/eaf4f4/666?text=عکس+۳'">
+    </div>
+
+    <!-- ۲. عنوان بخش -->
+    <div class="section-title">
+        فایل‌های قابل دانلود 📁
+    </div>
+
+    <!-- ۳. کارت اول: سوالات متن درس بیست و چهارم -->
+    <div class="download-card">
+        <div class="card-header">
+            <div class="card-info">
+                <h3>سوالات متن درس بیست و چهارم</h3>
+                <div class="card-meta">
+                    <span>📝 فرمت: PDF</span>
+                    <span>🔗 منبع: همیار</span>
+                </div>
+            </div>
+            <div class="icon-box icon-pink">
+                📄
+            </div>
+        </div>
+        <!-- لینک دانلود درس ۲۴ -->
+        <a href="https://dl.hamyar.me/tools/pdf/web/viewer.html?file=https://dl.hamyar.me/9/soal/mot/soalmatn-mot9-d24_%28hamyar.in%29.pdf" target="_blank" class="btn btn-primary">📥 مشاهده و دانلود</a>
+    </div>
+
+    <!-- ۴. کارت دوم: کاربرگ تمرین درس ۲۴ -->
+    <div class="download-card">
+        <div class="card-header">
+            <div class="card-info">
+                <h3>کاربرگ تمرین درس ۲۴</h3>
+                <div class="card-meta">
+                    <span>📝 فرمت: DOC</span>
+                    <span>📦 حجم: —</span>
+                </div>
+            </div>
+            <div class="icon-box icon-blue">
+                📝
+            </div>
+        </div>
+        <button class="btn btn-secondary" disabled>به‌زودی</button>
+    </div>
+
+    <!-- ۵. کارت سوم: تمرین درس ۲۴ -->
+    <div class="download-card">
+        <div class="card-header">
+            <div class="card-info">
+                <h3>تمرین درس ۲۴</h3>
+                <div class="card-meta">
+                    <span>📝 فرمت: PDF</span>
+                    <span>📦 حجم: —</span>
+                </div>
+            </div>
+            <div class="icon-box icon-pink">
+                📄
+            </div>
+        </div>
+        <button class="btn btn-secondary" disabled>به‌زودی</button>
+    </div>
+
+    <!-- ۶. دکمه بازگشت -->
+    <div class="back-container">
+        <a href="#" class="btn-back">➡️ بازگشت به فهرست دروس</a>
+    </div>
+
+</div>
+
+</body>
+</html>
