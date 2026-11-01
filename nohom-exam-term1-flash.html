@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>فلش کارت نوبت اول | مطالعات اجتماعی پایه نهم</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; font-family:'Vazirmatn',sans-serif; }
+  body { min-height:100vh; background-color:#f4f7f6; background-image:radial-gradient(#d1e0e0 1px, transparent 1px); background-size:20px 20px; color:#2c3e50; padding:30px 20px; display:flex; flex-direction:column; align-items:center; }
+  .container { width:100%; max-width:700px; }
+  .back-btn { display:inline-flex; align-items:center; gap:8px; text-decoration:none; color:#34495e; font-size:0.9rem; background:#fff; padding:8px 18px; border-radius:50px; margin-bottom:20px; transition:0.3s; border:1px solid #dcdde1; box-shadow:0 4px 10px rgba(0,0,0,0.05); font-weight:700; }
+  .back-btn:hover { background:#f8f9fa; transform:translateY(-2px); box-shadow:0 6px 15px rgba(0,0,0,0.1); }
+  .header-card { background:linear-gradient(135deg,#2980b9 0%,#1c5d8a 100%); color:#fff; border-radius:20px; padding:30px 25px; text-align:center; box-shadow:0 10px 30px rgba(41,128,185,0.25); margin-bottom:25px; position:relative; overflow:hidden; }
+  .header-card::before { content:""; position:absolute; top:-60px; left:-60px; width:180px; height:180px; background:rgba(255,255,255,0.08); border-radius:50%; }
+  .header-badge { display:inline-block; background:rgba(255,255,255,0.22); padding:6px 16px; border-radius:50px; font-size:0.82rem; font-weight:700; margin-bottom:12px; }
+  .header-card h1 { font-size:1.4rem; font-weight:900; margin-bottom:8px; }
+  .header-card .subtitle { font-size:0.92rem; opacity:0.95; }
+  .counter-bar { display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; }
+  .counter-badge { background:#ebf5fb; color:#2980b9; padding:8px 18px; border-radius:50px; font-weight:900; font-size:0.95rem; }
+  .hint-text { font-size:0.82rem; color:#7f8c8d; }
+  .flash-scene { perspective:1500px; width:100%; height:340px; margin-bottom:22px; }
+  .flash-card { width:100%; height:100%; position:relative; transform-style:preserve-3d; transition:transform 0.7s cubic-bezier(0.4,0,0.2,1); cursor:pointer; }
+  .flash-card.flipped { transform:rotateY(180deg); }
+  .card-face { position:absolute; inset:0; backface-visibility:hidden; -webkit-backface-visibility:hidden; border-radius:22px; padding:35px 28px; display:flex; flex-direction:column; justify-content:center; align-items:center; box-shadow:0 12px 40px rgba(0,0,0,0.12); text-align:center; overflow-y:auto; }
+  .card-front { background:linear-gradient(135deg,#2980b9,#1c5d8a); color:#fff; }
+  .card-back { background:linear-gradient(135deg,#ffffff,#ebf5fb); color:#2c3e50; transform:rotateY(180deg); border:2px solid #2980b9; }
+  .face-label { position:absolute; top:16px; right:20px; background:rgba(255,255,255,0.25); padding:5px 14px; border-radius:50px; font-size:0.75rem; font-weight:800; }
+  .card-back .face-label { background:rgba(41,128,185,0.15); color:#2980b9; }
+  .lesson-badge { position:absolute; top:16px; left:20px; background:rgba(255,255,255,0.3); padding:5px 12px; border-radius:50px; font-size:0.72rem; font-weight:800; }
+  .card-back .lesson-badge { background:rgba(41,128,185,0.2); color:#1c5d8a; }
+  .card-text { font-size:1.15rem; font-weight:800; line-height:1.9; max-width:100%; padding-top:10px; }
+  .card-back .card-text { font-size:1rem; font-weight:500; color:#2c3e50; line-height:2; text-align:right; }
+  .flip-hint { position:absolute; bottom:16px; left:50%; transform:translateX(-50%); font-size:0.78rem; opacity:0.75; font-weight:700; display:flex; align-items:center; gap:6px; white-space:nowrap; }
+  .nav-buttons { display:flex; gap:12px; margin-bottom:15px; }
+  .nav-btn { flex:1; padding:14px; border:none; border-radius:12px; font-size:0.98rem; font-weight:900; font-family:inherit; cursor:pointer; transition:0.25s; display:flex; align-items:center; justify-content:center; gap:8px; }
+  .nav-btn.prev { background:#fff; color:#2980b9; border:2px solid #2980b9; }
+  .nav-btn.prev:hover:not(:disabled) { background:#ebf5fb; transform:translateY(-2px); }
+  .nav-btn.next { background:linear-gradient(135deg,#2980b9,#1c5d8a); color:#fff; box-shadow:0 6px 18px rgba(41,128,185,0.3); }
+  .nav-btn.next:hover:not(:disabled) { transform:translateY(-2px); box-shadow:0 10px 25px rgba(41,128,185,0.4); }
+  .nav-btn:disabled { opacity:0.35; cursor:not-allowed; transform:none !important; box-shadow:none !important; }
+  .progress-bar { width:100%; height:8px; background:#d6eaf8; border-radius:50px; overflow:hidden; margin-bottom:20px; }
+  .progress-fill { height:100%; background:linear-gradient(90deg,#2980b9,#1c5d8a); border-radius:50px; transition:width 0.4s ease; }
+  .bottom-back { display:flex; justify-content:center; margin-top:10px; }
+  @media(max-width:600px){ .header-card h1 { font-size:1.15rem; } .flash-scene { height:300px; } .card-text { font-size:1rem; } .card-back .card-text { font-size:0.92rem; } .card-face { padding:30px 20px; } }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <a href="nohom.html" class="back-btn">➡ بازگشت به صفحهٔ دروس</a>
+
+  <div class="header-card">
+    <div class="header-badge">🎴 فلش کارت نوبت اول</div>
+    <h1>مرور درس ۱ تا ۱۲</h1>
+    <p class="subtitle">۵۰ کارت کلیدی برای آمادگی آزمون نوبت اول</p>
+  </div>
+
+  <div class="counter-bar">
+    <div class="counter-badge" id="counter">کارت ۱ از ۵۰</div>
+    <div class="hint-text">👆 روی کارت کلیک کن تا برگردد</div>
+  </div>
+
+  <div class="flash-scene">
+    <div class="flash-card" id="flashCard">
+      <div class="card-face card-front">
+        <div class="lesson-badge" id="frontLesson">درس ۱</div>
+        <div class="face-label">سوال</div>
+        <div class="card-text" id="frontText"></div>
+        <div class="flip-hint">🔄 برای دیدن پاسخ کلیک کن</div>
+      </div>
+      <div class="card-face card-back">
+        <div class="lesson-badge" id="backLesson">درس ۱</div>
+        <div class="face-label">پاسخ</div>
+        <div class="card-text" id="backText"></div>
+        <div class="flip-hint">🔄 برای دیدن سوال کلیک کن</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="progress-bar">
+    <div class="progress-fill" id="progressFill"></div>
+  </div>
+
+  <div class="nav-buttons">
+    <button class="nav-btn prev" id="prevBtn">→ کارت قبلی</button>
+    <button class="nav-btn next" id="nextBtn">کارت بعدی ←</button>
+  </div>
+
+  <div class="bottom-back">
+    <a href="nohom.html" class="back-btn" style="margin:0;">➡ بازگشت به فهرست دروس</a>
+  </div>
+
+</div>
+
+<script>
+const cards = [
+  { l: 1, q: "زمین در منظومهٔ خورشیدی چندمین سیاره است؟", a: "سومین سیارهٔ منظومهٔ خورشیدی." },
+  { l: 1, q: "سیاره‌های درونی و بیرونی کدام‌اند؟", a: "درونی: تیر، ناهید، زمین، بهرام. بیرونی: برجیس، کیوان، اورانوس، نپتون." },
+  { l: 1, q: "مختصات جغرافیایی چیست؟", a: "طول و عرض جغرافیایی هر مکان که با شبکهٔ مدارها و نصف‌النهارها تعیین می‌شود." },
+  { l: 1, q: "نصف‌النهار مبدأ از کجا می‌گذرد؟", a: "از رصدخانهٔ گرینویچ در لندن." },
+  { l: 2, q: "حرکت وضعی زمین چیست؟", a: "چرخش زمین به دور محور خود در هر ۲۴ ساعت، از غرب به شرق." },
+  { l: 2, q: "پیامدهای حرکت وضعی زمین چیست؟", a: "شب و روز، اختلاف ساعت، حرکت ظاهری خورشید." },
+  { l: 2, q: "حرکت انتقالی زمین چیست؟", a: "گردش زمین به دور خورشید در ۳۶۵ روز و ۶ ساعت با سرعت ۳۰ کیلومتر در ثانیه." },
+  { l: 2, q: "علت اصلی پیدایش فصل‌ها چیست؟", a: "مایل بودن محور زمین (حدود ۲۳/۵ درجه)." },
+  { l: 2, q: "سال کبیسه چیست؟", a: "هر ۴ سال یک بار، ۶ ساعت‌های اضافی جمع شده و یک روز به سال اضافه می‌شود. سال کبیسه ۳۶۶ روز دارد." },
+  { l: 3, q: "چهار محیط اصلی زمین کدام‌اند؟", a: "سنگ کره، آب کره، هواکره، زیست کره." },
+  { l: 3, q: "تفاوت درهٔ V شکل و U شکل چیست؟", a: "V شکل مربوط به کوه‌های جوان، U شکل مربوط به کوه‌های فرسوده." },
+  { l: 3, q: "عوامل درونی تغییر ناهمواری‌ها کدام‌اند؟", a: "چین‌خوردگی، گسل، کوه‌های آتشفشانی." },
+  { l: 3, q: "عوامل بیرونی تغییر ناهمواری‌ها کدام‌اند؟", a: "هوازدگی، فرسایش آبی، بادی و یخچالی." },
+  { l: 3, q: "بلندترین قله و ژرف‌ترین نقطهٔ زمین کجاست؟", a: "بلندترین: قله اورست (۸۸۴۸ متر). ژرف‌ترین: درازگودال ماریانا (بیش از ۱۱۰۰۰ متر)." },
+  { l: 4, q: "پنج اقیانوس جهان کدام‌اند؟", a: "آرام، اطلس، هند، منجمد شمالی، منجمد جنوبی. آرام پهناورترین و عمیق‌ترین است." },
+  { l: 4, q: "جزر و مد چیست؟", a: "بالا آمدن و پایین رفتن منظم و دوره‌ای آب دریاها بر اثر جاذبهٔ ماه و خورشید. روزی دو بار تکرار می‌شود." },
+  { l: 4, q: "ترکیب گازهای جوّ زمین چگونه است؟", a: "۷۸٪ نیتروژن، ۲۱٪ اکسیژن، ۱٪ سایر گازها." },
+  { l: 4, q: "اهمیت لایهٔ اُزُن چیست؟", a: "در پوشَن‌سپهر قرار دارد و مانع از رسیدن اشعهٔ فرابنفش مضر خورشید به زمین می‌شود." },
+  { l: 4, q: "عوامل مؤثر بر تنوع آب و هوا کدام‌اند؟", a: "زاویهٔ تابش خورشید و عرض جغرافیایی، دوری/نزدیکی به اقیانوس، ارتفاع، فشار هوا و جریان باد." },
+  { l: 5, q: "زیست‌بوم (بیوم) چیست؟", a: "ناحیهٔ وسیع جغرافیایی با گیاهان و جانوران خاص." },
+  { l: 5, q: "مهم‌ترین عوامل مؤثر بر تنوع زیست‌بوم‌ها کدام‌اند؟", a: "آب و هوا (به‌ویژه دما و بارش)، شکل ناهمواری، جنس خاک." },
+  { l: 5, q: "گسترده‌ترین و پرتنوع‌ترین زیست‌بوم جهان کدام‌اند؟", a: "گسترده‌ترین: تایگا. پرتنوع‌ترین: جنگل بارانی استوایی." },
+  { l: 5, q: "ویژگی‌های زیست‌بوم توندرا چیست؟", a: "نزدیک قطب شمال، سرمای شدید، خزه و گُل سنگ، بزرگ‌ترین جانور: خرس قطبی." },
+  { l: 5, q: "ساوان چیست؟", a: "علفزار با درختان تک و منفرد در مجاورت جنگل استوایی، بیشترین وسعت در آفریقا." },
+  { l: 6, q: "جنگل‌زدایی چیست؟", a: "از بین بردن کامل جنگل‌ها در یک ناحیه." }
+];
+const cards2 = [
+  { l: 6, q: "چرا جنگل‌های بارانی استوایی را «ریه‌های زمین» می‌نامند؟", a: "زیرا حدود ۵۰٪ اکسیژن سیارهٔ زمین را تولید می‌کنند و ۵۰٪ رطوبت جو را می‌سازند." },
+  { l: 6, q: "مهم‌ترین علل تخریب زیستگاه‌ها کدام‌اند؟", a: "شهرسازی، صنعتی‌شدن، مصرف‌گرایی، شکار بی‌رویه، جنگل‌زدایی، کشاورزی غیراصولی." },
+  { l: 6, q: "اتحادیهٔ بین‌المللی حفاظت از طبیعت چه هدفی دارد؟", a: "همکاری بین کشورها برای حفاظت از زیست‌بوم‌ها و گونه‌های در معرض خطر." },
+  { l: 7, q: "جمعیت جهان امروز حدوداً چقدر است؟", a: "بیش از ۸ میلیارد نفر. پیش‌بینی می‌شود در ۲۰۵۰ به حدود ۱۱ میلیارد برسد." },
+  { l: 7, q: "علت اصلی رشد جمعیت در دو قرن اخیر چیست؟", a: "کاهش میزان مرگ و میر به‌ویژه مرگ و میر کودکان به دلیل بهبود بهداشت و تغذیه." },
+  { l: 7, q: "رشد طبیعی جمعیت چگونه محاسبه می‌شود؟", a: "از تفاوت میزان موالید (تولدها) و میزان مرگ و میر در یک دورهٔ زمانی." },
+  { l: 7, q: "رشد منفی جمعیت چیست؟", a: "وقتی درصد رشد جمعیت به کمتر از صفر برسد (مرگ و میر بیشتر از تولد)." },
+  { l: 7, q: "مهاجرت داخلی و خارجی چه تفاوتی دارند؟", a: "داخلی: در داخل مرزهای یک کشور. خارجی: از یک کشور به کشور دیگر." },
+  { l: 7, q: "مهاجرت اجباری چیست؟", a: "بدون میل فرد به دلایلی چون جنگ، قحطی، خشکسالی و حوادث طبیعی." },
+  { l: 7, q: "مشکلات رشد سریع شهرنشینی چیست؟", a: "ترافیک، آلودگی هوا، زاغه‌نشینی، اختلاف طبقاتی، بی‌خانمانی." },
+  { l: 8, q: "نابرابری جهانی چیست؟", a: "تفاوت کشورها در ثروت، درآمد، کیفیت زندگی، دسترسی به مسکن، آموزش و بهداشت." },
+  { l: 8, q: "عوامل خارجی نابرابری کدام‌اند؟", a: "استعمار، چپاول منابع، اشغال نظامی، دخالت در امور داخلی." },
+  { l: 8, q: "عوامل داخلی نابرابری کدام‌اند؟", a: "وابستگی به بیگانگان، استبداد، فرهنگ‌های غلط، نبود مدیریت صحیح، عدم وحدت." },
+  { l: 8, q: "شاخص توسعهٔ انسانی بر پایهٔ چه عواملی محاسبه می‌شود؟", a: "۱) درآمد و رفاه، ۲) امید به زندگی، ۳) سواد و آموزش." },
+  { l: 8, q: "تولید ناخالص داخلی (GDP) چیست؟", a: "ارزش کلیهٔ محصولاتی که در یک دورهٔ معین (یک ساله) در داخل کشورها تولید می‌شود." },
+  { l: 9, q: "مؤسس حکومت صفوی چه کسی بود؟", a: "شاه اسماعیل اول، از نوادگان شیخ صفی‌الدین اردبیلی." },
+  { l: 9, q: "قزلباش‌ها چه کسانی بودند؟", a: "ایل‌های ترک شیعه‌مذهب که حامی صفویان بودند." },
+  { l: 9, q: "جنگ چالدران بین کدام کشورها بود؟", a: "بین ایران (صفوی) و عثمانی در نزدیکی خوی. پیروزی عثمانی به دلیل سلاح آتشین." },
+  { l: 9, q: "پایتخت‌های صفویان به ترتیب کدام بودند؟", a: "تبریز (شاه اسماعیل)، قزوین (شاه تهماسب)، اصفهان (شاه عباس اول)." },
+  { l: 9, q: "علل فروپاشی صفویان چه بود؟", a: "ضعف شاهان پس از شاه عباس، اختلاف مقام‌ها، شورش افغان‌ها، تسلیم سلطان حسین." },
+  { l: 10, q: "جمعیت ایران در دورهٔ صفوی چقدر بود؟", a: "حدود ۱۰ میلیون نفر. بیشتر مردم کشاورزی و دامداری می‌کردند." },
+  { l: 10, q: "پرسودترین کالای صادراتی دورهٔ صفوی چه بود؟", a: "ابریشم که صادرات آن در انحصار شاه عباس بود." },
+  { l: 10, q: "سه دانشمند بزرگ عصر صفوی کدام‌اند؟", a: "ملاصدرا، شیخ بهایی، علامه محمدباقر مجلسی." },
+  { l: 10, q: "شیخ بهایی چه خدمات مهمی داشت؟", a: "طرح محاسبهٔ دقیق آب زاینده‌رود، ساخت گرمابه، طراحی مسجد چهارباغ، طرح شمع‌آباد." },
+  { l: 12, q: "مهم‌ترین اقدام امیرکبیر چه بود؟", a: "تأسیس مدرسهٔ دارالفنون (۱۲۶۸ ق) و انتشار روزنامهٔ وقایع اتفاقیه." }
+];
+
+const allCards = cards.concat(cards2);
+
+const faDigits = "۰۱۲۳۴۵۶۷۸۹";
+const toFa = n => String(n).replace(/\d/g, d => faDigits[d]);
+
+let current = 0;
+const total = allCards.length;
+const flashCard = document.getElementById("flashCard");
+const frontText = document.getElementById("frontText");
+const backText = document.getElementById("backText");
+const frontLesson = document.getElementById("frontLesson");
+const backLesson = document.getElementById("backLesson");
+const counter = document.getElementById("counter");
+const progressFill = document.getElementById("progressFill");
+const prevBtn = document.getElementById("prevBtn");
+const nextBtn = document.getElementById("nextBtn");
+
+function render() {
+  flashCard.classList.remove("flipped");
+  setTimeout(() => {
+    const c = allCards[current];
+    frontText.textContent = c.q;
+    backText.textContent = c.a;
+    frontLesson.textContent = `درس ${toFa(c.l)}`;
+    backLesson.textContent = `درس ${toFa(c.l)}`;
+    counter.textContent = `کارت ${toFa(current + 1)} از ${toFa(total)}`;
+    progressFill.style.width = `${((current + 1) / total) * 100}%`;
+    prevBtn.disabled = current === 0;
+    nextBtn.disabled = current === total - 1;
+  }, 150);
+}
+
+flashCard.addEventListener("click", () => flashCard.classList.toggle("flipped"));
+prevBtn.addEventListener("click", () => { if (current > 0) { current--; render(); } });
+nextBtn.addEventListener("click", () => { if (current < total - 1) { current++; render(); } });
+render();
+</script>
+
+</body>
+</html>
