@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>فلش کارت درس ۷ | مطالعات اجتماعی پایه نهم</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; font-family:'Vazirmatn',sans-serif; }
+  body { min-height:100vh; background-color:#f4f7f6; background-image:radial-gradient(#d1e0e0 1px, transparent 1px); background-size:20px 20px; color:#2c3e50; padding:30px 20px; display:flex; flex-direction:column; align-items:center; }
+  .container { width:100%; max-width:700px; }
+  .back-btn { display:inline-flex; align-items:center; gap:8px; text-decoration:none; color:#34495e; font-size:0.9rem; background:#fff; padding:8px 18px; border-radius:50px; margin-bottom:20px; transition:0.3s; border:1px solid #dcdde1; box-shadow:0 4px 10px rgba(0,0,0,0.05); font-weight:700; }
+  .back-btn:hover { background:#f8f9fa; transform:translateY(-2px); box-shadow:0 6px 15px rgba(0,0,0,0.1); }
+  .header-card { background:linear-gradient(135deg,#00acc1 0%,#00838f 100%); color:#fff; border-radius:20px; padding:30px 25px; text-align:center; box-shadow:0 10px 30px rgba(0,172,193,0.25); margin-bottom:25px; position:relative; overflow:hidden; }
+  .header-card::before { content:""; position:absolute; top:-60px; left:-60px; width:180px; height:180px; background:rgba(255,255,255,0.08); border-radius:50%; }
+  .header-badge { display:inline-block; background:rgba(255,255,255,0.22); padding:6px 16px; border-radius:50px; font-size:0.82rem; font-weight:700; margin-bottom:12px; }
+  .header-card h1 { font-size:1.4rem; font-weight:900; margin-bottom:8px; }
+  .header-card .subtitle { font-size:0.92rem; opacity:0.95; }
+  .counter-bar { display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; }
+  .counter-badge { background:#e0f7fa; color:#00838f; padding:8px 18px; border-radius:50px; font-weight:900; font-size:0.95rem; }
+  .hint-text { font-size:0.82rem; color:#7f8c8d; }
+  .flash-scene { perspective:1500px; width:100%; height:340px; margin-bottom:22px; }
+  .flash-card { width:100%; height:100%; position:relative; transform-style:preserve-3d; transition:transform 0.7s cubic-bezier(0.4,0,0.2,1); cursor:pointer; }
+  .flash-card.flipped { transform:rotateY(180deg); }
+  .card-face { position:absolute; inset:0; backface-visibility:hidden; -webkit-backface-visibility:hidden; border-radius:22px; padding:35px 28px; display:flex; flex-direction:column; justify-content:center; align-items:center; box-shadow:0 12px 40px rgba(0,0,0,0.12); text-align:center; overflow-y:auto; }
+  .card-front { background:linear-gradient(135deg,#00acc1,#00838f); color:#fff; }
+  .card-back { background:linear-gradient(135deg,#ffffff,#e0f7fa); color:#2c3e50; transform:rotateY(180deg); border:2px solid #00acc1; }
+  .face-label { position:absolute; top:16px; right:20px; background:rgba(255,255,255,0.25); padding:5px 14px; border-radius:50px; font-size:0.75rem; font-weight:800; }
+  .card-back .face-label { background:rgba(0,172,193,0.15); color:#00838f; }
+  .card-text { font-size:1.15rem; font-weight:800; line-height:1.9; max-width:100%; padding-top:10px; }
+  .card-back .card-text { font-size:1rem; font-weight:500; color:#2c3e50; line-height:2; text-align:right; }
+  .flip-hint { position:absolute; bottom:16px; left:50%; transform:translateX(-50%); font-size:0.78rem; opacity:0.75; font-weight:700; display:flex; align-items:center; gap:6px; white-space:nowrap; }
+  .nav-buttons { display:flex; gap:12px; margin-bottom:15px; }
+  .nav-btn { flex:1; padding:14px; border:none; border-radius:12px; font-size:0.98rem; font-weight:900; font-family:inherit; cursor:pointer; transition:0.25s; display:flex; align-items:center; justify-content:center; gap:8px; }
+  .nav-btn.prev { background:#fff; color:#00838f; border:2px solid #00acc1; }
+  .nav-btn.prev:hover:not(:disabled) { background:#e0f7fa; transform:translateY(-2px); }
+  .nav-btn.next { background:linear-gradient(135deg,#00acc1,#00838f); color:#fff; box-shadow:0 6px 18px rgba(0,172,193,0.3); }
+  .nav-btn.next:hover:not(:disabled) { transform:translateY(-2px); box-shadow:0 10px 25px rgba(0,172,193,0.4); }
+  .nav-btn:disabled { opacity:0.35; cursor:not-allowed; transform:none !important; box-shadow:none !important; }
+  .progress-bar { width:100%; height:8px; background:#e0f2f2; border-radius:50px; overflow:hidden; margin-bottom:20px; }
+  .progress-fill { height:100%; background:linear-gradient(90deg,#00acc1,#00838f); border-radius:50px; transition:width 0.4s ease; }
+  .bottom-back { display:flex; justify-content:center; margin-top:10px; }
+  @media(max-width:600px){ .header-card h1 { font-size:1.15rem; } .flash-scene { height:300px; } .card-text { font-size:1rem; } .card-back .card-text { font-size:0.92rem; } .card-face { padding:30px 20px; } }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <a href="nohom.html" class="back-btn">➡ بازگشت به صفحهٔ دروس</a>
+
+  <div class="header-card">
+    <div class="header-badge">🎴 فلش کارت</div>
+    <h1>درس ۷: جمعیت جهان</h1>
+    <p class="subtitle">فصل ۴ — ساکنان سیارۀ زمین</p>
+  </div>
+
+  <div class="counter-bar">
+    <div class="counter-badge" id="counter">کارت ۱ از ۱۵</div>
+    <div class="hint-text">👆 روی کارت کلیک کن تا برگردد</div>
+  </div>
+
+  <div class="flash-scene">
+    <div class="flash-card" id="flashCard">
+      <div class="card-face card-front">
+        <div class="face-label">سوال</div>
+        <div class="card-text" id="frontText"></div>
+        <div class="flip-hint">🔄 برای دیدن پاسخ کلیک کن</div>
+      </div>
+      <div class="card-face card-back">
+        <div class="face-label">پاسخ</div>
+        <div class="card-text" id="backText"></div>
+        <div class="flip-hint">🔄 برای دیدن سوال کلیک کن</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="progress-bar">
+    <div class="progress-fill" id="progressFill"></div>
+  </div>
+
+  <div class="nav-buttons">
+    <button class="nav-btn prev" id="prevBtn">→ کارت قبلی</button>
+    <button class="nav-btn next" id="nextBtn">کارت بعدی ←</button>
+  </div>
+
+  <div class="bottom-back">
+    <a href="nohom.html" class="back-btn" style="margin:0;">➡ بازگشت به فهرست دروس</a>
+  </div>
+
+</div>
+
+<script>
+const cards = [
+  { q: "جمعیت جهان امروز چقدر است؟", a: "بیش از ۸ میلیارد نفر. پیش‌بینی می‌شود در سال ۲۰۵۰ به حدود ۱۱ میلیارد نفر برسد." },
+  { q: "علت اصلی رشد زیاد جمعیت در دو قرن اخیر چیست؟", a: "کاهش میزان مرگ و میر، به‌ویژه مرگ و میر کودکان، به دلیل بهبود بهداشت و تغذیه." },
+  { q: "دو عامل مهم کاهش مرگ و میر در دو قرن اخیر کدام‌اند؟", a: "۱) بهبود بهداشت (پیشرفت پزشکی و مهار بیماری‌ها)، ۲) بهبود تغذیه (افزایش تولید غذا و حمل و نقل)." },
+  { q: "رشد طبیعی جمعیت چگونه محاسبه می‌شود؟", a: "از تفاوت میزان موالید (تولدها) و میزان مرگ و میر در یک دورهٔ زمانی." },
+  { q: "اگر میزان موالید از مرگ و میر بیشتر باشد، جمعیت چه می‌شود؟", a: "جمعیت افزایش می‌یابد." },
+  { q: "اگر میزان موالید کمتر از مرگ و میر باشد، جمعیت چه می‌شود؟", a: "جمعیت کاهش می‌یابد." },
+  { q: "رشد منفی جمعیت چیست؟", a: "وقتی درصد رشد جمعیت به کمتر از صفر برسد (مرگ و میر بیشتر از تولد)." },
+  { q: "کشورهای دارای رشد منفی با چه مشکلاتی مواجه‌اند؟", a: "افزایش جمعیت سالخورده، کاهش نیروی جوان، کاهش رشد اقتصادی و خطر پیری جمعیت." },
+  { q: "دو نوع مهاجرت از نظر مرز کدام‌اند؟", a: "۱) مهاجرت داخلی (در داخل مرزهای یک کشور)، ۲) مهاجرت بین‌المللی (از یک کشور به کشور دیگر)." },
+  { q: "مهاجرت اختیاری چیست؟", a: "افراد با میل و تصمیم خود برای دستیابی به زندگی بهتر مهاجرت می‌کنند." },
+  { q: "مهاجرت اجباری چیست؟", a: "افراد بدون میل خود و به دلایلی چون قحطی، خشکسالی، جنگ‌ها، حوادث طبیعی یا اشغال نظامی مجبور به ترک محل زندگی خود می‌شوند." },
+  { q: "سه عامل جذب جمعیت را نام ببرید.", a: "۱) آب و هوای معتدل، ۲) دشت‌های حاصلخیز و منابع آب، ۳) امکانات آموزشی، اقتصادی و بهداشتی." },
+  { q: "سه عامل دفع جمعیت را نام ببرید.", a: "۱) آب و هوای گرم و خشک، ۲) نبود امکانات و تسهیلات، ۳) جنگ و آشوب." },
+  { q: "روند شهرنشینی در جهان چگونه بوده است؟", a: "در سال ۱۹۵۰ حدود ۲۵٪ جمعیت جهان در شهرها زندگی می‌کردند، اما امروزه بیش از ۵۰٪ در شهرها زندگی می‌کنند و این روند ادامه دارد." },
+  { q: "مشکلات رشد سریع شهرنشینی چیست؟", a: "ترافیک سنگین، آلودگی هوا، زاغه‌نشینی، افزایش اختلاف طبقاتی، بی‌خانمانی و کمبود امکانات." }
+];
+
+const faDigits = "۰۱۲۳۴۵۶۷۸۹";
+const toFa = n => String(n).replace(/\d/g, d => faDigits[d]);
+
+let current = 0;
+const total = cards.length;
+const flashCard = document.getElementById("flashCard");
+const frontText = document.getElementById("frontText");
+const backText = document.getElementById("backText");
+const counter = document.getElementById("counter");
+const progressFill = document.getElementById("progressFill");
+const prevBtn = document.getElementById("prevBtn");
+const nextBtn = document.getElementById("nextBtn");
+
+function render() {
+  flashCard.classList.remove("flipped");
+  setTimeout(() => {
+    frontText.textContent = cards[current].q;
+    backText.textContent = cards[current].a;
+    counter.textContent = `کارت ${toFa(current + 1)} از ${toFa(total)}`;
+    progressFill.style.width = `${((current + 1) / total) * 100}%`;
+    prevBtn.disabled = current === 0;
+    nextBtn.disabled = current === total - 1;
+  }, 150);
+}
+
+flashCard.addEventListener("click", () => flashCard.classList.toggle("flipped"));
+prevBtn.addEventListener("click", () => { if (current > 0) { current--; render(); } });
+nextBtn.addEventListener("click", () => { if (current < total - 1) { current++; render(); } });
+render();
+</script>
+
+</body>
+</html>
