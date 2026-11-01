@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>فلش کارت درس ۱۶ | مطالعات اجتماعی پایه نهم</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; font-family:'Vazirmatn',sans-serif; }
+  body { min-height:100vh; background-color:#f4f7f6; background-image:radial-gradient(#d1e0e0 1px, transparent 1px); background-size:20px 20px; color:#2c3e50; padding:30px 20px; display:flex; flex-direction:column; align-items:center; }
+  .container { width:100%; max-width:700px; }
+  .back-btn { display:inline-flex; align-items:center; gap:8px; text-decoration:none; color:#34495e; font-size:0.9rem; background:#fff; padding:8px 18px; border-radius:50px; margin-bottom:20px; transition:0.3s; border:1px solid #dcdde1; box-shadow:0 4px 10px rgba(0,0,0,0.05); font-weight:700; }
+  .back-btn:hover { background:#f8f9fa; transform:translateY(-2px); box-shadow:0 6px 15px rgba(0,0,0,0.1); }
+  .header-card { background:linear-gradient(135deg,#00acc1 0%,#00838f 100%); color:#fff; border-radius:20px; padding:30px 25px; text-align:center; box-shadow:0 10px 30px rgba(0,172,193,0.25); margin-bottom:25px; position:relative; overflow:hidden; }
+  .header-card::before { content:""; position:absolute; top:-60px; left:-60px; width:180px; height:180px; background:rgba(255,255,255,0.08); border-radius:50%; }
+  .header-badge { display:inline-block; background:rgba(255,255,255,0.22); padding:6px 16px; border-radius:50px; font-size:0.82rem; font-weight:700; margin-bottom:12px; }
+  .header-card h1 { font-size:1.4rem; font-weight:900; margin-bottom:8px; }
+  .header-card .subtitle { font-size:0.92rem; opacity:0.95; }
+  .counter-bar { display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; }
+  .counter-badge { background:#e0f7fa; color:#00838f; padding:8px 18px; border-radius:50px; font-weight:900; font-size:0.95rem; }
+  .hint-text { font-size:0.82rem; color:#7f8c8d; }
+  .flash-scene { perspective:1500px; width:100%; height:340px; margin-bottom:22px; }
+  .flash-card { width:100%; height:100%; position:relative; transform-style:preserve-3d; transition:transform 0.7s cubic-bezier(0.4,0,0.2,1); cursor:pointer; }
+  .flash-card.flipped { transform:rotateY(180deg); }
+  .card-face { position:absolute; inset:0; backface-visibility:hidden; -webkit-backface-visibility:hidden; border-radius:22px; padding:35px 28px; display:flex; flex-direction:column; justify-content:center; align-items:center; box-shadow:0 12px 40px rgba(0,0,0,0.12); text-align:center; overflow-y:auto; }
+  .card-front { background:linear-gradient(135deg,#00acc1,#00838f); color:#fff; }
+  .card-back { background:linear-gradient(135deg,#ffffff,#e0f7fa); color:#2c3e50; transform:rotateY(180deg); border:2px solid #00acc1; }
+  .face-label { position:absolute; top:16px; right:20px; background:rgba(255,255,255,0.25); padding:5px 14px; border-radius:50px; font-size:0.75rem; font-weight:800; }
+  .card-back .face-label { background:rgba(0,172,193,0.15); color:#00838f; }
+  .card-text { font-size:1.15rem; font-weight:800; line-height:1.9; max-width:100%; padding-top:10px; }
+  .card-back .card-text { font-size:1rem; font-weight:500; color:#2c3e50; line-height:2; text-align:right; }
+  .flip-hint { position:absolute; bottom:16px; left:50%; transform:translateX(-50%); font-size:0.78rem; opacity:0.75; font-weight:700; display:flex; align-items:center; gap:6px; white-space:nowrap; }
+  .nav-buttons { display:flex; gap:12px; margin-bottom:15px; }
+  .nav-btn { flex:1; padding:14px; border:none; border-radius:12px; font-size:0.98rem; font-weight:900; font-family:inherit; cursor:pointer; transition:0.25s; display:flex; align-items:center; justify-content:center; gap:8px; }
+  .nav-btn.prev { background:#fff; color:#00838f; border:2px solid #00acc1; }
+  .nav-btn.prev:hover:not(:disabled) { background:#e0f7fa; transform:translateY(-2px); }
+  .nav-btn.next { background:linear-gradient(135deg,#00acc1,#00838f); color:#fff; box-shadow:0 6px 18px rgba(0,172,193,0.3); }
+  .nav-btn.next:hover:not(:disabled) { transform:translateY(-2px); box-shadow:0 10px 25px rgba(0,172,193,0.4); }
+  .nav-btn:disabled { opacity:0.35; cursor:not-allowed; transform:none !important; box-shadow:none !important; }
+  .progress-bar { width:100%; height:8px; background:#e0f2f2; border-radius:50px; overflow:hidden; margin-bottom:20px; }
+  .progress-fill { height:100%; background:linear-gradient(90deg,#00acc1,#00838f); border-radius:50px; transition:width 0.4s ease; }
+  .bottom-back { display:flex; justify-content:center; margin-top:10px; }
+  @media(max-width:600px){ .header-card h1 { font-size:1.15rem; } .flash-scene { height:300px; } .card-text { font-size:1rem; } .card-back .card-text { font-size:0.92rem; } .card-face { padding:30px 20px; } }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <a href="nohom.html" class="back-btn">➡ بازگشت به صفحهٔ دروس</a>
+
+  <div class="header-card">
+    <div class="header-badge">🎴 فلش کارت</div>
+    <h1>درس ۱۶: ایران در دوران پس از پیروزی انقلاب اسلامی</h1>
+    <p class="subtitle">فصل ۸ — سقوط حکومت شاهنشاهی و شکل‌گیری نظام جمهوری اسلامی</p>
+  </div>
+
+  <div class="counter-bar">
+    <div class="counter-badge" id="counter">کارت ۱ از ۱۵</div>
+    <div class="hint-text">👆 روی کارت کلیک کن تا برگردد</div>
+  </div>
+
+  <div class="flash-scene">
+    <div class="flash-card" id="flashCard">
+      <div class="card-face card-front">
+        <div class="face-label">سوال</div>
+        <div class="card-text" id="frontText"></div>
+        <div class="flip-hint">🔄 برای دیدن پاسخ کلیک کن</div>
+      </div>
+      <div class="card-face card-back">
+        <div class="face-label">پاسخ</div>
+        <div class="card-text" id="backText"></div>
+        <div class="flip-hint">🔄 برای دیدن سوال کلیک کن</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="progress-bar">
+    <div class="progress-fill" id="progressFill"></div>
+  </div>
+
+  <div class="nav-buttons">
+    <button class="nav-btn prev" id="prevBtn">→ کارت قبلی</button>
+    <button class="nav-btn next" id="nextBtn">کارت بعدی ←</button>
+  </div>
+
+  <div class="bottom-back">
+    <a href="nohom.html" class="back-btn" style="margin:0;">➡ بازگشت به فهرست دروس</a>
+  </div>
+
+</div>
+
+<script>
+const cards = [
+  { q: "همه‌پرسی تعیین نظام سیاسی چه زمانی برگزار شد و چه نتیجه‌ای داشت؟", a: "در ۱۰ و ۱۱ فروردین ۱۳۵۸ برگزار شد و ۹۸/۲ درصد مردم به جمهوری اسلامی رأی مثبت دادند. ۱۲ فروردین به عنوان روز جمهوری اسلامی نام‌گذاری شد." },
+  { q: "قانون اساسی جمهوری اسلامی چگونه تدوین و تصویب شد؟", a: "در مرداد ۱۳۵۸ مردم نمایندگان مجلس خبرگان قانون اساسی (۷۵ نفر) را انتخاب کردند. این مجلس قانون اساسی را تدوین و تصویب کرد و در آذر ۱۳۵۸ با رأی ۹۹/۵ درصدی ملت تأیید شد." },
+  { q: "اولین دورهٔ انتخابات ریاست جمهوری و مجلس شورای اسلامی چه زمانی برگزار شد؟", a: "انتخابات ریاست جمهوری در بهمن ۱۳۵۸ و انتخابات مجلس شورای اسلامی در اسفند ۱۳۵۸ برگزار شد." },
+  { q: "مهم‌ترین نهادهای انقلابی چه بودند؟", a: "سپاه پاسداران، بسیج مستضعفان، کمیتهٔ انقلاب، جهاد سازندگی، کمیتهٔ امداد امام خمینی، نهضت سوادآموزی و سازمان تبلیغات اسلامی." },
+  { q: "کمیتهٔ انقلاب چه وظیفه‌ای داشت؟", a: "برقراری نظم و امنیت. بعدها با شهربانی و ژاندارمری ادغام شدند و نیروی انتظامی را تشکیل دادند." },
+  { q: "جهاد سازندگی چه هدفی داشت؟", a: "عمران و آبادانی روستاها و مناطق محروم. بعدها با وزارت کشاورزی ادغام شد." },
+  { q: "چرا سفارت آمریکا در ایران تسخیر شد؟", a: "زیرا سفارت آمریکا در ایران به مرکزی برای حمایت از گروه‌های ضد انقلاب و جاسوسی و نفوذ در برخی جریان‌های سیاسی و مذهبی تبدیل شده بود. در ۱۳ آبان ۱۳۵۸ دانشجویان پیرو خط امام آنجا را تسخیر کردند." },
+  { q: "نمونه‌هایی از ترورهای منافقین را نام ببرید.", a: "شهادت آیت‌الله مرتضی مطهری (۱۲ اردیبهشت ۱۳۵۸)، شهادت آیت‌الله دکتر بهشتی و ۷۲ تن از یارانش (۷ تیر ۱۳۶۰)، شهادت رجایی و باهنر (۸ شهریور ۱۳۶۰) و مجروح شدن آیت‌الله خامنه‌ای." },
+  { q: "جنگ تحمیلی چه زمانی آغاز شد و چه سرانجامی داشت؟", a: "در ۳۱ شهریور ۱۳۵۹ با حملهٔ صدام به خرمشهر آغاز شد و پس از هشت سال پایداری ملت، با ناکامی صدام به پایان رسید. صدام نتوانست یک وجب از خاک ایران را جدا کند." },
+  { q: "کدام کشورها در جنگ تحمیلی از رژیم بعث عراق حمایت می‌کردند؟", a: "آمریکا، شوروی، انگلستان، فرانسه و آلمان که انواع کمک‌های تجهیزاتی و اطلاعاتی را به رژیم بعث عراق می‌رساندند." },
+  { q: "حملهٔ نظامی آمریکا برای آزادی گروگان‌ها در کدام منطقه خنثی شد؟", a: "در صحرای طبس، هواپیما و بالگردهای آمریکایی دچار طوفان شن شدند و نیروهای آمریکایی با تحمل تلفات و خسارت گریختند." },
+  { q: "امام خمینی در چه تاریخی رحلت کردند؟", a: "در شامگاه ۱۳ خرداد ۱۳۶۸ در تهران. پیکر ایشان پس از یک تشییع بی‌نظیر تاریخی در نزدیکی بهشت زهرای تهران به خاک سپرده شد." },
+  { q: "پس از رحلت امام خمینی، رهبر جدید چگونه انتخاب شد؟", a: "یک روز پس از درگذشت امام، مجلس خبرگان رهبری با توجه به ویژگی‌های تعیین‌شده در قانون اساسی، آیت‌الله العظمی سید علی حسینی خامنه‌ای را به عنوان رهبر جمهوری اسلامی ایران انتخاب کرد." },
+  { q: "چالش‌های اصلی ایران پس از پایان جنگ تحمیلی چه بود؟", a: "بازسازی زیرساخت‌های تخریب‌شده در جنگ، رونق بخشیدن به اقتصاد و بازگرداندن کشور به مسیر پیشرفت، در حالی که دشمنی برخی قدرت‌های خارجی مانع تسریع این مسیر می‌شد." },
+  { q: "سه عامل مؤثر در موفقیت و استمرار نظام جمهوری اسلامی چه بوده است؟", a: "ایمان و اعتقاد مردم به اسلام، وحدت و همدلی ملت، رهبری دینی و قاطع، و مشارکت مردمی در همه‌پرسی‌ها، انتخابات و دفاع از کشور." }
+];
+
+const faDigits = "۰۱۲۳۴۵۶۷۸۹";
+const toFa = n => String(n).replace(/\d/g, d => faDigits[d]);
+
+let current = 0;
+const total = cards.length;
+const flashCard = document.getElementById("flashCard");
+const frontText = document.getElementById("frontText");
+const backText = document.getElementById("backText");
+const counter = document.getElementById("counter");
+const progressFill = document.getElementById("progressFill");
+const prevBtn = document.getElementById("prevBtn");
+const nextBtn = document.getElementById("nextBtn");
+
+function render() {
+  flashCard.classList.remove("flipped");
+  setTimeout(() => {
+    frontText.textContent = cards[current].q;
+    backText.textContent = cards[current].a;
+    counter.textContent = `کارت ${toFa(current + 1)} از ${toFa(total)}`;
+    progressFill.style.width = `${((current + 1) / total) * 100}%`;
+    prevBtn.disabled = current === 0;
+    nextBtn.disabled = current === total - 1;
+  }, 150);
+}
+
+flashCard.addEventListener("click", () => flashCard.classList.toggle("flipped"));
+prevBtn.addEventListener("click", () => { if (current > 0) { current--; render(); } });
+nextBtn.addEventListener("click", () => { if (current < total - 1) { current++; render(); } });
+render();
+</script>
+
+</body>
+</html>
