@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>آزمون تشریحی درس ۴ | مطالعات اجتماعی پایه نهم</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; font-family:'Vazirmatn',sans-serif; }
+  body { min-height:100vh; background-color:#f4f7f6; background-image:radial-gradient(#d1e0e0 1px, transparent 1px); background-size:20px 20px; color:#2c3e50; padding:30px 20px; display:flex; flex-direction:column; align-items:center; }
+  .container { width:100%; max-width:800px; }
+  .back-btn { display:inline-flex; align-items:center; gap:8px; text-decoration:none; color:#34495e; font-size:0.9rem; background:#fff; padding:8px 18px; border-radius:50px; margin-bottom:20px; transition:0.3s; border:1px solid #dcdde1; box-shadow:0 4px 10px rgba(0,0,0,0.05); font-weight:700; }
+  .back-btn:hover { background:#f8f9fa; transform:translateY(-2px); box-shadow:0 6px 15px rgba(0,0,0,0.1); }
+  .card { background:#fff; border-radius:20px; padding:35px 28px; box-shadow:0 8px 30px rgba(0,0,0,0.08); border-top:6px solid #e74c3c; margin-bottom:20px; }
+  .header-card { background:linear-gradient(135deg,#e74c3c 0%,#c0392b 100%); color:#fff; border-radius:20px; padding:30px 25px; text-align:center; box-shadow:0 10px 30px rgba(231,76,60,0.25); margin-bottom:20px; position:relative; overflow:hidden; }
+  .header-card::before { content:""; position:absolute; top:-60px; left:-60px; width:180px; height:180px; background:rgba(255,255,255,0.08); border-radius:50%; }
+  .header-badge { display:inline-block; background:rgba(255,255,255,0.22); padding:6px 16px; border-radius:50px; font-size:0.82rem; font-weight:700; margin-bottom:12px; }
+  .header-card h1 { font-size:1.5rem; font-weight:900; margin-bottom:8px; }
+  .header-card .subtitle { font-size:0.95rem; opacity:0.95; }
+  .start-screen h2 { font-size:1.25rem; color:#c0392b; margin-bottom:18px; text-align:center; font-weight:900; }
+  .info-list { background:#fdedec; border-radius:14px; padding:18px 22px; margin-bottom:20px; list-style:none; }
+  .info-list li { display:flex; align-items:center; gap:10px; font-size:0.95rem; padding:7px 0; font-weight:500; }
+  .info-list li .ico { font-size:1.2rem; }
+  .name-input { width:100%; padding:14px 18px; border:2px solid #f5b7b1; border-radius:12px; font-size:1rem; font-family:inherit; margin-bottom:18px; outline:none; transition:0.25s; text-align:center; }
+  .name-input:focus { border-color:#e74c3c; box-shadow:0 0 0 4px rgba(231,76,60,0.12); }
+  .btn-primary { width:100%; padding:15px; background:linear-gradient(135deg,#e74c3c,#c0392b); color:#fff; border:none; border-radius:12px; font-size:1.05rem; font-weight:900; font-family:inherit; cursor:pointer; transition:0.3s; box-shadow:0 6px 18px rgba(231,76,60,0.3); }
+  .btn-primary:hover { transform:translateY(-2px); box-shadow:0 10px 25px rgba(231,76,60,0.4); }
+  .quiz-topbar { display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; gap:15px; flex-wrap:wrap; }
+  .question-counter { background:#fdedec; color:#c0392b; padding:8px 16px; border-radius:50px; font-weight:800; font-size:0.9rem; }
+  .timer-box { background:#c0392b; color:#fff; padding:8px 18px; border-radius:50px; font-weight:900; font-size:1.1rem; display:flex; align-items:center; gap:8px; min-width:120px; justify-content:center; transition:0.3s; }
+  .timer-box.warning { background:#e74c3c; animation:pulseTimer 0.8s infinite; }
+  @keyframes pulseTimer { 0%,100% { transform:scale(1); } 50% { transform:scale(1.08); } }
+  .progress-bar { width:100%; height:10px; background:#fadbd8; border-radius:50px; overflow:hidden; margin-bottom:22px; }
+  .progress-fill { height:100%; background:linear-gradient(90deg,#e74c3c,#c0392b); border-radius:50px; transition:width 0.4s ease; width:0%; }
+  .question-box h3 { font-size:1.1rem; color:#2c3e50; line-height:1.9; margin-bottom:18px; font-weight:800; }
+  .question-num { display:inline-block; background:#e74c3c; color:#fff; width:32px; height:32px; border-radius:50%; text-align:center; line-height:32px; font-weight:900; font-size:0.95rem; margin-left:8px; }
+  .answer-area { width:100%; min-height:160px; padding:16px 18px; border:2px solid #f5b7b1; border-radius:14px; font-size:0.98rem; font-family:inherit; line-height:1.9; resize:vertical; outline:none; transition:0.25s; }
+  .answer-area:focus { border-color:#e74c3c; box-shadow:0 0 0 4px rgba(231,76,60,0.12); }
+  .btn-next { width:100%; padding:14px; background:linear-gradient(135deg,#e74c3c,#c0392b); color:#fff; border:none; border-radius:12px; font-size:1rem; font-weight:900; font-family:inherit; cursor:pointer; transition:0.3s; margin-top:22px; box-shadow:0 6px 18px rgba(231,76,60,0.3); }
+  .btn-next:not(:disabled):hover { transform:translateY(-2px); box-shadow:0 10px 25px rgba(231,76,60,0.4); }
+  .result-screen { text-align:center; }
+  .result-title { font-size:1.4rem; font-weight:900; color:#c0392b; margin-bottom:20px; }
+  .result-info { background:#fdedec; padding:16px 22px; border-radius:14px; margin-bottom:22px; font-size:0.95rem; font-weight:700; color:#922b21; }
+  .answer-card { background:#f8fdfd; border-radius:14px; padding:18px 20px; margin-bottom:14px; text-align:right; border-right:5px solid #e74c3c; }
+  .answer-card .q-title { font-weight:800; color:#c0392b; margin-bottom:10px; font-size:0.95rem; line-height:1.8; }
+  .answer-card .user-answer { background:#fff; padding:12px 16px; border-radius:10px; font-size:0.92rem; line-height:1.9; color:#2c3e50; border:1px solid #f5b7b1; min-height:50px; white-space:pre-wrap; word-wrap:break-word; }
+  .answer-card .user-answer.empty { color:#95a5a6; font-style:italic; background:#fef9f9; }
+  .btn-secondary { width:100%; padding:14px; background:#fff; color:#c0392b; border:2px solid #e74c3c; border-radius:12px; font-size:1rem; font-weight:900; font-family:inherit; cursor:pointer; transition:0.3s; margin-bottom:10px; }
+  .btn-secondary:hover { background:#fdedec; transform:translateY(-2px); }
+  .copy-notice { position:fixed; bottom:30px; left:50%; transform:translateX(-50%) translateY(120px); background:#2ecc71; color:#fff; padding:14px 30px; border-radius:50px; font-weight:800; font-size:0.95rem; box-shadow:0 10px 30px rgba(46,204,113,0.4); transition:transform 0.4s ease, opacity 0.4s; opacity:0; z-index:1000; }
+  .copy-notice.show { transform:translateX(-50%) translateY(0); opacity:1; }
+  .hidden { display:none !important; }
+  @media(max-width:600px){ .header-card h1 { font-size:1.25rem; } .card { padding:25px 18px; } .answer-area { min-height:130px; } }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <a href="nohom.html" class="back-btn">➡ بازگشت به صفحهٔ دروس</a>
+
+  <div class="header-card">
+    <div class="header-badge">✍️ آزمون تشریحی</div>
+    <h1>درس ۴: آب فراوان، هوای پاک</h1>
+    <p class="subtitle">فصل ۲ — سنگ کره، آب کره، هوا کره</p>
+  </div>
+
+  <div class="card start-screen" id="startScreen">
+    <h2>✍️ آماده‌ای؟</h2>
+    <ul class="info-list">
+      <li><span class="ico">📝</span> ۵ سوال تشریحی تصادفی (از بانک ۲۰ سوالی)</li>
+      <li><span class="ico">⏱️</span> هر سوال ۲ دقیقه فرصت دارد</li>
+      <li><span class="ico">✏️</span> پاسخ‌ها را در کادر مخصوص بنویس</li>
+      <li><span class="ico">📋</span> در پایان، همهٔ پاسخ‌ها قابل کپی برای ارسال به معلم</li>
+    </ul>
+    <input type="text" id="studentName" class="name-input" placeholder="نام و نام خانوادگی خود را وارد کنید">
+    <button class="btn-primary" id="startBtn">🚀 شروع آزمون</button>
+  </div>
+
+  <div class="card hidden" id="quizScreen">
+    <div class="quiz-topbar">
+      <div class="question-counter" id="questionCounter">سوال ۱ از ۵</div>
+      <div class="timer-box" id="timerBox">⏱️ <span id="timerText">۰۲:۰۰</span></div>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="question-box">
+      <h3><span class="question-num" id="qNum">۱</span><span id="qText"></span></h3>
+      <textarea id="answerArea" class="answer-area" placeholder="پاسخ خود را اینجا بنویسید..."></textarea>
+    </div>
+    <button class="btn-next" id="nextBtn">سوال بعدی ←</button>
+  </div>
+
+  <div class="card hidden result-screen" id="resultScreen">
+    <div class="result-title">🎓 پاسخ‌نامهٔ آزمون تشریحی</div>
+    <div class="result-info" id="resultInfo"></div>
+    <div id="answersList"></div>
+    <button class="btn-primary" id="copyBtn">📋 کپی پاسخ‌ها برای ارسال به معلم</button>
+    <button class="btn-secondary" id="restartBtn">🔄 آزمون مجدد</button>
+    <a href="nohom.html" class="back-btn" style="width:100%; justify-content:center; margin-top:8px;">➡ بازگشت به دروس</a>
+  </div>
+
+</div>
+
+<div class="copy-notice" id="copyNotice">✅ پاسخ‌ها کپی شد!</div>
+
+<script>
+const essayBank = [
+  "پنج اقیانوس بزرگ جهان را نام ببرید و بگویید کدام‌یک پهناورترین است.",
+  "جزر و مد چیست و چگونه ایجاد می‌شود؟",
+  "جریان‌های دریایی چگونه بر آب و هوای مناطق مجاور اثر می‌گذارند؟",
+  "ناهمواری‌های کف اقیانوس‌ها را نام ببرید و هر یک را توضیح دهید.",
+  "ترکیب گازهای تشکیل‌دهندهٔ جوّ زمین را بیان کنید.",
+  "لایه‌های جوّ را نام ببرید و بگویید لایهٔ اُزُن در کدام بخش قرار دارد.",
+  "اهمیت لایهٔ اُزُن برای حیات روی زمین چیست؟",
+  "عوامل مؤثر بر تنوع آب و هوا در جهان را نام ببرید و هر یک را توضیح دهید.",
+  "چرا در نزدیکی استوا هوا گرم و در نزدیکی قطب‌ها سرد است؟",
+  "چرا آب‌ها دیرتر از خشکی‌ها گرم و سرد می‌شوند و این موضوع چه تأثیری بر آب و هوا دارد؟",
+  "منظور از گازهای گلخانه‌ای چیست و چگونه موجب گرم شدن زمین می‌شوند؟",
+  "سه پیامد مهم تغییر اقلیم را نام ببرید و توضیح دهید.",
+  "چرا آمریکا بیشترین نقش را در تشدید تغییر اقلیم دارد؟",
+  "دلیل اصلی افزایش میانگین دمای زمین در یک قرن گذشته چیست؟",
+  "چرا اقیانوس‌ها برای انسان اهمیت زیادی دارند؟ سه مورد ذکر کنید.",
+  "چرا محل تلاقی جریان‌های گرم و سرد دریایی از مناطق مهم صید ماهی جهان است؟",
+  "چرا برخی از کشورها با توافق‌های بین‌المللی برای حفاظت از اقیانوس‌ها مخالفت می‌کنند؟",
+  "چرا لایهٔ وَردسپهر برای حیات موجودات زنده اهمیت دارد؟",
+  "چرا با افزایش ارتفاع از سطح زمین، دما کاهش می‌یابد؟",
+  "با توجه به مشکل کمبود آب در کشورمان، چه راهکارهایی برای مصرف درست آب پیشنهاد می‌کنید؟"
+];
+
+const TOTAL_ESSAY = 5;
+const TIME_PER_QUESTION = 120;
+const faDigits = "۰۱۲۳۴۵۶۷۸۹";
+let essayQuestions = [];
+let currentIndex = 0;
+let userAnswers = [];
+let timerInterval = null;
+let timeLeft = TIME_PER_QUESTION;
+let studentName = "";
+
+function toFa(num) { return String(num).replace(/\d/g, d => faDigits[d]); }
+function shuffleArray(arr) { const a = [...arr]; for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+function formatTime(seconds) { const m = Math.floor(seconds / 60); const s = seconds % 60; return toFa(String(m).padStart(2, "0") + ":" + String(s).padStart(2, "0")); }
+
+document.getElementById("startBtn").addEventListener("click", () => {
+  const name = document.getElementById("studentName").value.trim();
+  if (!name) { document.getElementById("studentName").focus(); document.getElementById("studentName").style.borderColor = "#c0392b"; document.getElementById("studentName").placeholder = "⚠️ لطفاً نام خود را وارد کنید"; return; }
+  studentName = name;
+  essayQuestions = shuffleArray(essayBank).slice(0, TOTAL_ESSAY);
+  currentIndex = 0;
+  userAnswers = new Array(TOTAL_ESSAY).fill("");
+  document.getElementById("startScreen").classList.add("hidden");
+  document.getElementById("quizScreen").classList.remove("hidden");
+  renderQuestion();
+});
+
+function renderQuestion() {
+  if (currentIndex >= TOTAL_ESSAY) { finishQuiz(); return; }
+  const q = essayQuestions[currentIndex];
+  document.getElementById("questionCounter").textContent = `سوال ${toFa(currentIndex + 1)} از ${toFa(TOTAL_ESSAY)}`;
+  document.getElementById("qNum").textContent = toFa(currentIndex + 1);
+  document.getElementById("qText").textContent = q;
+  const area = document.getElementById("answerArea");
+  area.value = userAnswers[currentIndex] || "";
+  document.getElementById("nextBtn").textContent = currentIndex === TOTAL_ESSAY - 1 ? "پایان آزمون و مشاهدهٔ پاسخ‌نامه ←" : "سوال بعدی ←";
+  document.getElementById("progressFill").style.width = `${(currentIndex / TOTAL_ESSAY) * 100}%`;
+  startTimer();
+  setTimeout(() => area.focus(), 100);
+}
+
+function startTimer() {
+  clearInterval(timerInterval);
+  timeLeft = TIME_PER_QUESTION;
+  updateTimerDisplay();
+  const tb = document.getElementById("timerBox");
+  tb.classList.remove("warning");
+  timerInterval = setInterval(() => {
+    timeLeft--;
+    updateTimerDisplay();
+    if (timeLeft <= 10 && timeLeft > 0) tb.classList.add("warning");
+    if (timeLeft <= 0) { clearInterval(timerInterval); goNext(); }
+  }, 1000);
+}
+
+function updateTimerDisplay() { document.getElementById("timerText").textContent = formatTime(Math.max(0, timeLeft)); }
+
+document.getElementById("nextBtn").addEventListener("click", () => {
+  clearInterval(timerInterval);
+  userAnswers[currentIndex] = document.getElementById("answerArea").value.trim();
+  goNext();
+});
+
+function goNext() {
+  userAnswers[currentIndex] = document.getElementById("answerArea").value.trim();
+  currentIndex++;
+  if (currentIndex >= TOTAL_ESSAY) finishQuiz();
+  else renderQuestion();
+}
+
+function finishQuiz() {
+  clearInterval(timerInterval);
+  document.getElementById("quizScreen").classList.add("hidden");
+  document.getElementById("resultScreen").classList.remove("hidden");
+  document.getElementById("resultInfo").innerHTML = `👤 نام: <b>${studentName}</b><br>📝 تعداد سوال: ${toFa(TOTAL_ESSAY)} سوال تشریحی<br>✅ پاسخ‌ها را برای معلم ارسال کن.`;
+  const list = document.getElementById("answersList");
+  list.innerHTML = "";
+  essayQuestions.forEach((q, i) => {
+    const answer = userAnswers[i] || "";
+    const card = document.createElement("div");
+    card.className = "answer-card";
+    const answerHTML = answer ? `<div class="user-answer">${escapeHTML(answer)}</div>` : `<div class="user-answer empty">⚠️ پاسخ داده نشده</div>`;
+    card.innerHTML = `<div class="q-title">${toFa(i + 1)}. ${q}</div>${answerHTML}`;
+    list.appendChild(card);
+  });
+  document.getElementById("progressFill").style.width = "100%";
+}
+
+function escapeHTML(str) { return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
+
+document.getElementById("copyBtn").addEventListener("click", () => {
+  let text = `📋 پاسخ‌نامهٔ آزمون تشریحی — درس ۴ (آب فراوان، هوای پاک)\n`;
+  text += `👤 نام: ${studentName}\n📚 پایه: نهم | مطالعات اجتماعی\n━━━━━━━━━━━━━━━━━━━━\n\n`;
+  essayQuestions.forEach((q, i) => { text += `سوال ${toFa(i + 1)}: ${q}\nپاسخ: ${userAnswers[i] || "(بدون پاسخ)"}\n\n`; });
+  text += `━━━━━━━━━━━━━━━━━━━━\nتعداد سوال: ${toFa(TOTAL_ESSAY)}\n`;
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(showCopyNotice).catch(fallbackCopy.bind(null, text));
+  } else { fallbackCopy(text); }
+});
+
+function fallbackCopy(text) {
+  const ta = document.createElement("textarea");
+  ta.value = text; ta.style.position = "fixed"; ta.style.left = "-9999px";
+  document.body.appendChild(ta); ta.select();
+  try { document.execCommand("copy"); showCopyNotice(); }
+  catch (e) { alert("کپی خودکار ممکن نشد. لطفاً پاسخ‌ها را دستی انتخاب و کپی کنید."); }
+  document.body.removeChild(ta);
+}
+
+function showCopyNotice() {
+  const notice = document.getElementById("copyNotice");
+  notice.classList.add("show");
+  setTimeout(() => notice.classList.remove("show"), 2500);
+}
+
+document.getElementById("restartBtn").addEventListener("click", () => {
+  document.getElementById("resultScreen").classList.add("hidden");
+  document.getElementById("startScreen").classList.remove("hidden");
+  document.getElementById("studentName").value = "";
+  document.getElementById("studentName").style.borderColor = "#f5b7b1";
+  document.getElementById("studentName").placeholder = "نام و نام خانوادگی خود را وارد کنید";
+});
+</script>
+
+</body>
+</html>
