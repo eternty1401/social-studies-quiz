@@ -11,19 +11,23 @@
     background-color: #f4f7f6;
     background-image: radial-gradient(#d1e0e0 1px, transparent 1px);
     background-size: 20px 20px;
-    color: #2c3e50; padding: 30px 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh;
+    color: #2c3e50; padding: 30px 20px;
+    display: flex; flex-direction: column; align-items: center;
+    min-height: 100vh;
   }
   .container {
     background: #fff; width: 100%; max-width: 800px; border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.08); padding: 35px; border: 1px solid #eef2f5;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08); padding: 35px;
+    border: 1px solid #eef2f5;
   }
-  
+
   #start-section { text-align: center; padding: 20px 0; }
   #start-section h1 { color: #00acc1; font-size: 1.6rem; margin-bottom: 15px; }
   #start-section p { color: #7f8c8d; margin-bottom: 20px; line-height: 1.8; }
   .info-box {
     background: #e0f7fa; border-radius: 12px; padding: 15px 20px;
-    margin-bottom: 25px; font-size: 0.9rem; color: #00acc1; text-align: right;
+    margin-bottom: 25px; font-size: 0.9rem; color: #00acc1;
+    text-align: right; line-height: 2;
   }
   .name-input {
     width: 100%; max-width: 400px; padding: 15px; margin-bottom: 20px;
@@ -34,43 +38,52 @@
   .start-btn {
     background: #2ecc71; color: #fff; border: none; padding: 15px 40px;
     border-radius: 12px; font-size: 1.1rem; font-weight: 900; font-family: inherit;
-    cursor: pointer; transition: 0.3s; box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);
+    cursor: pointer; transition: 0.3s;
+    box-shadow: 0 4px 15px rgba(46,204,113,0.3);
   }
   .start-btn:hover { background: #27ae60; transform: translateY(-2px); }
 
   #quiz-section { display: none; }
-  .header-top { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px dashed #eef2f5; padding-bottom: 15px; margin-bottom: 25px; }
+  .header-top {
+    display: flex; justify-content: space-between; align-items: center;
+    border-bottom: 2px dashed #eef2f5; padding-bottom: 15px; margin-bottom: 25px;
+  }
   .header-title h1 { color: #00acc1; font-size: 1.3rem; }
   .header-title p { color: #7f8c8d; font-size: 0.85rem; margin-top: 5px; }
   .timer-box {
     background: #fdedec; color: #e74c3c; padding: 8px 18px; border-radius: 50px;
     font-weight: 900; font-size: 1.1rem; border: 1px solid #fadbd8;
-    display: flex; align-items: center; gap: 8px; direction: ltr;
+    display: flex; align-items: center; gap: 8px;
     transition: all 0.3s;
   }
-  .timer-box.warning { background: #fef9e7; color: #f39c12; border-color: #fae5d3; animation: pulse 1s infinite; }
-  @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
-
+  .timer-box.warning {
+    background: #fef9e7; color: #f39c12; border-color: #fae5d3;
+    animation: pulse 1s infinite;
+  }
+  @keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+  }
   .progress-bar-container {
-    width: 100%; height: 8px; background: #ecf0f1; border-radius: 10px;
-    margin-bottom: 25px; overflow: hidden;
+    width: 100%; height: 8px; background: #ecf0f1;
+    border-radius: 10px; margin-bottom: 25px; overflow: hidden;
   }
   .progress-bar {
     height: 100%; background: linear-gradient(90deg, #00acc1, #26c6da);
-    border-radius: 10px; transition: width 0.4s ease;
-    width: 0%;
+    border-radius: 10px; transition: width 0.4s ease; width: 0%;
   }
-
-  .question-box {
+   .question-box {
     background: #fafbfc; border: 1px solid #eef2f5; border-radius: 12px;
     padding: 25px; margin-bottom: 20px; min-height: 300px;
     animation: slideIn 0.4s ease;
   }
-  @keyframes slideIn { from { opacity: 0; transform: translateX(30px); } to { opacity: 1; transform: translateX(0); } }
-  
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateX(30px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
   .q-number { font-size: 0.85rem; color: #00acc1; font-weight: 900; margin-bottom: 10px; }
   .q-title { font-weight: 900; font-size: 1.1rem; margin-bottom: 20px; line-height: 1.7; }
-  
   .options { display: flex; flex-direction: column; gap: 10px; }
   .option-label {
     display: flex; align-items: center; gap: 10px; padding: 14px 18px;
@@ -78,26 +91,27 @@
     cursor: pointer; transition: 0.2s; font-size: 0.95rem;
   }
   .option-label:hover { background: #e0f7fa; border-color: #00acc1; }
-  .option-label input[type="radio"] { display: none; }
-  .option-label.selected { background: #e0f7fa; border-color: #00acc1; font-weight: 700; color: #00838f; }
-  
+  .option-label.selected {
+    background: #e0f7fa; border-color: #00acc1; font-weight: 700; color: #00838f;
+  }
   .nav-buttons { display: flex; justify-content: flex-end; margin-top: 20px; }
   .next-btn {
     background: #00acc1; color: #fff; border: none; padding: 12px 35px;
     border-radius: 30px; font-size: 1rem; font-weight: 700; font-family: inherit;
-    cursor: pointer; transition: 0.3s; box-shadow: 0 4px 12px rgba(0,172,193,0.3);
+    cursor: pointer; transition: 0.3s;
+    box-shadow: 0 4px 12px rgba(0,172,193,0.3);
   }
   .next-btn:hover { background: #00838f; transform: translateY(-2px); }
-
   .result-container { display: none; text-align: center; }
   .student-name-display {
-    font-size: 1.2rem; font-weight: 900; color: #2c3e50; margin-bottom: 20px;
-    background: #ecf0f1; padding: 10px 20px; border-radius: 10px; display: inline-block;
+    font-size: 1.2rem; font-weight: 900; color: #2c3e50;
+    margin-bottom: 20px; background: #ecf0f1; padding: 10px 20px;
+    border-radius: 10px; display: inline-block;
   }
   .score-circle {
     width: 150px; height: 150px; border-radius: 50%; margin: 0 auto 20px;
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    border: 8px solid #ecf0f1;
+    display: flex; flex-direction: column; align-items: center;
+    justify-content: center; border: 8px solid #ecf0f1;
   }
   .score-circle.excellent { border-color: #2ecc71; color: #2ecc71; }
   .score-circle.good { border-color: #f39c12; color: #f39c12; }
@@ -108,20 +122,29 @@
   .stat-box { padding: 15px 25px; border-radius: 10px; font-weight: 700; font-size: 0.95rem; }
   .stat-box.correct { color: #2ecc71; background: #e8f8f5; }
   .stat-box.wrong { color: #e74c3c; background: #fdedec; }
-  
   .review-btn {
     display: inline-block; background: #3498db; color: #fff; text-decoration: none;
-    padding: 12px 30px; border-radius: 30px; font-weight: 700; border: none; cursor: pointer;
-    font-size: 1rem; font-family: inherit; transition: 0.3s;
+    padding: 12px 30px; border-radius: 30px; font-weight: 700; border: none;
+    cursor: pointer; font-size: 1rem; font-family: inherit; transition: 0.3s;
   }
   .review-btn:hover { background: #2980b9; }
-
-  .review-item { text-align: right; margin-bottom: 15px; padding: 15px; border-radius: 10px; background: #f8f9fa; }
+  .review-item {
+    text-align: right; margin-bottom: 15px; padding: 15px;
+    border-radius: 10px; background: #f8f9fa;
+  }
   .review-item .review-q { font-weight: 900; margin-bottom: 10px; }
-  .review-item .review-a-correct { color: #27ae60; background: #e8f8f5; padding: 8px 12px; border-radius: 8px; margin-top: 5px; }
-  .review-item .review-a-wrong { color: #e74c3c; background: #fdedec; padding: 8px 12px; border-radius: 8px; margin-top: 5px; }
-  .review-item .review-a-empty { color: #95a5a6; background: #ecf0f1; padding: 8px 12px; border-radius: 8px; margin-top: 5px; }
-
+  .review-item .review-a-correct {
+    color: #27ae60; background: #e8f8f5; padding: 8px 12px;
+    border-radius: 8px; margin-top: 5px;
+  }
+  .review-item .review-a-wrong {
+    color: #e74c3c; background: #fdedec; padding: 8px 12px;
+    border-radius: 8px; margin-top: 5px;
+  }
+  .review-item .review-a-empty {
+    color: #95a5a6; background: #ecf0f1; padding: 8px 12px;
+    border-radius: 8px; margin-top: 5px;
+  }
   @media(max-width:600px) {
     .container { padding: 20px; }
     .header-top { flex-direction: column; gap: 10px; text-align: center; }
@@ -132,7 +155,7 @@
 <body>
 
 <div class="container">
-  
+
   <div id="start-section">
     <h1>📝 آزمون تستی درس ۷</h1>
     <p>ارتباط و رسانه — مطالعات اجتماعی پایه هشتم</p>
@@ -156,13 +179,10 @@
       </div>
       <div class="timer-box" id="timer-display">⏱ ۳۰</div>
     </div>
-    
     <div class="progress-bar-container">
       <div class="progress-bar" id="progress-bar"></div>
     </div>
-    
     <div id="question-container"></div>
-    
     <div class="nav-buttons">
       <button class="next-btn" id="next-btn" onclick="nextQuestion()">سوال بعدی ←</button>
     </div>
@@ -171,7 +191,6 @@
   <div id="result-section" class="result-container">
     <h2 style="color:#2c3e50; margin-bottom:20px; font-weight:900;">🎓 کارنامه شما</h2>
     <div class="student-name-display" id="display-student-name">نام دانش‌آموز</div>
-    
     <div id="score-circle" class="score-circle">
       <div class="score-num" id="score-display">0</div>
       <div class="score-text">از ۱۰۰</div>
@@ -181,20 +200,231 @@
       <div class="stat-box correct" id="stat-correct">تعداد درست: ۰</div>
       <div class="stat-box wrong" id="stat-wrong">تعداد غلط: ۰</div>
     </div>
-    
     <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">
       <button class="review-btn" onclick="showReview()" style="background:#f39c12;">🔍 مرور پاسخ‌ها</button>
       <a href="hashtom.html" class="review-btn" style="background:#3498db;">🔙 بازگشت به دروس</a>
     </div>
-    
     <div id="review-section" style="display:none; margin-top:25px;"></div>
   </div>
 
 </div>
-
 <script>
   const questionBank = [
     { q: "ارتباط برقرار کردن یکی از نیازهای مهم چه کسی است؟", options: ["بشر", "حیوانات", "گیاهان", "اشیا"], answer: 0 },
     { q: "بدون ارتباط، آیا می‌توان زندگی کرد؟", options: ["خیر، ادامه زندگی ممکن نیست", "بله، می‌توان زندگی کرد", "فقط در روستاها", "فقط در شهرها"], answer: 0 },
     { q: "ارتباط یعنی چه؟", options: ["جریان ارسال و دریافت پیام", "جریان خرید و فروش", "جریان تولید و مصرف", "جریان رفت و آمد"], answer: 0 },
-    { q: "عناصر اصلی ارتباط کدام‌اند؟", options: ["فرستنده،
+    { q: "عناصر اصلی ارتباط کدام‌اند؟", options: ["فرستنده، پیام، گیرنده", "فرستنده، خریدار، فروشنده", "گیرنده، نویسنده، خواننده", "شنونده، گوینده، بیننده"], answer: 0 },
+    { q: "فرستنده در فرایند ارتباط چه کسی است؟", options: ["کسی که پیام را دریافت می‌کند", "کسی که پیام را ارسال می‌کند", "کسی که پیام را پنهان می‌کند", "کسی که پیام را نادیده می‌گیرد"], answer: 1 },
+    { q: "گیرنده در فرایند ارتباط چه کسی است؟", options: ["کسی که پیام را ارسال می‌کند", "کسی که پیام را پنهان می‌کند", "کسی که پیام را دریافت می‌کند", "کسی که پیام را نادیده می‌گیرد"], answer: 2 },
+    { q: "پیام در فرایند ارتباط چه چیزی است؟", options: ["مطلبی که بین فرستنده و گیرنده رد و بدل می‌شود", "وسیله‌ای که پیام را منتقل می‌کند", "فردی که پیام را دریافت می‌کند", "زمان ارسال پیام"], answer: 0 },
+    { q: "بازخورد در ارتباط یعنی چه؟", options: ["نوعی پیام تبلیغاتی", "واکنش گیرنده به پیام فرستنده", "نوعی رسانه", "خرابی وسایل ارتباطی"], answer: 1 },
+    { q: "ارتباط کلامی از چه طریقی انجام می‌شود؟", options: ["از طریق حرکات بدن", "از طریق تصاویر", "از طریق کلمات و گفتار", "از طریق حالات چهره"], answer: 2 },
+    { q: "ارتباط غیرکلامی از چه طریقی انجام می‌شود؟", options: ["از طریق حرکات بدن و حالات چهره", "از طریق نوشتن", "از طریق صحبت کردن", "از طریق تلفن"], answer: 0 },
+    { q: "رسانه به چه معناست؟", options: ["وسیله‌ای برای خرید و فروش", "وسیله‌ای برای حمل و نقل", "وسیله‌ای برای انتقال پیام به مخاطب", "وسیله‌ای برای ساخت و ساز"], answer: 2 },
+    { q: "رسانه‌های جمعی چه ویژگی دارند؟", options: ["فقط به یک نفر پیام می‌دهند", "پیام را به تعداد زیادی از مردم می‌رسانند", "فقط در شهرها استفاده می‌شوند", "فقط در روستاها استفاده می‌شوند"], answer: 1 },
+    { q: "کدام یک از رسانه‌های زیر شنیداری است؟", options: ["تلویزیون", "روزنامه", "مجله", "رادیو"], answer: 3 },
+    { q: "کدام یک از رسانه‌های زیر دیداری است؟", options: ["تلویزیون", "رادیو", "تلفن", "نامه"], answer: 0 },
+    { q: "روزنامه و مجله از کدام نوع رسانه هستند؟", options: ["شنیداری", "نوشتاری", "دیداری", "تعاملی"], answer: 1 },
+    { q: "تلویزیون از کدام نوع رسانه است؟", options: ["فقط نوشتاری", "فقط شنیداری", "دیداری و شنیداری", "فقط دیداری"], answer: 2 },
+    { q: "یکی از کارکردهای اصلی رسانه چیست؟", options: ["خرید و فروش", "اطلاع‌رسانی", "تولید کالا", "حمل و نقل"], answer: 1 },
+    { q: "رسانه‌ها در آموزش چه نقشی دارند؟", options: ["کاهش سواد", "گسترش آموزش و یادگیری", "توقف آموزش", "جلوگیری از یادگیری"], answer: 1 },
+    { q: "یکی از نقش‌های مهم رسانه‌ها در جامعه چیست؟", options: ["تقسیم ثروت", "قانون‌گذاری", "شکل‌دهی به افکار عمومی", "قضاوت"], answer: 2 },
+    { q: "سواد رسانه‌ای یعنی چه؟", options: ["توانایی خواندن و نوشتن", "توانایی درک، تحلیل و ارزیابی پیام‌های رسانه‌ای", "توانایی استفاده از رایانه", "توانایی کار با تلفن همراه"], answer: 1 },
+     { q: "چرا سواد رسانه‌ای اهمیت دارد؟", options: ["برای افزایش سرعت اینترنت", "برای یادگیری زبان خارجی", "برای تشخیص پیام‌های درست از نادرست", "برای خرید ارزان‌تر"], answer: 2 },
+  { q: "اعتیاد به رسانه‌های اجتماعی چه پیامدی دارد؟", options: ["افزایش روابط خانوادگی", "افزایش مطالعه", "کاهش روابط اجتماعی واقعی", "افزایش تحرک بدنی"], answer: 2 },
+  { q: "حریم خصوصی در فضای مجازی باید چگونه باشد؟", options: ["به همه نشان داده شود", "محافظت شود", "در اختیار عموم قرار گیرد", "در سایت‌های عمومی منتشر شود"], answer: 1 },
+  { q: "کدام یک از خطرات فضای مجازی است؟", options: ["افزایش اطلاعات عمومی", "نقض حریم خصوصی", "افزایش آگاهی", "توسعه آموزش"], answer: 1 },
+  { q: "اطلاعات شخصی مانند شماره تلفن و آدرس در فضای مجازی چگونه باید باشد؟", options: ["در دسترس همه", "در شبکه‌های اجتماعی منتشر شود", "محرمانه", "به غریبه‌ها داده شود"], answer: 2 },
+  { q: "اگر در فضای مجازی با محتوای نامناسب روبه‌رو شدیم چه باید کرد؟", options: ["با دوستان به اشتراک بگذاریم", "آن را گزارش دهیم", "آن را نادیده بگیریم", "بیشتر به آن نگاه کنیم"], answer: 1 },
+  { q: "شبکه‌های اجتماعی چه نوع رسانه‌ای هستند؟", options: ["رسانه‌های چاپی", "رسانه‌های تعاملی", "رسانه‌های سنتی", "رسانه‌های نوشتاری"], answer: 1 },
+  { q: "رسانه تعاملی چه ویژگی دارد؟", options: ["فقط پیام می‌فرستد", "فقط پیام دریافت می‌کند", "امکان پاسخ‌دهی ندارد", "کاربر می‌تواند با رسانه ارتباط دوطرفه داشته باشد"], answer: 3 },
+  { q: "یکی از تأثیرات مثبت رسانه‌ها چیست؟", options: ["ترویج خشونت", "افزایش آگاهی عمومی", "کاهش سواد", "تضعیف روابط خانوادگی"], answer: 1 },
+  { q: "یکی از تأثیرات منفی رسانه‌ها چیست؟", options: ["افزایش آگاهی", "آموزش و یادگیری", "ترویج خشونت و رفتارهای ناپسند", "افزایش اطلاعات عمومی"], answer: 2 },
+  { q: "رسانه‌ها در سرگرمی چه نقشی دارند؟", options: ["توقف سرگرمی", "فراهم کردن اوقات فراغت سالم", "جلوگیری از تفریح", "کاهش شادی"], answer: 1 },
+  { q: "استفاده از رسانه‌ها باید چگونه باشد؟", options: ["بی‌هدف و تصادفی", "بیش از حد", "هدفمند و آگاهانه", "بدون برنامه"], answer: 2 },
+  { q: "یکی از اولین رسانه‌های جمعی چه بود؟", options: ["شبکه‌های اجتماعی", "روزنامه", "تلویزیون", "رادیو"], answer: 1 },
+  { q: "امروزه یکی از مهم‌ترین رسانه‌های جمعی چیست؟", options: ["روزنامه‌های دست‌نویس", "نامه‌های پستی", "تلگراف", "شبکه‌های اجتماعی و رسانه‌های دیجیتال"], answer: 3 },
+  { q: "در استفاده از رسانه‌های اجتماعی چه نکته‌ای مهم است؟", options: ["پذیرش هر محتوایی", "نقد و بررسی محتوا", "اشتراک‌گذاری همه چیز", "اعتماد به همه پیام‌ها"], answer: 1 },
+  { q: "رسانه‌ها می‌توانند در چه زمینه‌ای آسیب‌زننده باشند؟", options: ["افزایش آگاهی", "ترویج خرافات و اطلاعات نادرست", "آموزش مهارت", "توسعه علم"], answer: 1 },
+  { q: "انتخاب رسانه مناسب به چه چیزی بستگی دارد؟", options: ["رنگ رسانه", "اندازه رسانه", "هدف، سن و نیاز مخاطب", "قیمت رسانه"], answer: 2 },
+  { q: "نقش والدین در استفاده فرزندان از رسانه چیست؟", options: ["بی‌توجهی", "نظارت و راهنمایی", "منع کامل", "تشویق به استفاده بی‌رویه"], answer: 1 },
+  { q: "یکی از حقوق کاربران فضای مجازی چیست؟", options: ["نقض اطلاعات دیگران", "حفظ حریم خصوصی", "انتشار اطلاعات دیگران", "دسترسی به اطلاعات همه"], answer: 1 },
+  { q: "استفاده صحیح از رسانه‌ها به چه چیزی کمک می‌کند؟", options: ["تضعیف روابط", "رشد و پیشرفت فردی و اجتماعی", "کاهش آگاهی", "افزایش انزوا"], answer: 1 }
+];
+
+const QUESTIONS_COUNT = 15;
+const TIME_PER_Q = 30;
+const faDigits = "۰۱۲۳۴۵۶۷۸۹";
+let studentName = "";
+let shuffledQuestions = [];
+let currentQIndex = 0;
+let userAnswers = [];
+let timerInterval = null;
+let timeLeft = TIME_PER_Q;
+
+function toFa(n) { return String(n).replace(/\d/g, d => faDigits[d]); }
+function shuffleArray(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+   function startQuiz() {
+    const nameInput = document.getElementById("student-name");
+    const name = nameInput.value.trim();
+    if (!name) {
+      nameInput.focus();
+      nameInput.style.borderColor = "#e74c3c";
+      nameInput.placeholder = "⚠️ لطفاً نام خود را وارد کنید";
+      return;
+    }
+    studentName = name;
+    const picked = shuffleArray(questionBank).slice(0, QUESTIONS_COUNT);
+    shuffledQuestions = picked.map(q => {
+      const opts = q.options.map((text, i) => ({ text, isCorrect: i === q.answer }));
+      const shuffled = shuffleArray(opts);
+      return {
+        q: q.q,
+        options: shuffled,
+        correctIndex: shuffled.findIndex(o => o.isCorrect)
+      };
+    });
+    currentQIndex = 0;
+    userAnswers = new Array(QUESTIONS_COUNT).fill(null);
+    document.getElementById("start-section").style.display = "none";
+    document.getElementById("quiz-section").style.display = "block";
+    document.getElementById("result-section").style.display = "none";
+    renderQuestion();
+  }
+
+  function renderQuestion() {
+    const q = shuffledQuestions[currentQIndex];
+    document.getElementById("progress-text").textContent =
+      `سوال ${toFa(currentQIndex + 1)} از ${toFa(QUESTIONS_COUNT)}`;
+    const letters = ["الف", "ب", "ج", "د"];
+    const container = document.getElementById("question-container");
+    container.innerHTML = `
+      <div class="question-box">
+        <div class="q-number">سوال ${toFa(currentQIndex + 1)}</div>
+        <div class="q-title">${q.q}</div>
+        <div class="options">
+          ${q.options.map((opt, i) => `
+            <label class="option-label" data-index="${i}" onclick="selectOption(${i}, this)">
+              <span style="font-weight:900; color:#00acc1; min-width:24px;">${letters[i]}</span>
+              <span>${opt.text}</span>
+            </label>
+          `).join("")}
+        </div>
+      </div>
+    `;
+    document.getElementById("progress-bar").style.width =
+      `${(currentQIndex / QUESTIONS_COUNT) * 100}%`;
+    document.getElementById("next-btn").textContent =
+      currentQIndex === QUESTIONS_COUNT - 1 ? "پایان آزمون ←" : "سوال بعدی ←";
+    startTimer();
+  }
+
+  function selectOption(idx, el) {
+    document.querySelectorAll(".option-label").forEach(x => x.classList.remove("selected"));
+    el.classList.add("selected");
+    userAnswers[currentQIndex] = idx;
+  }
+
+  function startTimer() {
+    clearInterval(timerInterval);
+    timeLeft = TIME_PER_Q;
+    updateTimer();
+    const timerBox = document.getElementById("timer-display");
+    timerBox.classList.remove("warning");
+    timerInterval = setInterval(() => {
+      timeLeft--;
+      updateTimer();
+      if (timeLeft <= 5 && timeLeft > 0) timerBox.classList.add("warning");
+      if (timeLeft <= 0) {
+        clearInterval(timerInterval);
+        goNext();
+      }
+    }, 1000);
+  }
+
+  function updateTimer() {
+    document.getElementById("timer-display").textContent =
+      `⏱ ${toFa(Math.max(0, timeLeft))}`;
+  }
+
+  function nextQuestion() {
+    if (userAnswers[currentQIndex] === null) {
+      alert("لطفاً یک گزینه را انتخاب کنید");
+      return;
+    }
+    clearInterval(timerInterval);
+    goNext();
+  }
+
+  function goNext() {
+    currentQIndex++;
+    if (currentQIndex >= QUESTIONS_COUNT) finishQuiz();
+    else renderQuestion();
+  }
+
+  function finishQuiz() {
+    clearInterval(timerInterval);
+    document.getElementById("quiz-section").style.display = "none";
+    document.getElementById("result-section").style.display = "block";
+    document.getElementById("display-student-name").textContent = studentName;
+
+    let correct = 0;
+    shuffledQuestions.forEach((q, i) => {
+      if (userAnswers[i] === q.correctIndex) correct++;
+    });
+    const wrong = QUESTIONS_COUNT - correct;
+    const percent = Math.round((correct / QUESTIONS_COUNT) * 100);
+
+    document.getElementById("score-display").textContent = toFa(percent);
+    document.getElementById("stat-correct").textContent = `تعداد درست: ${toFa(correct)}`;
+    document.getElementById("stat-wrong").textContent = `تعداد غلط: ${toFa(wrong)}`;
+
+    const circle = document.getElementById("score-circle");
+    circle.classList.remove("excellent", "good", "fail");
+    const msg = document.getElementById("result-message");
+    if (percent >= 80) {
+      circle.classList.add("excellent");
+      msg.textContent = "🌟 عالی بود! تسلط خوبی روی درس داری.";
+    } else if (percent >= 50) {
+      circle.classList.add("good");
+      msg.textContent = "👍 خوب بود، با کمی تلاش بیشتر می‌تونی عالی بشی.";
+    } else {
+      circle.classList.add("fail");
+      msg.textContent = "📚 نیاز به مرور بیشتر داری. درسنامه رو یه بار دیگه بخون!";
+    }
+  }
+
+  function showReview() {
+    const reviewSection = document.getElementById("review-section");
+    const letters = ["الف", "ب", "ج", "د"];
+    let html = '<h3 style="margin-bottom:15px; color:#2c3e50;">🔍 مرور پاسخ‌ها</h3>';
+    shuffledQuestions.forEach((q, i) => {
+      const userAns = userAnswers[i];
+      const isCorrect = userAns === q.correctIndex;
+      html += `<div class="review-item"><div class="review-q">${toFa(i + 1)}. ${q.q}</div>`;
+      q.options.forEach((opt, j) => {
+        if (j === q.correctIndex) {
+          html += `<div class="review-a-correct">✓ ${letters[j]}) ${opt.text}</div>`;
+        } else if (j === userAns && !isCorrect) {
+          html += `<div class="review-a-wrong">✗ ${letters[j]}) ${opt.text} (پاسخ شما)</div>`;
+        }
+      });
+      if (userAns === null) {
+        html += `<div class="review-a-empty">⚠️ بدون پاسخ</div>`;
+      }
+      html += `</div>`;
+    });
+    reviewSection.innerHTML = html;
+    reviewSection.style.display = "block";
+    reviewSection.scrollIntoView({ behavior: "smooth" });
+  }
+</script>
+</body>
+</html>
