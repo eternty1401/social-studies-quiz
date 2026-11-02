@@ -10,8 +10,8 @@ function submitScoreToTelegram(score, correctCount) {
     const examName = document.title; 
 
     // 👇👇 این دو خط رو با اطلاعات خودت پر کن 👇👇
-    const botToken = "توکنی_که_از_BotFather_گرفتی";
-    const chatId = "آیدی_عددی_که_از_userinfobot_گرفتی";
+    const botToken = "9142270513:AAEvR5jPojPtQ4WOJ9aIDFzJFebUeTYJXlo";
+    const chatId = "7129110141";
 
     // متن پیامی که قراره به تلگرامت بیاد
     const message = `📝 نتیجه یک آزمون جدید!\n\n👤 نام دانش‌آموز: ${studentName}\n📚 آزمون: ${examName}\n🎯 نمره: ${score}٪\n✅ تعداد درست: ${correctCount}`;
