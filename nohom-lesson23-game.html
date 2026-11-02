@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>درس ۲۳: بهره‌وری چیست؟ | بازی کلمه‌سازی</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+/* ===== متغیرهای تم (صورتی-ارغوانی) ===== */
+:root{--c1:#ff4ecd;--c2:#a044ff;--glow:#ff7be5;--ok:#22c55e}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+
+/* ===== پس‌زمینهٔ متحرک ===== */
+body{font-family:'Vazirmatn',Tahoma,sans-serif;min-height:100vh;color:#fff;
+ background:linear-gradient(135deg,#1a0b2e,#3b0b5e,#7a1fa2,#c2188d,#3b0b5e);
+ background-size:400% 400%;animation:bg 14s ease infinite;
+ display:flex;justify-content:center;align-items:flex-start;padding:14px;overflow-x:hidden}
+@keyframes bg{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+.app{width:100%;max-width:560px;position:relative}
+
+/* ===== انتقال صفحات (fade) ===== */
+.screen{display:none}
+.screen.active{display:block;animation:fade .5s ease}
+@keyframes fade{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+/* ===== کارت شیشه‌ای ===== */
+.card{background:rgba(255,255,255,.08);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+ border:1px solid rgba(255,255,255,.18);border-radius:24px;padding:22px;
+ box-shadow:0 0 30px rgba(255,78,205,.25)}
+
+/* ===== صفحهٔ شروع ===== */
+.icon-big{font-size:76px;text-align:center;filter:drop-shadow(0 0 18px var(--glow));animation:float 3s ease-in-out infinite}
+@keyframes float{50%{transform:translateY(-10px)}}
+h1{font-size:1.6rem;text-align:center;margin:10px 0 6px;font-weight:800;
+ background:linear-gradient(90deg,#fff,var(--glow));-webkit-background-clip:text;background-clip:text;color:transparent}
+.sub{text-align:center;opacity:.88;font-size:.95rem;margin-bottom:14px;line-height:1.9}
+.rules{list-style:none;margin:12px 0 18px}
+.rules li{background:rgba(255,255,255,.07);border-radius:12px;padding:9px 12px;margin-bottom:8px;
+ font-size:.9rem;line-height:1.8;border-right:4px solid var(--c1)}
+
+/* ===== دکمه‌ها ===== */
+.btn{display:block;width:100%;border:0;border-radius:16px;padding:14px;font-family:inherit;
+ font-size:1.1rem;font-weight:800;color:#fff;cursor:pointer;
+ background:linear-gradient(90deg,var(--c1),var(--c2));box-shadow:0 0 22px rgba(255,78,205,.55);
+ transition:transform .15s,box-shadow .15s}
+.btn:active{transform:scale(.97)}
+.btn:disabled{opacity:.4;cursor:not-allowed;box-shadow:none}
+/* ===== صفحهٔ بازی ===== */
+.chapter{text-align:center;font-weight:800;font-size:1rem;color:var(--glow);margin-bottom:10px;text-shadow:0 0 10px var(--c1)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px}
+.stat{background:rgba(255,255,255,.1);border-radius:14px;padding:8px 4px;text-align:center}
+.stat small{display:block;font-size:.72rem;opacity:.75}
+.stat b{font-size:1.25rem;display:inline-block}
+.stat.low b{color:#ff6b6b;animation:pulse .6s infinite alternate}
+@keyframes pulse{to{transform:scale(1.15)}}
+.bar{height:8px;background:rgba(255,255,255,.15);border-radius:8px;overflow:hidden;margin-bottom:12px}
+.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--c1),var(--c2));transition:width .5s;box-shadow:0 0 10px var(--c1)}
+.qbox{background:rgba(0,0,0,.28);border:1px solid rgba(255,255,255,.15);border-radius:16px;padding:14px;line-height:2;font-size:1rem;margin-bottom:12px;min-height:84px}
+.answer,.letters{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:12px}
+
+/* خانه‌های جواب */
+.slot{width:46px;height:52px;border-radius:12px;border:2px dashed rgba(255,255,255,.4);
+ display:flex;align-items:center;justify-content:center;font-size:1.5rem;font-weight:800;
+ background:rgba(255,255,255,.05);cursor:pointer;transition:.2s}
+.slot.fill{border-style:solid;border-color:var(--c1);background:rgba(255,78,205,.25);box-shadow:0 0 12px var(--c1)}
+.slot.win{background:var(--ok);border-color:#fff;animation:flip .7s ease both}
+.slot.err{animation:shake .4s}
+@keyframes flip{0%{transform:rotateY(0)}50%{transform:rotateY(180deg) scale(1.15)}100%{transform:rotateY(360deg)}}
+@keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+
+/* حروف به‌هم‌ریخته */
+.tile{width:48px;height:52px;border:0;border-radius:12px;font-family:inherit;font-size:1.5rem;font-weight:800;
+ color:#2a0845;background:linear-gradient(145deg,#fff,#f6c8ff);
+ box-shadow:0 5px 0 #b05ad6,0 0 14px rgba(255,123,229,.5);cursor:pointer;transition:transform .15s,opacity .25s}
+.tile:hover{transform:translateY(-4px) scale(1.1)}
+.tile:active{transform:translateY(-6px) scale(1.15)}
+.tile.used{opacity:.25;pointer-events:none;transform:none}
+.tile.gone{display:none}
+
+/* راهنمایی و پیام */
+.hint{display:none;background:rgba(255,215,0,.15);border:1px solid rgba(255,215,0,.5);border-radius:12px;padding:10px;font-size:.92rem;line-height:1.9;margin-bottom:10px}
+.hint.show{display:block;animation:fade .4s}
+.msg{min-height:30px;text-align:center;font-weight:600;margin-bottom:10px;line-height:1.8}
+.msg.ok{color:#86efac}
+.msg.bad{color:#fca5a5}
+.helpers{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.helpers .btn{font-size:.95rem;padding:11px;background:linear-gradient(90deg,#f59e0b,#ec4899)}
+
+/* ===== افکت آفرین ===== */
+#ov{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.55);z-index:50}
+#ov.show{display:flex}
+.okcard{background:linear-gradient(145deg,#16a34a,#22c55e);border-radius:28px;padding:28px 26px;text-align:center;
+ box-shadow:0 0 50px #22c55e;animation:pop .5s cubic-bezier(.2,1.6,.4,1);max-width:86%}
+@keyframes pop{from{transform:scale(.3);opacity:0}to{transform:scale(1);opacity:1}}
+.tick{width:84px;height:84px;border-radius:50%;background:#fff;color:#16a34a;font-size:3rem;font-weight:800;
+ display:flex;align-items:center;justify-content:center;margin:0 auto 12px}
+.okcard h2{font-size:1.35rem;margin-bottom:6px}
+.okcard .ans{font-size:1.1rem;opacity:.95}
+.okcard .pts{font-size:1.25rem;font-weight:800;margin-top:8px}
+.cf{position:fixed;top:-20px;width:10px;height:16px;z-index:60;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(720deg);opacity:.8}}
+.star{position:fixed;font-size:1.8rem;z-index:61;animation:star 1.6s ease-out forwards}
+@keyframes star{from{transform:scale(0) rotate(0);opacity:1}to{transform:scale(1.6) rotate(360deg) translateY(-60px);opacity:0}}
+
+/* ===== صفحهٔ پایان ===== */
+.trophy{font-size:84px;text-align:center;animation:float 2.5s infinite}
+.final{text-align:center;font-size:2.2rem;font-weight:800;margin:8px 0}
+.badge{display:block;width:fit-content;margin:6px auto 12px;padding:6px 18px;border-radius:30px;
+ background:linear-gradient(90deg,var(--c1),var(--c2));font-weight:800}
+.praise{text-align:center;opacity:.92;line-height:2;margin-bottom:16px}
+
+/* ===== ریسپانسیو ===== */
+@media(max-width:420px){.tile,.slot{width:42px;height:48px;font-size:1.3rem}.card{padding:16px}}
+</style>
+</head>
+<body>
+<div class="app">
+
+ <!-- صفحهٔ شروع -->
+ <section id="s-start" class="screen active"><div class="card">
+  <div class="icon-big">📈</div>
+  <h1>درس ۲۳: بهره‌وری چیست؟</h1>
+  <p class="sub">با ساختن کلمه از حروف به‌هم‌ریخته، نکته‌های کلیدی درس را مرور کن!</p>
+  <ul class="rules">
+   <li>۱۰ سؤال از متن همین درس پرسیده می‌شود.</li>
+   <li>با کلیک روی حروف، کلمه را بساز؛ جواب درست خودکار تأیید می‌شود (حروف اضافی هم وجود دارد!).</li>
+   <li>برای هر سؤال ۲ دقیقه زمان داری.</li>
+   <li>جواب زیر ۳۰ ثانیه ۵۰٪ و بدون کمک ۵۰ امتیاز جایزه دارد.</li>
+   <li>هر اشتباه ۵ امتیاز جریمه دارد؛ راهنمایی و ۵۰:۵۰ برای هر سؤال یک‌بار.</li>
+  </ul>
+  <button class="btn" id="btnStart">🚀 شروع بازی</button>
+ </div></section>
+
+ <!-- صفحهٔ بازی -->
+ <section id="s-game" class="screen"><div class="card">
+  <div class="chapter" id="chap"></div>
+  <div class="stats">
+   <div class="stat"><small>امتیاز</small><b id="score">۰</b></div>
+   <div class="stat"><small>زمان</small><b id="time">۱۲۰</b></div>
+   <div class="stat"><small>مرحله</small><b id="stage">۱/۱۰</b></div>
+  </div>
+  <div class="bar"><i id="bar"></i></div>
+  <div class="qbox" id="qbox"></div>
+  <div class="answer" id="ans"></div>
+  <div class="letters" id="lt"></div>
+  <div class="hint" id="hint"></div>
+  <div class="msg" id="msg"></div>
+  <div class="helpers">
+   <button class="btn" id="btnHint">💡 راهنمایی</button>
+   <button class="btn" id="btnFifty">✂️ ۵۰:۵۰</button>
+  </div>
+ </div></section>
+
+ <!-- صفحهٔ پایان -->
+ <section id="s-end" class="screen"><div class="card">
+  <div class="trophy" id="trophy">🏆</div>
+  <h1 id="etitle"></h1>
+  <div class="final" id="efinal">۰</div>
+  <span class="badge" id="ebadge"></span>
+  <p class="praise" id="epraise"></p>
+  <button class="btn" id="btnAgain">🔄 بازی دوباره</button>
+ </div></section>
+</div>
+
+<!-- اورلی آفرین -->
+<div id="ov"><div class="okcard">
+ <div class="tick">✓</div>
+ <h2>🎉 آفرین! درست گفتی! 🎉</h2>
+ <div class="ans" id="ovAns"></div>
+ <div class="pts" id="ovPts"></div>
+</div></div>
+<script>
+(function(){
+'use strict';
+/* ===== ابزارهای کمکی ===== */
+const FA='۰۱۲۳۴۵۶۷۸۹';
+const fa=n=>String(n).replace(/\d/g,d=>FA[d]);   // تبدیل به اعداد فارسی
+const $=id=>document.getElementById(id);
+const LESSON=23;
+const EXTRA=4;                                   // تعداد حروف اضافی
+const POOL='ابپتجچحخدذرزسشصضطعفقکگلمنوهی';       // منبع حروف اضافی
+const CH='درس ۲۳: بهره‌وری چیست؟';
+
+/* ===== داده‌های بازی (۱۰ سؤال از متن درس ۲۳) ===== */
+const DATA=[
+ {c:CH,q:'در مقدمهٔ درس آمده است که باید از ... و اتلاف منابع بپرهیزیم. این واژه یعنی زیاده‌روی و هدر دادن امکانات.',
+  a:'اسراف',h:'در آیهٔ «بخورید و بیاشامید ولی ... نکنید» هم آمده است.',t:120,p:100},
+ {c:CH,q:'بهره‌وری یعنی از بین کارهای ممکن، کارِ ... را انتخاب کنیم و آن را با روش مناسب انجام دهیم.',
+  a:'درست',h:'ضد کلمهٔ «نادرست» است.',t:120,p:110},
+ {c:CH,q:'آقای اسدی با ساختن سایبان برای کولر آبی و پوشاندن کانال آن با عایق، چه چیزی را افزایش داد؟',
+  a:'بازدهی',h:'کولر با همان امکانات، خروجی و کارایی بیشتری پیدا کرد.',t:120,p:120},
+ {c:CH,q:'کشاورزی که زمین‌هایش روی شیب بود، با مشورت کارشناسان کدام روش آبیاری را شروع کرد؟',
+  a:'قطرهای',d:'قطره‌ای',h:'آب را کم‌کم و چکه‌چکه به ریشهٔ گیاه می‌رساند.',t:120,p:130},
+ {c:CH,q:'حفر ... و ذخیره کردن آب در آب‌انبارها، نمونه‌هایی از تفکر بهره‌وری در روزگار گذشته است.',
+  a:'قنات',h:'کانال زیرزمینی انتقال آب در مناطق خشک ایران.',t:120,p:110},
+ {c:CH,q:'«وقت و ... ثروتی است که قابل ذخیره و پس‌انداز نیست.»',
+  a:'زمان',h:'اگر تلف شود، دیگر قابل جبران نخواهد بود.',t:120,p:110},
+ {c:CH,q:'جدولی که درآمدها و هزینه‌های ماهانهٔ خانواده (دخل و خرج) در آن نوشته می‌شود، جدول ... اقتصادی نام دارد.',
+  a:'بودجه',h:'برنامهٔ مالی ماهانهٔ خانواده.',t:120,p:130},
+ {c:CH,q:'در فرایند تولید، به ورودی‌ها (منابع طبیعی، نیروی کار، سرمایه) چه می‌گویند؟',
+  a:'نهاده',h:'خروجی‌ها «ستانده» نام دارند؛ این واژه برای ورودی‌هاست.',t:120,p:150},
+ {c:CH,q:'در «بیشتر بدانیم»، مثال بهره‌وری در توزیع خدمات دربارهٔ مراکز صدور چه چیزی است؟',
+  a:'گذرنامه',h:'نام دیگرش «پاسپورت» است.',t:120,p:150},
+ {c:CH,q:'در «بیشتر بدانیم»، پیرمرد خردمند به کارآفرین توصیه کرد برای رسیدن به هدف‌هایش چه چیزی داشته باشد؟',
+  a:'پشتکار',h:'پایداری و تلاش مداوم، بدون خسته شدن.',t:120,p:160}
+];
+
+/* ===== وضعیت بازی ===== */
+let idx=0,score=0,left=0,timer=null;
+let locked=false,done=false,helped=false,hintUsed=false,fiftyUsed=false;
+let tiles=[],picks=[];
+
+/* بُر زدن آرایه */
+const shuffle=a=>{for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+/* نمایش یک صفحه */
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));$(id).classList.add('active')}
+/* پیام زیر بازی */
+function setMsg(t,cls){$('msg').textContent=t;$('msg').className='msg '+(cls||'')}
+/* به‌روزرسانی نمایش زمان */
+function tick(){$('time').textContent=fa(Math.max(left,0));$('time').parentNode.classList.toggle('low',left<=20)}
+
+/* ===== شروع بازی ===== */
+function startGame(){idx=0;score=0;show('s-game');loadQ()}
+
+/* ===== بارگذاری یک مرحله ===== */
+function loadQ(){
+ const q=DATA[idx];
+ clearInterval(timer);
+ locked=false;done=false;helped=false;hintUsed=false;fiftyUsed=false;picks=[];
+ $('chap').textContent=q.c;
+ $('qbox').textContent=q.q;
+ $('stage').textContent=fa(idx+1)+'/'+fa(DATA.length);
+ $('score').textContent=fa(score);
+ $('bar').style.width=(idx/DATA.length*100)+'%';
+ $('hint').className='hint';$('hint').textContent='';
+ setMsg('');
+ $('btnHint').disabled=false;$('btnFifty').disabled=false;
+ /* ساخت کاشی‌ها: حروف پاسخ + حروف اضافی */
+ const letters=[...q.a].map(ch=>({ch:ch,extra:false}));
+ shuffle([...POOL].filter(c=>!q.a.includes(c))).slice(0,EXTRA).forEach(ch=>letters.push({ch:ch,extra:true}));
+ tiles=shuffle(letters).map((l,i)=>({id:i,ch:l.ch,extra:l.extra,used:false,gone:false}));
+ render();
+ left=q.t;tick();
+ timer=setInterval(()=>{left--;tick();if(left<=0)timeUp()},1000);
+}
+
+/* ===== رسم خانه‌های جواب و حروف ===== */
+function render(){
+ const n=DATA[idx].a.length;
+ const ans=$('ans');ans.innerHTML='';
+ for(let i=0;i<n;i++){
+  const s=document.createElement('div');s.className='slot';
+  if(picks[i]!==undefined){
+   s.classList.add('fill');s.textContent=tiles[picks[i]].ch;
+   s.onclick=()=>unpick(i);
+  }
+  ans.appendChild(s);
+ }
+ const lt=$('lt');lt.innerHTML='';
+ tiles.forEach(t=>{
+  const b=document.createElement('button');
+  b.className='tile'+(t.used?' used':'')+(t.gone?' gone':'');
+  b.textContent=t.ch;
+  b.onclick=()=>pick(t.id);
+  lt.appendChild(b);
+ });
+}
+/* ===== انتخاب یک حرف ===== */
+function pick(id){
+ if(locked||tiles[id].used)return;
+ tiles[id].used=true;picks.push(id);render();
+ if(picks.length===DATA[idx].a.length)check();   // تأیید خودکار
+}
+/* برداشتن حرف از خانهٔ جواب */
+function unpick(i){
+ if(locked)return;
+ const id=picks[i];picks.splice(i,1);tiles[id].used=false;render();
+}
+
+/* ===== بررسی جواب ===== */
+function check(){
+ const word=picks.map(i=>tiles[i].ch).join('');
+ if(word===DATA[idx].a)onCorrect();else onWrong();
+}
+
+/* ===== جواب درست ===== */
+function onCorrect(){
+ locked=true;done=true;clearInterval(timer);
+ const q=DATA[idx];
+ let pts=q.p;
+ if(!helped)pts+=50;                          // جایزهٔ بدون راهنمایی
+ if(q.t-left<30)pts+=Math.round(q.p*0.5);     // جایزهٔ سرعت
+ score+=pts;$('score').textContent=fa(score);
+ document.querySelectorAll('#ans .slot').forEach((s,i)=>{
+  s.classList.add('win');s.style.animationDelay=(i*0.08)+'s';
+ });
+ $('ovAns').textContent=q.d||q.a;
+ $('ovPts').textContent='+'+fa(pts)+' امتیاز';
+ setTimeout(()=>{$('ov').classList.add('show');fx()},650);
+ setTimeout(()=>{$('ov').classList.remove('show');next()},650+2200);
+}
+
+/* ===== جواب غلط ===== */
+function onWrong(){
+ locked=true;
+ score=Math.max(0,score-5);$('score').textContent=fa(score);
+ setMsg('❌ اشتباه شد! ۵ امتیاز کم شد؛ دوباره تلاش کن.','bad');
+ document.querySelectorAll('#ans .slot').forEach(s=>s.classList.add('err'));
+ setTimeout(()=>{
+  if(done)return;
+  picks=[];tiles.forEach(t=>t.used=false);
+  locked=false;render();
+ },700);
+}
+
+/* ===== تمام شدن زمان ===== */
+function timeUp(){
+ if(done)return;
+ done=true;locked=true;clearInterval(timer);
+ const q=DATA[idx];
+ setMsg('⏰ وقت تمام شد! پاسخ درست: '+(q.d||q.a),'bad');
+ setTimeout(next,2500);
+}
+
+/* ===== مرحلهٔ بعد ===== */
+function next(){
+ idx++;
+ if(idx>=DATA.length)endGame();else loadQ();
+}
+
+/* ===== راهنمایی ===== */
+function useHint(){
+ if(locked||hintUsed)return;
+ hintUsed=true;helped=true;
+ $('hint').textContent='💡 '+DATA[idx].h;
+ $('hint').className='hint show';
+ $('btnHint').disabled=true;
+}
+
+/* ===== ۵۰:۵۰ (حذف نصف حروف اضافی) ===== */
+function useFifty(){
+ if(locked||fiftyUsed)return;
+ const cands=tiles.filter(t=>t.extra&&!t.gone&&!t.used);
+ shuffle(cands).slice(0,Math.floor(EXTRA/2)).forEach(t=>t.gone=true);
+ fiftyUsed=true;helped=true;
+ $('btnFifty').disabled=true;
+ render();
+}
+
+/* ===== کانفتی (۴۰ قطعه) و ستاره‌ها (۸ ایموجی) ===== */
+function fx(){
+ const cols=['#ff4ecd','#a044ff','#ffd700','#22c55e','#38bdf8','#ffffff'];
+ for(let i=0;i<40;i++){
+  const c=document.createElement('i');c.className='cf';
+  c.style.left=(Math.random()*100)+'vw';
+  c.style.background=cols[i%cols.length];
+  c.style.animationDuration=(1.6+Math.random()*1.6)+'s';
+  c.style.animationDelay=(Math.random()*0.4)+'s';
+  document.body.appendChild(c);
+  setTimeout(()=>c.remove(),3800);
+ }
+ ['⭐','🌟','✨','💫','🎉','⭐','🌟','✨'].forEach((e,i)=>{
+  const s=document.createElement('span');s.className='star';s.textContent=e;
+  s.style.left=(8+i*11)+'vw';
+  s.style.top=(20+Math.random()*50)+'vh';
+  s.style.animationDelay=(i*0.08)+'s';
+  document.body.appendChild(s);
+  setTimeout(()=>s.remove(),2200);
+ });
+}
+
+/* ===== صفحهٔ پایان و رتبه‌بندی ===== */
+function endGame(){
+ clearInterval(timer);
+ let ic='📚',badge='📚 تازه‌کار',msg='شروع خوبی بود! یک بار دیگر درس را بخوان و دوباره امتحان کن.';
+ if(score>=1300){ic='🏆';badge='🏆 استاد درس '+fa(LESSON);msg='عالی بود! بهره‌وری را کاملاً یاد گرفتی.';}
+ else if(score>=900){ic='🥇';badge='🥇 دانش‌آموز ماهر';msg='آفرین! خیلی نزدیک به استادی هستی.';}
+ else if(score>=500){ic='🥈';badge='🥈 کوشا';msg='تلاشت قابل تحسین است؛ با یک بار مرور، امتیازت بیشتر می‌شود.';}
+ $('trophy').textContent=ic;
+ $('etitle').textContent='پایان بازی';
+ $('efinal').textContent=fa(score)+' امتیاز';
+ $('ebadge').textContent=badge;
+ $('epraise').textContent=msg;
+ show('s-end');
+}
+
+/* ===== رویدادها ===== */
+$('btnStart').onclick=startGame;
+$('btnAgain').onclick=startGame;
+$('btnHint').onclick=useHint;
+$('btnFifty').onclick=useFifty;
+})();
+</script>
+</body>
+</html>
