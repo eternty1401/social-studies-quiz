@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
+ <script src="telegram.js"></script>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -243,6 +244,7 @@
       if (answers[index] === item.answer) correctCount++; else wrongCount++;
     });
     const score = Math.round((correctCount / selectedQuestions.length) * 100);
+   submitScoreToTelegram(score, correctCount);
     document.getElementById('quiz-section').style.display = 'none';
     document.getElementById('result-section').style.display = 'block';
     document.getElementById('display-student-name').innerText = `دانش‌آموز: ${studentName}`;
