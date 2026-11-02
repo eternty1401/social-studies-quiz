@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
+  <script src="telegram.js"></script>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -219,6 +220,7 @@ function showResult() {
   document.getElementById('resultScreen').classList.remove('hidden');
 
   const score = Math.round((correct / questions.length) * 20);
+  submitScoreToTelegram(score, correctCount);
   document.getElementById('resultName').textContent = `دانش‌آموز: ${studentName}`;
   document.getElementById('scoreNum').textContent = score;
   document.getElementById('correctCount').textContent = correct;
