@@ -34,7 +34,7 @@
   .progress-fill { height:100%; background:linear-gradient(90deg,#00acc1,#00838f); border-radius:50px; transition:width 0.4s ease; width:0%; }
   .question-box h3 { font-size:1.1rem; color:#2c3e50; line-height:1.9; margin-bottom:22px; font-weight:800; }
   .question-num { display:inline-block; background:#00acc1; color:#fff; width:32px; height:32px; border-radius:50%; text-align:center; line-height:32px; font-weight:900; font-size:0.95rem; margin-left:8px; }
-  .options-list { display:flex; flex-direction:column; gap:12px; }
+   .options-list { display:flex; flex-direction:column; gap:12px; }
   .option-item { padding:14px 20px; background:#f8fdfd; border:2px solid #d6eef0; border-radius:14px; cursor:pointer; transition:0.22s; display:flex; align-items:center; gap:14px; font-size:0.98rem; font-weight:500; }
   .option-item:hover { border-color:#00acc1; background:#e0f7fa; transform:translateX(-3px); }
   .option-item .opt-letter { width:32px; height:32px; border-radius:8px; background:#e0f7fa; color:#00838f; display:flex; align-items:center; justify-content:center; font-weight:900; flex-shrink:0; transition:0.22s; }
@@ -101,8 +101,7 @@
     <input type="text" id="studentName" class="name-input" placeholder="نام و نام خانوادگی خود را وارد کنید">
     <button class="btn-primary" id="startBtn">🚀 شروع آزمون</button>
   </div>
-
-  <div class="card hidden" id="quizScreen">
+    <div class="card hidden" id="quizScreen">
     <div class="quiz-topbar">
       <div class="question-counter" id="questionCounter">سوال ۱ از ۱۵</div>
       <div class="timer-box" id="timerBox">⏱️ <span id="timerText">۳۰</span> ثانیه</div>
@@ -141,7 +140,6 @@
   </div>
 
 </div>
-
 <script>
 const questionBank = [
   { q: "جمعیت جهان امروز حدوداً چقدر است؟", o: ["۵ میلیارد نفر", "۶ میلیارد نفر", "۸ میلیارد نفر", "۱۰ میلیارد نفر"], a: 2 },
@@ -164,7 +162,7 @@ const questionBank = [
   { q: "امروزه چند درصد جمعیت جهان در شهرها زندگی می‌کنند؟", o: ["بیش از ۵۰٪", "کمتر از ۳۰٪", "دقیقاً ۲۵٪", "حدود ۴۰٪"], a: 0 },
   { q: "کدام‌یک از مشکلات شهرنشینی سریع است؟", o: ["افزایش تنوع زیستی", "ترافیک و آلودگی هوا", "کاهش جمعیت", "افزایش جنگل‌ها"], a: 1 },
   { q: "کدام‌یک از راهکارهای کاهش مشکلات شهرنشینی است؟", o: ["توسعهٔ بیشتر شهرها", "تقویت امکانات و اقتصاد روستایی", "کاهش جمعیت", "افزایش مهاجرت"], a: 1 },
-  { q: "زاغه‌نشینی در کدام بخش شهرها بیشتر رخ می‌دهد؟", o: ["مرکز شهر", "حومه و اطراف شهر", "خیابان‌های اصلی", "بازار"], a: 1 },
+   { q: "زاغه‌نشینی در کدام بخش شهرها بیشتر رخ می‌دهد؟", o: ["مرکز شهر", "حومه و اطراف شهر", "خیابان‌های اصلی", "بازار"], a: 1 },
   { q: "علت اصلی افزایش شهرنشینی چیست؟", o: ["مهاجرت از شهر به روستا", "مهاجرت گسترده از روستا به شهر", "کاهش جمعیت", "افزایش کشاورزی"], a: 1 },
   { q: "کدام‌یک از موارد زیر از علل کاهش مرگ و میر نیست؟", o: ["بهبود بهداشت", "پیشرفت پزشکی", "بهبود تغذیه", "افزایش جنگ"], a: 3 },
   { q: "دویست سال پیش علت اصلی مرگ و میر چه بود؟", o: ["بیماری‌های واگیردار، گرسنگی و جنگ", "تصادفات رانندگی", "پیری", "آلودگی هوا"], a: 0 },
@@ -201,11 +199,23 @@ function toFa(num) { return String(num).replace(/\d/g, d => faDigits[d]); }
 function shuffleArray(arr) { const a = [...arr]; for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
 
 document.getElementById("startBtn").addEventListener("click", () => {
-  const name = document.getElementById("studentName").value.trim();
-  if (!name) { document.getElementById("studentName").focus(); document.getElementById("studentName").style.borderColor = "#e74c3c"; document.getElementById("studentName").placeholder = "⚠️ لطفاً نام خود را وارد کنید"; return; }
+  const nameInput = document.getElementById("studentName");
+  const name = nameInput.value.trim();
+  if (!name) {
+    nameInput.focus();
+    nameInput.style.borderColor = "#e74c3c";
+    nameInput.placeholder = "⚠️ لطفاً نام خود را وارد کنید";
+    return;
+  }
+  nameInput.style.borderColor = "#d6eef0";
   const picked = shuffleArray(questionBank).slice(0, TOTAL_QUESTIONS);
-  quizQuestions = picked.map(q => { const opts = q.o.map((text, i) => ({ text, isCorrect: i === q.a })); const shuffled = shuffleArray(opts); return { q: q.q, options: shuffled, correctIndex: shuffled.findIndex(o => o.isCorrect) }; });
-  currentIndex = 0; userAnswers = new Array(TOTAL_QUESTIONS).fill(null);
+  quizQuestions = picked.map(q => {
+    const opts = q.o.map((text, i) => ({ text, isCorrect: i === q.a }));
+    const shuffled = shuffleArray(opts);
+    return { q: q.q, options: shuffled, correctIndex: shuffled.findIndex(o => o.isCorrect) };
+  });
+  currentIndex = 0;
+  userAnswers = new Array(TOTAL_QUESTIONS).fill(null);
   document.getElementById("startScreen").classList.add("hidden");
   document.getElementById("quizScreen").classList.remove("hidden");
   renderQuestion();
@@ -240,8 +250,7 @@ function selectOption(i, el) {
   el.classList.add("selected");
   document.getElementById("nextBtn").disabled = false;
 }
-
-function startTimer() {
+ function startTimer() {
   clearInterval(timerInterval);
   timeLeft = TIME_PER_QUESTION;
   updateTimerDisplay();
@@ -251,11 +260,17 @@ function startTimer() {
     timeLeft--;
     updateTimerDisplay();
     if (timeLeft <= 5 && timeLeft > 0) timerBox.classList.add("warning");
-    if (timeLeft <= 0) { clearInterval(timerInterval); userAnswers[currentIndex] = selectedOption; goNext(); }
+    if (timeLeft <= 0) {
+      clearInterval(timerInterval);
+      userAnswers[currentIndex] = selectedOption;
+      goNext();
+    }
   }, 1000);
 }
 
-function updateTimerDisplay() { document.getElementById("timerText").textContent = toFa(Math.max(0, timeLeft)); }
+function updateTimerDisplay() {
+  document.getElementById("timerText").textContent = toFa(Math.max(0, timeLeft));
+}
 
 document.getElementById("nextBtn").addEventListener("click", () => {
   if (selectedOption === null) return;
@@ -306,7 +321,10 @@ document.getElementById("reviewBtn").addEventListener("click", () => {
       let cls = "normal";
       if (j === q.correctIndex) cls = "correct-opt";
       else if (j === userAns) cls = "wrong-opt";
-      html += `<div class="review-opt ${cls}"><span>${letters[j]}) ${opt.text}</span>${j === q.correctIndex ? '<span class="review-badge green">درست</span>' : ''}${j === userAns && !isCorrect ? '<span class="review-badge red">پاسخ تو</span>' : ''}</div>`;
+      const badge = j === q.correctIndex
+        ? '<span class="review-badge green">درست</span>'
+        : (j === userAns && !isCorrect ? '<span class="review-badge red">پاسخ تو</span>' : '');
+      html += `<div class="review-opt ${cls}"><span>${letters[j]}) ${opt.text}</span>${badge}</div>`;
     });
     item.innerHTML = html;
     list.appendChild(item);
@@ -319,7 +337,18 @@ document.getElementById("backToResultBtn").addEventListener("click", () => {
 });
 
 document.getElementById("restartBtn").addEventListener("click", () => {
+  clearInterval(timerInterval);
   document.getElementById("resultScreen").classList.add("hidden");
   document.getElementById("startScreen").classList.remove("hidden");
-  document.getElementById("studentName").value = "";
-  document.getElementById("studentName").
+  const nameInput = document.getElementById("studentName");
+  nameInput.value = "";
+  nameInput.style.borderColor = "#d6eef0";
+  nameInput.placeholder = "نام و نام خانوادگی خود را وارد کنید";
+  currentIndex = 0;
+  userAnswers = [];
+  quizQuestions = [];
+  selectedOption = null;
+});
+</script>
+</body>
+</html>
