@@ -1,10 +1,11 @@
-const CACHE_NAME = 'social-studies-v2';
+const CACHE_NAME = 'social-studies-v3';
 const urlsToCache = [
   './',
   './index.html',
   './haftom.html',
   './hashtom.html',
   './nohom.html'
+  './telegram.js'
 ];
 
 self.addEventListener('install', event => {
