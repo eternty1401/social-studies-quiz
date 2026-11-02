@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>درس ۲: تعاون (۲)</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Vazirmatn',Tahoma,sans-serif}
+body{min-height:100vh;background:linear-gradient(135deg,#4a1a5c,#a04ac8,#4a1a5c);background-size:200% 200%;animation:bg 12s ease infinite;display:flex;align-items:center;justify-content:center;padding:20px;color:#fff;overflow-x:hidden}
+@keyframes bg{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+.container{width:100%;max-width:720px;background:rgba(45,15,55,.82);backdrop-filter:blur(25px);border:2px solid rgba(220,150,255,.35);border-radius:28px;padding:32px;box-shadow:0 25px 70px rgba(0,0,0,.7);position:relative}
+.header{text-align:center;margin-bottom:24px}
+.header h1{font-size:1.8rem;font-weight:900;background:linear-gradient(90deg,#dc96ff,#ecc8ff,#dc96ff);background-size:200% 100%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:8px;animation:ts 4s linear infinite}
+@keyframes ts{0%{background-position:0% 50%}100%{background-position:200% 50%}}
+.stats{display:flex;justify-content:space-between;gap:10px;margin-bottom:24px;flex-wrap:wrap}
+.sb{flex:1;min-width:100px;background:linear-gradient(135deg,rgba(220,150,255,.12),rgba(236,200,255,.08));border:1px solid rgba(220,150,255,.35);border-radius:14px;padding:12px;text-align:center}
+.sb .l{font-size:.75rem;color:#b890c8;margin-bottom:4px}
+.sb .v{font-size:1.35rem;font-weight:900;background:linear-gradient(90deg,#dc96ff,#ecc8ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.pb{width:100%;height:10px;background:rgba(0,0,0,.5);border-radius:10px;margin-bottom:24px;overflow:hidden;border:1px solid rgba(220,150,255,.3)}
+.pf{height:100%;background:linear-gradient(90deg,#dc96ff,#ecc8ff,#ffd700);background-size:200% 100%;border-radius:10px;transition:width .5s;animation:ts 3s linear infinite}
+.qb{background:linear-gradient(135deg,rgba(220,150,255,.12),rgba(236,200,255,.08));border:1px solid rgba(220,150,255,.35);border-radius:18px;padding:22px;margin-bottom:22px;text-align:center}
+.qb .ql{color:#dc96ff;font-size:.85rem;margin-bottom:10px;font-weight:700}
+.qb .qt{font-size:1.1rem;line-height:1.9;font-weight:700;color:#f0d8ff}
+.la{display:flex;flex-wrap:wrap;justify-content:center;gap:9px;margin-bottom:22px;min-height:65px}
+.lt{width:50px;height:50px;display:flex;align-items:center;justify-content:center;font-size:1.45rem;font-weight:900;background:linear-gradient(135deg,#a04ac8,#4a1a5c);border:2px solid rgba(220,150,255,.45);border-radius:12px;cursor:pointer;transition:all .2s;user-select:none;color:#f0d8ff}
+.lt:hover:not(.used){transform:translateY(-4px) scale(1.05);border-color:#dc96ff}
+.lt.used{opacity:.15;pointer-events:none;transform:scale(.85)}
+.aa{display:flex;flex-wrap:wrap;justify-content:center;gap:9px;min-height:65px;padding:16px;background:rgba(0,0,0,.5);border:2px dashed rgba(220,150,255,.5);border-radius:16px;margin-bottom:22px;align-items:center;transition:all .3s}
+.aa.correct{border-color:#ffd700;border-style:solid;box-shadow:0 0 40px rgba(255,215,0,.6);background:rgba(255,215,0,.1)}
+.at{width:50px;height:50px;display:flex;align-items:center;justify-content:center;font-size:1.45rem;font-weight:900;background:linear-gradient(135deg,#dc96ff,#ecc8ff);border-radius:12px;cursor:pointer;color:#4a1a5c;animation:pi .25s}
+.at.correct{background:linear-gradient(135deg,#ffd700,#ffe680);animation:cp .6s}
+@keyframes pi{0%{transform:scale(0)}70%{transform:scale(1.2)}100%{transform:scale(1)}}
+@keyframes cp{0%{transform:scale(1)}30%{transform:scale(1.3)}60%{transform:scale(1.15)}100%{transform:scale(1)}}
+.ph{color:#8868a0;font-size:.95rem;font-style:italic}
+.bts{display:flex;gap:10px;flex-wrap:wrap}
+.bn{flex:1;min-width:120px;padding:15px 20px;border:none;border-radius:14px;font-size:1rem;font-weight:800;cursor:pointer;font-family:'Vazirmatn',sans-serif}
+.bn:active{transform:scale(.96)}
+.bp{background:linear-gradient(135deg,#dc96ff,#ecc8ff);color:#4a1a5c}
+.bs{background:rgba(255,215,0,.15);color:#ffd700;border:1px solid rgba(255,215,0,.4)}
+.bn:disabled{opacity:.35;cursor:not-allowed}
+.hb{margin-top:16px;padding:14px;background:rgba(255,215,0,.12);border:1px solid rgba(255,215,0,.4);border-radius:12px;color:#ffd700;font-size:.92rem;text-align:center;display:none;font-weight:600}
+.mb{margin-top:16px;padding:14px;border-radius:12px;text-align:center;font-weight:800;display:none}
+.me{background:rgba(255,100,150,.15);border:1px solid rgba(255,100,150,.5);color:#ff64a0}
+.scr{display:none}
+.scr.active{display:block;animation:fi .4s}
+@keyframes fi{from{opacity:0}to{opacity:1}}
+.st{text-align:center;padding:20px 0}
+.st .em{font-size:5.5rem;margin-bottom:20px;animation:fl 3s ease-in-out infinite}
+@keyframes fl{0%,100%{transform:translateY(0)}50%{transform:translateY(-15px)}}
+.str{font-size:1.6rem;font-weight:900;background:linear-gradient(90deg,#dc96ff,#ecc8ff,#dc96ff);background-size:200% 100%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:15px;animation:ts 3s linear infinite}
+.st p{color:#b890c8;line-height:1.9;margin-bottom:22px}
+.rl{text-align:right;background:rgba(220,150,255,.06);border:1px solid rgba(220,150,255,.25);border-radius:14px;padding:18px 28px;margin-bottom:28px;list-style:none}
+.rl li{padding:8px 0;color:#d8c0e8;font-size:.95rem;border-bottom:1px dashed rgba(220,150,255,.15)}
+.rl li:last-child{border-bottom:none}
+.rl li::before{content:'💝 ';margin-left:6px}
+.sbt{width:100%;font-size:1.25rem;padding:18px}
+.es{text-align:center;padding:20px 0}
+.es .tr{font-size:5.5rem;margin-bottom:15px;animation:bo 1.2s ease infinite}
+@keyframes bo{0%,100%{transform:translateY(0)}50%{transform:translateY(-20px)}}
+.es h2{font-size:1.9rem;color:#ecc8ff;margin-bottom:10px}
+.fs{font-size:3.2rem;font-weight:900;background:linear-gradient(90deg,#dc96ff,#ecc8ff,#ffd700);background-size:200% 100%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin:18px 0;animation:ts 4s linear infinite}
+.rb{display:inline-block;padding:12px 35px;background:linear-gradient(135deg,#dc96ff,#ecc8ff);color:#4a1a5c;border-radius:35px;font-weight:900;font-size:1.15rem;margin-bottom:22px}
+.tc{animation:pu .5s ease infinite;color:#ff4466!important}
+@keyframes pu{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}
+.so{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.7);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;z-index:1000}
+.so.show{display:flex}
+.sc2{background:linear-gradient(135deg,#ffd700,#ffe680,#ffd700);background-size:200% 200%;animation:gs 2s ease infinite,sp .6s cubic-bezier(.68,-0.55,.27,1.55);padding:50px 70px;border-radius:30px;text-align:center;box-shadow:0 25px 80px rgba(255,215,0,.6)}
+@keyframes sp{0%{transform:scale(0) rotate(-180deg);opacity:0}60%{transform:scale(1.15) rotate(10deg);opacity:1}100%{transform:scale(1) rotate(0);opacity:1}}
+@keyframes gs{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+.cc{width:100px;height:100px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;margin:0 auto 20px}
+.cm{font-size:4rem;color:#4a1a5c;font-weight:900}
+.sx{font-size:1.8rem;font-weight:900;color:#4a1a5c;margin-bottom:10px}
+.sp2{font-size:1.1rem;font-weight:700;color:#4a1a5c}
+.cf{position:fixed;width:10px;height:10px;pointer-events:none;z-index:1001;animation:cff 2s linear forwards}
+@keyframes cff{0%{transform:translateY(-100vh) rotate(0);opacity:1}100%{transform:translateY(100vh) rotate(720deg);opacity:0}}
+.sk2{position:fixed;font-size:2rem;pointer-events:none;z-index:1001;animation:skf 1.5s ease-out forwards}
+@keyframes skf{0%{transform:scale(0);opacity:1}100%{transform:scale(0) translateY(-100px);opacity:0}}
+@media(max-width:500px){.container{padding:20px 15px}.lt,.at{width:42px;height:42px;font-size:1.15rem}.sc2{padding:35px 40px}}
+</style>
+</head>
+<body>
+
+<div class="so" id="so">
+  <div class="sc2">
+    <div class="cc"><div class="cm">✓</div></div>
+    <div class="sx">🎉 آفرین! درست گفتی! 🎉</div>
+    <div class="sp2" id="sp2"></div>
+  </div>
+</div>
+
+<div class="container">
+@keyframes sk{0%,100%{transform:translateX(0)}20%{transform:translateX(-12px)}40%{transform:translateX(12px)}60%{transform:translateX(-8px)}80%{transform:translateX(8px)}}
+<div class="scr active" id="ss">
+  <div class="st">
+    <div class="em">💝</div>
+    <div class="str">درس دوم: تعاون (۲)</div>
+    <p>مطالعات اجتماعی هشتم — فصل تعاون</p>
+    <ul class="rl">
+      <li>۱۰ سوال فقط از درس دوم</li>
+      <li>حروف پاسخ را مرتب کن تا کلمه ساخته شود</li>
+      <li>وقتی درست چیدی، خودکار تأیید می‌شود!</li>
+      <li>هر مرحله ۲ دقیقه زمان داری</li>
+      <li>از راهنمایی و ۵۰:۵۰ استفاده کن</li>
+    </ul>
+    <button class="bn bp sbt" id="startBtn">🚀 شروع بازی</button>
+  </div>
+</div>
+
+<div class="scr" id="gs">
+  <div class="header"><h1 id="stT">مرحله ۱</h1></div>
+  <div class="stats">
+    <div class="sb"><div class="l">امتیاز</div><div class="v" id="sd">۰</div></div>
+    <div class="sb"><div class="l">زمان</div><div class="v" id="td">۱۲۰</div></div>
+    <div class="sb"><div class="l">مرحله</div><div class="v" id="pd">۱/۱۰</div></div>
+  </div>
+  <div class="pb"><div class="pf" id="pf" style="width:0%"></div></div>
+  <div class="qb">
+    <div class="ql">💝 سوال از درس دوم</div>
+    <div class="qt" id="qt"></div>
+  </div>
+  <div class="la" id="la"></div>
+  <div class="aa" id="aa"><span class="ph">حروف را اینجا بچین...</span></div>
+  <div class="hb" id="hb"></div>
+  <div class="mb" id="mb"></div>
+  <div class="bts" style="margin-top:15px">
+    <button class="bn bs" onclick="showHint()" id="hb2">💡 راهنمایی</button>
+    <button class="bn bp" onclick="useFF()" id="fb2">✂️ ۵۰:۵۰</button>
+  </div>
+</div>
+
+<div class="scr" id="es">
+  <div class="es">
+    <div class="tr" id="te">🏆</div>
+    <h2 id="et">آفرین!</h2>
+    <div class="fs" id="fs">۰</div>
+    <div class="rb" id="rb">استاد درس دوم</div>
+    <p style="color:#b890c8;margin-bottom:22px" id="em2"></p>
+    <button class="bn bp" style="width:100%" onclick="restart()">🔄 بازی دوباره</button>
+  </div>
+</div>
+
+</div>
+
+<script>
+var gameData = [
+{c:"درس ۲: تعاون (۲)",q:"به بخشش مال، علم، توانایی‌ها و وقت خود به کسانی که نیازمند هستند چه می‌گویند؟",a:"انفاق",h:"۵ حرفی — بخشش در راه خدا",t:120,p:100},
+{c:"درس ۲: تعاون (۲)",q:"طبق آیه ۹۲ سوره آل‌عمران، هرگز به نیکی نمی‌رسید مگر اینکه از چه چیزی انفاق کنید؟",a:"آنچه دوست دارید",d:"آنچه دوست دارید",h:"سه کلمه — «آنچه ____ ____»",t:120,p:120},
+{c:"درس ۲: تعاون (۲)",q:"به مؤسساتی که گروهی از افراد نیکوکار برای تأمین نیازهای خانواده‌های نیازمند و آسیب‌دیدگان اجتماعی فعالیت می‌کنند چه می‌گویند؟",a:"مؤسسات خیریه",d:"مؤسسات خیریه",h:"دو کلمه — «مؤسسات ____»",t:120,p:110},
+{c:"درس ۲: تعاون (۲)",q:"به افرادی که با استفاده از توانمندی خود، مدرسه می‌سازند و در اختیار وزارت آموزش و پرورش قرار می‌دهند چه می‌گویند؟",a:"خیرین مدرسه‌ساز",d:"خیرین مدرسه‌ساز",h:"سه کلمه — «خیرین ____ ____»",t:120,p:130},
+{c:"درس ۲: تعاون (۲)",q:"یکی از اقدامات مهم به منظور انفاق و تعاون در جامعه که از روزگاران قدیم در ایران وجود داشته و اموال برای استفادهٔ عمومی وقف می‌شود چه نام دارد؟",a:"وقف",h:"۳ حرفی — با «و» شروع می‌شود",t:120,p:120},
+{c:"درس ۲: تعاون (۲)",q:"به اموال و دارایی‌هایی که وقف می‌شوند و تا ابد باید به همان صورت معین استفاده شوند چه می‌گویند؟",a:"موقوفات",h:"۸ حرفی — جمع «موقوف»",t:120,p:130},
+{c:"درس ۲: تعاون (۲)",q:"به کسی که چیزی را وقف می‌کند چه می‌گویند؟",a:"واقف",h:"۵ حرفی — از ریشه «وقف»",t:120,p:120},
+{c:"درس ۲: تعاون (۲)",q:"به گروهی از افراد که برای رفع یک مشکل در جامعه به صورت داوطلبانه، غیردولتی و غیرتجاری فعالیت می‌کنند چه می‌گویند؟",a:"سازمان مردم‌نهاد",d:"سازمان مردم‌نهاد",h:"دو کلمه — «سازمان ____»",t:120,p:140},
+{c:"درس ۲: تعاون (۲)",q:"هرگاه گروهی از مردم برای رفع نیازهای معیشتی و شغلی خود دور هم جمع شوند، سرمایه‌گذاری و همکاری کنند و در سود و زیان شریک شوند، چه چیزی تشکیل می‌دهند؟",a:"شرکت تعاونی",d:"شرکت تعاونی",h:"دو کلمه — «شرکت ____»",t:120,p:150},
+{c:"درس ۲: تعاون (۲)",q:"در شرکت تعاونی، همهٔ افراد با هم برابرند و هرکس با هر مقدار سرمایه، چند حق رأی دارد؟",a:"یک حق رأی",d:"یک حق رأی",h:"سه کلمه — «یک ____ ____»",t:120,p:140}
+];
+
+var cs=0,sc=0,tm=null,tl=0,cl=[],sl=[],hu=false,fd=false,cc2=0,ip=false;
+
+function pn(n){return n.toString().replace(/\d/g,function(d){return '۰۱۲۳۴۵۶۷۸۹'[parseInt(d)]})}
+function shuf(a){var r=a.slice();for(var i=r.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=r[i];r[i]=r[j];r[j]=t}return r}
+function genL(a){var c=a.replace(/\s+/g,''),l=[];for(var i=0;i<c.length;i++)l.push(c[i]);var s=shuf(l),n=0;while(s.join('')===l.join('')&&n<50){s=shuf(l);n++}return s}
+function showS(id){var x=document.querySelectorAll('.scr');for(var i=0;i<x.length;i++)x[i].classList.remove('active');document.getElementById(id).classList.add('active')}
+function start(){cs=0;sc=0;cc2=0;showS('gs');load()}
+
+function load(){
+  if(cs>=gameData.length){end();return}
+  var d=gameData[cs];
+  hu=false;fd=false;sl=[];ip=false;
+  document.getElementById('stT').textContent=d.c;
+  document.getElementById('qt').textContent=d.q;
+  cl=genL(d.a);
+  document.getElementById('aa').classList.remove('correct');
+  rendL();rendA();upd();
+  document.getElementById('hb').style.display='none';
+  var m=document.getElementById('mb');m.style.display='none';m.className='mb';
+  document.getElementById('hb2').disabled=false;
+  document.getElementById('fb2').disabled=false;
+  startT(d.t);
+}
+
+function rendL(){
+  var a=document.getElementById('la');a.innerHTML='';
+  for(var i=0;i<cl.length;i++){(function(idx){
+    var t=document.createElement('div');t.className='lt';t.textContent=cl[idx];t.setAttribute('data-index',idx);
+    t.onclick=function(){selL(idx)};a.appendChild(t)
+  })(i)}
+}
+
+function selL(i){
+  if(ip)return;
+  var t=document.querySelector('.lt[data-index="'+i+'"]');
+  if(!t||t.classList.contains('used'))return;
+  t.classList.add('used');sl.push({letter:t.textContent,oi:i});rendA();
+  setTimeout(chkA,150);
+}
+
+function rendA(){
+  var a=document.getElementById('aa');a.innerHTML='';
+  if(sl.length===0){a.innerHTML='<span class="ph">حروف را اینجا بچین...</span>';return}
+  for(var i=0;i<sl.length;i++){(function(idx){
+    var t=document.createElement('div');t.className='at';t.textContent=sl[idx].letter;
+    t.onclick=function(){rmL(idx)};a.appendChild(t)
+  })(i)}
+}
+
+function rmL(i){
+  if(ip)return;
+  var it=sl[i];if(!it)return;
+  var t=document.querySelector('.lt[data-index="'+it.oi+'"]');
+  if(t)t.classList.remove('used');
+  sl.splice(i,1);rendA()
+}
+
+function chkA(){
+  if(ip)return;
+  var d=gameData[cs],ca=d.a.replace(/\s+/g,'');
+  if(sl.length!==ca.length)return;
+  var ua='';for(var i=0;i<sl.length;i++)ua+=sl[i].letter;
+  if(ua===ca){
+    ip=true;stopT();cc2++;
+    document.getElementById('aa').classList.add('correct');
+    var t=document.querySelectorAll('.at');for(var i=0;i<t.length;i++)t[i].classList.add('correct');
+    var e=d.p,b='';
+    if(!hu){e+=50;b+=' +۵۰'}
+    if(tl>=90&&!hu){e+=Math.round(d.p*.5);b+=' +سرعت'}
+    sc+=e;upd();shwS(e,b);
+    setTimeout(function(){document.getElementById('so').classList.remove('show');cs++;if(cs>=gameData.length)end();else load()},2200);
+  }else{
+    sc=Math.max(0,sc-5);upd();
+    var m=document.getElementById('mb');m.className='mb me';m.innerHTML='❌ اشتباهه! یه حرف رو عوض کن.<br>(-۵)';m.style.display='block';
+    var a=document.getElementById('aa');a.style.animation='sk .5s';
+    setTimeout(function(){a.style.animation=''},500);
+    setTimeout(function(){m.style.display='none'},1500);
+  }
+}
+
+function shwS(e,b){
+  document.getElementById('sp2').innerHTML='امتیاز: +'+pn(e)+(b?'<br><small>'+b+'</small>':'');
+  document.getElementById('so').classList.add('show');
+  var col=['#ffd700','#ffe680','#dc96ff','#ecc8ff','#ff64a0','#fff'];
+  for(var i=0;i<40;i++){setTimeout(function(){
+    var c=document.createElement('div');c.className='cf';
+    c.style.left=Math.random()*100+'vw';c.style.background=col[Math.floor(Math.random()*col.length)];
+    c.style.width=(Math.random()*8+6)+'px';c.style.height=(Math.random()*8+6)+'px';
+    c.style.borderRadius=Math.random()>.5?'50%':'2px';c.style.animationDuration=(Math.random()*1+1.5)+'s';
+    document.body.appendChild(c);setTimeout(function(){c.remove()},3000);
+  },i*30)}
+  var em=['⭐','✨','🌟','💫','🎉','🎊'];
+  for(var i=0;i<8;i++){setTimeout(function(){
+    var s=document.createElement('div');s.className='sk2';s.textContent=em[Math.floor(Math.random()*em.length)];
+    s.style.left=(Math.random()*80+10)+'vw';s.style.top=(Math.random()*60+20)+'vh';
+    document.body.appendChild(s);setTimeout(function(){s.remove()},2000);
+  },i*100)}
+}
+
+function showHint(){if(hu)return;hu=true;document.getElementById('hb2').disabled=true;
+  var h=document.getElementById('hb');h.textContent='💡 '+gameData[cs].h;h.style.display='block'}
+
+function useFF(){
+  if(fd)return;fd=true;document.getElementById('fb2').disabled=true;
+  var d=gameData[cs],ca=d.a.replace(/\s+/g,'').split('');
+  var av=[],ts=document.querySelectorAll('.lt:not(.used)');
+  for(var i=0;i<ts.length;i++)av.push({i:parseInt(ts[i].getAttribute('data-index')),l:ts[i].textContent});
+  var nd=ca.slice(),kp=[];
+  for(var i=0;i<av.length;i++){var p=nd.indexOf(av[i].l);if(p>-1){kp.push(av[i].i);nd.splice(p,1)}}
+  var rc=Math.floor(av.length/2),ex=[];
+  for(var i=0;i<av.length;i++)if(kp.indexOf(av[i].i)===-1)ex.push(av[i].i);
+  var rm=shuf(ex).slice(0,rc);
+  for(var i=0;i<rm.length;i++){var t=document.querySelector('.lt[data-index="'+rm[i]+'"]');if(t)t.classList.add('used')}
+  var m=document.getElementById('mb');m.className='mb';
+  m.style.background='rgba(255,215,0,.12)';m.style.border='1px solid rgba(255,215,0,.4)';m.style.color='#ffd700';
+  m.textContent='✂️ نصف حروف اضافی حذف شد!';m.style.display='block';
+  setTimeout(function(){m.style.display='none'},1500)
+}
+
+function startT(s){stopT();tl=s;updT();
+  tm=setInterval(function(){tl--;updT();if(tl<=15)document.getElementById('td').classList.add('tc');
+    if(tl<=0){stopT();timeUp()}},1000)}
+
+function updT(){document.getElementById('td').textContent=pn(tl);
+  if(tl>15)document.getElementById('td').classList.remove('tc')}
+
+function stopT(){if(tm){clearInterval(tm);tm=null}document.getElementById('td').classList.remove('tc')}
+
+function timeUp(){
+  var d=gameData[cs],m=document.getElementById('mb');
+  m.className='mb me';m.innerHTML='⏰ زمان تمام شد! جواب: <b>'+(d.d||d.a)+'</b>';m.style.display='block';
+  document.getElementById('hb2').disabled=true;document.getElementById('fb2').disabled=true;
+  setTimeout(function(){cs++;if(cs>=gameData.length)end();else load()},2500)
+}
+
+function upd(){
+  document.getElementById('sd').textContent=pn(sc);
+  document.getElementById('pd').textContent=pn(cs+1)+'/'+pn(gameData.length);
+  document.getElementById('pf').style.width=(cs/gameData.length*100)+'%'
+}
+
+function end(){
+  stopT();showS('es');
+  document.getElementById('fs').textContent=pn(sc);
+  var r,e2,m2;
+  if(sc>=1300){r='🏆 استاد درس دوم';e2='🏆';m2='فوق‌العاده! درس دوم رو کامل یاد گرفتی!'}
+  else if(sc>=900){r='🥇 دانش‌آموز ماهر';e2='🥇';m2='عالی بود! تسلط خوبی روی درس داری.'}
+  else if(sc>=500){r='🥈 کوشا';e2='🥈';m2='خوب بود! با کمی مرور بهتر می‌شی.'}
+  else{r='📚 تازه‌کار';e2='📚';m2='نگران نباش! درس دوم رو دوباره بخون.'}
+  document.getElementById('rb').textContent=r;
+  document.getElementById('te').textContent=e2;
+  document.getElementById('em2').textContent=m2;
+}
+
+function restart(){showS('ss')}
+
+document.getElementById('startBtn').addEventListener('click',start);
+</script>
+</body>
+</html>
