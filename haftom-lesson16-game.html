@@ -17,16 +17,16 @@ body{min-height:100vh;background:linear-gradient(135deg,#3d1a4a,#a04ac8,#3d1a4a)
 .sb{flex:1;min-width:100px;background:linear-gradient(135deg,rgba(220,150,255,.12),rgba(236,200,255,.08));border:1px solid rgba(220,150,255,.35);border-radius:14px;padding:12px;text-align:center}
 .sb .l{font-size:.75rem;color:#b890c8;margin-bottom:4px}
 .sb .v{font-size:1.35rem;font-weight:900;background:linear-gradient(90deg,#dc96ff,#ecc8ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.pb{width:100%;height:10px;background:rgba(0,0,0,.5);border-radius:10px;margin-bottom:24px;overflow:hidden;border:1px solid rgba(220,150,255,.3)}
+  .pb{width:100%;height:10px;background:rgba(0,0,0,.5);border-radius:10px;margin-bottom:24px;overflow:hidden;border:1px solid rgba(220,150,255,.3)}
 .pf{height:100%;background:linear-gradient(90deg,#dc96ff,#ecc8ff,#ffd700);background-size:200% 100%;border-radius:10px;transition:width .5s;animation:ts 3s linear infinite}
 .qb{background:linear-gradient(135deg,rgba(220,150,255,.12),rgba(236,200,255,.08));border:1px solid rgba(220,150,255,.35);border-radius:18px;padding:22px;margin-bottom:22px;text-align:center}
 .qb .ql{color:#dc96ff;font-size:.85rem;margin-bottom:10px;font-weight:700}
-.qb .qt{font-size:1.15rem;line-height:1.9;font-weight:700;color:#f0d8ff}
+.qb .qt{font-size:1.1rem;line-height:1.9;font-weight:700;color:#f0d8ff}
 .la{display:flex;flex-wrap:wrap;justify-content:center;gap:9px;margin-bottom:22px;min-height:65px}
 .lt{width:50px;height:50px;display:flex;align-items:center;justify-content:center;font-size:1.45rem;font-weight:900;background:linear-gradient(135deg,#a04ac8,#3d1a4a);border:2px solid rgba(220,150,255,.45);border-radius:12px;cursor:pointer;transition:all .2s;user-select:none;color:#f0d8ff}
 .lt:hover:not(.used){transform:translateY(-4px) scale(1.05);border-color:#dc96ff}
 .lt.used{opacity:.15;pointer-events:none;transform:scale(.85)}
-.aa{display:flex;flex-wrap:wrap;justify-content:center;gap:9px;min-height:65px;padding:16px;background:rgba(0,0,0,.5);border:2px dashed rgba(220,150,255,.5);border-radius:16px;margin-bottom:22px;align-items:center;transition:all .3s}
+  .aa{display:flex;flex-wrap:wrap;justify-content:center;gap:9px;min-height:65px;padding:16px;background:rgba(0,0,0,.5);border:2px dashed rgba(220,150,255,.5);border-radius:16px;margin-bottom:22px;align-items:center;transition:all .3s}
 .aa.correct{border-color:#ffd700;border-style:solid;box-shadow:0 0 40px rgba(255,215,0,.6);background:rgba(255,215,0,.1)}
 .at{width:50px;height:50px;display:flex;align-items:center;justify-content:center;font-size:1.45rem;font-weight:900;background:linear-gradient(135deg,#dc96ff,#ecc8ff);border-radius:12px;cursor:pointer;color:#3d1a4a;animation:pi .25s}
 .at.correct{background:linear-gradient(135deg,#ffd700,#ffe680);animation:cp .6s}
@@ -42,13 +42,13 @@ body{min-height:100vh;background:linear-gradient(135deg,#3d1a4a,#a04ac8,#3d1a4a)
 .hb{margin-top:16px;padding:14px;background:rgba(255,215,0,.12);border:1px solid rgba(255,215,0,.4);border-radius:12px;color:#ffd700;font-size:.92rem;text-align:center;display:none;font-weight:600}
 .mb{margin-top:16px;padding:14px;border-radius:12px;text-align:center;font-weight:800;display:none}
 .me{background:rgba(255,100,150,.15);border:1px solid rgba(255,100,150,.5);color:#ff64a0}
-.scr{display:none}
+  .scr{display:none}
 .scr.active{display:block;animation:fi .4s}
 @keyframes fi{from{opacity:0}to{opacity:1}}
 .st{text-align:center;padding:20px 0}
 .st .em{font-size:5.5rem;margin-bottom:20px;animation:fl 3s ease-in-out infinite}
 @keyframes fl{0%,100%{transform:translateY(0)}50%{transform:translateY(-15px)}}
-.str{font-size:1.8rem;font-weight:900;background:linear-gradient(90deg,#dc96ff,#ecc8ff,#dc96ff);background-size:200% 100%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:15px;animation:ts 3s linear infinite}
+.str{font-size:1.6rem;font-weight:900;background:linear-gradient(90deg,#dc96ff,#ecc8ff,#dc96ff);background-size:200% 100%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:15px;animation:ts 3s linear infinite}
 .st p{color:#b890c8;line-height:1.9;margin-bottom:22px}
 .rl{text-align:right;background:rgba(220,150,255,.06);border:1px solid rgba(220,150,255,.25);border-radius:14px;padding:18px 28px;margin-bottom:28px;list-style:none}
 .rl li{padding:8px 0;color:#d8c0e8;font-size:.95rem;border-bottom:1px dashed rgba(220,150,255,.15)}
@@ -63,7 +63,8 @@ body{min-height:100vh;background:linear-gradient(135deg,#3d1a4a,#a04ac8,#3d1a4a)
 .rb{display:inline-block;padding:12px 35px;background:linear-gradient(135deg,#dc96ff,#ecc8ff);color:#3d1a4a;border-radius:35px;font-weight:900;font-size:1.15rem;margin-bottom:22px}
 .tc{animation:pu .5s ease infinite;color:#ff4466!important}
 @keyframes pu{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}
-.so{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.7);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;z-index:1000}
+@keyframes sk{0%,100%{transform:translateX(0)}20%{transform:translateX(-12px)}40%{transform:translateX(12px)}60%{transform:translateX(-8px)}80%{transform:translateX(8px)}}
+  .so{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.7);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;z-index:1000}
 .so.show{display:flex}
 .sc2{background:linear-gradient(135deg,#ffd700,#ffe680,#ffd700);background-size:200% 200%;animation:gs 2s ease infinite,sp .6s cubic-bezier(.68,-0.55,.27,1.55);padding:50px 70px;border-radius:30px;text-align:center;box-shadow:0 25px 80px rgba(255,215,0,.6)}
 @keyframes sp{0%{transform:scale(0) rotate(-180deg);opacity:0}60%{transform:scale(1.15) rotate(10deg);opacity:1}100%{transform:scale(1) rotate(0);opacity:1}}
@@ -90,7 +91,7 @@ body{min-height:100vh;background:linear-gradient(135deg,#3d1a4a,#a04ac8,#3d1a4a)
 </div>
 
 <div class="container">
-<div class="scr active" id="ss">
+  <div class="scr active" id="ss">
   <div class="st">
     <div class="em">🕌</div>
     <div class="str">درس شانزدهم: جاذبه‌های گردشگری ایران</div>
@@ -144,7 +145,7 @@ body{min-height:100vh;background:linear-gradient(135deg,#3d1a4a,#a04ac8,#3d1a4a)
 <script>
 var gameData = [
 {c:"درس ۱۶: جاذبه‌های گردشگری",q:"مهم‌ترین قطب زیارتی ایران که همه ساله میلیون‌ها زائر برای زیارت مرقد مطهر امام رضا به آن سفر می‌کنند کدام شهر است؟",a:"مشهد",h:"۵ حرفی — مرقد امام هشتم",t:120,p:110},
-{c:"درس ۱۶: جاذبه‌های گردشگری",q:"مسجد گوهرشاد در کدام شهر و در کنار کدام حرم مطهر قرار دارد؟",a:"حرم رضوی",d:"حرم رضوی",h:"دو کلمه — «حرم ____»",t:120,p:120},
+{c:"درس ۱۶: جاذبه‌های گردشگری",q:"مسجد گوهرشاد در کدام شهر و در کنار کدام حرم مطهر قرار دارد؟ (پاسخ: حرم رضوی)",a:"حرم رضوی",d:"حرم رضوی",h:"دو کلمه — «حرم ____»",t:120,p:120},
 {c:"درس ۱۶: جاذبه‌های گردشگری",q:"حرم حضرت معصومه (س) در کدام شهر ایران قرار دارد؟",a:"قم",h:"۲ حرفی — شهری مذهبی",t:120,p:110},
 {c:"درس ۱۶: جاذبه‌های گردشگری",q:"آرامگاه حضرت احمد بن موسی (ع) معروف به شاهچراغ در کدام شهر قرار دارد؟",a:"شیراز",h:"۵ حرفی — شهر شعر و ادب",t:120,p:120},
 {c:"درس ۱۶: جاذبه‌های گردشگری",q:"مجموعه باستانی تخت جمشید در کدام استان ایران قرار دارد؟",a:"فارس",h:"۴ حرفی — استان شیراز",t:120,p:130},
@@ -315,4 +316,3 @@ document.getElementById('startBtn').addEventListener('click',start);
 </script>
 </body>
 </html>
-@keyframes sk{0%,100%{transform:translateX(0)}20%{transform:translateX(-12px)}40%{transform:translateX(12px)}60%{transform:translateX(-8px)}80%{transform:translateX(8px)}}
