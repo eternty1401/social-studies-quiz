@@ -330,7 +330,30 @@
     });
 
     const score = Math.round((correctCount / selectedQuestions.length) * 100);
+// ---- ارسال نمره به Web3Forms ----
+const examName = "هشتم - درس ۷ تستی"; // اسم این آزمون
 
+// پیدا کردن نام دانش‌آموز (بر اساس کد خودت)
+const studentName = document.getElementById('student-name').value || "دانش‌آموز ناشناس"; 
+
+const formData = new FormData();
+formData.append("access_key", "a45e3cfb-d669-4853-95ad-d84fa9759109"); // 👈 کلیدت رو اینجا بذار
+formData.append("subject", "نمره جدید: " + studentName);
+formData.append("نام دانش‌آموز", studentName);
+formData.append("نام آزمون", examName);
+formData.append("نمره (درصد)", score);
+formData.append("تعداد درست", correctCount);
+
+fetch("https://api.web3forms.com/submit", {
+  method: "POST",
+  body: formData
+})
+.then(response => response.json())
+.then(data => {
+  if(data.success) console.log("نمره با موفقیت ارسال شد!");
+})
+.catch(error => console.error("خطای ارسال:", error));
+// ---------------------------------
     document.getElementById('quiz-section').style.display = 'none';
     document.getElementById('result-section').style.display = 'block';
 
