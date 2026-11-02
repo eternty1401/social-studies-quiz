@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
+ <script src="telegram.js"></script>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -278,6 +279,7 @@ function finishQuiz() {
   quizQuestions.forEach((q, i) => { if (userAnswers[i] === q.correctIndex) correct++; });
   const wrong = TOTAL_QUESTIONS - correct;
   const percent = Math.round((correct / TOTAL_QUESTIONS) * 100);
+ submitScoreToTelegram(score, correctCount);
   document.getElementById("correctCount").textContent = toFa(correct);
   document.getElementById("wrongCount").textContent = toFa(wrong);
   document.getElementById("scoreNum").textContent = toFa(percent);
