@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
+ <script src="telegram.js"></script>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -381,7 +382,7 @@ function shuffleArray(arr) {
     });
     const wrong = QUESTIONS_COUNT - correct;
     const percent = Math.round((correct / QUESTIONS_COUNT) * 100);
-
+submitScoreToTelegram(score, correctCount);
     document.getElementById("score-display").textContent = toFa(percent);
     document.getElementById("stat-correct").textContent = `تعداد درست: ${toFa(correct)}`;
     document.getElementById("stat-wrong").textContent = `تعداد غلط: ${toFa(wrong)}`;
