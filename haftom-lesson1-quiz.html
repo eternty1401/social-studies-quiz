@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
+ <script src="telegram.js"></script>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -330,7 +331,8 @@
     });
 
     const score = Math.round((correctCount / selectedQuestions.length) * 100);
-// ---- ارسال نمره به Web3Forms ----
+   submitScoreToTelegram(score, correctCount);
+// --submitScoreToTelegram(score, correctCount);-- ارسال نمره به Web3Forms ----
 const examName = "هشتم - درس ۷ تستی"; // اسم این آزمون
 
 // پیدا کردن نام دانش‌آموز (بر اساس کد خودت)
