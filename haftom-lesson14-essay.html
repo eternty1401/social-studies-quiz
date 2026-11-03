@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
+<script src="telegram.js"></script>
+<script src="https://js.puter.com/v2/"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>آزمون تشریحی درس ۱۴: منابع آب و خاک</title>
@@ -17,8 +19,6 @@
     background: #fff; width: 100%; max-width: 800px; border-radius: 20px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.08); padding: 35px; border: 1px solid #eef2f5;
   }
-  
-  /* صفحه شروع */
   #start-section { text-align: center; padding: 20px 0; }
   #start-section h1 { color: #0288d1; font-size: 1.6rem; margin-bottom: 15px; }
   #start-section p { color: #7f8c8d; margin-bottom: 30px; line-height: 1.8; }
@@ -34,8 +34,6 @@
     cursor: pointer; transition: 0.3s; box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);
   }
   .start-btn:hover { background: #27ae60; transform: translateY(-2px); }
-
-  /* هدر و تایمر */
   .header-top { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px dashed #eef2f5; padding-bottom: 15px; margin-bottom: 25px; }
   .header-title h1 { color: #0288d1; font-size: 1.4rem; }
   .header-title p { color: #7f8c8d; font-size: 0.85rem; margin-top: 5px; }
@@ -46,8 +44,6 @@
   }
   .timer-box.warning { background: #fef9e7; color: #f39c12; border-color: #fae5d3; animation: pulse 1s infinite; }
   @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
-
-  /* سوالات تشریحی */
   .question-box {
     background: #fafbfc; border: 1px solid #eef2f5; border-radius: 12px;
     padding: 20px; margin-bottom: 20px;
@@ -59,7 +55,6 @@
     background: #fff; outline: none; transition: 0.3s; line-height: 1.8;
   }
   .essay-textarea:focus { border-color: #0288d1; box-shadow: 0 0 8px rgba(2,136,209,0.1); }
-  
   .submit-btn {
     display: block; width: 100%; padding: 15px; margin-top: 30px;
     background: #0288d1; color: #fff; border: none; border-radius: 12px;
@@ -67,28 +62,30 @@
     transition: 0.3s;
   }
   .submit-btn:hover { background: #01579b; }
-
-  /* کارنامه */
   .result-container { display: none; text-align: center; }
   .student-name-display {
     font-size: 1.2rem; font-weight: 900; color: #2c3e50; margin-bottom: 20px;
     background: #ecf0f1; padding: 10px 20px; border-radius: 10px; display: inline-block;
   }
-  .result-message {
-    font-size: 1.1rem; font-weight: 700; color: #e74c3c; margin-bottom: 30px;
+  .score-circle {
+    width: 150px; height: 150px; border-radius: 50%; margin: 0 auto 20px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    border: 8px solid #ecf0f1;
   }
-  
-  /* بخش پاسخ‌های دانش‌آموز */
+  .score-circle.excellent { border-color: #2ecc71; color: #2ecc71; }
+  .score-circle.good { border-color: #f39c12; color: #f39c12; }
+  .score-circle.fail { border-color: #e74c3c; color: #e74c3c; }
+  .score-num { font-size: 2.8rem; font-weight: 900; line-height: 1; }
+  .score-text { font-size: 0.9rem; color: #7f8c8d; margin-top: 5px; font-weight: 700; }
+  .loading-spinner { font-size: 1.2rem; color: #0288d1; font-weight: 900; margin: 30px 0; }
   .answers-review-box {
     text-align: right; background: #f8f9fa; border: 1px dashed #bdc3c7;
     padding: 20px; border-radius: 12px; margin-bottom: 30px;
   }
-  .answers-review-box h3 { color: #2980b9; margin-bottom: 15px; font-size: 1.1rem; }
   .review-item { margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #ecf0f1; }
   .review-q { font-weight: 900; color: #2c3e50; margin-bottom: 8px; }
-  .review-a { color: #27ae60; background: #e8f8f5; padding: 10px; border-radius: 8px; line-height: 1.8; white-space: pre-wrap; }
-  .review-a.empty { color: #e74c3c; background: #fdedec; }
-  
+  .review-a { color: #27ae60; background: #e8f8f5; padding: 10px; border-radius: 8px; line-height: 1.8; white-space: pre-wrap; margin-bottom: 5px;}
+  .review-score { color: #d35400; font-weight: bold; font-size: 0.9rem;}
   .action-btns { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
   .review-btn {
     background: #3498db; color: #fff; text-decoration: none; border: none;
@@ -96,9 +93,6 @@
     font-size: 1rem; transition: 0.3s; font-family: inherit;
   }
   .review-btn:hover { background: #2980b9; }
-  .copy-btn { background: #f39c12; }
-  .copy-btn:hover { background: #d68910; }
-
   @media(max-width:600px) {
     .container { padding: 20px; }
     .header-top { flex-direction: column; gap: 10px; text-align: center; }
@@ -106,84 +100,94 @@
 </style>
 </head>
 <body>
-
-<div class="container">
-  
-  <!-- صفحه شروع -->
+ <div class="container">
   <div id="start-section">
     <h1>✍️ آزمون تشریحی درس ۱۴</h1>
-    <p>منابع آب و خاک — مطالعات اجتماعی پایه هفتم<br>لطفاً نام و نام خانوادگی خود را وارد کنید.</p>
+    <p>منابع آب و خاک — مطالعات اجتماعی پایه هفتم<br><strong>۱۰ سوال تصادفی - تصحیح خودکار با هوش مصنوعی</strong></p>
     <input type="text" id="student-name" class="name-input" placeholder="مثلاً: علی محمدی">
     <br>
     <button class="start-btn" onclick="startQuiz()">شروع آزمون</button>
   </div>
 
-  <!-- بخش آزمون -->
   <div id="quiz-section" style="display: none;">
     <div class="header-top">
       <div class="header-title">
         <h1>✍️ آزمون تشریحی درس ۱۴</h1>
-        <p>۵ سوال تصادفی از بانک سوالات</p>
+        <p>۱۰ سوال از بانک ۳۰ سوالی</p>
       </div>
       <div class="timer-box" id="timer-display">⏱ ۱۵:۰۰</div>
     </div>
     
     <form id="quiz-form">
       <div id="questions-container"></div>
-      <button type="submit" class="submit-btn" id="submit-btn">پایان آزمون و مشاهده کارنامه</button>
+      <button type="submit" class="submit-btn" id="submit-btn">پایان آزمون و تصحیح خودکار</button>
     </form>
   </div>
 
-  <!-- بخش کارنامه -->
   <div id="result-section" class="result-container">
-    <h2 style="color:#2c3e50; margin-bottom:20px; font-weight:900;">🎓 کارنامه آزمون تشریحی</h2>
+    <h2 style="color:#2c3e50; margin-bottom:20px; font-weight:900;">🎓 کارنامه آزمون</h2>
     <div class="student-name-display" id="display-student-name">نام دانش‌آموز</div>
     
-    <p class="result-message">
-      پاسخ‌های شما ثبت شد. برای تصحیح، کادر زیر را کپی کرده و برای دبیر خود ارسال کنید.
-    </p>
+    <div id="grading-loader" class="loading-spinner" style="display: none;">
+      🤖 هوش مصنوعی در حال بررسی و تصحیح پاسخ‌های شماست... لطفاً صبر کنید ⏳
+    </div>
 
-    <!-- بخش کپی پاسخ‌ها -->
-    <div class="answers-review-box" id="copyable-answers">
+    <div id="score-display-container" style="display: none;">
+      <div id="score-circle" class="score-circle">
+        <div class="score-num" id="final-score">0</div>
+        <div class="score-text">از ۱۰۰</div>
+      </div>
+    </div>
+
+    <div class="answers-review-box" id="copyable-answers" style="display: none;">
+      <h3>📝 نتیجه تصحیح هوش مصنوعی:</h3>
       <!-- پاسخ‌ها به صورت داینامیک اینجا قرار می‌گیرند -->
     </div>
 
-    <div class="action-btns">
-      <button class="review-btn copy-btn" onclick="copyAnswers()">📋 کپی پاسخ‌ها</button>
+    <div class="action-btns" id="action-buttons" style="display: none;">
       <a href="haftom.html" class="review-btn">🔙 بازگشت به دروس</a>
     </div>
   </div>
-
 </div>
 
 <script>
   // ==========================================
-  // بانک سوالات تشریحی درس ۱۴
+  // بانک سوالات تشریحی همراه با پاسخ صحیح (کلید)
   // ==========================================
   const essayBank = [
-    { q: "چرا کشور ما با کمبود آب مواجه است؟ (دو دلیل)" },
-    { q: "سه حوضه آبریز ایران را نام ببرید و ویژگی هر یک را توضیح دهید." },
-    { q: "قنات چیست و چه نقشی در تأمین آب نواحی خشک ایران داشته است؟" },
-    { q: "سه راه برای مصرف صحیح آب در خانه نام ببرید." },
-    { q: "چرا آلوده کردن آب‌ها از نظر اسلام گناه است؟" },
-    { q: "خاک چگونه تشکیل می‌شود؟ (عوامل مؤثر را نام ببرید)" },
-    { q: "چرا تشکیل یک سانتی‌متر خاک زراعی زمان زیادی می‌برد؟" },
-    { q: "سه عامل از بین رفتن خاک را نام ببرید و توضیح دهید." },
-    { q: "چرا خاک یک منبع محدود و ارزشمند است؟" },
-    { q: "سازمان مسئول حفاظت از خاک در کشور ما کدام است و چه وظیفه‌ای دارد؟" },
-    { q: "چرا حفاظت از خاک فقط وظیفهٔ سازمان جنگل‌ها و مراتع نیست؟" },
-    { q: "دو راه برای جلوگیری از فرسایش خاک پیشنهاد دهید." },
-    { q: "چرخه آب در طبیعت را به طور مختصر توضیح دهید." },
-    { q: "چرا استفاده از آب باران برای آبیاری باغچه مفید است؟" },
-    { q: "تفاوت منابع تجدیدپذیر و تجدیدناپذیر را با ذکر مثال توضیح دهید." },
-    { q: "چرا در ایران مصرف سرانه آب بیش از حد مجاز است؟" },
-    { q: "سه کاربرد خاک در زندگی انسان را بنویسید." },
-    { q: "چرا نابودی خاک بر امنیت غذایی کشور تأثیر می‌گذارد؟" },
-    { q: "به نظر شما چگونه می‌توانیم در مدرسه، فرهنگ مصرف صحیح آب را ترویج کنیم؟" },
-    { q: "به نظر شما چرا برخی کشاورزان از روش‌های آبیاری سنتی استفاده می‌کنند و این کار چه مشکلاتی ایجاد می‌کند؟" }
+    { q: "چرا کشور ما با کمبود آب مواجه است؟ (دو دلیل)", key: "به دلیل قرار گرفتن در کمربند خشک جهان، کم بودن بارش، پراکندگی نامناسب بارش و افزایش جمعیت." },
+    { q: "سه حوضه آبریز ایران را نام ببرید و ویژگی هر یک را توضیح دهید.", key: "حوضه خزر (پرآب‌ترین)، حوضه خلیج فارس و دریای عمان (بزرگ‌ترین)، حوضه مرکزی (کم‌آب‌ترین و بسته)." },
+    { q: "قنات چیست و چه نقشی در تأمین آب نواحی خشک ایران داشته است؟", key: "قنات (کاریز) مجرایی زیرزمینی است که آب سفره‌های زیرزمینی را بدون تبخیر به سطح زمین می‌آورد." },
+    { q: "سه راه برای مصرف صحیح آب در خانه نام ببرید.", key: "بستن شیر آب هنگام مسواک زدن، تعمیر شیرهای آب‌چکان، کوتاه کردن زمان دوش گرفتن و استفاده از ماشین لباسشویی با ظرفیت کامل." },
+    { q: "چرا آلوده کردن آب‌ها از نظر اسلام گناه است؟", key: "زیرا باعث اسراف و تباهی منابع می‌شود و به دیگران آسیب می‌زند." },
+    { q: "خاک چگونه تشکیل می‌شود؟ (عوامل مؤثر را نام ببرید)", key: "از خرد شدن سنگ‌ها توسط عوامل طبیعی مثل آب و هوا (هوازدگی) و تأثیر گیاهان و جانوران طی هزاران سال." },
+    { q: "چرا تشکیل یک سانتی‌متر خاک زراعی زمان زیادی می‌برد؟", key: "زیرا فرآیند خرد شدن سنگ‌ها و تجزیه مواد آلی توسط میکروب‌ها بسیار کند و طولانی است." },
+    { q: "سه عامل از بین رفتن خاک را نام ببرید و توضیح دهید.", key: "فرسایش آبی (شسته شدن توسط آب)، فرسایش بادی (جابه‌جایی توسط باد)، و آلودگی (مواد شیمیایی)." },
+    { q: "چرا خاک یک منبع محدود و ارزشمند است؟", key: "زیرا تشکیل آن هزاران سال طول می‌کشد و منبع اصلی تأمین غذا برای انسان است." },
+    { q: "سازمان مسئول حفاظت از خاک در کشور ما کدام است و چه وظیفه‌ای دارد؟", key: "سازمان جنگل‌ها، مراتع و آبخیزداری که وظیفه حفاظت از پوشش گیاهی و جلوگیری از فرسایش را دارد." },
+    { q: "چرا حفاظت از خاک فقط وظیفهٔ سازمان جنگل‌ها و مراتع نیست؟", key: "زیرا همه انسان‌ها از خاک استفاده می‌کنند و کشاورزان، شهروندان و دولت‌ها همگی در حفظ آن مسئول هستند." },
+    { q: "دو راه برای جلوگیری از فرسایش خاک پیشنهاد دهید.", key: "کاشت درخت و پوشش گیاهی، و استفاده از روش‌های نوین آبیاری مانند آبیاری قطره‌ای." },
+    { q: "چرخه آب در طبیعت را به طور مختصر توضیح دهید.", key: "تبخیر آب دریاها و اقیانوس‌ها، تشکیل ابر (میعان)، بارش باران یا برف و برگشت آب به زمین و دریاها." },
+    { q: "چرا استفاده از آب باران برای آبیاری باغچه مفید است؟", key: "زیرا آب باران املاح نمکی ندارد و برای رشد گیاهان بسیار مناسب‌تر از آب لوله‌کشی است." },
+    { q: "تفاوت منابع تجدیدپذیر و تجدیدناپذیر را با ذکر مثال توضیح دهید.", key: "منابع تجدیدپذیر مثل آب و گیاهان قابل جایگزینی هستند، اما منابع تجدیدناپذیر مثل نفت و زغال‌سنگ پس از اتمام تمام می‌شوند." },
+    { q: "چرا در ایران مصرف سرانه آب بیش از حد مجاز است؟", key: "به دلیل استفاده از روش‌های سنتی آبیاری (غرقابی)، هدر رفتن آب در شبکه‌های انتقال و الگوی مصرف نادرست." },
+    { q: "سه کاربرد خاک در زندگی انسان را بنویسید.", key: "کشاورزی و تأمین غذا، ساخت آجر و سفال برای ساختمان‌سازی، و بستر زندگی و ساخت شهرها." },
+    { q: "چرا نابودی خاک بر امنیت غذایی کشور تأثیر می‌گذارد؟", key: "زیرا خاک بستر اصلی رشد گیاهان و تأمین غذاست و با نابودی آن، تولید مواد غذایی کاهش می‌یابد." },
+    { q: "به نظر شما چگونه می‌توانیم در مدرسه، فرهنگ مصرف صحیح آب را ترویج کنیم؟", key: "با نصب پوسترهای آموزشی، برگزاری مسابقات نقاشی با این موضوع و نظارت بر شیرهای آب مدرسه." },
+    { q: "به نظر شما چرا برخی کشاورزان از روش‌های آبیاری سنتی استفاده می‌کنند و این کار چه مشکلاتی ایجاد می‌کند؟", key: "به دلیل هزینه بالای تجهیزات جدید و نداشتن آموزش کافی؛ این کار باعث هدر رفتن شدید آب می‌شود." },
+    { q: "آب‌های زیرزمینی چگونه به وجود می‌آیند؟", key: "از نفوذ آب باران و برف به داخل زمین و ذخیره شدن در لایه‌های نفوذپذیر (سفره‌های زیرزمینی)." },
+    { q: "چرا می‌گویند خاک بستر حیات است؟", key: "زیرا بیشتر موجودات زنده از جمله گیاهان، جانوران و انسان برای زندگی و تغذیه به خاک وابسته‌اند." },
+    { q: "دو روش برای جلوگیری از شور شدن خاک نام ببرید.", key: "زهکشی صحیح زمین‌های کشاورزی و استفاده نکردن از آب‌های شور برای آبیاری." },
+    { q: "چرا پوشش گیاهی برای خاک مهم است؟", key: "ریشه گیاهان از فرسایش خاک توسط باد و آب جلوگیری می‌کند و مواد آلی به خاک اضافه می‌کند." },
+    { q: "دو راهکار برای حفظ منابع آب در کشاورزی بیان کنید.", key: "استفاده از آبیاری قطره‌ای و بارانی، و انتخاب گیاهان متناسب با اقلیم خشک." },
+    { q: "چرا سدسازی به تنهایی برای حل مشکل کمبود آب کافی نیست؟", key: "زیرا تبخیر آب در دریاچه سدها زیاد است، هزینه‌بر است و به بارش کافی نیاز دارد." },
+    { q: "آلودگی آب‌ها چگونه بر انسان تأثیر می‌گذارد؟", key: "باعث بروز بیماری‌های واگیردار و گوارشی، و از بین رفتن آبزیان و اکوسیستم می‌شود." },
+    { q: "دو نوع فرسایش خاک را مقایسه کنید.", key: "فرسایش آبی توسط جریان آب رخ می‌دهد و سطحی‌تر است، اما فرسایش بادی توسط باد در مناطق خشک رخ می‌دهد." },
+    { q: "چرا استفاده از کودهای شیمیایی بیش از حد برای خاک مضر است؟", key: "زیرا باعث آلودگی شیمیایی خاک، کاهش مواد آلی و از بین رفتن میکروب‌های مفید خاک می‌شود." },
+    { q: "چگونه می‌توانیم از خاک در برابر باد محافظت کنیم؟", key: "با کاشت درختان به عنوان بادشکن و ایجاد مانع در برابر جریان شدید باد." }
   ];
 
-  const numQuestionsToShow = 5; // تعداد سوالات تشریحی در هر آزمون
+  const numQuestionsToShow = 10; // 👈 تعداد سوالات به ۱۰ افزایش یافت
   const totalTime = 900; // ۱۵ دقیقه
   
   let selectedQuestions = [];
@@ -236,18 +240,12 @@
 
   function startTimer() {
     const display = document.getElementById('timer-display');
-    
     timerInterval = setInterval(() => {
       timeLeft--;
       const minutes = Math.floor(timeLeft / 60);
       const seconds = timeLeft % 60;
-      
       display.innerHTML = `⏱ ${minutes < 10 ? '0'+minutes : minutes}:${seconds < 10 ? '0'+seconds : seconds}`;
-
-      if (timeLeft <= 60) {
-        display.classList.add('warning');
-      }
-      
+      if (timeLeft <= 60) display.classList.add('warning');
       if (timeLeft <= 0) {
         clearInterval(timerInterval);
         display.innerHTML = `⏱ ۰۰:۰۰`;
@@ -256,44 +254,108 @@
     }, 1000);
   }
 
-  // ثبت و نمایش کارنامه
-  document.getElementById('quiz-form').addEventListener('submit', function(e) {
+  // ثبت، تصحیح خودکار با هوش مصنوعی و ارسال به تلگرام
+  document.getElementById('quiz-form').addEventListener('submit', async function(e) {
     e.preventDefault();
     clearInterval(timerInterval);
 
     document.getElementById('quiz-section').style.display = 'none';
     document.getElementById('result-section').style.display = 'block';
-
     document.getElementById('display-student-name').innerText = `دانش‌آموز: ${studentName}`;
     
-    const reviewContainer = document.getElementById('copyable-answers');
-    reviewContainer.innerHTML = `<h3>📝 پاسخ‌های دانش‌آموز (جهت ارسال به دبیر):</h3>`;
+    // نمایش لودینگ برای دانش‌آموز
+    document.getElementById('grading-loader').style.display = 'block';
+    document.getElementById('submit-btn').disabled = true;
 
+    // جمع آوری پاسخ‌های دانش‌آموز
+    let answersText = "";
     selectedQuestions.forEach((item, index) => {
-      const answerText = document.querySelector(`textarea[name="a${index}"]`).value.trim();
-      const answerHTML = answerText === "" ? `<div class="review-a empty">[بدون پاسخ]</div>` : `<div class="review-a">${answerText}</div>`;
+      const answer = document.querySelector(`textarea[name="a${index}"]`).value.trim();
+      answersText += `\nسوال ${index + 1}: ${item.q}\nپاسخ صحیح (کلید): ${item.key}\nپاسخ دانش‌آموز: ${answer === "" ? "[بدون پاسخ]" : answer}\n---`;
+    });
+
+    // کلید API گروک
+    const GROQ_API_KEY = "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";
+
+    const prompt = `
+      شما یک معلم دلسوز و متخصص مطالعات اجتماعی هستید. 
+      لطفاً پاسخ‌های دانش‌آموز را به ۱۰ سوال زیر بر اساس کلید (پاسخ صحیح) تصحیح کنید.
+      برای هر سوال، به پاسخ دانش‌آموز یک نمره از ۰ تا ۱۰ بدهید. (مجموع نمرات از ۱۰۰ خواهد بود).
+      خروجی را دقیقاً به فرمت JSON زیر برگردانید و هیچ متن اضافه‌ای بیرون از JSON ننویسید:
+      {
+        "totalScore": [مجموع نمرات],
+        "feedbacks": ["توضیح کوتاه برای سوال ۱", "توضیح کوتاه برای سوال ۲", "و ..."]
+      }
       
-      reviewContainer.innerHTML += `
-        <div class="review-item">
-          <div class="review-q">سوال ${index + 1}: ${item.q}</div>
-          ${answerHTML}
-        </div>
-      `;
-    });
-    
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+      سوالات و پاسخ‌ها:
+      ${answersText}
+    `;
+
+    try {
+      const payload = {
+        model: "openai/gpt-oss-120b",
+        messages: [
+          { role: "system", content: "شما یک تصحیح‌کننده دقیق و منصف هستید که فقط خروجی JSON معتبر تولید می‌کند." },
+          { role: "user", content: prompt }
+        ],
+        response_format: { type: "json_object" } // درخواست خروجی JSON از گروک
+      };
+
+      const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+        method: "POST",
+        headers: { "Authorization": `Bearer ${GROQ_API_KEY}` },
+        body: new Blob([JSON.stringify(payload)], { type: 'application/json' })
+      });
+
+      const data = await response.json();
+      
+      // پردازش پاسخ هوش مصنوعی
+      const aiResult = JSON.parse(data.choices[0].message.content);
+      const finalScore = aiResult.totalScore;
+      
+      // نمایش نمره نهایی
+      document.getElementById('grading-loader').style.display = 'none';
+      document.getElementById('score-display-container').style.display = 'block';
+      
+      const scoreCircle = document.getElementById('score-circle');
+      document.getElementById('final-score').innerText = finalScore;
+      
+      scoreCircle.className = 'score-circle';
+      if (finalScore >= 80) scoreCircle.classList.add('excellent');
+      else if (finalScore >= 50) scoreCircle.classList.add('good');
+      else scoreCircle.classList.add('fail');
+
+      // نمایش پاسخ‌ها و بازخورد هوش مصنوعی
+      const reviewContainer = document.getElementById('copyable-answers');
+      reviewContainer.style.display = 'block';
+      reviewContainer.innerHTML = `<h3>📝 نتیجه تصحیح هوش مصنوعی:</h3>`;
+
+      selectedQuestions.forEach((item, index) => {
+        const answerText = document.querySelector(`textarea[name="a${index}"]`).value.trim();
+        const feedback = aiResult.feedbacks[index] || "بررسی شد";
+        const answerHTML = answerText === "" ? `<div class="review-a" style="color:#e74c3c;">[بدون پاسخ]</div>` : `<div class="review-a">${answerText}</div>`;
+        
+        reviewContainer.innerHTML += `
+          <div class="review-item">
+            <div class="review-q">سوال ${index + 1}: ${item.q}</div>
+            ${answerHTML}
+            <div class="review-score">🤖 نظر هوش مصنوعی: ${feedback}</div>
+          </div>
+        `;
+      });
+
+      document.getElementById('action-buttons').style.display = 'flex';
+
+      // ارسال به تلگرام
+      if (typeof submitScoreToTelegram === 'function') {
+        submitScoreToTelegram(finalScore, finalScore); // پارامتر دوم تعداد درست است، اینجا درصد را می‌فرستیم
+      }
+
+    } catch (error) {
+      console.error(error);
+      document.getElementById('grading-loader').innerHTML = "❌ خطا در ارتباط با هوش مصنوعی. لطفاً از فیلترشکن استفاده کنید و دوباره امتحان کنید.";
+    }
   });
-
-  // کپی کردن پاسخ‌ها
-  function copyAnswers() {
-    const textToCopy = document.getElementById('copyable-answers').innerText;
-    navigator.clipboard.writeText(textToCopy).then(() => {
-      alert("✅ پاسخ‌ها با موفقیت کپی شدند. می‌توانید آن را برای معلم خود ارسال کنید.");
-    }).catch(err => {
-      alert("❌ خطایی در کپی کردن رخ داد. لطفاً به صورت دستی متن را انتخاب و کپی کنید.");
-    });
-  }
 </script>
-
 </body>
 </html>
