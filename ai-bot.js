@@ -2,10 +2,10 @@
 // اسکریپت اختصاصی دستیار هوشمند مطالعات اجتماعی
 // ==========================================
 
-// ۱. استایل‌های ظاهری چت‌بات
+// ۱. استایل‌های ظاهری چت‌بات (تغییر یافته به سمت راست)
 const aiBotStyles = `
   .ai-chat-btn {
-    position: fixed; bottom: 20px; left: 20px; width: 60px; height: 60px; border-radius: 50%;
+    position: fixed; bottom: 20px; right: 20px; width: 60px; height: 60px; border-radius: 50%;
     background: linear-gradient(135deg, #00acc1, #00838f); color: white; font-size: 30px;
     border: none; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.3); z-index: 10000;
     display: flex; justify-content: center; align-items: center; transition: 0.3s;
@@ -14,7 +14,7 @@ const aiBotStyles = `
   .ai-chat-btn:hover { transform: scale(1.1); }
   
   .ai-chat-window {
-    position: fixed; bottom: 90px; left: 20px; width: 350px; max-width: calc(100vw - 40px);
+    position: fixed; bottom: 90px; right: 20px; width: 350px; max-width: calc(100vw - 40px);
     height: 450px; background: #fff; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);
     display: none; flex-direction: column; z-index: 10000; overflow: hidden; border: 1px solid #eee;
     font-family: 'Vazirmatn', Tahoma, sans-serif;
