@@ -38,13 +38,13 @@
             resultDiv.className = ''; 
             resultDiv.innerHTML = 'در حال ارتباط با سرور... ⏳';
 
-            // کلید API شما در اینجا قرار داده شد
+            // کلید API شما
             const GROQ_API_KEY = "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";
 
             try {
                 // استفاده از Blob برای جلوگیری از خطای کاراکترهای فارسی در موبایل
                 const payload = {
-                    model: "llama3-8b-8192",
+                    model: "llama-3.1-8b-instant", // 👈 مدل جدید جایگزین شد
                     messages: [
                         { role: "system", content: "شما یک معلم مطالعات اجتماعی هستید. به فارسی، کوتاه و ساده جواب بده." },
                         { role: "user", content: input }
