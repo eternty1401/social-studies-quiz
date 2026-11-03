@@ -43,8 +43,7 @@
 
             try {
                 const payload = {
-                    // 👈 به‌روزرسانی به جدیدترین مدلِ فعال و پرسرعتِ Groq
-                    model: "openai/gpt-oss-120b", 
+                    model: "openai/gpt-oss-120b", // مدل جدیدی که در سایت فعال کردید
                     messages: [
                         { role: "system", content: "شما یک معلم مطالعات اجتماعی هستید. به فارسی، کوتاه و ساده جواب بده." },
                         { role: "user", content: input }
@@ -56,7 +55,7 @@
                     headers: {
                         "Authorization": `Bearer ${GROQ_API_KEY}`
                     },
-                    // استفاده از Blob برای جلوگیری از خطای کاراکترهای فارسی
+                    // استفاده از Blob برای جلوگیری از خطای کاراکترهای فارسی در گوشی
                     body: new Blob([JSON.stringify(payload)], { type: 'application/json' })
                 });
 
