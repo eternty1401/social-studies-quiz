@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تست هوش مصنوعی</title>
+    <style>
+        body { font-family: Tahoma, sans-serif; padding: 20px; background: #f0f2f5; }
+        .box { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); max-width: 600px; margin: 0 auto; }
+        input { width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
+        button { background: #00acc1; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; width: 100%; font-weight: bold; }
+        #result { margin-top: 20px; padding: 15px; background: #e0f7fa; border-radius: 5px; white-space: pre-wrap; line-height: 1.6; }
+        .error { background: #ffebee !important; color: #c62828; border: 1px solid #ef9a9a; }
+    </style>
+</head>
+<body>
+
+    <div class="box">
+        <h2 style="text-align:center; color:#333;">🤖 تست هوش مصنوعی</h2>
+        <p style="font-size: 13px; color: #666;">یک سوال بپرسید تا ببینیم سیستم کار می‌کند یا نه.</p>
+        
+        <input type="text" id="userInput" placeholder="مثلاً: قنات چیست؟">
+        <button onclick="testAI()">ارسال سوال</button>
+
+        <div id="result" style="display:none;"></div>
+    </div>
+
+    <!-- ۱. لود کتابخانه Puter -->
+    <script src="https://js.puter.com/v2/"></script>
+
+    <script>
+        async function testAI() {
+            const input = document.getElementById('userInput').value;
+            const resultDiv = document.getElementById('result');
+            
+            if (!input) {
+                alert("لطفاً یک سوال بنویسید.");
+                return;
+            }
+
+            resultDiv.style.display = 'block';
+            resultDiv.className = ''; // پاک کردن کلاس خطای قبلی
+            resultDiv.innerHTML = 'در حال ارتباط با سرور... ⏳';
+
+            try {
+                // ارسال درخواست به هوش مصنوعی
+                const response = await puter.ai.chat(`به فارسی کوتاه جواب بده: ${input}`);
+                
+                // اگر موفق بود، جواب رو نشون بده
+                resultDiv.innerHTML = response.message.content;
+                
+            } catch (error) {
+                // اگر خطا داد، دقیقاً متن خطا رو نشون بده تا بفهمیم مشکل چیه
+                resultDiv.classList.add('error');
+                resultDiv.innerHTML = `❌ خطا رخ داد:<br><br>${error.message || JSON.stringify(error)}<br><br>لطفاً بررسی کنید که آیا اینترنت شما به سرورهای Puter دسترسی دارد یا خیر.`;
+            }
+        }
+    </script>
+</body>
+</html>
