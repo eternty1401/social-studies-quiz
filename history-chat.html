@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>گفتگو با شخصیت‌های تاریخی</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; font-family:'Vazirmatn',sans-serif; }
+  body {
+    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); /* تم تاریخی و آرام */
+    min-height: 100vh; color: #fff; padding: 30px 20px;
+    display: flex; flex-direction: column; align-items: center;
+  }
+
+  .header { text-align: center; margin-bottom: 30px; }
+  .header h1 { font-size: 1.8rem; font-weight: 900; margin-bottom: 10px; }
+  .header p { color: rgba(255,255,255,0.8); font-size: 0.95rem; }
+
+  /* صفحه انتخاب شخصیت */
+  #character-selection { width: 100%; max-width: 800px; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
+  
+  .char-card {
+    background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 20px; padding: 25px 15px; text-align: center; cursor: pointer; transition: 0.3s;
+  }
+  .char-card:hover { transform: translateY(-5px); background: rgba(255,255,255,0.2); box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
+  .char-icon { font-size: 4rem; margin-bottom: 10px; display: block; }
+  .char-name { font-size: 1.2rem; font-weight: 900; margin-bottom: 5px; }
+  .char-desc { font-size: 0.8rem; color: rgba(255,255,255,0.7); }
+
+  /* صفحه چت (در ابتدا مخفی است) */
+  #chat-section { display: none; width: 100%; max-width: 600px; background: #fff; border-radius: 20px; overflow: hidden; box-shadow: 0 15px 30px rgba(0,0,0,0.3); }
+  .chat-header { background: #2a5298; color: white; padding: 15px 20px; display: flex; align-items: center; justify-content: space-between; }
+  .back-btn { background: transparent; border: none; color: white; font-size: 1.5rem; cursor: pointer; }
+  
+  .chat-messages { height: 400px; overflow-y: auto; padding: 20px; background: #f4f7f6; display: flex; flex-direction: column; gap: 15px; color: #333; }
+  .msg { padding: 12px 16px; border-radius: 15px; max-width: 85%; line-height: 1.6; font-size: 0.95rem; }
+  .msg.user { background: #e0f7fa; color: #006064; align-self: flex-start; border-bottom-right-radius: 2px; }
+  .msg.bot { background: #fff; color: #333; align-self: flex-end; border: 1px solid #eee; border-bottom-left-radius: 2px; }
+  
+  .chat-input-area { display: flex; padding: 15px; background: #fff; border-top: 1px solid #eee; }
+  .chat-input-area input { flex: 1; padding: 12px; border: 1px solid #ddd; border-radius: 30px; outline: none; font-family: inherit; }
+  .chat-input-area button { background: #2a5298; color: white; border: none; border-radius: 50%; width: 45px; height: 45px; margin-right: 10px; cursor: pointer; font-size: 1.2rem; display: flex; justify-content: center; align-items: center; }
+</style>
+</head>
+<body>
+
+  <div class="header">
+    <h1>⏳ گفتگو با تاریخ</h1>
+    <p>یک شخصیت را انتخاب کن و از او بپرس!</p>
+  </div>
+
+  <!-- صفحه انتخاب شخصیت -->
+  <div id="character-selection">
+    <div class="char-card" onclick="startChat('کوروش کبیر', 'بنیان‌گذار امپراتوری هخامنشی')">
+      <span class="char-icon">👑</span>
+      <div class="char-name">کوروش کبیر</div>
+      <div class="char-desc">بنیان‌گذار امپراتوری هخامنشی</div>
+    </div>
+    
+    <div class="char-card" onclick="startChat('امیرکبیر', 'صدراعظم اصلاح‌طلب دوره ناصری')">
+      <span class="char-icon">📜</span>
+      <div class="char-name">امیرکبیر</div>
+      <div class="char-desc">صدراعظم اصلاح‌طلب ناصرالدین شاه</div>
+    </div>
+
+    <div class="char-card" onclick="startChat('نادرشاه افشار', 'بنیان‌گذار سلسله افشاریه')">
+      <span class="char-icon">⚔️</span>
+      <div class="char-name">نادرشاه</div>
+      <div class="char-desc">بنیان‌گذار سلسله افشاریه</div>
+    </div>
+    
+    <div class="char-card" onclick="startChat('داریوش بزرگ', 'پادشاه هخامنشی و سازنده راه شاهی')">
+      <span class="char-icon">🏛️</span>
+      <div class="char-name">داریوش بزرگ</div>
+      <div class="char-desc">پادشاه هخامنشی و سازنده تخت جمشید</div>
+    </div>
+  </div>
+
+  <!-- صفحه چت -->
+  <div id="chat-section">
+    <div class="chat-header">
+      <span id="chat-title">در حال اتصال...</span>
+      <button class="back-btn" onclick="closeChat()">✖</button>
+    </div>
+    <div class="chat-messages" id="chat-messages">
+      <!-- پیام‌ها اینجا قرار می‌گیرند -->
+    </div>
+    <div class="chat-input-area">
+      <input type="text" id="chat-input" placeholder="سوال خود را بنویسید..." onkeypress="handleEnter(event)">
+      <button onclick="sendMessage()">➤</button>
+    </div>
+  </div>
+
+  <script>
+    const GROQ_API_KEY = "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";
+    let currentCharacter = "";
+    let chatHistory = [];
+
+    function startChat(name, role) {
+      currentCharacter = name;
+      chatHistory = []; // پاک کردن تاریخچه قبلی
+      
+      // تغییر صفحه
+      document.getElementById('character-selection').style.display = 'none';
+      document.getElementById('chat-section').style.display = 'block';
+      document.getElementById('chat-title').innerText = `گفتگو با ${name}`;
+      
+      // خالی کردن پیام‌های قبلی
+      document.getElementById('chat-messages').innerHTML = '';
+      
+      // پیام خوش‌آمدگویی اولیه
+      let welcomeMsg = `سلام ای جوان! من ${name} هستم. چه می‌خواهی از من بدانی؟`;
+      addMessageToUI(welcomeMsg, 'bot');
+      
+      // اضافه کردن به تاریخچه برای هوش مصنوعی
+      chatHistory.push({ role: "assistant", content: welcomeMsg });
+    }
+
+    function closeChat() {
+      document.getElementById('chat-section').style.display = 'none';
+      document.getElementById('character-selection').style.display = 'grid';
+    }
+
+    function handleEnter(e) {
+      if (e.key === 'Enter') sendMessage();
+    }
+
+    function addMessageToUI(text, sender) {
+      const messagesDiv = document.getElementById('chat-messages');
+      const msgDiv = document.createElement('div');
+      msgDiv.className = `msg ${sender}`;
+      msgDiv.innerText = text;
+      messagesDiv.appendChild(msgDiv);
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    }
+
+    async function sendMessage() {
+      const input = document.getElementById('chat-input');
+      const text = input.value.trim();
+      if (!text) return;
+
+      // نمایش پیام کاربر
+      addMessageToUI(text, 'user');
+      input.value = '';
+      
+      // ذخیره در تاریخچه
+      chatHistory.push({ role: "user", content: text });
+
+      // نمایش لودینگ
+      const loadingId = 'loading-' + Date.now();
+      const messagesDiv = document.getElementById('chat-messages');
+      const loader = document.createElement('div');
+      loader.className = 'msg bot';
+      loader.id = loadingId;
+      loader.innerText = 'در حال فکر کردن... ⏳';
+      messagesDiv.appendChild(loader);
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+
+      try {
+        // ساخت پرامپت برای هوش مصنوعی (نقش‌آفرینی)
+        const systemPrompt = `شما ${currentCharacter} هستید. با لحن تاریخی، مغرور اما مهربان و با استفاده از کلمات مناسب همان دوره (مثل ای جوان، ای هموطن) به سوالات دانش‌آموز پاسخ دهید. پاسخ‌ها باید کوتاه و متناسب با شخصیت تاریخی شما باشد. از نقش خود خارج نشوید.`;
+        
+        // ارسال به گروک
+        const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+          method: "POST",
+          headers: { "Authorization": `Bearer ${GROQ_API_KEY}` },
+          body: new Blob([JSON.stringify({
+            model: "openai/gpt-oss-120b",
+            messages: [
+              { role: "system", content: systemPrompt },
+              ...chatHistory // ارسال کل تاریخچه برای اینکه حافظه داشته باشد
+            ]
+          })], { type: 'application/json' })
+        });
+
+        const data = await response.json();
+        
+        // حذف لودینگ
+        document.getElementById(loadingId).remove();
+        
+        if (data.error) throw new Error(data.error.message);
+
+        const botReply = data.choices[0].message.content;
+        
+        // نمایش پاسخ و ذخیره در تاریخچه
+        addMessageToUI(botReply, 'bot');
+        chatHistory.push({ role: "assistant", content: botReply });
+
+      } catch (error) {
+        document.getElementById(loadingId).remove();
+        addMessageToUI("❌ خطا در ارتباط. لطفاً فیلترشکن خود را روشن کنید.", 'bot');
+      }
+    }
+  </script>
+</body>
+</html>
