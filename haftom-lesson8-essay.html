@@ -219,6 +219,9 @@
 
 </div>
 
+<!-- بارگذاری اسکریپت تلگرام -->
+<script src="telegram.js"></script>
+
 <script>
 const essayBank = [
   { q: "مصرف‌کننده را تعریف کنید.", key: "کسی که کالا یا خدماتی را برای رفع نیاز خود خریداری و استفاده می‌کند." },
@@ -355,9 +358,30 @@ async function gradeWithAI() {
     aiResult = result;
     renderResult();
     showSection('result');
+    
+    // ارسال نمره به تلگرام
+    sendToTelegram();
+    
   } catch (err) {
     console.error("خطای تصحیح:", err);
     showSection('error');
+  }
+}
+
+function sendToTelegram() {
+  if (typeof submitScoreToTelegram !== 'function') {
+    console.warn("تابع submitScoreToTelegram پیدا نشد. telegram.js بارگذاری نشده؟");
+    return;
+  }
+  
+  try {
+    const score = Math.max(0, Math.min(20, aiResult.total_score || 0));
+    const correctCount = Math.round(score / 2);
+    
+    submitScoreToTelegram(score, correctCount);
+    console.log("✅ نمره به تلگرام ارسال شد:", { score, correctCount });
+  } catch (err) {
+    console.error("❌ خطا در ارسال به تلگرام:", err);
   }
 }
 
