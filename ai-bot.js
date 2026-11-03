@@ -2,7 +2,7 @@
 // اسکریپت اختصاصی دستیار هوشمند مطالعات اجتماعی
 // ==========================================
 
-// ۱. استایل‌های ظاهری چت‌بات (تغییر یافته به سمت راست)
+// ۱. استایل‌های ظاهری چت‌بات
 const aiBotStyles = `
   .ai-chat-btn {
     position: fixed; bottom: 20px; right: 20px; width: 60px; height: 60px; border-radius: 50%;
@@ -47,9 +47,9 @@ const styleSheet = document.createElement("style");
 styleSheet.innerText = aiBotStyles;
 document.head.appendChild(styleSheet);
 
-// ۳. ساختار HTML دکمه و پنجره چت
+// ۳. ساختار HTML دکمه و پنجره چت (آیکون مغز جایگزین شد)
 const botHTML = `
-  <button class="ai-chat-btn" onclick="toggleChat()">🤖</button>
+  <button class="ai-chat-btn" onclick="toggleChat()">🥷</button>
   <div class="ai-chat-window" id="aiChatWindow">
     <div class="ai-chat-header">
       <span>دستیار هوشمند مطالعات اجتماعی</span>
