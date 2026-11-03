@@ -26,14 +26,15 @@ const aiBotStyles = `
   .ai-chat-input-area input { flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 20px; outline: none; font-family: inherit; font-size: 0.9rem; }
   .ai-chat-input-area button { background: #00acc1; color: white; border: none; border-radius: 50%; width: 40px; height: 40px; margin-right: 10px; cursor: pointer; font-size: 1.2rem; display: flex; justify-content: center; align-items: center; }
 
-  /* دکمه شناور خلاصه ساز */
+  /* استایل جدید دکمه خلاصه ساز (داخل متن) */
   .ai-summarize-btn {
-    position: fixed; bottom: 90px; right: 20px; width: 50px; height: 50px; border-radius: 50%;
-    background: #f39c12; color: white; font-size: 1.2rem; border: none; cursor: pointer;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.3); z-index: 9999; display: none; 
-    justify-content: center; align-items: center; transition: 0.3s;
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    background: #f39c12; color: white; border: none; padding: 10px 25px;
+    border-radius: 30px; font-family: inherit; font-weight: bold; font-size: 0.95rem;
+    cursor: pointer; margin: 15px auto; box-shadow: 0 4px 10px rgba(243, 156, 18, 0.3);
+    transition: 0.3s; width: fit-content;
   }
-  .ai-summarize-btn:hover { transform: scale(1.1); }
+  .ai-summarize-btn:hover { background: #d68910; transform: translateY(-2px); }
 `;
 
 const styleSheet = document.createElement("style");
@@ -55,14 +56,31 @@ const botHTML = `
       <button onclick="sendChatMessage()">➤</button>
     </div>
   </div>
-  <button class="ai-summarize-btn" id="summarizeBtn" onclick="summarizeText()">✨ خلاصه کن</button>
 `;
 
 document.addEventListener('DOMContentLoaded', () => {
     document.body.insertAdjacentHTML('beforeend', botHTML);
-    // اگر در صفحه درسنامه هستیم، دکمه خلاصه ساز را نشان بده
+    
+    // اگر در صفحه درسنامه هستیم، دکمه خلاصه ساز را زیر کادر سبز اضافه کن
     if (window.location.pathname.includes('-note.html')) {
-        document.getElementById('summarizeBtn').style.display = 'flex';
+        // پیدا کردن اولین کادر سبز (هدف کلی درس)
+        const targetBox = document.querySelector('.highlight-box, .goal-box, .intro-box, .info-box') || document.querySelector('.container > div:nth-child(3)');
+        
+        const summarizeBtn = document.createElement('button');
+        summarizeBtn.className = 'ai-summarize-btn';
+        summarizeBtn.innerHTML = '✨ خلاصه کن';
+        summarizeBtn.onclick = summarizeText;
+
+        if (targetBox) {
+            // قرار دادن دکمه دقیقاً بعد از کادر سبز
+            targetBox.parentNode.insertBefore(summarizeBtn, targetBox.nextSibling);
+        } else {
+            // اگر کادر پیدا نشد، دکمه را بعد از هدر قرار بده
+            const header = document.querySelector('h1') || document.querySelector('.header');
+            if(header) {
+                header.parentNode.insertBefore(summarizeBtn, header.nextSibling);
+            }
+        }
     }
 });
 
@@ -121,11 +139,9 @@ async function sendChatMessage() {
 
 // تابع خلاصه کردن متن درسنامه
 async function summarizeText() {
-  // پیدا کردن محتوای اصلی درسنامه (تگ body یا کانتینر اصلی)
+  // پیدا کردن محتوای اصلی درسنامه
   let lessonText = document.body.innerText;
-  
-  // جلوگیری از ارسال کل کدها (فقط متن خالص)
-  lessonText = lessonText.substring(0, 3000); // محدودیت کاراکتر برای جلوگیری از خطا
+  lessonText = lessonText.substring(0, 3000); 
 
   const chatWindow = document.getElementById('aiChatWindow');
   chatWindow.style.display = 'flex';
