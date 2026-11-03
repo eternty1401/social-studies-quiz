@@ -21,6 +21,58 @@
     display: flex; flex-direction: column; align-items: center;
     padding: 40px 20px;
     overflow-x: hidden;
+    transition: background 0.5s ease;
+  }
+
+  /* ===== استایل‌های حالت تاریک ===== */
+  body.dark-mode {
+    background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+  }
+  body.dark-mode .grade-card,
+  body.dark-mode .teacher-badge,
+  body.dark-mode .about-section {
+    background: rgba(0, 0, 0, 0.4);
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+  body.dark-mode .grade-card:hover {
+    background: rgba(0, 0, 0, 0.6);
+  }
+  body.dark-mode .grade-btn {
+    background: rgba(255, 255, 255, 0.8);
+    color: #1a1a2e;
+  }
+  body.dark-mode .feature-chip {
+    background: rgba(0, 0, 0, 0.3);
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+  body.dark-mode .bubble {
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  /* دکمه تغییر تم */
+  .theme-toggle {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.2);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.3);
+    font-size: 1.5rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+    transition: 0.3s;
+    color: #fff;
+  }
+  .theme-toggle:hover {
+    transform: scale(1.1);
+    background: rgba(255,255,255,0.3);
   }
 
   @keyframes gradientShift {
@@ -319,10 +371,14 @@
     .about-section { padding: 25px 20px; }
     .about-section h2 { font-size: 1.1rem; }
     .about-section p { font-size: 0.9rem; }
+    .theme-toggle { top: 15px; left: 15px; width: 40px; height: 40px; font-size: 1.2rem; }
   }
 </style>
 </head>
 <body>
+
+  <!-- دکمه حالت تاریک/روشن -->
+  <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">🌙</button>
 
   <!-- حباب‌های تزئینی -->
   <div class="bubble"></div>
@@ -386,6 +442,7 @@
         <span class="feature-chip">✍️ آزمون تشریحی</span>
         <span class="feature-chip">🎴 فلش کارت</span>
         <span class="feature-chip">📂 فایل‌ها و عکس‌ها</span>
+        <span class="feature-chip">🎮 بازی آموزشی</span> <!-- این مورد اضافه شد -->
       </div>
     </div>
 
@@ -395,7 +452,30 @@
   <div class="footer">
     ساخته شده با <span class="heart">❤️</span> برای دانش‌آموزان عزیز
   </div>
+
 <script>
+  // اسکریپت حالت تاریک/روشن
+  const themeBtn = document.getElementById('themeBtn');
+  const currentTheme = localStorage.getItem('theme');
+  
+  // بررسی تم ذخیره شده در مرورگر
+  if (currentTheme === 'dark') {
+    document.body.classList.add('dark-mode');
+    themeBtn.textContent = '☀️';
+  }
+
+  function toggleTheme() {
+    document.body.classList.toggle('dark-mode');
+    if (document.body.classList.contains('dark-mode')) {
+      localStorage.setItem('theme', 'dark');
+      themeBtn.textContent = '☀️';
+    } else {
+      localStorage.setItem('theme', 'light');
+      themeBtn.textContent = '🌙';
+    }
+  }
+
+  // کدهای مربوط به Service Worker
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
       navigator.serviceWorker.register('./service-worker.js');
