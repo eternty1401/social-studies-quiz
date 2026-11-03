@@ -1,8 +1,3 @@
-// ═══════════════════════════════════════════════
-//  🏛️ داده‌های موزه‌ها
-//  برای افزودن موزه جدید، فقط یک آبجکت
-//  جدید به این آرایه اضافه کن. تمام!
-// ═══════════════════════════════════════════════
 const museums = [
   {
     id: 'takht-jamshid',
@@ -12,7 +7,7 @@ const museums = [
     icon: '👑',
     location: 'فارس - مرودشت',
     description: 'پایتخت باشکوه امپراتوری هخامنشی؛ نماد هنر، معماری و قدرت ایران باستان.',
-    image: '',
+    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/نقش_برجسته_های_زیبای_تاریخی_تخت_جمشید.jpg/800px-نقش_برجسته_های_زیبای_تاریخی_تخت_جمشید.jpg', // تصویر از ویکی‌مدیا [citation:20]
     tourUrl: 'https://share.google/MqniBykn7iXyYh6Xd',
     color: '#f59e0b'
   },
@@ -24,7 +19,7 @@ const museums = [
     icon: '📜',
     location: 'فارس - شیراز',
     description: 'آرامگاه لسان‌الغیب، شاعر بزرگ ایرانی؛ محبوب‌ترین جاذبه تاریخی و فرهنگی شیراز.',
-    image: '',
+    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/آرامگاه_حافظ_شیرازی.jpg/800px-آرامگاه_حافظ_شیرازی.jpg', // تصویر از ویکی‌مدیا [citation:21]
     tourUrl: 'https://www.panoman.ir/vt/shiraz/hafezieh/',
     color: '#10b981'
   },
@@ -36,7 +31,7 @@ const museums = [
     icon: '✒️',
     location: 'فارس - شیراز',
     description: 'آرامگاه استاد سخن، سعدی شیرازی؛ مکان زیارتی و فرهنگی با معماری چشم‌نواز.',
-    image: '',
+    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/سعدیه_یا_آرامگاه_سعدی_شیراز_ایران-Tomb_of_Saadi_shiraz_iran_04.jpg/800px-سعدیه_یا_آرامگاه_سعدی_شیراز_ایران-Tomb_of_Saadi_shiraz_iran_04.jpg', // تصویر از ویکی‌مدیا [citation:22]
     tourUrl: 'https://www.panoman.ir/vt/shiraz/sadieh/',
     color: '#0ea5e9'
   },
@@ -48,7 +43,7 @@ const museums = [
     icon: '🕌',
     location: 'فارس - شیراز',
     description: 'زیارتگاه احمد بن موسی (ع)؛ شاهکاری از کاشی‌کاری و آینه‌کاری در قلب شیراز.',
-    image: '',
+    image: '', // متأسفانه در نتایج جستجو تصویر مستقیمی از شاهچراغ در ویکی‌مدیا یافت نشد. می‌توانید از تور مجازی عکس بگیرید یا بعداً اضافه کنید.
     tourUrl: 'https://www.panoman.ir/vt/shiraz/shahe-cheragh/',
     color: '#14b8a6'
   },
@@ -60,7 +55,7 @@ const museums = [
     icon: '⛰️',
     location: 'فارس - مرودشت',
     description: 'مجموعه‌ای از آرامگاه‌های صخره‌ای و نقش‌برجسته‌های باستانی از دوره هخامنشی و ساسانی.',
-    image: '',
+    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/نقش_رستم.JPG/800px-نقش_رستم.JPG', // تصویر از ویکی‌مدیا [citation:23]
     tourUrl: 'https://www.panoman.ir/vt/naghshe-rostam/index.htm',
     color: '#f97316'
   },
@@ -72,7 +67,7 @@ const museums = [
     icon: '🛍️',
     location: 'فارس - شیراز',
     description: 'بازار سنتی باشکوه به جا مانده از دوران کریم‌خان زند؛ مرکز تجارت و هنر قدیم شیراز.',
-    image: '',
+    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/A_store_in_Vakil_Bazaar_in_shiraz_credit_to_Ghazal_kohandel_یک_مغازه_در_بازار_وکیل_شیراز_عکاس_غزاله_کهن_دل.jpg/800px-A_store_in_Vakil_Bazaar_in_shiraz_credit_to_Ghazal_kohandel_یک_مغازه_در_بازار_وکیل_شیراز_عکاس_غزاله_کهن_دل.jpg', // تصویر از ویکی‌مدیا [citation:24]
     tourUrl: 'https://www.panoman.ir/vt/shiraz/vakil-bazaar/',
     color: '#eab308'
   },
@@ -84,7 +79,7 @@ const museums = [
     icon: '💧',
     location: 'فارس - شیراز',
     description: 'حمام تاریخی با معماری بی‌نظیر و ستون‌های سنگی؛ نمونه‌ای از معماری اصیل زندیه.',
-    image: '',
+    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/موزه_فرش_در_حمام_وکیل_شیراز_سال_۲۰۰۹_میلادی_مصطفی_معراجی_06.jpg/800px-موزه_فرش_در_حمام_وکیل_شیراز_سال_۲۰۰۹_میلادی_مصطفی_معراجی_06.jpg', // تصویر از ویکی‌مدیا [citation:25]
     tourUrl: 'https://www.panoman.ir/vt/shiraz/vakil-bath/',
     color: '#06b6d4'
   },
@@ -96,7 +91,7 @@ const museums = [
     icon: '🕌',
     location: 'فارس - شیراز',
     description: 'مسجدی با شکوه از دوره زندیه که کاشی‌کاری‌های زیبای آن زبانزد عام و خاص است.',
-    image: '',
+    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/مسجد_وکیل_شیراز،مجموعه_ای_در_خور_توجه_و_مرمت2.jpg/800px-مسجد_وکیل_شیراز،مجموعه_ای_در_خور_توجه_و_مرمت2.jpg', // تصویر از ویکی‌مدیا [citation:26]
     tourUrl: 'https://www.panoman.ir/vt/shiraz/vakil-mosque/',
     color: '#8b5cf6'
   },
@@ -108,7 +103,7 @@ const museums = [
     icon: '🍊',
     location: 'فارس - شیراز',
     description: 'عمارتی زیبا در دل باغی پر از درختان نارنج؛ شاهکار معماری دوره قاجار.',
-    image: '',
+    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Naranjestan_%2827%29.jpg/800px-Naranjestan_%2827%29.jpg', // تصویر از ویکی‌مدیا [citation:27]
     tourUrl: 'https://www.panoman.ir/vt/shiraz/ghavam-orangery/',
     color: '#f59e0b'
   },
@@ -120,7 +115,7 @@ const museums = [
     icon: '🏛️',
     location: 'فارس - شیراز',
     description: 'خانه‌ای تاریخی با معماری ایرانی-اسلامی و تزئینات چشم‌نواز در قلب شیراز.',
-    image: '',
+    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/خانه_زینت_الملک.jpg/800px-خانه_زینت_الملک.jpg', // تصویر از ویکی‌مدیا [citation:28]
     tourUrl: 'https://www.panoman.ir/vt/shiraz/zinat-almolk-house/',
     color: '#ec4899'
   },
@@ -132,7 +127,7 @@ const museums = [
     icon: '🏰',
     location: 'فارس - شیراز',
     description: 'قلعه‌ای باشکوه از دوران کریم‌خان زند؛ مرکز حکومت و اقامتگاه او در شیراز.',
-    image: '',
+    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e2/Arg_of_Karim_Khan_ارگ_کریم_خان_زند_در_شیراز_25.jpg/800px-Arg_of_Karim_Khan_ارگ_کریم_خان_زند_در_شیراز_25.jpg', // تصویر از ویکی‌مدیا [citation:29]
     tourUrl: 'https://www.panoman.ir/vt/shiraz/arg-e-karimkhan/',
     color: '#f43f5e'
   },
@@ -144,7 +139,7 @@ const museums = [
     icon: '🕌',
     location: 'اصفهان',
     description: 'میدان بزرگ و باشکوه دوره صفویه؛ یکی از بزرگترین میدان‌های تاریخی جهان.',
-    image: '',
+    image: '', // برای این مورد و موارد زیر در جستجوی فعلی تصویر مستقیم از کامنز پیدا نشد.
     tourUrl: 'https://www.panoman.ir/vt/isfahan/naghshe-jahan/',
     color: '#6366f1'
   },
@@ -184,88 +179,4 @@ const museums = [
     tourUrl: 'https://blackdate.ir/vtour/index.htm',
     color: '#a855f7'
   }
-
-  // 👇 برای افزودن موزه بعدی، این الگو رو کپی کن:
-  // ,{
-  //   id: 'اسم-انگلیسی-بدون-فاصله',
-  //   title: 'نام مکان',
-  //   era: 'hakhamaneshi | ashkani | sasani | eslami | moaser',
-  //   eraLabel: 'دوره به فارسی',
-  //   icon: '🏛️',
-  //   location: 'استان - شهر',
-  //   description: 'یک جمله توضیح جذاب...',
-  //   image: 'آدرس-عکس-اختیاری',
-  //   tourUrl: 'لینک-تور-۳۶۰-درجه',
-  //   color: '#6366f1'
-  // }
 ];
-
-// ═══════════════════════════════════════════════
-//  🎨 رنگ پیش‌فرض بر اساس دوره (اگه رنگ نده)
-// ═══════════════════════════════════════════════
-const eraColors = {
-  hakhamaneshi: '#f59e0b',
-  ashkani:      '#10b981',
-  sasani:       '#ec4899',
-  eslami:       '#06b6d4',
-  moaser:       '#8b5cf6'
-};
-
-// ═══════════════════════════════════════════════
-//  🖼️ رندر کارت‌ها
-// ═══════════════════════════════════════════════
-function renderMuseums(filter = 'all') {
-  const grid = document.getElementById('museumGrid');
-  if (!grid) return;
-  grid.innerHTML = '';
-
-  const list = museums.filter(m => filter === 'all' || m.era === filter);
-
-  if (!list.length) {
-    grid.innerHTML = '<p style="text-align:center;grid-column:1/-1;opacity:.7;padding:40px 0;font-weight:700">موزه‌ای در این دسته یافت نشد.</p>';
-    return;
-  }
-
-  list.forEach((m, i) => {
-    const card = document.createElement('article');
-    card.className = 'museum-card';
-    card.style.setProperty('--card-color', m.color || eraColors[m.era] || '#6366f1');
-    card.style.animationDelay = `${i * 80}ms`;
-
-    card.innerHTML = `
-      <div class="card-image">
-        <div class="card-image-fallback">${m.icon}</div>
-        ${m.image ? `<img src="${m.image}" alt="${m.title}" loading="lazy" onerror="this.remove()">` : ''}
-        <span class="card-badge">${m.icon} ${m.eraLabel}</span>
-      </div>
-      <div class="card-body">
-        <h3 class="card-title">${m.title}</h3>
-        <p class="card-location">📍 ${m.location}</p>
-        <p class="card-desc">${m.description}</p>
-        <a href="${m.tourUrl}" target="_blank" rel="noopener noreferrer" class="tour-btn">
-          <span class="tour-icon">🔄</span>
-          شروع تور ۳۶۰ درجه
-        </a>
-      </div>
-    `;
-
-    grid.appendChild(card);
-  });
-}
-
-// ═══════════════════════════════════════════════
-//  🎯 فیلترها
-// ═══════════════════════════════════════════════
-const filtersBox = document.getElementById('filters');
-if (filtersBox) {
-  filtersBox.addEventListener('click', (e) => {
-    const chip = e.target.closest('.filter-chip');
-    if (!chip) return;
-    document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
-    chip.classList.add('active');
-    renderMuseums(chip.dataset.filter);
-  });
-}
-
-// 🚀 شروع
-renderMuseums();
