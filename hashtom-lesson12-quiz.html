@@ -6,6 +6,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>آزمون تستی درس ۱۲: عصر طلایی فرهنگ و تمدن ایرانی ــ اسلامی</title>
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;900&display=swap" rel="stylesheet">
+<script src="sounds.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
 <style>
   * { margin:0; padding:0; box-sizing:border-box; font-family:'Vazirmatn',sans-serif; }
   body {
@@ -192,7 +194,6 @@
   </div>
 
 </div>
-
 <script>
   const questionBank = [
     { q: "عصر طلایی فرهنگ و تمدن ایرانی ــ اسلامی مربوط به کدام دوره است؟", options: ["قرن سوم تا پنجم هجری", "قرن اول تا دوم هجری", "قرن ششم تا هشتم هجری", "قرن نهم تا دهم هجری"], answer: 0 },
@@ -348,6 +349,9 @@
   }
   
   function selectOption(optionIndex, element) {
+    // 🔊 صدای کلیک روی گزینه
+    if (typeof playClick === "function") playClick();
+
     answers[currentIndex] = optionIndex;
     const allLabels = document.querySelectorAll('.option-label');
     allLabels.forEach(l => l.classList.remove('selected'));
@@ -380,6 +384,26 @@
     });
     
     const score = Math.round((correctCount / selectedQuestions.length) * 100);
+
+    // ==========================================
+    // 🎉 افکت صوتی و باران کاغذرنگی پایان آزمون
+    // ==========================================
+    setTimeout(() => {
+      if (score >= 80) {
+        if (typeof playFinish === "function") playFinish();
+        if (typeof confetti === "function") {
+          confetti({ particleCount: 180, spread: 90, origin: { y: 0.6 } });
+          setTimeout(() => confetti({ particleCount: 120, angle: 60, spread: 70, origin: { x: 0 } }), 250);
+          setTimeout(() => confetti({ particleCount: 120, angle: 120, spread: 70, origin: { x: 1 } }), 400);
+        }
+      } else if (score >= 50) {
+        if (typeof playCorrect === "function") playCorrect();
+      } else {
+        if (typeof playWrong === "function") playWrong();
+      }
+    }, 300);
+    // ==========================================
+
     submitScoreToTelegram(score, correctCount);
     document.getElementById('quiz-section').style.display = 'none';
     document.getElementById('result-section').style.display = 'block';
