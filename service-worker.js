@@ -1,4 +1,4 @@
-const CACHE_NAME = 'social-studies-v5';
+const CACHE_NAME = 'social-studies-v6';
 const urlsToCache = [
   './',
   './index.html',
