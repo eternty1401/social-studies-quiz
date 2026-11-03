@@ -422,3 +422,267 @@ let timerInterval;
 let timeLeft = totalTime;
 let studentName = "";
 let aiResult = null;
+// ==========================================
+// توابع کمکی
+// ==========================================
+function shuffle(array) {
+  let currentIndex = array.length, randomIndex;
+  while (currentIndex != 0) {
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex--;
+    [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+  }
+  return array;
+}
+
+function showSection(name) {
+  const sections = {
+    start: 'start-section',
+    quiz: 'quiz-section',
+    loading: 'loading-section',
+    error: 'error-section',
+    result: 'result-section'
+  };
+  Object.entries(sections).forEach(([key, id]) => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = (key === name) ? 'block' : 'none';
+  });
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function toPersianNumber(num) {
+  const persianDigits = ['۰','۱','۲','۳','۴','۵','۶','۷','۸','۹'];
+  return String(num).replace(/\d/g, d => persianDigits[d]).replace('.', '٫');
+}
+
+function escapeHtml(text) {
+  const div = document.createElement('div');
+  div.textContent = String(text);
+  return div.innerHTML;
+}
+
+// ==========================================
+// شروع آزمون
+// ==========================================
+function startQuiz() {
+  studentName = document.getElementById('student-name').value.trim();
+  if (studentName === "") {
+    alert("لطفاً نام و نام خانوادگی خود را وارد کنید.");
+    return;
+  }
+  showSection('quiz');
+  initQuiz();
+}
+
+function initQuiz() {
+  const shuffledBank = shuffle([...essayBank]);
+  selectedQuestions = shuffledBank.slice(0, numQuestionsToShow);
+
+  const container = document.getElementById('questions-container');
+  container.innerHTML = '';
+
+  selectedQuestions.forEach((item, index) => {
+    const qBox = document.createElement('div');
+    qBox.className = 'question-box';
+    qBox.innerHTML = `
+      <div class="q-title">${index + 1}. ${item.q}</div>
+      <textarea class="essay-textarea" name="a${index}" placeholder="پاسخ خود را اینجا بنویسید..."></textarea>
+    `;
+    container.appendChild(qBox);
+  });
+
+  startTimer();
+}
+
+function startTimer() {
+  const display = document.getElementById('timer-display');
+  timerInterval = setInterval(() => {
+    timeLeft--;
+    const minutes = Math.floor(timeLeft / 60);
+    const seconds = timeLeft % 60;
+    display.innerHTML = `⏱ ${minutes < 10 ? '0'+minutes : minutes}:${seconds < 10 ? '0'+seconds : seconds}`;
+    if (timeLeft <= 60) display.classList.add('warning');
+    if (timeLeft <= 0) {
+      clearInterval(timerInterval);
+      document.getElementById('quiz-form').dispatchEvent(new Event('submit'));
+    }
+  }, 1000);
+}
+
+// ==========================================
+// ثبت پاسخ‌ها
+// ==========================================
+document.getElementById('quiz-form').addEventListener('submit', function(e) {
+  e.preventDefault();
+  clearInterval(timerInterval);
+  
+  // ذخیره پاسخ‌ها در حافظه (حتی بعد از قطعی، حفظ می‌شوند)
+  studentAnswers = {};
+  selectedQuestions.forEach((_, i) => {
+    const ta = document.querySelector(`textarea[name="a${i}"]`);
+    studentAnswers[i] = ta ? ta.value.trim() : "";
+  });
+  
+  showSection('loading');
+  gradeWithAI();
+});
+
+// ==========================================
+// تصحیح با هوش مصنوعی (Groq)
+// ==========================================
+async function gradeWithAI() {
+  try {
+    const result = await callGroq();
+    aiResult = result;
+    renderResult();
+    showSection('result');
+  } catch (err) {
+    console.error("خطای تصحیح:", err);
+    showSection('error');
+  }
+}
+
+function retryAI() {
+  // پاسخ‌ها در studentAnswers حفظ شده‌اند؛ فقط دوباره API را صدا می‌زنیم
+  showSection('loading');
+  gradeWithAI();
+}
+
+async function callGroq() {
+  const questionsForPrompt = selectedQuestions.map((item, i) => ({
+    index: i,
+    question: item.q,
+    answer_key: item.key,
+    student_answer: studentAnswers[i] || ""
+  }));
+
+  const systemPrompt = `شما یک معلم مهربان و باتجربه مطالعات اجتماعی پایه هفتم هستید که آزمون تشریحی دانش‌آموزان را تصحیح می‌کنید.
+
+قوانین مهم تصحیح:
+۱. بسیار سهل‌گیر و مهربان باشید. هدف اصلی تشویق و دلگرمی دانش‌آموز است.
+۲. هر سوال ۲ نمره دارد (کل آزمون ۲۰ نمره).
+۳. اگر دانش‌آموز حتی بخشی از مفهوم اصلی را فهمیده باشد، نمره کامل یا نزدیک به کامل (۱٫۵ تا ۲) بدهید.
+۴. اگر پاسخ کاملاً خالی است، صفر بدهید.
+۵. اگر پاسخ کاملاً بی‌ربط است، صفر بدهید.
+۶. برای پاسخ ناقص ولی مرتبط، نمره بین ۱ تا ۱٫۵ بدهید.
+۷. بازخورد هر سوال کوتاه، محبت‌آمیز و سازنده باشد (حداکثر دو جمله).
+۸. overall_message یک پیام دلگرم‌کننده کلی درباره عملکرد دانش‌آموز باشد.
+
+خروجی را فقط به صورت یک JSON معتبر و بدون هیچ متن اضافه برگردانید:
+{
+  "total_score": <عدد بین 0 تا 20>,
+  "overall_message": "<پیام دلگرم‌کننده>",
+  "questions": [
+    {"index": 0, "score": <0 تا 2>, "feedback": "<بازخورد>"},
+    ...برای هر ۱۰ سوال...
+  ]
+}`;
+
+  const userPrompt = `نام دانش‌آموز: ${studentName}\n\nاطلاعات سوالات، پاسخ‌های دانش‌آموز و کلید پاسخ:\n${JSON.stringify(questionsForPrompt, null, 2)}`;
+
+  const payload = {
+    model: "openai/gpt-oss-120b",
+    messages: [
+      { role: "system", content: systemPrompt },
+      { role: "user", content: userPrompt }
+    ],
+    temperature: 0.3,
+    response_format: { type: "json_object" }
+  };
+
+  // استفاده از Blob برای جلوگیری از خطای کاراکترهای فارسی
+  const blob = new Blob([JSON.stringify(payload)], { type: "application/json" });
+
+  const response = await fetch(GROQ_URL, {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${GROQ_API_KEY}`,
+      "Content-Type": "application/json"
+    },
+    body: blob
+  });
+
+  if (!response.ok) {
+    throw new Error("Groq API error: " + response.status);
+  }
+
+  const data = await response.json();
+  let content = data.choices[0].message.content;
+
+  // حذف احتمالی بلوک‌های markdown
+  content = content.replace(/```json\s*/g, '').replace(/```\s*/g, '').trim();
+
+  let parsed;
+  try {
+    parsed = JSON.parse(content);
+  } catch (e) {
+    const match = content.match(/\{[\s\S]*\}/);
+    if (match) parsed = JSON.parse(match[0]);
+    else throw new Error("پاسخ JSON نامعتبر است");
+  }
+
+  return parsed;
+}
+
+// ==========================================
+// نمایش کارنامه
+// ==========================================
+function renderResult() {
+  document.getElementById('display-student-name').innerText = `دانش‌آموز: ${studentName}`;
+  
+  const score = Math.max(0, Math.min(20, aiResult.total_score || 0));
+  document.getElementById('score-value').innerText = toPersianNumber(score);
+  document.getElementById('score-message').innerText = aiResult.overall_message || "آفرین بر تلاش شما!";
+  
+  const reviewContainer = document.getElementById('copyable-answers');
+  reviewContainer.innerHTML = `<h3>📝 پاسخ‌ها و بازخورد معلم:</h3>`;
+  
+  const qResults = Array.isArray(aiResult.questions) ? aiResult.questions : [];
+  
+  selectedQuestions.forEach((item, index) => {
+    const answerText = studentAnswers[index] || "";
+    const answerHTML = answerText === "" 
+      ? `<div class="review-a empty">[بدون پاسخ]</div>` 
+      : `<div class="review-a">${escapeHtml(answerText)}</div>`;
+    
+    const qResult = qResults.find(r => r.index === index) || { score: 0, feedback: "پاسخی ثبت نشده است." };
+    const qScore = Math.max(0, Math.min(2, qResult.score || 0));
+    const badgeClass = qScore >= 2 ? 'full' : (qScore === 0 ? 'zero' : '');
+    
+    reviewContainer.innerHTML += `
+      <div class="review-item">
+        <div class="review-q">
+          <span>سوال ${index + 1}: ${item.q}</span>
+          <span class="q-score-badge ${badgeClass}">${toPersianNumber(qScore)} از ۲</span>
+        </div>
+        ${answerHTML}
+        <div class="ai-feedback">💬 <strong>بازخورد معلم:</strong> ${escapeHtml(qResult.feedback || "")}</div>
+      </div>
+    `;
+  });
+}
+
+// ==========================================
+// کپی کارنامه
+// ==========================================
+function copyAnswers() {
+  const score = aiResult ? aiResult.total_score : 0;
+  const message = aiResult ? aiResult.overall_message : "";
+  
+  const textToCopy = `📋 کارنامه آزمون تشریحی درس ۸ (مصرف)\n` +
+    `👤 دانش‌آموز: ${studentName}\n` +
+    `📊 نمره: ${toPersianNumber(score)} از ۲۰\n` +
+    `💬 ${message}\n\n` +
+    `─────────────────────\n\n` +
+    document.getElementById('copyable-answers').innerText;
+  
+  navigator.clipboard.writeText(textToCopy).then(() => {
+    alert("✅ کارنامه با موفقیت کپی شد.");
+  }).catch(() => {
+    alert("❌ خطا در کپی. لطفاً متن را به صورت دستی انتخاب و کپی کنید.");
+  });
+}
+</script>
+
+</body>
+</html>
