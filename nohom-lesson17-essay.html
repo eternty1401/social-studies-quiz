@@ -7,248 +7,535 @@
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;900&display=swap" rel="stylesheet">
 <style>
   * { margin:0; padding:0; box-sizing:border-box; font-family:'Vazirmatn',sans-serif; }
-  body { min-height:100vh; background-color:#f4f7f6; background-image:radial-gradient(#d1e0e0 1px, transparent 1px); background-size:20px 20px; color:#2c3e50; padding:30px 20px; display:flex; flex-direction:column; align-items:center; }
-  .container { width:100%; max-width:800px; }
-  .back-btn { display:inline-flex; align-items:center; gap:8px; text-decoration:none; color:#34495e; font-size:0.9rem; background:#fff; padding:8px 18px; border-radius:50px; margin-bottom:20px; transition:0.3s; border:1px solid #dcdde1; box-shadow:0 4px 10px rgba(0,0,0,0.05); font-weight:700; }
-  .back-btn:hover { background:#f8f9fa; transform:translateY(-2px); box-shadow:0 6px 15px rgba(0,0,0,0.1); }
-  .card { background:#fff; border-radius:20px; padding:35px 28px; box-shadow:0 8px 30px rgba(0,0,0,0.08); border-top:6px solid #e74c3c; margin-bottom:20px; }
-  .header-card { background:linear-gradient(135deg,#e74c3c 0%,#c0392b 100%); color:#fff; border-radius:20px; padding:30px 25px; text-align:center; box-shadow:0 10px 30px rgba(231,76,60,0.25); margin-bottom:20px; position:relative; overflow:hidden; }
-  .header-card::before { content:""; position:absolute; top:-60px; left:-60px; width:180px; height:180px; background:rgba(255,255,255,0.08); border-radius:50%; }
-  .header-badge { display:inline-block; background:rgba(255,255,255,0.22); padding:6px 16px; border-radius:50px; font-size:0.82rem; font-weight:700; margin-bottom:12px; }
-  .header-card h1 { font-size:1.5rem; font-weight:900; margin-bottom:8px; }
-  .header-card .subtitle { font-size:0.95rem; opacity:0.95; }
-  .start-screen h2 { font-size:1.25rem; color:#c0392b; margin-bottom:18px; text-align:center; font-weight:900; }
-  .info-list { background:#fdedec; border-radius:14px; padding:18px 22px; margin-bottom:20px; list-style:none; }
-  .info-list li { display:flex; align-items:center; gap:10px; font-size:0.95rem; padding:7px 0; font-weight:500; }
+  body { min-height:100vh; background-color:#fcf7f7; background-image:radial-gradient(#ebd5d5 1px, transparent 1px); background-size:20px 20px; color:#2c3e50; padding:30px 20px; display:flex; flex-direction:column; align-items:center; }
+  
+  .container { width:100%; max-width:800px; background:#fff; border-radius:20px; padding:35px 28px; box-shadow:0 8px 30px rgba(0,0,0,0.08); border-top:6px solid #e74c3c; margin-bottom:20px; }
+  
+  /* صفحه شروع */
+  #start-section { text-align: center; }
+  #start-section h1 { color: #c0392b; font-size: 1.5rem; margin-bottom: 10px; font-weight: 900; }
+  #start-section .subtitle { color: #7f8c8d; font-size: 0.95rem; margin-bottom: 25px; }
+  
+  .info-list { background:#fdedec; border-radius:14px; padding:18px 22px; margin-bottom:25px; list-style:none; text-align:right; }
+  .info-list li { display:flex; align-items:center; gap:10px; font-size:0.95rem; padding:7px 0; font-weight:500; color:#922b21; }
   .info-list li .ico { font-size:1.2rem; }
+  
   .name-input { width:100%; padding:14px 18px; border:2px solid #f5b7b1; border-radius:12px; font-size:1rem; font-family:inherit; margin-bottom:18px; outline:none; transition:0.25s; text-align:center; }
   .name-input:focus { border-color:#e74c3c; box-shadow:0 0 0 4px rgba(231,76,60,0.12); }
-  .btn-primary { width:100%; padding:15px; background:linear-gradient(135deg,#e74c3c,#c0392b); color:#fff; border:none; border-radius:12px; font-size:1.05rem; font-weight:900; font-family:inherit; cursor:pointer; transition:0.3s; box-shadow:0 6px 18px rgba(231,76,60,0.3); }
-  .btn-primary:hover { transform:translateY(-2px); box-shadow:0 10px 25px rgba(231,76,60,0.4); }
-  .quiz-topbar { display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; gap:15px; flex-wrap:wrap; }
-  .question-counter { background:#fdedec; color:#c0392b; padding:8px 16px; border-radius:50px; font-weight:800; font-size:0.9rem; }
-  .timer-box { background:#c0392b; color:#fff; padding:8px 18px; border-radius:50px; font-weight:900; font-size:1.1rem; display:flex; align-items:center; gap:8px; min-width:120px; justify-content:center; transition:0.3s; }
-  .timer-box.warning { background:#e74c3c; animation:pulseTimer 0.8s infinite; }
+  
+  .start-btn { width:100%; padding:15px; background:linear-gradient(135deg,#e74c3c,#c0392b); color:#fff; border:none; border-radius:12px; font-size:1.05rem; font-weight:900; font-family:inherit; cursor:pointer; transition:0.3s; box-shadow:0 6px 18px rgba(231,76,60,0.3); }
+  .start-btn:hover { transform:translateY(-2px); box-shadow:0 10px 25px rgba(231,76,60,0.4); }
+
+  /* هدر و تایمر آزمون */
+  .header-top { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px dashed #f5e6e6; padding-bottom: 15px; margin-bottom: 25px; }
+  .header-title h1 { color: #c0392b; font-size: 1.3rem; }
+  .header-title p { color: #7f8c8d; font-size: 0.85rem; margin-top: 5px; }
+  .timer-box {
+    background: #c0392b; color: #fff; padding: 8px 18px; border-radius: 50px;
+    font-weight: 900; font-size: 1.1rem; display: flex; align-items: center; gap: 8px; direction: ltr;
+    transition: 0.3s;
+  }
+  .timer-box.warning { background: #e74c3c; animation: pulseTimer 0.8s infinite; }
   @keyframes pulseTimer { 0%,100% { transform:scale(1); } 50% { transform:scale(1.08); } }
-  .progress-bar { width:100%; height:10px; background:#fadbd8; border-radius:50px; overflow:hidden; margin-bottom:22px; }
-  .progress-fill { height:100%; background:linear-gradient(90deg,#e74c3c,#c0392b); border-radius:50px; transition:width 0.4s ease; width:0%; }
-  .question-box h3 { font-size:1.1rem; color:#2c3e50; line-height:1.9; margin-bottom:18px; font-weight:800; }
-  .question-num { display:inline-block; background:#e74c3c; color:#fff; width:32px; height:32px; border-radius:50%; text-align:center; line-height:32px; font-weight:900; font-size:0.95rem; margin-left:8px; }
-  .answer-area { width:100%; min-height:160px; padding:16px 18px; border:2px solid #f5b7b1; border-radius:14px; font-size:0.98rem; font-family:inherit; line-height:1.9; resize:vertical; outline:none; transition:0.25s; }
-  .answer-area:focus { border-color:#e74c3c; box-shadow:0 0 0 4px rgba(231,76,60,0.12); }
-  .btn-next { width:100%; padding:14px; background:linear-gradient(135deg,#e74c3c,#c0392b); color:#fff; border:none; border-radius:12px; font-size:1rem; font-weight:900; font-family:inherit; cursor:pointer; transition:0.3s; margin-top:22px; box-shadow:0 6px 18px rgba(231,76,60,0.3); }
-  .btn-next:not(:disabled):hover { transform:translateY(-2px); box-shadow:0 10px 25px rgba(231,76,60,0.4); }
-  .result-screen { text-align:center; }
-  .result-title { font-size:1.4rem; font-weight:900; color:#c0392b; margin-bottom:20px; }
-  .result-info { background:#fdedec; padding:16px 22px; border-radius:14px; margin-bottom:22px; font-size:0.95rem; font-weight:700; color:#922b21; }
-  .answer-card { background:#f8fdfd; border-radius:14px; padding:18px 20px; margin-bottom:14px; text-align:right; border-right:5px solid #e74c3c; }
-  .answer-card .q-title { font-weight:800; color:#c0392b; margin-bottom:10px; font-size:0.95rem; line-height:1.8; }
-  .answer-card .user-answer { background:#fff; padding:12px 16px; border-radius:10px; font-size:0.92rem; line-height:1.9; color:#2c3e50; border:1px solid #f5b7b1; min-height:50px; white-space:pre-wrap; word-wrap:break-word; }
-  .answer-card .user-answer.empty { color:#95a5a6; font-style:italic; background:#fef9f9; }
-  .btn-secondary { width:100%; padding:14px; background:#fff; color:#c0392b; border:2px solid #e74c3c; border-radius:12px; font-size:1rem; font-weight:900; font-family:inherit; cursor:pointer; transition:0.3s; margin-bottom:10px; }
-  .btn-secondary:hover { background:#fdedec; transform:translateY(-2px); }
-  .copy-notice { position:fixed; bottom:30px; left:50%; transform:translateX(-50%) translateY(120px); background:#2ecc71; color:#fff; padding:14px 30px; border-radius:50px; font-weight:800; font-size:0.95rem; box-shadow:0 10px 30px rgba(46,204,113,0.4); transition:transform 0.4s ease, opacity 0.4s; opacity:0; z-index:1000; }
-  .copy-notice.show { transform:translateX(-50%) translateY(0); opacity:1; }
-  .hidden { display:none !important; }
-  @media(max-width:600px){ .header-card h1 { font-size:1.15rem; } .card { padding:25px 18px; } .answer-area { min-height:130px; } }
+
+  /* سوالات تشریحی */
+  .question-box {
+    background: #fafbfc; border: 1px solid #f5e6e6; border-radius: 12px;
+    padding: 20px; margin-bottom: 20px;
+  }
+  .q-title { font-weight: 800; font-size: 1.05rem; margin-bottom: 15px; line-height: 1.8; color: #2c3e50; }
+  .essay-textarea {
+    width: 100%; min-height: 120px; padding: 15px; border: 2px solid #e2e8f0;
+    border-radius: 10px; font-family: inherit; font-size: 0.95rem; resize: vertical;
+    background: #fff; outline: none; transition: 0.3s; line-height: 1.9;
+  }
+  .essay-textarea:focus { border-color: #e74c3c; box-shadow: 0 0 8px rgba(231,76,60,0.1); }
+  
+  .submit-btn {
+    display: block; width: 100%; padding: 15px; margin-top: 30px;
+    background: linear-gradient(135deg,#e74c3c,#c0392b); color: #fff; border: none; border-radius: 12px;
+    font-size: 1.1rem; font-weight: 900; font-family: inherit; cursor: pointer;
+    transition: 0.3s; box-shadow: 0 6px 18px rgba(231,76,60,0.3);
+  }
+  .submit-btn:hover { transform:translateY(-2px); }
+  .submit-btn:disabled { background: #bdc3c7; cursor: not-allowed; box-shadow: none; transform:none; }
+
+  /* کارنامه و لودینگ */
+  .result-container { display: none; text-align: center; }
+  .student-name-display {
+    font-size: 1.1rem; font-weight: 900; color: #2c3e50; margin-bottom: 20px;
+    background: #fdedec; padding: 10px 20px; border-radius: 10px; display: inline-block;
+  }
+
+  .ai-loading { text-align: center; padding: 40px 20px; }
+  .spinner {
+    width: 55px; height: 55px; margin: 0 auto 20px;
+    border: 5px solid #f5e6e6; border-top-color: #e74c3c;
+    border-radius: 50%; animation: spin 1s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .ai-loading p { color: #c0392b; font-weight: 900; font-size: 1.1rem; }
+  .ai-loading .sub { font-size: 0.85rem; color: #95a5a6; margin-top: 10px; font-weight: 400; }
+
+  /* کارت نمره */
+  .score-card {
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+    color: #fff; padding: 30px 25px; border-radius: 18px;
+    margin-bottom: 25px; text-align: center;
+    box-shadow: 0 10px 30px rgba(231,76,60,0.35);
+  }
+  .score-card .score-value { font-size: 3.2rem; font-weight: 900; line-height: 1; }
+  .score-card .score-value small { font-size: 1.2rem; opacity: 0.85; }
+  .score-card .score-label { font-size: 0.9rem; opacity: 0.9; margin-top: 8px; }
+  .score-card .score-message {
+    font-size: 1rem; margin-top: 18px; font-weight: 700;
+    background: rgba(255,255,255,0.15); padding: 12px; border-radius: 10px;
+  }
+
+  /* بازبینی پاسخ‌ها */
+  .answers-review-box {
+    text-align: right; background: #f8f9fa; border: 1px dashed #bdc3c7;
+    padding: 20px; border-radius: 12px; margin-bottom: 25px;
+  }
+  .answers-review-box h3 { color: #2980b9; margin-bottom: 15px; font-size: 1.1rem; }
+  .review-item { margin-bottom: 18px; padding-bottom: 18px; border-bottom: 1px solid #ecf0f1; }
+  .review-item:last-child { border-bottom: none; }
+  .review-q {
+    font-weight: 800; color: #2c3e50; margin-bottom: 8px;
+    display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; line-height:1.8;
+  }
+  .review-q span { flex: 1; }
+  .q-score-badge {
+    background: #f39c12; color: #fff; padding: 3px 12px;
+    border-radius: 20px; font-size: 0.8rem; font-weight: 900; white-space: nowrap;
+  }
+  .q-score-badge.full { background: #2ecc71; }
+  .q-score-badge.zero { background: #e74c3c; }
+  .review-a {
+    color: #2c3e50; background: #e8f8f5; padding: 12px;
+    border-radius: 8px; line-height: 1.8; white-space: pre-wrap;
+    font-size: 0.92rem; border: 1px solid #d1f2eb;
+  }
+  .review-a.empty { color: #e74c3c; background: #fdedec; font-style: italic; border-color: #fadbd8; }
+  .ai-feedback {
+    background: #fff8e1; border-right: 4px solid #f39c12;
+    padding: 12px; border-radius: 8px; margin-top: 10px;
+    font-size: 0.88rem; line-height: 1.7; color: #5d4e1f;
+  }
+  .ai-feedback strong { color: #e67e22; }
+
+  /* دکمه‌ها */
+  .action-btns { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+  .review-btn {
+    background: #fff; color: #c0392b; text-decoration: none; border: 2px solid #e74c3c;
+    padding: 12px 25px; border-radius: 30px; font-weight: 900; cursor: pointer;
+    font-size: 1rem; transition: 0.3s; font-family: inherit; box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  }
+  .review-btn:hover { background: #fdedec; transform:translateY(-2px); }
+  .copy-btn { background: #e74c3c; color: #fff; border: none; box-shadow: 0 4px 15px rgba(231,76,60,0.3); }
+  .copy-btn:hover { background: #c0392b; }
+
+  /* تلاش مجدد */
+  .retry-section {
+    background: #fdedec; border: 2px dashed #e74c3c;
+    padding: 30px 20px; border-radius: 14px; text-align: center;
+    margin: 20px 0;
+  }
+  .retry-section .error-icon { font-size: 2.5rem; margin-bottom: 15px; }
+  .retry-section h3 { color: #e74c3c; margin-bottom: 12px; font-size: 1.15rem; }
+  .retry-section p { color: #7f8c8d; margin-bottom: 20px; font-size: 0.92rem; line-height: 1.7; }
+  .retry-section .preserve-note {
+    background: #fff; border-radius: 8px; padding: 10px 14px;
+    color: #27ae60; font-weight: 700; font-size: 0.88rem;
+    margin-bottom: 20px; display: inline-block;
+  }
+  .try-again-btn {
+    background: #e74c3c; color: #fff; border: none;
+    padding: 14px 35px; border-radius: 30px; font-weight: 900;
+    font-size: 1rem; cursor: pointer; font-family: inherit;
+    box-shadow: 0 4px 15px rgba(231,76,60,0.4);
+    transition: 0.3s;
+  }
+  .try-again-btn:hover { background: #c0392b; transform: translateY(-2px); }
+
+  @media(max-width:600px) {
+    body { padding: 15px 10px; }
+    .container { padding: 20px; border-radius: 15px; }
+    .header-top { flex-direction: column; gap: 10px; text-align: center; }
+    .score-card .score-value { font-size: 2.5rem; }
+  }
 </style>
 </head>
 <body>
 
 <div class="container">
-
-  <a href="nohom.html" class="back-btn">➡ بازگشت به صفحهٔ دروس</a>
-
-  <div class="header-card">
-    <div class="header-badge">✍️ آزمون تشریحی</div>
-    <h1>درس ۱۷: فرهنگ</h1>
-    <p class="subtitle">فصل ۹ — فرهنگ و هویت</p>
-  </div>
-
-  <div class="card start-screen" id="startScreen">
-    <h2>✍️ آماده‌ای؟</h2>
+  
+  <div id="start-section">
+    <h1>✍️ آزمون تشریحی درس ۱۷</h1>
+    <p class="subtitle">فرهنگ — مطالعات اجتماعی پایه نهم</p>
+    
     <ul class="info-list">
-      <li><span class="ico">📝</span> ۵ سوال تشریحی تصادفی (از بانک ۲۰ سوالی)</li>
-      <li><span class="ico">⏱️</span> هر سوال ۲ دقیقه فرصت دارد</li>
-      <li><span class="ico">✏️</span> پاسخ‌ها را در کادر مخصوص بنویس</li>
-      <li><span class="ico">📋</span> در پایان، همهٔ پاسخ‌ها قابل کپی برای ارسال به معلم</li>
+      <li><span class="ico">📝</span> ۱۰ سوال تشریحی تصادفی (از بانک ۳۰ سوالی)</li>
+      <li><span class="ico">⏱️</span> ۲۰ دقیقه زمان کلی برای پاسخگویی</li>
+      <li><span class="ico">🤖</span> تصحیح خودکار با هوش مصنوعی و نمره از ۲۰</li>
+      <li><span class="ico">📋</span> دریافت کارنامه با بازخورد معلم</li>
     </ul>
-    <input type="text" id="studentName" class="name-input" placeholder="نام و نام خانوادگی خود را وارد کنید">
-    <button class="btn-primary" id="startBtn">🚀 شروع آزمون</button>
+
+    <input type="text" id="student-name" class="name-input" placeholder="نام و نام خانوادگی خود را وارد کنید">
+    <button class="start-btn" onclick="startQuiz()">🚀 شروع آزمون</button>
   </div>
 
-  <div class="card hidden" id="quizScreen">
-    <div class="quiz-topbar">
-      <div class="question-counter" id="questionCounter">سوال ۱ از ۵</div>
-      <div class="timer-box" id="timerBox">⏱️ <span id="timerText">۰۲:۰۰</span></div>
+  <div id="quiz-section" style="display: none;">
+    <div class="header-top">
+      <div class="header-title">
+        <h1>✍️ آزمون تشریحی درس ۱۷</h1>
+        <p>فرهنگ</p>
+      </div>
+      <div class="timer-box" id="timer-display">⏱ ۲۰:۰۰</div>
     </div>
-    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
-    <div class="question-box">
-      <h3><span class="question-num" id="qNum">۱</span><span id="qText"></span></h3>
-      <textarea id="answerArea" class="answer-area" placeholder="پاسخ خود را اینجا بنویسید..."></textarea>
-    </div>
-    <button class="btn-next" id="nextBtn">سوال بعدی ←</button>
+    <form id="quiz-form">
+      <div id="questions-container"></div>
+      <button type="submit" class="submit-btn" id="submit-btn">پایان آزمون و تصحیح هوشمند</button>
+    </form>
   </div>
 
-  <div class="card hidden result-screen" id="resultScreen">
-    <div class="result-title">🎓 پاسخ‌نامهٔ آزمون تشریحی</div>
-    <div class="result-info" id="resultInfo"></div>
-    <div id="answersList"></div>
-    <button class="btn-primary" id="copyBtn">📋 کپی پاسخ‌ها برای ارسال به معلم</button>
-    <button class="btn-secondary" id="restartBtn">🔄 آزمون مجدد</button>
-    <a href="nohom.html" class="back-btn" style="width:100%; justify-content:center; margin-top:8px;">➡ بازگشت به دروس</a>
+  <div id="loading-section" style="display: none;">
+    <div class="ai-loading">
+      <div class="spinner"></div>
+      <p>🤖 در حال تصحیح پاسخ‌های شما...</p>
+      <p class="sub">هوش مصنوعی پاسخ‌ها را با کلید مقایسه می‌کند، لطفاً صبر کنید</p>
+    </div>
+  </div>
+
+  <div id="error-section" style="display: none;">
+    <div class="retry-section">
+      <div class="error-icon">⚠️</div>
+      <h3>اتصال به هوش مصنوعی برقرار نشد</h3>
+      <p>لطفاً اتصال اینترنت یا فیلترشکن خود را بررسی کنید و دوباره تلاش کنید.</p>
+      <div class="preserve-note">✅ نگران نباشید، پاسخ‌های شما کاملاً محفوظ هستند</div>
+      <br>
+      <button class="try-again-btn" onclick="retryAI()">🔄 تلاش مجدد</button>
+    </div>
+  </div>
+
+  <div id="result-section" class="result-container">
+    <h2 style="color:#c0392b; margin-bottom:20px; font-weight:900; text-align:center;">🎓 کارنامه آزمون تشریحی</h2>
+    <div style="text-align:center;">
+      <div class="student-name-display" id="display-student-name">نام دانش‌آموز</div>
+    </div>
+    
+    <div class="score-card" id="score-card">
+      <div class="score-value"><span id="score-value">۰</span><small> / ۲۰</small></div>
+      <div class="score-label">نمره نهایی</div>
+      <div class="score-message" id="score-message">...</div>
+    </div>
+    
+    <div class="answers-review-box" id="copyable-answers"></div>
+    
+    <div class="action-btns">
+      <button class="review-btn copy-btn" onclick="copyAnswers()">📋 کپی کارنامه</button>
+      <a href="nohom.html" class="review-btn">🔙 بازگشت به دروس</a>
+    </div>
   </div>
 
 </div>
 
-<div class="copy-notice" id="copyNotice">✅ پاسخ‌ها کپی شد!</div>
+<!-- بارگذاری اسکریپت تلگرام -->
+<script src="telegram.js"></script>
 
 <script>
+// ==========================================
+// بانک ۳۰ سوال تشریحی درس ۱۷ (نهم) + کلید پاسخ
+// ==========================================
 const essayBank = [
-  "فرهنگ را تعریف کنید و بگویید چرا فرهنگ پدیده‌ای آموختنی است.",
-  "چرا جامعهٔ بدون فرهنگ وجود ندارد و فرهنگ بدون جامعه به وجود نمی‌آید؟",
-  "اجتماعی شدن (جامعه‌پذیری) چیست و چرا ضروری است؟",
-  "نقش خانواده در اجتماعی شدن فرزندان را توضیح دهید.",
-  "لایه‌های فرهنگ را نام ببرید و هر یک را توضیح دهید.",
-  "تفاوت نمادها و هنجارها را بیان کنید و برای هر یک مثال بزنید.",
-  "هنجار چیست؟ چه عواملی موجب پیروی افراد از هنجارها می‌شود؟",
-  "اگر افراد از هنجارهای جامعه پیروی نکنند، چه اتفاقی می‌افتد؟",
-  "ارزش‌ها چیست؟ نمونه‌هایی از ارزش‌های اسلامی و اجتماعی را نام ببرید.",
-  "نقش عقاید دینی در شکل‌گیری ارزش‌ها چیست؟",
-  "چرا برخی از ارزش‌ها در همهٔ جوامع انسانی مشترک‌اند؟ نمونه بیاورید.",
-  "چرا هنجارهای یک جامعه ممکن است تغییر کنند؟ مثال بزنید.",
-  "عوامل تغییر فرهنگ را نام ببرید و هر یک را توضیح دهید.",
-  "نقش رسانه‌ها در تغییر فرهنگ جامعه چیست؟",
-  "نفوذ فرهنگی بیگانگان چه تأثیری بر فرهنگ بومی دارد؟",
-  "خرده‌فرهنگ چیست؟ با مثال توضیح دهید.",
-  "چرا پیروی کورکورانه از همهٔ هنجارها درست نیست؟",
-  "چگونه می‌توان در برابر نفوذ فرهنگی بیگانگان از فرهنگ بومی محافظت کرد؟",
-  "چه رابطه‌ای بین فرهنگ و هویت فردی و اجتماعی وجود دارد؟",
-  "چرا شناخت فرهنگ خودمان برای زندگی در جامعهٔ امروز اهمیت دارد؟"
+  { q: "فرهنگ را تعریف کنید و بگویید چرا فرهنگ پدیده‌ای آموختنی است.", key: "فرهنگ مجموعه‌ای از باورها، ارزش‌ها، هنجارها، آداب و رسوم و دانش مشترک یک جامعه است. آموختنی است چون با تولد به همراه نمی‌آید و از طریق خانواده و جامعه یاد گرفته می‌شود." },
+  { q: "چرا جامعهٔ بدون فرهنگ وجود ندارد و فرهنگ بدون جامعه به وجود نمی‌آید؟", key: "چون انسان موجودی اجتماعی است و برای زندگی به هنجارها، قوانین و زبان مشترک نیاز دارد. بدون فرهنگ، نظمی وجود ندارد و بدون جامعه، فرد چیزی را یاد نمی‌گیرد." },
+  { q: "اجتماعی شدن (جامعه‌پذیری) چیست و چرا ضروری است؟", key: "فرآیند یادگیری فرهنگ و هنجارهای جامعه برای زندگی کردن در آن. ضروری است تا فرد بتواند عضو مفیدی برای جامعه باشد و تعامل سازنده داشته باشد." },
+  { q: "نقش خانواده در اجتماعی شدن فرزندان را توضیح دهید.", key: "خانواده اولین و مهم‌ترین نهاد جامعه‌پذیری است. ارزش‌ها، زبان، آداب معاشرت و باورهای اولیه از خانواده به فرزندان منتقل می‌شود." },
+  { q: "لایه‌های فرهنگ را نام ببرید و هر یک را توضیح دهید.", key: "لایه‌های فرهنگ شامل: ۱. نمادها (چیزهایی که معنای خاصی دارند) ۲. هنجارها (قوانین و رفتارهای پذیرفته شده) ۳. ارزش‌ها (معیارهای اخلاقی و خوب و بد) ۴. عقاید و باورها (اعتقادات دینی و فکری) ۵. مادیات (آثار و ابزارهای ساخته شده توسط انسان)." },
+  { q: "تفاوت نمادها و هنجارها را بیان کنید و برای هر یک مثال بزنید.", key: "نمادها نشانه‌ها و علامت‌هایی هستند که معنای مشترک دارند (مثل پرچم یا چراغ قرمز). هنجارها قواعد رفتاری در جامعه هستند (مثل سلام کردن یا رعایت نوبت)." },
+  { q: "هنجار چیست؟ چه عواملی موجب پیروی افراد از هنجارها می‌شود؟", key: "هنجار قواعد و رفتارهای پذیرفته شده در جامعه است. عوامل: آموزش خانواده و مدرسه، ترس از مجازات و تنبیه، فشار اجتماعی و میل به تایید شدن توسط دیگران." },
+  { q: "اگر افراد از هنجارهای جامعه پیروی نکنند، چه اتفاقی می‌افتد؟", key: "بی‌نظمی، هرج و مرج، بروز ناهنجاری‌ها، تنش بین افراد و از بین رفتن همبستگی اجتماعی به وجود می‌آید." },
+  { q: "ارزش‌ها چیست؟ نمونه‌هایی از ارزش‌های اسلامی و اجتماعی را نام ببرید.", key: "ارزش‌ها معیارهای اخلاقی خوب و بد هستند. مثال‌ها: صداقت، عدالت، احترام به والدین، کمک به نیازمندان، ایثار و شجاعت." },
+  { q: "نقش عقاید دینی در شکل‌گیری ارزش‌ها چیست؟", key: "عقاید دینی به عنوان اساس و بنیان ارزش‌ها عمل می‌کنند. باور به خدا و روز جزا باعث می‌شود افراد به اصول اخلاقی پایبند باشند." },
+  { q: "چرا برخی از ارزش‌ها در همهٔ جوامع انسانی مشترک‌اند؟ نمونه بیاورید.", key: "چون ریشه در فطرت انسانی دارند و برای بقای روابط انسانی ضروری‌اند. مثل: احترام به بزرگترها، نیکی به دیگران، پرهیز از دروغ و خیانت." },
+  { q: "چرا هنجارهای یک جامعه ممکن است تغییر کنند؟ مثال بزنید.", key: "با پیشرفت زمان، تغییر نیازها و ورود فناوری‌های جدید، برخی هنجارها تغییر می‌کنند. مثال: نحوه خرید از حضوری به اینترنتی تغییر کرده، یا نحوه آموزش از سنتی به مجازی." },
+  { q: "عوامل تغییر فرهنگ را نام ببرید و هر یک را توضیح دهید.", key: "۱. تحولات درونی (نیازهای جدید) ۲. پیشرفت فناوری ۳. تعامل با سایر فرهنگ‌ها (تاثیرپذیری) ۴. رسانه‌ها ۵. عوامل محیطی (مثل مهاجرت)." },
+  { q: "نقش رسانه‌ها در تغییر فرهنگ جامعه چیست؟", key: "رسانه‌ها (تلویزیون، شبکه‌های اجتماعی) با نمایش رفتارها، ارزش‌ها و سبک زندگی، نقش بسیار قوی در تغییر هنجارها و باورهای مردم دارند." },
+  { q: "نفوذ فرهنگی بیگانگان چه تأثیری بر فرهنگ بومی دارد؟", key: "نفوذ بیگانگان می‌تواند موجب خودباختگی فرهنگی، فراموشی سنت‌های بومی و ترویج فرهنگ مصرف‌گرایی یا سبک زندگی ناسازگار با فرهنگ محلی شود." },
+  { q: "خرده‌فرهنگ چیست؟ با مثال توضیح دهید.", key: "خرده‌فرهنگ، عقاید، هنجارها و سبک زندگی گروهی از افراد جامعه است که با فرهنگ اصلی تفاوت دارد اما در تضاد با آن نیست. مثال: خرده‌فرهنگ جوانان یا خرده‌فرهنگ عشایر." },
+  { q: "چرا پیروی کورکورانه از همهٔ هنجارها درست نیست؟", key: "چون برخی هنجارها ممکن است با اصول اخلاقی، دینی یا انسانی همخوانی نداشته باشند یا قدیمی و مضر شده باشند (مثل خشونت‌های قبیله‌ای). باید عاقلانه بررسی شوند." },
+  { q: "چگونه می‌توان در برابر نفوذ فرهنگی بیگانگان از فرهنگ بومی محافظت کرد؟", key: "با شناخت فرهنگ خودی، افتخار به هویت ملی و دینی، الگوگیری از بزرگان، و استفاده هوشمندانه از رسانه‌ها و پرهیز از خودباختگی در برابر فرهنگ بیگانه." },
+  { q: "چه رابطه‌ای بین فرهنگ و هویت فردی و اجتماعی وجود دارد؟", key: "فرهنگ هویت‌ساز است. باورها و آداب ما شکل‌دهنده شخصیت فردی و هویت ملی و اجتماعی ما هستند. تفاوت ما با دیگران ریشه در فرهنگ ما دارد." },
+  { q: "چرا شناخت فرهنگ خودمان برای زندگی در جامعهٔ امروز اهمیت دارد؟", key: "شناخت فرهنگ خودی سبب حفظ هویت، افزایش اعتماد به نفس ملی، تشخیص خوب از بد در مواجهه با فرهنگ‌های دیگر و جلوگیری از گم شدن در دنیای مدرن می‌شود." },
+  { q: "عناصر اصلی فرهنگ را نام ببرید.", key: "نمادها، هنجارها، ارزش‌ها، عقاید و باورها، مادیات و ابزارها." },
+  { q: "«جامعه‌پذیری» از چه زمانی آغاز و تا چه زمانی ادامه دارد؟", key: "از بدو تولد آغاز شده و در طول زندگی ادامه دارد، اما در کودکی و نوجوانی نقش پررنگ‌تری دارد." },
+  { q: "تفاوت «ارزش» و «هنجار» را با ذکر مثال بنویسید.", key: "ارزش یک باور و ایده‌آل است (مثل احترام به بزرگتر)، اما هنجار یک قانون و رفتار عملی برای رسیدن به آن ارزش است (مثل سلام کردن)." },
+  { q: "«فرهنگ مادی» و «فرهنگ معنوی» را با مثال مقایسه کنید.", key: "فرهنگ مادی شامل اشیاء و ابزار است (مثل ساختمان و ماشین)، اما فرهنگ معنوی شامل باورها، ارزش‌ها و آداب است (مثل جشن نوروز و اعتقادات دینی)." },
+  { q: "چه عواملی باعث می‌شود یک هنجار در جامعه به تدریج از بین برود؟", key: "عدم نیاز جامعه، جایگزین شدن با هنجارهای بهتر، تغییر شرایط اجتماعی و اقتصادی، و نفوذ فرهنگ‌های بیگانه." },
+  { q: "«جهانی شدن» چه تأثیری بر فرهنگ‌های بومی دارد؟", key: "از یک سو باعث تبادل فرهنگی و پیشرفت می‌شود، از سوی دیگر خطر از بین رفتن هویت فرهنگی و یکسان‌سازی فرهنگی (غالباً غربی) را به همراه دارد." },
+  { q: "نقش مدرسه در انتقال فرهنگ به نسل‌های بعد چیست؟", key: "آموزش تاریخ و ادبیات، پرورش ارزش‌های اخلاقی و دینی، ترویج هنجارهای اجتماعی و ایجاد حس هویت مشترک." },
+  { q: "چرا فرهنگ یک مفهوم پویا و تغییرپذیر است؟", key: "چون انسان و جامعه همواره در حال تحول و پیشرفت است و با نیازهای جدید، فناوری‌ها و تعاملات، فرهنگ نیز تغییر می‌کند." },
+  { q: "نمونه‌ای از یک «خرده‌فرهنگ» در ایران را نام برده و ویژگی آن را بنویسید.", key: "خرده‌فرهنگ عشایر (با آداب و پوشش خاص)، یا خرده‌فرهنگ یک قومیت مانند کردها یا بلوچ‌ها. ویژگی: داشتن زبان، موسیقی، پوشش یا آداب خاص در کنار فرهنگ اصلی." },
+  { q: "اگر فردی در یک جامعه به درستی «جامعه‌پذیر» نشود، چه مشکلاتی برای او و جامعه به وجود می‌آید؟", key: "او نمی‌تواند با دیگران ارتباط درست برقرار کند، هنجارها را نمی‌داند و منزوی می‌شود. برای جامعه نیز مشکلاتی مثل ناهنجاری‌های اجتماعی و بی‌نظمی به وجود می‌آورد." }
 ];
 
-const TOTAL_ESSAY = 5;
-const TIME_PER_QUESTION = 120;
-const faDigits = "۰۱۲۳۴۵۶۷۸۹";
-let essayQuestions = [];
-let currentIndex = 0;
-let userAnswers = [];
-let timerInterval = null;
-let timeLeft = TIME_PER_QUESTION;
+const numQuestionsToShow = 10;
+const totalTime = 1200; // ۲۰ دقیقه
+const GROQ_API_KEY = "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";
+const GROQ_URL = "https://api.groq.com/openai/v1/chat/completions";
+
+let selectedQuestions = [];
+let studentAnswers = {};
+let timerInterval;
+let timeLeft = totalTime;
 let studentName = "";
+let aiResult = null;
 
-function toFa(num) { return String(num).replace(/\d/g, d => faDigits[d]); }
-function shuffleArray(arr) { const a = [...arr]; for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
-function formatTime(seconds) { const m = Math.floor(seconds / 60); const s = seconds % 60; return toFa(String(m).padStart(2, "0") + ":" + String(s).padStart(2, "0")); }
+function shuffle(array) {
+  let currentIndex = array.length, randomIndex;
+  while (currentIndex != 0) {
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex--;
+    [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+  }
+  return array;
+}
 
-document.getElementById("startBtn").addEventListener("click", () => {
-  const name = document.getElementById("studentName").value.trim();
-  if (!name) { document.getElementById("studentName").focus(); document.getElementById("studentName").style.borderColor = "#c0392b"; document.getElementById("studentName").placeholder = "⚠️ لطفاً نام خود را وارد کنید"; return; }
-  studentName = name;
-  essayQuestions = shuffleArray(essayBank).slice(0, TOTAL_ESSAY);
-  currentIndex = 0;
-  userAnswers = new Array(TOTAL_ESSAY).fill("");
-  document.getElementById("startScreen").classList.add("hidden");
-  document.getElementById("quizScreen").classList.remove("hidden");
-  renderQuestion();
-});
+function showSection(name) {
+  const sections = { start:'start-section', quiz:'quiz-section', loading:'loading-section', error:'error-section', result:'result-section' };
+  Object.entries(sections).forEach(([key, id]) => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = (key === name) ? 'block' : 'none';
+  });
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
 
-function renderQuestion() {
-  if (currentIndex >= TOTAL_ESSAY) { finishQuiz(); return; }
-  const q = essayQuestions[currentIndex];
-  document.getElementById("questionCounter").textContent = `سوال ${toFa(currentIndex + 1)} از ${toFa(TOTAL_ESSAY)}`;
-  document.getElementById("qNum").textContent = toFa(currentIndex + 1);
-  document.getElementById("qText").textContent = q;
-  const area = document.getElementById("answerArea");
-  area.value = userAnswers[currentIndex] || "";
-  document.getElementById("nextBtn").textContent = currentIndex === TOTAL_ESSAY - 1 ? "پایان آزمون و مشاهدهٔ پاسخ‌نامه ←" : "سوال بعدی ←";
-  document.getElementById("progressFill").style.width = `${(currentIndex / TOTAL_ESSAY) * 100}%`;
+function toPersianNumber(num) {
+  const persianDigits = ['۰','۱','۲','۳','۴','۵','۶','۷','۸','۹'];
+  return String(num).replace(/\d/g, d => persianDigits[d]).replace('.', '٫');
+}
+
+function escapeHtml(text) {
+  const div = document.createElement('div');
+  div.textContent = String(text);
+  return div.innerHTML;
+}
+
+function startQuiz() {
+  studentName = document.getElementById('student-name').value.trim();
+  if (studentName === "") {
+    alert("لطفاً نام و نام خانوادگی خود را وارد کنید.");
+    document.getElementById('student-name').focus();
+    return;
+  }
+  showSection('quiz');
+  initQuiz();
+}
+
+function initQuiz() {
+  const shuffledBank = shuffle([...essayBank]);
+  selectedQuestions = shuffledBank.slice(0, numQuestionsToShow);
+  const container = document.getElementById('questions-container');
+  container.innerHTML = '';
+  
+  selectedQuestions.forEach((item, index) => {
+    const qBox = document.createElement('div');
+    qBox.className = 'question-box';
+    qBox.innerHTML = `
+      <div class="q-title">${index + 1}. ${item.q}</div>
+      <textarea class="essay-textarea" name="a${index}" placeholder="پاسخ خود را اینجا بنویسید..."></textarea>
+    `;
+    container.appendChild(qBox);
+  });
   startTimer();
-  setTimeout(() => area.focus(), 100);
 }
 
 function startTimer() {
-  clearInterval(timerInterval);
-  timeLeft = TIME_PER_QUESTION;
-  updateTimerDisplay();
-  const tb = document.getElementById("timerBox");
-  tb.classList.remove("warning");
+  const display = document.getElementById('timer-display');
   timerInterval = setInterval(() => {
     timeLeft--;
-    updateTimerDisplay();
-    if (timeLeft <= 10 && timeLeft > 0) tb.classList.add("warning");
-    if (timeLeft <= 0) { clearInterval(timerInterval); goNext(); }
+    const minutes = Math.floor(timeLeft / 60);
+    const seconds = timeLeft % 60;
+    display.innerHTML = `⏱ ${minutes < 10 ? '0'+minutes : minutes}:${seconds < 10 ? '0'+seconds : seconds}`;
+    if (timeLeft <= 60) display.classList.add('warning');
+    if (timeLeft <= 0) {
+      clearInterval(timerInterval);
+      document.getElementById('quiz-form').dispatchEvent(new Event('submit'));
+    }
   }, 1000);
 }
 
-function updateTimerDisplay() { document.getElementById("timerText").textContent = formatTime(Math.max(0, timeLeft)); }
-
-document.getElementById("nextBtn").addEventListener("click", () => {
+document.getElementById('quiz-form').addEventListener('submit', function(e) {
+  e.preventDefault();
   clearInterval(timerInterval);
-  userAnswers[currentIndex] = document.getElementById("answerArea").value.trim();
-  goNext();
-});
-
-function goNext() {
-  userAnswers[currentIndex] = document.getElementById("answerArea").value.trim();
-  currentIndex++;
-  if (currentIndex >= TOTAL_ESSAY) finishQuiz();
-  else renderQuestion();
-}
-
-function finishQuiz() {
-  clearInterval(timerInterval);
-  document.getElementById("quizScreen").classList.add("hidden");
-  document.getElementById("resultScreen").classList.remove("hidden");
-  document.getElementById("resultInfo").innerHTML = `👤 نام: <b>${studentName}</b><br>📝 تعداد سوال: ${toFa(TOTAL_ESSAY)} سوال تشریحی<br>✅ پاسخ‌ها را برای معلم ارسال کن.`;
-  const list = document.getElementById("answersList");
-  list.innerHTML = "";
-  essayQuestions.forEach((q, i) => {
-    const answer = userAnswers[i] || "";
-    const card = document.createElement("div");
-    card.className = "answer-card";
-    const answerHTML = answer ? `<div class="user-answer">${escapeHTML(answer)}</div>` : `<div class="user-answer empty">⚠️ پاسخ داده نشده</div>`;
-    card.innerHTML = `<div class="q-title">${toFa(i + 1)}. ${q}</div>${answerHTML}`;
-    list.appendChild(card);
+  
+  studentAnswers = {};
+  selectedQuestions.forEach((_, i) => {
+    const ta = document.querySelector(`textarea[name="a${i}"]`);
+    studentAnswers[i] = ta ? ta.value.trim() : "";
   });
-  document.getElementById("progressFill").style.width = "100%";
-}
-
-function escapeHTML(str) { return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
-
-document.getElementById("copyBtn").addEventListener("click", () => {
-  let text = `📋 پاسخ‌نامهٔ آزمون تشریحی — درس ۱۷ (فرهنگ)\n`;
-  text += `👤 نام: ${studentName}\n📚 پایه: نهم | مطالعات اجتماعی\n━━━━━━━━━━━━━━━━━━━━\n\n`;
-  essayQuestions.forEach((q, i) => { text += `سوال ${toFa(i + 1)}: ${q}\nپاسخ: ${userAnswers[i] || "(بدون پاسخ)"}\n\n`; });
-  text += `━━━━━━━━━━━━━━━━━━━━\nتعداد سوال: ${toFa(TOTAL_ESSAY)}\n`;
-  if (navigator.clipboard && navigator.clipboard.writeText) {
-    navigator.clipboard.writeText(text).then(showCopyNotice).catch(fallbackCopy.bind(null, text));
-  } else { fallbackCopy(text); }
+  
+  showSection('loading');
+  gradeWithAI();
 });
 
-function fallbackCopy(text) {
-  const ta = document.createElement("textarea");
-  ta.value = text; ta.style.position = "fixed"; ta.style.left = "-9999px";
-  document.body.appendChild(ta); ta.select();
-  try { document.execCommand("copy"); showCopyNotice(); }
-  catch (e) { alert("کپی خودکار ممکن نشد. لطفاً پاسخ‌ها را دستی انتخاب و کپی کنید."); }
-  document.body.removeChild(ta);
+async function gradeWithAI() {
+  try {
+    const result = await callGroq();
+    aiResult = result;
+    renderResult();
+    showSection('result');
+    
+    // ارسال نمره به تلگرام
+    sendToTelegram();
+    
+  } catch (err) {
+    console.error("خطای تصحیح:", err);
+    showSection('error');
+  }
 }
 
-function showCopyNotice() {
-  const notice = document.getElementById("copyNotice");
-  notice.classList.add("show");
-  setTimeout(() => notice.classList.remove("show"), 2500);
+function sendToTelegram() {
+  if (typeof submitScoreToTelegram !== 'function') {
+    console.warn("تابع submitScoreToTelegram پیدا نشد. telegram.js بارگذاری نشده؟");
+    return;
+  }
+  
+  try {
+    const score = Math.max(0, Math.min(20, aiResult.total_score || 0));
+    const correctCount = Math.round(score / 2);
+    submitScoreToTelegram(score, correctCount);
+    console.log("✅ نمره به تلگرام ارسال شد:", { score, correctCount });
+  } catch (err) {
+    console.error("❌ خطا در ارسال به تلگرام:", err);
+  }
 }
 
-document.getElementById("restartBtn").addEventListener("click", () => {
-  document.getElementById("resultScreen").classList.add("hidden");
-  document.getElementById("startScreen").classList.remove("hidden");
-  document.getElementById("studentName").value = "";
-  document.getElementById("studentName").style.borderColor = "#f5b7b1";
-  document.getElementById("studentName").placeholder = "نام و نام خانوادگی خود را وارد کنید";
-});
+function retryAI() {
+  showSection('loading');
+  gradeWithAI();
+}
+
+async function callGroq() {
+  const questionsForPrompt = selectedQuestions.map((item, i) => ({
+    index: i,
+    question: item.q,
+    answer_key: item.key,
+    student_answer: studentAnswers[i] || ""
+  }));
+
+  const systemPrompt = `شما یک معلم مهربان و باتجربه مطالعات اجتماعی پایه نهم هستید که آزمون تشریحی دانش‌آموزان را تصحیح می‌کنید.
+
+قوانین مهم تصحیح:
+۱. بسیار سهل‌گیر و مهربان باشید. هدف اصلی تشویق و دلگرمی دانش‌آموز است.
+۲. هر سوال ۲ نمره دارد (کل آزمون ۲۰ نمره).
+۳. اگر دانش‌آموز حتی بخشی از مفهوم اصلی را فهمیده باشد، نمره کامل یا نزدیک به کامل (۱٫۵ تا ۲) بدهید.
+۴. اگر پاسخ کاملاً خالی است، صفر بدهید.
+۵. اگر پاسخ کاملاً بی‌ربط است، صفر بدهید.
+۶. برای پاسخ ناقص ولی مرتبط، نمره بین ۱ تا ۱٫۵ بدهید.
+۷. بازخورد هر سوال کوتاه، محبت‌آمیز و سازنده باشد (حداکثر دو جمله).
+۸. overall_message یک پیام دلگرم‌کننده کلی درباره عملکرد دانش‌آموز باشد.
+
+خروجی را فقط به صورت یک JSON معتبر و بدون هیچ متن اضافه برگردانید:
+{
+  "total_score": <عدد بین 0 تا 20>,
+  "overall_message": "<پیام دلگرم‌کننده>",
+  "questions": [
+    {"index": 0, "score": <0 تا 2>, "feedback": "<بازخورد>"},
+    ...برای هر ۱۰ سوال...
+  ]
+}`;
+
+  const userPrompt = `نام دانش‌آموز: ${studentName}\n\nاطلاعات سوالات، پاسخ‌های دانش‌آموز و کلید پاسخ:\n${JSON.stringify(questionsForPrompt, null, 2)}`;
+
+  const payload = {
+    model: "openai/gpt-oss-120b",
+    messages: [
+      { role: "system", content: systemPrompt },
+      { role: "user", content: userPrompt }
+    ],
+    temperature: 0.3,
+    response_format: { type: "json_object" }
+  };
+
+  const blob = new Blob([JSON.stringify(payload)], { type: "application/json" });
+
+  const response = await fetch(GROQ_URL, {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${GROQ_API_KEY}`,
+      "Content-Type": "application/json"
+    },
+    body: blob
+  });
+
+  if (!response.ok) throw new Error("Groq API error: " + response.status);
+
+  const data = await response.json();
+  let content = data.choices[0].message.content;
+  content = content.replace(/```json\s*/g, '').replace(/```\s*/g, '').trim();
+
+  let parsed;
+  try {
+    parsed = JSON.parse(content);
+  } catch (e) {
+    const match = content.match(/\{[\s\S]*\}/);
+    if (match) parsed = JSON.parse(match[0]);
+    else throw new Error("پاسخ JSON نامعتبر است");
+  }
+  return parsed;
+}
+
+function renderResult() {
+  document.getElementById('display-student-name').innerText = `دانش‌آموز: ${studentName}`;
+  const score = Math.max(0, Math.min(20, aiResult.total_score || 0));
+  document.getElementById('score-value').innerText = toPersianNumber(score);
+  document.getElementById('score-message').innerText = aiResult.overall_message || "آفرین بر تلاش شما!";
+  
+  const reviewContainer = document.getElementById('copyable-answers');
+  reviewContainer.innerHTML = `<h3>📝 پاسخ‌ها و بازخورد معلم:</h3>`;
+  const qResults = Array.isArray(aiResult.questions) ? aiResult.questions : [];
+  
+  selectedQuestions.forEach((item, index) => {
+    const answerText = studentAnswers[index] || "";
+    const answerHTML = answerText === "" 
+      ? `<div class="review-a empty">[بدون پاسخ]</div>` 
+      : `<div class="review-a">${escapeHtml(answerText)}</div>`;
+    const qResult = qResults.find(r => r.index === index) || { score: 0, feedback: "پاسخی ثبت نشده است." };
+    const qScore = Math.max(0, Math.min(2, qResult.score || 0));
+    const badgeClass = qScore >= 2 ? 'full' : (qScore === 0 ? 'zero' : '');
+    
+    reviewContainer.innerHTML += `
+      <div class="review-item">
+        <div class="review-q">
+          <span>سوال ${index + 1}: ${item.q}</span>
+          <span class="q-score-badge ${badgeClass}">${toPersianNumber(qScore)} از ۲</span>
+        </div>
+        ${answerHTML}
+        <div class="ai-feedback">💬 <strong>بازخورد معلم:</strong> ${escapeHtml(qResult.feedback || "")}</div>
+      </div>
+    `;
+  });
+}
+
+function copyAnswers() {
+  const score = aiResult ? aiResult.total_score : 0;
+  const message = aiResult ? aiResult.overall_message : "";
+  const textToCopy = `📋 کارنامه آزمون تشریحی درس ۱۷ (فرهنگ)\n` +
+    `👤 دانش‌آموز: ${studentName}\n` +
+    `📚 پایه: نهم | مطالعات اجتماعی\n` +
+    `📊 نمره: ${toPersianNumber(score)} از ۲۰\n` +
+    `💬 ${message}\n\n` +
+    `─────────────────────\n\n` +
+    document.getElementById('copyable-answers').innerText;
+  
+  navigator.clipboard.writeText(textToCopy).then(() => {
+    alert("✅ کارنامه با موفقیت کپی شد.");
+  }).catch(() => {
+    alert("❌ خطا در کپی. لطفاً متن را به صورت دستی انتخاب و کپی کنید.");
+  });
+}
 </script>
-
 </body>
 </html>
