@@ -5,6 +5,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>آزمون تستی درس ۸ - رسانه‌ها در زندگی ما</title>
+<script src="sounds.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap');
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -88,7 +90,6 @@
   </div>
 
 </div>
-
 <script>
 const questions = [
   { q: "با پست الکترونیک (ایمیل) چه کاری می‌توان انجام داد؟",
@@ -194,6 +195,10 @@ function selectAnswer(index) {
   if (answered) return;
   answered = true;
   clearInterval(timerInterval);
+
+  // 🔊 صدای کلیک فقط وقتی خود دانش‌آموز گزینه را انتخاب کرده (نه تایم‌اوت)
+  if (index >= 0 && typeof playClick === "function") playClick();
+
   const q = questions[current];
   const options = document.querySelectorAll('.option');
 
@@ -202,10 +207,14 @@ function selectAnswer(index) {
   if (index === q.a) {
     options[index].classList.add('correct');
     correct++;
+    // ✅ صدای پاسخ درست
+    if (typeof playCorrect === "function") playCorrect();
   } else {
     if (index >= 0) options[index].classList.add('wrong');
     options[q.a].classList.add('correct');
     wrong++;
+    // ❌ صدای پاسخ غلط (یا اتمام زمان)
+    if (typeof playWrong === "function") playWrong();
   }
 
   setTimeout(() => {
@@ -220,7 +229,27 @@ function showResult() {
   document.getElementById('resultScreen').classList.remove('hidden');
 
   const score = Math.round((correct / questions.length) * 20);
-  submitScoreToTelegram(score, correctCount);
+
+  // 🐛 اصلاح باگ: متغیر correctCount وجود نداشت، باید correct باشد
+  submitScoreToTelegram(score, correct);
+
+  // ==========================================
+  // 🎉 افکت صوتی و باران کاغذرنگی پایان آزمون
+  // ==========================================
+  setTimeout(() => {
+    if (score >= 17) {
+      // نمره عالی (بالای ۸۵٪ ≈ بالای ۸۰٪)
+      if (typeof playFinish === "function") playFinish();
+      if (typeof confetti === "function") {
+        confetti({ particleCount: 180, spread: 90, origin: { y: 0.6 } });
+        setTimeout(() => confetti({ particleCount: 120, angle: 60, spread: 70, origin: { x: 0 } }), 250);
+        setTimeout(() => confetti({ particleCount: 120, angle: 120, spread: 70, origin: { x: 1 } }), 400);
+      }
+    }
+    // برای نمرات پایین‌تر، صدای درست/غلط قبلاً در هر سوال پخش شده
+  }, 300);
+  // ==========================================
+
   document.getElementById('resultName').textContent = `دانش‌آموز: ${studentName}`;
   document.getElementById('scoreNum').textContent = score;
   document.getElementById('correctCount').textContent = correct;
