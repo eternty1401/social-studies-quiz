@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#667eea">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>موزه گردی مجازی | مطالعات اجتماعی</title>
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="museum.css">
+</head>
+
+<body>
+
+  <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">🌙</button>
+
+  <div class="bubble"></div>
+  <div class="bubble"></div>
+  <div class="bubble"></div>
+  <div class="bubble"></div>
+  <div class="bubble"></div>
+
+  <header class="museum-header">
+    <a href="index.html" class="back-btn">→ بازگشت به خانه</a>
+    <h1 class="museum-title">🏛️ موزه گردی مجازی</h1>
+    <p class="museum-subtitle">با یک کلیک به دل تاریخ سفر کن</p>
+  </header>
+
+  <section class="filters" id="filters">
+    <button class="filter-chip active" data-filter="all">همه</button>
+    <button class="filter-chip" data-filter="hakhamaneshi">👑 هخامنشی</button>
+    <button class="filter-chip" data-filter="ashkani">🏹 اشکانی</button>
+    <button class="filter-chip" data-filter="sasani">🔥 ساسانی</button>
+    <button class="filter-chip" data-filter="eslami">🕌 اسلامی</button>
+    <button class="filter-chip" data-filter="moaser">🏛️ معاصر</button>
+  </section>
+
+  <main class="museum-grid" id="museumGrid"></main>
+
+  <script src="museum.js"></script>
+  <script>
+    const themeBtn = document.getElementById('themeBtn');
+    if (localStorage.getItem('theme') === 'dark') {
+      document.body.classList.add('dark-mode');
+      themeBtn.textContent = '☀️';
+    }
+    function toggleTheme() {
+      document.body.classList.toggle('dark-mode');
+      if (document.body.classList.contains('dark-mode')) {
+        localStorage.setItem('theme', 'dark');
+        themeBtn.textContent = '☀️';
+      } else {
+        localStorage.setItem('theme', 'light');
+        themeBtn.textContent = '🌙';
+      }
+    }
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./service-worker.js');
+      });
+    }
+  </script>
+</body>
+
+</html>
