@@ -18,7 +18,7 @@
     <div class="box">
         <h2 style="text-align:center; color:#333;">🤖 تست هوش مصنوعی (Groq)</h2>
         
-        <input type="text" id="userInput" placeholder="مثلاً: قنات چیست؟">
+        <input type="text" id="userInput" placeholder="مثلاً: آبرفت چیست؟">
         <button onclick="testAI()">ارسال سوال</button>
 
         <div id="result"></div>
@@ -38,23 +38,25 @@
             resultDiv.className = ''; 
             resultDiv.innerHTML = 'در حال ارتباط با سرور... ⏳';
 
-            // 👇👇 کلید API خودت رو اینجا بذار 👇👇
+            // کلید API شما در اینجا قرار داده شد
             const GROQ_API_KEY = "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";
 
             try {
+                // استفاده از Blob برای جلوگیری از خطای کاراکترهای فارسی در موبایل
+                const payload = {
+                    model: "llama3-8b-8192",
+                    messages: [
+                        { role: "system", content: "شما یک معلم مطالعات اجتماعی هستید. به فارسی، کوتاه و ساده جواب بده." },
+                        { role: "user", content: input }
+                    ]
+                };
+
                 const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
                     method: "POST",
                     headers: {
-                        "Authorization": `Bearer ${GROQ_API_KEY}`,
-                        "Content-Type": "application/json"
+                        "Authorization": `Bearer ${GROQ_API_KEY}`
                     },
-                    body: JSON.stringify({
-                        model: "llama3-8b-8192", // یک مدل سریع و رایگان
-                        messages: [
-                            { role: "system", content: "شما یک معلم مطالعات اجتماعی هستید. به فارسی، کوتاه و ساده جواب بده." },
-                            { role: "user", content: input }
-                        ]
-                    })
+                    body: new Blob([JSON.stringify(payload)], { type: 'application/json' })
                 });
 
                 const data = await response.json();
