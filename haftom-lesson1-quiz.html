@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>آزمون درس ۱ | مطالعات اجتماعی هفتم</title>
+<title>آزمون درس اول - من حق دارم (هفتم)</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
@@ -33,16 +33,27 @@
     font-size: 0.85rem;
     margin-bottom: 20px;
   }
-  .user-box {
+  .student-name-box {
     background: #ebf8ff;
     padding: 12px;
     border-radius: 10px;
     margin-bottom: 20px;
-    text-align: center;
-    font-size: 0.9rem;
-    color: #2b6cb0;
   }
-  .user-box strong { color: #2c5282; }
+  .student-name-box label {
+    display: block;
+    font-size: 0.9rem;
+    margin-bottom: 6px;
+    color: #2b6cb0;
+    font-weight: bold;
+  }
+  .student-name-box input {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #bee3f8;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-family: inherit;
+  }
   .question {
     background: #f7fafc;
     border-radius: 12px;
@@ -85,9 +96,21 @@
     font-weight: bold;
     cursor: pointer;
     margin-top: 10px;
+    font-family: inherit;
   }
   .submit-btn:hover { background: #2f855a; }
   .submit-btn:disabled { background: #a0aec0; cursor: not-allowed; }
+
+  .status-msg {
+    text-align: center;
+    font-size: 0.85rem;
+    margin-top: 10px;
+    min-height: 20px;
+    color: #718096;
+  }
+  .status-msg.error { color: #e53e3e; }
+  .status-msg.success { color: #38a169; }
+
   .result-box {
     display: none;
     text-align: center;
@@ -98,13 +121,13 @@
     margin-top: 20px;
   }
   .result-box .score {
-    font-size: 2.2rem;
+    font-size: 2.5rem;
     font-weight: bold;
     color: #2b6cb0;
     display: block;
     margin: 10px 0;
   }
-  .result-box .msg { color: #4a5568; font-size: 0.9rem; }
+  .result-box .msg { color: #4a5568; font-size: 0.95rem; }
   .retry-btn {
     margin-top: 14px;
     padding: 10px 24px;
@@ -114,11 +137,9 @@
     border-radius: 8px;
     cursor: pointer;
     font-size: 0.9rem;
-    margin-left: 8px;
+    font-family: inherit;
   }
-  .back-btn {
-    background: #718096;
-  }
+  .retry-btn:hover { background: #2c5282; }
 </style>
 </head>
 <body>
@@ -126,13 +147,15 @@
   <h1>📝 آزمون درس اول: من حق دارم</h1>
   <p class="subtitle">مطالعات اجتماعی پایه هفتم</p>
 
-  <div class="user-box" id="userBox">
-    در حال شناسایی حساب کاربری...
+  <div class="student-name-box">
+    <label for="studentName">نام و نام خانوادگی:</label>
+    <input type="text" id="studentName" placeholder="نام خود را وارد کنید...">
   </div>
 
   <div id="quizArea"></div>
 
   <button class="submit-btn" id="submitBtn" onclick="submitQuiz()">✅ ثبت و ارسال نمره</button>
+  <div class="status-msg" id="statusMsg"></div>
 
   <div class="result-box" id="resultBox">
     <span class="msg">نمره شما (از ۱۰):</span>
@@ -140,69 +163,14 @@
     <span class="msg" id="resultMsg"></span>
     <br>
     <button class="retry-btn" onclick="location.reload()">🔄 آزمون مجدد</button>
-    <button class="retry-btn back-btn" onclick="location.href='student-panel.html'">🏠 پنل من</button>
   </div>
 </div>
 
-<!-- Firebase SDK -->
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+<!-- فایل تلگرام -->
+<script src="telegram.js"></script>
 
 <script>
-// ==== تنظیمات Firebase ====
-const firebaseConfig = {
-  apiKey: "AIzaSyXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
-  authDomain: "social-studies-app-6b600.firebaseapp.com",
-  projectId: "social-studies-app-6b600",
-  storageBucket: "social-studies-app-6b600.appspot.com",
-  messagingSenderId: "000000000000",
-  appId: "1:000000000000:web:xxxxxxxxxxxxxxxxxxxxxx"
-};
-
-if (!firebase.apps.length) {
-  firebase.initializeApp(firebaseConfig);
-}
-const auth = firebase.auth();
-const db = firebase.firestore();
-
-let currentUser = null;
-
-// ==== بررسی لاگین ====
-auth.onAuthStateChanged((user) => {
-  const userBox = document.getElementById("userBox");
-  if (!user) {
-    // اگر لاگین نبود، به صفحه لاگین برود
-    window.location.href = "login.html";
-    return;
-  }
-  currentUser = user;
-  const displayName = user.displayName || user.email || "دانش‌آموز";
-  userBox.innerHTML = `👤 خوش آمدی، <strong>${displayName}</strong>`;
-});
-
-// ==== تابع ذخیره نمره (با رند به بالا + userId + email) ====
-window.saveGradeToFirebase = async function(studentName, quizName, score) {
-  try {
-    if (!currentUser) throw new Error("کاربر لاگین نیست");
-
-    const roundedScore = Math.ceil(score);
-    await db.collection("grades").add({
-      userId: currentUser.uid,
-      studentEmail: currentUser.email || "",
-      studentName: studentName,
-      quizName: quizName,
-      score: roundedScore,
-      timestamp: firebase.firestore.FieldValue.serverTimestamp()
-    });
-    console.log("نمره ذخیره شد:", roundedScore);
-  } catch (error) {
-    console.error("خطا در ذخیره نمره:", error);
-    throw error;
-  }
-};
-
-// ==== بانک سوالات ====
+// ==== بانک سوالات درس اول (من حق دارم) ====
 const questions = [
   {
     q: "خداوند در قرآن درباره مقام انسان چه می‌فرماید؟",
@@ -296,7 +264,7 @@ const questions = [
   }
 ];
 
-// ==== ساخت سوالات ====
+// ==== ساخت سوالات در صفحه ====
 const quizArea = document.getElementById("quizArea");
 let selectedAnswers = new Array(questions.length).fill(null);
 
@@ -323,16 +291,26 @@ function selectOption(qIndex, optIndex, radioEl) {
   radioEl.closest(".option").classList.add("selected");
 }
 
+// ==== نمایش پیام وضعیت ====
+function showStatus(text, type) {
+  const statusEl = document.getElementById("statusMsg");
+  statusEl.textContent = text;
+  statusEl.className = "status-msg" + (type ? " " + type : "");
+}
+
 // ==== ارسال آزمون ====
-async function submitQuiz() {
-  if (!currentUser) {
-    alert("لطفاً ابتدا وارد حساب خود شوید.");
-    window.location.href = "login.html";
+function submitQuiz() {
+  const nameInput = document.getElementById("studentName");
+  const studentName = nameInput.value.trim();
+
+  if (!studentName) {
+    showStatus("⚠️ لطفاً نام و نام خانوادگی خود را وارد کنید.", "error");
+    nameInput.focus();
     return;
   }
 
   if (selectedAnswers.includes(null)) {
-    alert("لطفاً به همه سوالات پاسخ دهید.");
+    showStatus("⚠️ لطفاً به همه سوالات پاسخ دهید.", "error");
     return;
   }
 
@@ -341,30 +319,34 @@ async function submitQuiz() {
   questions.forEach((item, index) => {
     if (selectedAnswers[index] === item.answer) correct++;
   });
-  const rawScore = (correct / questions.length) * 10;
-  const finalScore = Math.ceil(rawScore);
 
-  // نام نمایشی دانش‌آموز
-  const studentName = currentUser.displayName || currentUser.email || "دانش‌آموز";
+  const percentage = Math.round((correct / questions.length) * 100); // برای تلگرام (درصد)
+  const finalScore = Math.ceil((correct / questions.length) * 10);  // برای نمایش (از ۱۰)
 
-  // غیرفعال دکمه
+  // غیرفعال کردن دکمه
   const submitBtn = document.getElementById("submitBtn");
   submitBtn.disabled = true;
   submitBtn.textContent = "در حال ارسال...";
+  showStatus("");
 
+  // ارسال به تلگرام
   try {
-    await window.saveGradeToFirebase(studentName, "درس اول - من حق دارم", rawScore);
+    if (typeof submitScoreToTelegram === "function") {
+      submitScoreToTelegram(percentage, correct);
+      showStatus("✅ نمره شما با موفقیت ارسال شد.", "success");
+    } else {
+      console.warn("تابع submitScoreToTelegram پیدا نشد. telegram.js را بررسی کن.");
+      showStatus("⚠️ فایل telegram.js بارگذاری نشده است.", "error");
+    }
   } catch (err) {
-    alert("خطا در ذخیره نمره. لطفاً اتصال اینترنت را بررسی کن.");
-    submitBtn.disabled = false;
-    submitBtn.textContent = "✅ ثبت و ارسال نمره";
-    return;
+    console.error("خطا در ارسال به تلگرام:", err);
+    showStatus("⚠️ خطا در ارسال به تلگرام. لطفاً به معلم اطلاع دهید.", "error");
   }
 
-  // نمایش نتیجه
+  // نمایش نتیجه به دانش‌آموز
   document.getElementById("quizArea").style.display = "none";
   submitBtn.style.display = "none";
-  document.getElementById("userBox").style.display = "none";
+  document.querySelector(".student-name-box").style.display = "none";
 
   const resultBox = document.getElementById("resultBox");
   resultBox.style.display = "block";
