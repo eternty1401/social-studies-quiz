@@ -51,7 +51,6 @@
     font-size: 0.85rem;
     opacity: 0.9;
   }
-  /* لودینگ قطره آبی */
   .loader {
     display: none;
     width: 24px;
@@ -67,30 +66,25 @@
   table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
   }
-  thead {
-    background: #2b6cb0;
-    color: #fff;
-  }
+  thead { background: #2b6cb0; color: #fff; }
   th, td {
-    padding: 10px 8px;
+    padding: 10px 6px;
     text-align: center;
     border-bottom: 1px solid #e2e8f0;
   }
   tbody tr:nth-child(even) { background: #f7fafc; }
   tbody tr:hover { background: #ebf8ff; }
+  .email-cell {
+    font-size: 0.75rem;
+    color: #4a5568;
+    direction: ltr;
+    word-break: break-all;
+  }
+  .empty-msg { text-align: center; color: #888; padding: 20px; }
+  .error-msg { text-align: center; color: #e53e3e; padding: 20px; }
 
-  .empty-msg {
-    text-align: center;
-    color: #888;
-    padding: 20px;
-  }
-  .error-msg {
-    text-align: center;
-    color: #e53e3e;
-    padding: 20px;
-  }
   .logout-btn {
     display: block;
     width: 100%;
@@ -126,7 +120,8 @@
   <table>
     <thead>
       <tr>
-        <th>نام دانش‌آموز</th>
+        <th>نام</th>
+        <th>ایمیل</th>
         <th>آزمون</th>
         <th>نمره</th>
         <th>تاریخ</th>
@@ -160,25 +155,22 @@ if (!firebase.apps.length) {
 const auth = firebase.auth();
 const db = firebase.firestore();
 
-// ==== بررسی وضعیت لاگین ====
+// ==== بررسی لاگین ====
 auth.onAuthStateChanged((user) => {
   if (!user) {
-    // اگر لاگین نبود، به صفحه ورود برو
     window.location.href = "login.html";
   } else {
-    // اگر لاگین بود، نمرات را بارگذاری کن
     loadGrades();
   }
 });
 
-// ==== تابع بارگذاری نمرات ====
+// ==== بارگذاری همه نمرات ====
 async function loadGrades() {
   const gradesList = document.getElementById("gradesList");
   const totalGradesEl = document.getElementById("totalGrades");
   const avgScoreEl = document.getElementById("avgScore");
   const loadingEl = document.getElementById("loading");
 
-  // نمایش لودینگ
   if (loadingEl) loadingEl.style.display = "block";
   if (gradesList) gradesList.innerHTML = "";
 
@@ -187,20 +179,15 @@ async function loadGrades() {
       .orderBy("timestamp", "desc")
       .get();
 
-    // === شمارش دقیق ===
     const total = snapshot.size;
     if (totalGradesEl) totalGradesEl.textContent = total;
 
-    // === حالت خالی ===
     if (snapshot.empty) {
       if (avgScoreEl) avgScoreEl.textContent = "0";
-      if (gradesList) {
-        gradesList.innerHTML = `<tr><td colspan="4" class="empty-msg">هنوز نمره‌ای ثبت نشده است.</td></tr>`;
-      }
+      gradesList.innerHTML = `<tr><td colspan="5" class="empty-msg">هنوز نمره‌ای ثبت نشده است.</td></tr>`;
       return;
     }
 
-    // === ساخت ردیف‌ها + محاسبه میانگین ===
     let rowsHtml = "";
     let sum = 0;
     let count = 0;
@@ -208,6 +195,7 @@ async function loadGrades() {
     snapshot.forEach((doc) => {
       const data = doc.data() || {};
       const name = data.studentName || "بدون نام";
+      const email = data.studentEmail || "—";
       const quiz = data.quizName || "—";
       const score = (typeof data.score === "number") ? data.score : "—";
       const date = (data.timestamp && data.timestamp.toDate)
@@ -222,37 +210,32 @@ async function loadGrades() {
       rowsHtml += `
         <tr>
           <td>${name}</td>
+          <td class="email-cell">${email}</td>
           <td>${quiz}</td>
           <td>${score}</td>
           <td>${date}</td>
         </tr>`;
     });
 
-    if (gradesList) gradesList.innerHTML = rowsHtml;
-
-    // میانگین
+    gradesList.innerHTML = rowsHtml;
     const avg = count > 0 ? (sum / count).toFixed(1) : "0";
     if (avgScoreEl) avgScoreEl.textContent = avg;
 
   } catch (error) {
     console.error("خطا در بارگذاری نمرات:", error);
-    if (gradesList) {
-      gradesList.innerHTML = `<tr><td colspan="4" class="error-msg">خطا: ${error.message}</td></tr>`;
-    }
+    gradesList.innerHTML = `<tr><td colspan="5" class="error-msg">خطا: ${error.message}</td></tr>`;
     if (totalGradesEl) totalGradesEl.textContent = "0";
     if (avgScoreEl) avgScoreEl.textContent = "0";
   } finally {
-    // 🔑 مهم: در هر حالت لودینگ مخفی شود
     if (loadingEl) loadingEl.style.display = "none";
   }
 }
 
-// ==== خروج از حساب ====
+// ==== خروج ====
 function logout() {
   auth.signOut().then(() => {
     window.location.href = "login.html";
   }).catch((error) => {
-    console.error("خطا در خروج:", error);
     alert("خطا در خروج: " + error.message);
   });
 }
