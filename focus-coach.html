@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>مربی تمرکز | مهارت زندگی</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; font-family:'Vazirmatn',sans-serif; }
+  body {
+    background: linear-gradient(135deg, #064e3b 0%, #0f766e 100%);
+    min-height: 100vh; color: #fff; padding: 30px 20px;
+    display: flex; flex-direction: column; align-items: center;
+    overflow-x: hidden;
+  }
+
+  .header { text-align: center; margin-bottom: 30px; }
+  .header h1 { font-size: 2rem; font-weight: 900; margin-bottom: 10px; color: #34d399; text-shadow: 0 0 15px rgba(52, 211, 153, 0.3); }
+  .header p { color: #a7f3d0; font-size: 0.95rem; line-height: 1.6; }
+
+  /* بخش هدف‌گذاری */
+  .goal-box {
+    background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
+    padding: 15px 20px; border-radius: 15px; width: 100%; max-width: 400px;
+    margin-bottom: 30px; text-align: center; backdrop-filter: blur(10px);
+  }
+  .goal-box label { display: block; margin-bottom: 10px; font-weight: bold; font-size: 0.95rem; }
+  .goal-box input {
+    width: 100%; padding: 12px; border-radius: 10px; border: none; outline: none;
+    font-family: inherit; font-size: 1rem; text-align: center; background: #fff; color: #064e3b;
+  }
+
+  /* تایمر دایره‌ای */
+  .timer-container {
+    position: relative; width: 280px; height: 280px;
+    display: flex; justify-content: center; align-items: center;
+    margin-bottom: 30px;
+  }
+  .timer-svg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; transform: rotate(-90deg); }
+  .timer-circle-bg { fill: none; stroke: rgba(255,255,255,0.1); stroke-width: 10; }
+  .timer-circle-progress {
+    fill: none; stroke: #34d399; stroke-width: 10; stroke-linecap: round;
+    stroke-dasharray: 816; /* محیط دایره (2 * pi * r) */
+    stroke-dashoffset: 0; transition: stroke-dashoffset 1s linear, stroke 0.5s;
+  }
+  .timer-text { font-size: 3.5rem; font-weight: 900; z-index: 1; direction: ltr; font-variant-numeric: tabular-nums; }
+  .timer-status { font-size: 1rem; color: #a7f3d0; margin-top: 10px; position: absolute; bottom: 60px; z-index: 1; }
+
+  /* دکمه‌ها */
+  .controls { display: flex; gap: 15px; }
+  .btn {
+    padding: 15px 30px; border: none; border-radius: 50px; font-family: inherit;
+    font-size: 1.1rem; font-weight: 900; cursor: pointer; transition: 0.3s;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .btn-start { background: #34d399; color: #064e3b; box-shadow: 0 4px 15px rgba(52,211,153,0.3); }
+  .btn-start:hover { background: #fff; transform: translateY(-3px); }
+  .btn-reset { background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.3); }
+  .btn-reset:hover { background: rgba(255,255,255,0.2); }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+  /* پنجره پایان و هوش مصنوعی */
+  .modal {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.8); backdrop-filter: blur(5px);
+    display: none; justify-content: center; align-items: center; z-index: 1000; padding: 20px;
+  }
+  .modal-content {
+    background: #0f172a; padding: 30px; border-radius: 20px; width: 100%; max-width: 500px;
+    text-align: center; border: 1px solid #334155; animation: zoomIn 0.3s ease;
+  }
+  @keyframes zoomIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+  .modal h2 { color: #34d399; margin-bottom: 15px; }
+  .modal textarea {
+    width: 100%; height: 100px; padding: 15px; border-radius: 10px; border: 1px solid #475569;
+    background: #1e293b; color: #fff; font-family: inherit; resize: none; margin-bottom: 15px; outline: none;
+  }
+  .modal-btn { background: #34d399; color: #064e3b; padding: 12px 25px; border-radius: 10px; border: none; font-family: inherit; font-weight: 900; font-size: 1rem; cursor: pointer; width: 100%; margin-bottom: 10px; }
+  .modal-btn:disabled { opacity: 0.5; }
+  .ai-response { margin-top: 15px; padding: 15px; background: rgba(52, 211, 153, 0.1); border: 1px solid #34d399; border-radius: 10px; text-align: right; font-size: 0.95rem; line-height: 1.8; display: none; }
+
+  @media(max-width: 600px) {
+    .header h1 { font-size: 1.8rem; }
+    .timer-container { width: 240px; height: 240px; }
+    .timer-text { font-size: 2.8rem; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="header">
+    <h1>🎯 مربی تمرکز</h1>
+    <p>با تکنیک پومودورو، درس خوندن رو به یک بازی تبدیل کن! (۲۵ دقیقه تمرکز، ۵ دقیقه استراحت)</p>
+  </div>
+
+  <!-- هدف‌گذاری -->
+  <div class="goal-box">
+    <label>🎯 هدف امروز من چیه؟</label>
+    <input type="text" id="goalInput" placeholder="مثلاً: خوندن درس ۵ تاریخ">
+  </div>
+
+  <!-- تایمر -->
+  <div class="timer-container">
+    <svg class="timer-svg" viewBox="0 0 280 280">
+      <circle class="timer-circle-bg" cx="140" cy="140" r="130"></circle>
+      <circle class="timer-circle-progress" id="timerProgress" cx="140" cy="140" r="130"></circle>
+    </svg>
+    <div class="timer-text" id="timerText">25:00</div>
+    <div class="timer-status" id="timerStatus">آماده برای شروع</div>
+  </div>
+
+  <!-- دکمه‌ها -->
+  <div class="controls">
+    <button class="btn btn-start" id="startBtn" onclick="toggleTimer()">▶ شروع تمرکز</button>
+    <button class="btn btn-reset" onclick="resetTimer()">🔄 ریست</button>
+  </div>
+
+  <!-- پنجره پایان و هوش مصنوعی -->
+  <div class="modal" id="finishModal">
+    <div class="modal-content">
+      <h2>🎉 آفرین! زمان تمرکز تمام شد.</h2>
+      <p style="margin-bottom: 15px; font-size: 0.9rem; color: #cbd5e1;">چقدر تونستی به هدفت برسی؟</p>
+      <textarea id="progressInput" placeholder="مثلاً: ۲ صفحه از درس رو خوندم..."></textarea>
+      <button class="modal-btn" id="sendToAiBtn" onclick="askAiForFeedback()">دریافت تحلیل از مربی هوشمند 🤖</button>
+      <div class="ai-response" id="aiFeedback"></div>
+      <button class="modal-btn" style="background: transparent; color: #94a3b8; border: 1px solid #475569; margin-top: 15px;" onclick="closeModal()">بستن</button>
+    </div>
+  </div>
+
+  <script>
+    const GROQ_API_KEY = "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";
+    
+    let timeLeft = 25 * 60;
+    let totalTime = 25 * 60;
+    let timerInterval = null;
+    let isRunning = false;
+    let isBreak = false;
+    
+    const timerText = document.getElementById('timerText');
+    const timerProgress = document.getElementById('timerProgress');
+    const timerStatus = document.getElementById('timerStatus');
+    const startBtn = document.getElementById('startBtn');
+    const goalInput = document.getElementById('goalInput');
+
+    // صدا زنگ
+    function playDing() {
+      const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      const oscillator = audioCtx.createOscillator();
+      const gainNode = audioCtx.createGain();
+      oscillator.type = 'sine';
+      oscillator.frequency.value = 800;
+      gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + 1);
+      oscillator.connect(gainNode);
+      gainNode.connect(audioCtx.destination);
+      oscillator.start();
+      oscillator.stop(audioCtx.currentTime + 1);
+    }
+
+    function updateDisplay() {
+      const minutes = Math.floor(timeLeft / 60);
+      const seconds = timeLeft % 60;
+      timerText.innerText = `${minutes < 10 ? '0'+minutes : minutes}:${seconds < 10 ? '0'+seconds : seconds}`;
+      
+      // آپدیت دایره (محیط 816)
+      const progress = (timeLeft / totalTime) * 816;
+      timerProgress.style.strokeDashoffset = 816 - progress;
+
+      if (isBreak) {
+        timerProgress.style.stroke = '#38bdf8'; // رنگ آبی برای استراحت
+      } else {
+        timerProgress.style.stroke = '#34d399'; // رنگ سبز برای تمرکز
+      }
+    }
+
+    function toggleTimer() {
+      if (isRunning) {
+        // توقف
+        clearInterval(timerInterval);
+        isRunning = false;
+        startBtn.innerHTML = '▶ ادامه';
+        timerStatus.innerText = 'متوقف شده';
+      } else {
+        // شروع
+        if (!goalInput.value.trim()) {
+          alert("لطفاً اول هدف خودت رو بنویس تا تمرکزت رو شروع کنیم!");
+          goalInput.focus();
+          return;
+        }
+        isRunning = true;
+        startBtn.innerHTML = '⏸ توقف';
+        timerStatus.innerText = isBreak ? 'زمان استراحت...' : 'در حال تمرکز...';
+        
+        timerInterval = setInterval(() => {
+          timeLeft--;
+          updateDisplay();
+          
+          if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            isRunning = false;
+            playDing();
+            
+            if (!isBreak) {
+              // پایان تمرکز
+              document.getElementById('finishModal').style.display = 'flex';
+              timeLeft = 5 * 60; // استراحت
+              totalTime = 5 * 60;
+              isBreak = true;
+              startBtn.innerHTML = '▶ شروع استراحت';
+              timerStatus.innerText = 'زمان استراحت';
+            } else {
+              // پایان استراحت
+              alert("زمان استراحت تمام شد. آماده‌ای برای یک تمرکز دیگه؟");
+              resetTimer();
+            }
+            updateDisplay();
+          }
+        }, 1000);
+      }
+    }
+
+    function resetTimer() {
+      clearInterval(timerInterval);
+      isRunning = false;
+      isBreak = false;
+      timeLeft = 25 * 60;
+      totalTime = 25 * 60;
+      updateDisplay();
+      startBtn.innerHTML = '▶ شروع تمرکز';
+      timerStatus.innerText = 'آماده برای شروع';
+    }
+
+    function closeModal() {
+      document.getElementById('finishModal').style.display = 'none';
+      document.getElementById('progressInput').value = '';
+      document.getElementById('aiFeedback').style.display = 'none';
+      document.getElementById('sendToAiBtn').disabled = false;
+    }
+
+    async function askAiForFeedback() {
+      const goal = goalInput.value.trim();
+      const progress = document.getElementById('progressInput').value.trim();
+      const aiBtn = document.getElementById('sendToAiBtn');
+      const aiFeedback = document.getElementById('aiFeedback');
+
+      if (!progress) {
+        alert("لطفاً بنویس چقدر تونستی پیش بری!");
+        return;
+      }
+
+      aiBtn.disabled = true;
+      aiBtn.innerText = 'مربی در حال فکر کردن است... ⏳';
+      aiFeedback.style.display = 'block';
+      aiFeedback.innerText = 'لطفاً صبر کنید...';
+
+      const prompt = `
+        شما یک "مربی تمرکز و انگیزه" برای یک دانش‌آموز هستید.
+        هدف او برای این جلسه این بوده: "${goal}"
+        و بعد از ۲۵ دقیقه تمرکز، می‌گوید: "${progress}"
+        
+        لطفاً با لحنی گرم، صمیمی و انگیزشی، به او بازخورد بدهید.
+        اگر پیشرفت خوبی داشته، تشویقش کنید. 
+        اگر چیزی یاد نگرفته یا تمرکزش کم بوده، دلسوزی کنید و یک راهکار عملی (مثل دور کردن گوشی یا تقسیم کار) به او پیشنهاد دهید.
+        پاسخ حداکثر در ۲ پاراگراف کوتاه باشد.
+      `;
+
+      try {
+        const payload = {
+          model: "openai/gpt-oss-120b",
+          messages: [
+            { role: "system", content: "شما یک مربی انگیزشی و دلسوز هستید. به زبان فارسی صمیمی صحبت کنید." },
+            { role: "user", content: prompt }
+          ]
+        };
+
+        const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+          method: "POST",
+          headers: { "Authorization": `Bearer ${GROQ_API_KEY}` },
+          body: new Blob([JSON.stringify(payload)], { type: 'application/json' })
+        });
+
+        const data = await response.json();
+        
+        if (data.error) throw new Error(data.error.message);
+        
+        aiFeedback.innerText = data.choices[0].message.content;
+        aiBtn.innerText = '✅ تحلیل انجام شد';
+
+      } catch (error) {
+        aiFeedback.innerText = "❌ خطا در ارتباط با هوش مصنوعی. لطفاً از فیلترشکن استفاده کنید.";
+        aiBtn.disabled = false;
+        aiBtn.innerText = 'تلاش مجدد';
+      }
+    }
+
+    // راه‌اندازی اولیه
+    updateDisplay();
+  </script>
+</body>
+</html>
