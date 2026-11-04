@@ -23,7 +23,6 @@
   .login-container h1 { color: #38bdf8; font-size: 1.8rem; margin-bottom: 10px; }
   .login-container p { color: #94a3b8; font-size: 0.95rem; margin-bottom: 30px; line-height: 1.6; }
 
-  /* دکمه گوگل */
   .google-btn {
     display: flex; align-items: center; justify-content: center; gap: 10px;
     background: #fff; color: #333; border: none; padding: 15px; border-radius: 12px;
@@ -32,7 +31,6 @@
   }
   .google-btn:hover { background: #e2e8f0; transform: translateY(-2px); }
 
-  /* جداکننده */
   .divider {
     display: flex; align-items: center; text-align: center; color: #64748b; margin-bottom: 20px; font-size: 0.85rem;
   }
@@ -41,7 +39,6 @@
   }
   .divider span { padding: 0 10px; }
 
-  /* فرم ایمیل */
   .input-group { margin-bottom: 15px; text-align: right; }
   .input-group label { display: block; margin-bottom: 8px; color: #cbd5e1; font-size: 0.9rem; }
   .input-group input {
@@ -62,7 +59,6 @@
   .toggle-text span { color: #38bdf8; cursor: pointer; font-weight: bold; }
   .toggle-text span:hover { text-decoration: underline; }
 
-  /* پیام‌ها */
   #message { margin-top: 15px; padding: 10px; border-radius: 8px; font-size: 0.9rem; display: none; }
   .msg-error { background: rgba(239, 68, 68, 0.2); color: #fca5a5; border: 1px solid #ef4444; }
   .msg-success { background: rgba(16, 185, 129, 0.2); color: #a7f3d0; border: 1px solid #10b981; }
@@ -79,7 +75,6 @@
     <h1>👋 خوش آمدی!</h1>
     <p>برای دسترسی به آزمون‌ها و کارنامه، وارد حساب خودت شو.</p>
 
-    <!-- دکمه ورود با گوگل -->
     <button class="google-btn" onclick="signInWithGoogle()">
       <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="24" alt="Google">
       ورود با حساب گوگل
@@ -87,7 +82,6 @@
 
     <div class="divider"><span>یا</span></div>
 
-    <!-- فرم ورود/ثبت‌نام با ایمیل -->
     <div class="input-group">
       <label>ایمیل</label>
       <input type="email" id="email" placeholder="example@email.com" dir="ltr">
@@ -127,7 +121,14 @@
     const auth = getAuth(app);
     const provider = new GoogleAuthProvider();
 
-    let isLoginMode = true; // حالت پیش‌فرض: ورود
+    let isLoginMode = true;
+
+    // ==== تابع کلیدی: هدایت بعد از لاگین ====
+    function redirectAfterAuth() {
+      const redirect = sessionStorage.getItem("redirectAfterLogin");
+      sessionStorage.removeItem("redirectAfterLogin");
+      window.location.href = redirect || "index.html";
+    }
 
     // تغییر بین حالت ورود و ثبت‌نام
     window.toggleMode = () => {
@@ -139,7 +140,6 @@
       document.getElementById('message').style.display = 'none';
     };
 
-    // نمایش پیام
     function showMessage(text, type) {
       const msg = document.getElementById('message');
       msg.innerText = text;
@@ -151,7 +151,7 @@
     window.signInWithGoogle = () => {
       signInWithPopup(auth, provider)
         .then((result) => {
-          window.location.href = 'index.html';
+          redirectAfterAuth();  // ← اصلاح شد
         })
         .catch((error) => {
           showMessage("خطا در ورود با گوگل: " + error.message, 'error');
@@ -175,7 +175,7 @@
       if (isLoginMode) {
         signInWithEmailAndPassword(auth, email, password)
           .then(() => {
-            window.location.href = 'index.html';
+            redirectAfterAuth();  // ← اصلاح شد
           })
           .catch((error) => {
             showMessage("ایمیل یا رمز عبور اشتباه است!", 'error');
@@ -184,7 +184,9 @@
         createUserWithEmailAndPassword(auth, email, password)
           .then(() => {
             showMessage("✅ حساب با موفقیت ساخته شد! در حال انتقال...", 'success');
-            setTimeout(() => { window.location.href = 'index.html'; }, 1500);
+            setTimeout(() => {
+              redirectAfterAuth();  // ← اصلاح شد
+            }, 1500);
           })
           .catch((error) => {
             if (error.code === 'auth/email-already-in-use') {
