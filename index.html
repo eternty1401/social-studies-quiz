@@ -283,49 +283,6 @@
     border-color: rgba(255,255,255,0.15);
   }
 
-  .about-section {
-    background: rgba(255,255,255,0.15);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255,255,255,0.3);
-    border-radius: 24px; padding: 35px 30px;
-    text-align: center;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.15);
-    animation: fadeInUp 1s ease 1.5s backwards;
-    margin-bottom: 30px;
-  }
-  .about-section h2 { font-size: 1.3rem; margin-bottom: 15px; font-weight: 900; }
-  .about-section p {
-    font-size: 1rem; color: rgba(255,255,255,0.9);
-    line-height: 1.9; max-width: 700px; margin: 0 auto;
-  }
-  .features-row {
-    display: flex; justify-content: center; flex-wrap: wrap;
-    gap: 15px; margin-top: 25px;
-  }
-  .feature-chip {
-    background: rgba(255,255,255,0.2);
-    border: 1px solid rgba(255,255,255,0.3);
-    padding: 8px 18px; border-radius: 30px;
-    font-size: 0.85rem; font-weight: 700;
-    display: flex; align-items: center; gap: 6px;
-    transition: 0.3s;
-  }
-  .feature-chip:hover { background: rgba(255,255,255,0.3); transform: translateY(-2px); }
-
-  .footer {
-    text-align: center; color: rgba(255,255,255,0.8);
-    font-size: 0.9rem; margin-top: 20px;
-    z-index: 1; position: relative;
-  }
-  .footer .heart {
-    color: #ff6b9d; animation: pulse 1.5s infinite; display: inline-block;
-  }
-  @keyframes pulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.2); }
-  }
-
   .history-banner {
     display: block; text-decoration: none; color: #fff;
     background: linear-gradient(135deg,
@@ -405,6 +362,49 @@
   .life-banner-btn { background: rgba(255,255,255,0.95); color: #764ba2; padding: 11px 22px; border-radius: 30px; font-weight: 900; font-size: 0.85rem; white-space: nowrap; transition: 0.3s; box-shadow: 0 4px 15px rgba(0,0,0,0.15); }
   .life-banner:hover .life-banner-btn { transform: scale(1.05); background: #fff; }
 
+  .about-section {
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 24px; padding: 35px 30px;
+    text-align: center;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+    animation: fadeInUp 1s ease 1.5s backwards;
+    margin-bottom: 30px;
+  }
+  .about-section h2 { font-size: 1.3rem; margin-bottom: 15px; font-weight: 900; }
+  .about-section p {
+    font-size: 1rem; color: rgba(255,255,255,0.9);
+    line-height: 1.9; max-width: 700px; margin: 0 auto;
+  }
+  .features-row {
+    display: flex; justify-content: center; flex-wrap: wrap;
+    gap: 15px; margin-top: 25px;
+  }
+  .feature-chip {
+    background: rgba(255,255,255,0.2);
+    border: 1px solid rgba(255,255,255,0.3);
+    padding: 8px 18px; border-radius: 30px;
+    font-size: 0.85rem; font-weight: 700;
+    display: flex; align-items: center; gap: 6px;
+    transition: 0.3s;
+  }
+  .feature-chip:hover { background: rgba(255,255,255,0.3); transform: translateY(-2px); }
+
+  .footer {
+    text-align: center; color: rgba(255,255,255,0.8);
+    font-size: 0.9rem; margin-top: 20px;
+    z-index: 1; position: relative;
+  }
+  .footer .heart {
+    color: #ff6b9d; animation: pulse 1.5s infinite; display: inline-block;
+  }
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+  }
+
   @media(max-width:600px) {
     body { padding: 25px 15px; }
     .header h1 { font-size: 1.9rem; }
@@ -450,7 +450,6 @@
   <!-- نوار احراز هویت -->
   <div class="auth-bar" id="authBar">
     <span class="user-name" id="userNameBar">...</span>
-    <button onclick="location.href='student-panel.html'">پنل من</button>
     <button class="logout-btn" onclick="logout()">خروج</button>
   </div>
   <div class="auth-bar" id="guestBar">
@@ -477,22 +476,21 @@
     <h2 class="section-title">🎯 پایه تحصیلی خود را انتخاب کنید</h2>
 
     <div class="grades-grid">
-      <!-- ✅ آزاد: بدون نیاز به لاگین -->
-      <div class="grade-card" onclick="goToPage('haftom.html', false)">
+      <div class="grade-card" onclick="goToPage('haftom.html')">
         <span class="grade-icon">📗</span>
         <div class="grade-num">پایه هفتم</div>
         <div class="grade-desc">۲۴ درس کامل با درسنامه، آزمون، فلش کارت و فایل‌ها</div>
         <span class="grade-btn">ورود به پایه هفتم ←</span>
       </div>
 
-      <div class="grade-card" onclick="goToPage('hashtom.html', false)">
+      <div class="grade-card" onclick="goToPage('hashtom.html')">
         <span class="grade-icon">📘</span>
         <div class="grade-num">پایه هشتم</div>
         <div class="grade-desc">۲۴ درس کامل با درسنامه، آزمون، فلش کارت و فایل‌ها</div>
         <span class="grade-btn">ورود به پایه هشتم ←</span>
       </div>
 
-      <div class="grade-card" onclick="goToPage('nohom.html', false)">
+      <div class="grade-card" onclick="goToPage('nohom.html')">
         <span class="grade-icon">📙</span>
         <div class="grade-num">پایه نهم</div>
         <div class="grade-desc">۲۴ درس کامل با درسنامه، آزمون، فلش کارت و فایل‌ها</div>
@@ -500,8 +498,7 @@
       </div>
     </div>
 
-    <!-- ✅ آزاد -->
-    <div class="museum-banner" onclick="goToPage('museum.html', false)">
+    <div class="museum-banner" onclick="goToPage('museum.html')">
       <div class="museum-banner-content">
         <span class="museum-banner-icon">🏛️</span>
         <div class="museum-banner-text">
@@ -512,8 +509,7 @@
       </div>
     </div>
 
-    <!-- ✅ آزاد -->
-    <div class="history-banner" onclick="goToPage('history-chat.html', false)">
+    <div class="history-banner" onclick="goToPage('history-chat.html')">
       <div class="history-banner-content">
         <span class="history-banner-icon">⏳</span>
         <div class="history-banner-text">
@@ -524,8 +520,7 @@
       </div>
     </div>
 
-    <!-- ✅ آزاد -->
-    <div class="life-banner" onclick="goToPage('life-skills.html', false)">
+    <div class="life-banner" onclick="goToPage('life-skills.html')">
       <div class="life-banner-content">
         <span class="life-banner-icon">🌟</span>
         <div class="life-banner-text">
@@ -536,7 +531,6 @@
       </div>
     </div>
 
-    <!-- درباره -->
     <div class="about-section">
       <h2>✨ درباره این سایت</h2>
       <p>
@@ -567,7 +561,7 @@
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
 
 <script>
-  // ===== تنظیمات Firebase (از login.html کپی شده) =====
+  // ===== تنظیمات Firebase =====
   const firebaseConfig = {
     apiKey: "AIzaSyAo0zfeqp_BfJEqAHLir6xiYD0N9NqQcvE",
     authDomain: "social-studies-app-6b600.firebaseapp.com",
@@ -580,7 +574,6 @@
 
   let auth = null;
   let currentUser = null;
-  let authReady = false;
 
   try {
     if (!firebase.apps.length) {
@@ -589,15 +582,12 @@
     auth = firebase.auth();
   } catch (e) {
     console.warn("Firebase راه‌اندازی نشد:", e);
-    authReady = true;
   }
 
   // ===== بررسی وضعیت لاگین =====
   if (auth) {
     auth.onAuthStateChanged((user) => {
       currentUser = user;
-      authReady = true;
-
       const authBar = document.getElementById("authBar");
       const guestBar = document.getElementById("guestBar");
       const userNameBar = document.getElementById("userNameBar");
@@ -616,27 +606,9 @@
     document.getElementById("guestBar").style.display = "flex";
   }
 
-  // ===== 🔑 تابع ناوبری (با پارامتر نیاز به لاگین) =====
-  // requireAuth = true  → فقط برای آزمون‌ها
-  // requireAuth = false → آزاد برای همه
-  function goToPage(destination, requireAuth) {
-    if (!requireAuth) {
-      // آزاد — بدون بررسی لاگین
-      window.location.href = destination;
-      return;
-    }
-
-    // نیاز به لاگین
-    if (!authReady) {
-      setTimeout(() => goToPage(destination, requireAuth), 300);
-      return;
-    }
-    if (currentUser) {
-      window.location.href = destination;
-    } else {
-      sessionStorage.setItem("redirectAfterLogin", destination);
-      window.location.href = "login.html";
-    }
+  // ===== 🟢 ناوبری آزاد — همه بخش‌ها بدون لاگین باز هستند =====
+  function goToPage(destination) {
+    window.location.href = destination;
   }
 
   // ===== رفتن به لاگین (از دکمه بالا) =====
