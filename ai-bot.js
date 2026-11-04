@@ -1,5 +1,5 @@
 // ==========================================
-// اسکریپت دستیار هوشمند، خلاصه‌ساز و خواندن صوتی (نسخه نهایی)
+// اسکریپت دستیار هوشمند چند شخصیتی و خلاصه‌ساز
 // ==========================================
 
 const aiBotStyles = `
@@ -13,25 +13,60 @@ const aiBotStyles = `
   
   .ai-chat-window {
     position: fixed; bottom: 90px; right: 20px; width: 350px; max-width: calc(100vw - 40px);
-    height: 450px; background: #fff; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    height: 480px; background: #fff; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);
     display: none; flex-direction: column; z-index: 10000; overflow: hidden; border: 1px solid #eee;
     font-family: 'Vazirmatn', Tahoma, sans-serif;
   }
-  .ai-chat-header { background: #00acc1; color: white; padding: 15px; font-weight: 900; display: flex; justify-content: space-between; align-items: center; }
+  .ai-chat-header { 
+    background: #00acc1; color: white; padding: 15px; font-weight: 900; 
+    display: flex; justify-content: space-between; align-items: center; font-size: 1rem;
+  }
+  
+  /* بخش انتخاب لحن هوش مصنوعی */
+  .ai-tone-selector-container {
+    padding: 10px;
+    background: #f0f4f5;
+    border-bottom: 1px solid #ddd;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .ai-tone-selector-container label {
+    font-size: 0.8rem;
+    color: #333;
+    font-weight: bold;
+    white-space: nowrap;
+  }
+  .ai-tone-select {
+    flex: 1;
+    padding: 6px 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-family: inherit;
+    font-size: 0.85rem;
+    color: #333;
+    outline: none;
+    background: #fff;
+  }
+
   .ai-chat-messages { flex: 1; padding: 15px; overflow-y: auto; background: #f9f9f9; display: flex; flex-direction: column; gap: 10px; font-size: 0.9rem; }
   .ai-msg { padding: 10px 15px; border-radius: 10px; max-width: 85%; line-height: 1.6; white-space: pre-wrap; }
   .ai-msg.user { background: #e0f7fa; color: #006064; align-self: flex-start; }
   .ai-msg.bot { background: #fff; color: #333; align-self: flex-end; border: 1px solid #eee; }
+  
   .ai-chat-input-area { display: flex; padding: 10px; background: #fff; border-top: 1px solid #eee; }
   .ai-chat-input-area input { flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 20px; outline: none; font-family: inherit; font-size: 0.9rem; }
   .ai-chat-input-area button { background: #00acc1; color: white; border: none; border-radius: 50%; width: 40px; height: 40px; margin-right: 10px; cursor: pointer; font-size: 1.2rem; display: flex; justify-content: center; align-items: center; }
-  .ai-tools-container { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin: 15px auto; }
-  .ai-summarize-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; background: #f39c12; color: white; border: none; padding: 10px 20px; border-radius: 30px; font-family: inherit; font-weight: bold; font-size: 0.9rem; cursor: pointer; box-shadow: 0 4px 10px rgba(243, 156, 18, 0.3); transition: 0.3s; }
+
+  /* دکمه خلاصه ساز */
+  .ai-summarize-btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    background: #f39c12; color: white; border: none; padding: 10px 20px;
+    border-radius: 30px; font-family: inherit; font-weight: bold; font-size: 0.9rem;
+    cursor: pointer; box-shadow: 0 4px 10px rgba(243, 156, 18, 0.3);
+    transition: 0.3s; margin: 15px auto;
+  }
   .ai-summarize-btn:hover { background: #d68910; transform: translateY(-2px); }
-  .ai-tts-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; background: #2ecc71; color: white; border: none; padding: 10px 20px; border-radius: 30px; font-family: inherit; font-weight: bold; font-size: 0.9rem; cursor: pointer; box-shadow: 0 4px 10px rgba(46, 204, 113, 0.3); transition: 0.3s; }
-  .ai-tts-btn:hover { background: #27ae60; transform: translateY(-2px); }
-  .ai-tts-btn.speaking { background: #e74c3c; box-shadow: 0 4px 10px rgba(231, 76, 60, 0.3); }
-  .ai-tts-btn.speaking:hover { background: #c0392b; }
 `;
 
 const styleSheet = document.createElement("style");
@@ -45,8 +80,20 @@ const botHTML = `
       <span>دستیار هوشمند</span>
       <span style="cursor:pointer; font-size:1.2rem;" onclick="toggleChat()">✖</span>
     </div>
+    
+    <!-- بخش انتخاب لحن -->
+    <div class="ai-tone-selector-container">
+      <label>لحن ربات:</label>
+      <select id="ai-tone-select" class="ai-tone-select" onchange="changeBotTone()">
+        <option value="normal">معلم جدی (عادی)</option>
+        <option value="child">مثل یک بچه ۷ ساله</option>
+        <option value="story">داستان‌سرا و هیجان‌انگیز</option>
+        <option value="football">با مثال‌های فوتبالی/ورزشی</option>
+      </select>
+    </div>
+
     <div class="ai-chat-messages" id="chatMessages">
-      <div class="ai-msg bot">سلام! من دستیار هوشمند درس مطالعات اجتماعی هستم. هر سوالی داری بپرس! 😊</div>
+      <div class="ai-msg bot">سلام! من دستیار هوشمند درس مطالعات اجتماعی هستم. می‌تونی از منوی بالا لحن من رو عوض کنی! 😊</div>
     </div>
     <div class="ai-chat-input-area">
       <input type="text" id="chatInput" placeholder="سوال خود را بنویسید..." onkeypress="handleChatEnter(event)">
@@ -58,29 +105,20 @@ const botHTML = `
 document.addEventListener('DOMContentLoaded', () => {
     document.body.insertAdjacentHTML('beforeend', botHTML);
     
+    // اگر در صفحه درسنامه هستیم، دکمه خلاصه ساز را زیر کادر سبز اضافه کن
     if (window.location.pathname.includes('-note.html')) {
         const targetBox = document.querySelector('.highlight-box, .goal-box, .intro-box, .info-box') || document.querySelector('.container > div:nth-child(3)');
-        const toolsContainer = document.createElement('div');
-        toolsContainer.className = 'ai-tools-container';
-
+        
         const summarizeBtn = document.createElement('button');
         summarizeBtn.className = 'ai-summarize-btn';
         summarizeBtn.innerHTML = '✨ خلاصه کن';
         summarizeBtn.onclick = summarizeText;
-        toolsContainer.appendChild(summarizeBtn);
-
-        const ttsBtn = document.createElement('button');
-        ttsBtn.className = 'ai-tts-btn';
-        ttsBtn.id = 'ai-tts-btn';
-        ttsBtn.innerHTML = '🔊 خواندن درس';
-        ttsBtn.onclick = toggleTTS;
-        toolsContainer.appendChild(ttsBtn);
 
         if (targetBox) {
-            targetBox.parentNode.insertBefore(toolsContainer, targetBox.nextSibling);
+            targetBox.parentNode.insertBefore(summarizeBtn, targetBox.nextSibling);
         } else {
             const header = document.querySelector('h1') || document.querySelector('.header');
-            if(header) header.parentNode.insertBefore(toolsContainer, header.nextSibling);
+            if(header) header.parentNode.insertBefore(summarizeBtn, header.nextSibling);
         }
     }
 });
@@ -88,6 +126,20 @@ document.addEventListener('DOMContentLoaded', () => {
 function toggleChat() {
   const chatWindow = document.getElementById('aiChatWindow');
   chatWindow.style.display = chatWindow.style.display === 'flex' ? 'none' : 'flex';
+}
+
+function changeBotTone() {
+    const tone = document.getElementById('ai-tone-select').value;
+    const messages = document.getElementById('chatMessages');
+    let toneMsg = "";
+    
+    if (tone === 'child') toneMsg = "باشه! از این به بعد مثل یک بچه ۷ ساله خیلی ساده و بامزه توضیح می‌دم. 🧒";
+    else if (tone === 'story') toneMsg = "عالیه! از این به بعد درس رو برات مثل یک داستان هیجان‌انگیز تعریف می‌کنم. 📖✨";
+    else if (tone === 'football') toneMsg = "چه انتخاب باحالی! از این به بعد با مثال‌های فوتبالی و ورزشی توضیح می‌دم. ⚽🏆";
+    else toneMsg = "بسیار خب! به حالت معلم جدی و رسمی برگشتم. 👨‍🏫";
+
+    messages.innerHTML += `<div class="ai-msg bot" style="background:#e8f8f5; color:#27ae60;">${toneMsg}</div>`;
+    messages.scrollTop = messages.scrollHeight;
 }
 
 function handleChatEnter(event) {
@@ -109,12 +161,27 @@ async function sendChatMessage() {
   messages.scrollTop = messages.scrollHeight;
 
   const GROQ_API_KEY = "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";
+  
+  // خواندن لحن انتخاب شده
+  const selectedTone = document.getElementById('ai-tone-select').value;
+  let systemPrompt = "";
+
+  // تنظیم دستور سیستم بر اساس لحن
+  if (selectedTone === 'child') {
+      systemPrompt = "شما یک معلم هستید که باید مفاهیم مطالعات اجتماعی را برای یک کودک ۷ ساله توضیح دهید. از کلمات بسیار ساده، جذاب و مثال‌های کودکانه استفاده کنید. پاسخ‌ها باید کوتاه باشند.";
+  } else if (selectedTone === 'story') {
+      systemPrompt = "شما یک داستان‌سرای جذاب هستید. باید مفاهیم مطالعات اجتماعی را در قالب یک داستان هیجان‌انگیز، با شخصیت‌پردازی و جذابیت بالا تعریف کنید.";
+  } else if (selectedTone === 'football') {
+      systemPrompt = "شما یک معلم هستید که عاشق فوتبال و ورزش است. باید مفاهیم مطالعات اجتماعی را با استفاده از مثال‌های فوتبالی، ورزشی یا بازی‌های کامپیوتری برای دانش‌آموز توضیح دهید.";
+  } else {
+      systemPrompt = "شما یک معلم دلسوز و متخصص مطالعات اجتماعی هستید. به فارسی، کوتاه و ساده پاسخ دهید.";
+  }
 
   try {
     const payload = {
       model: "openai/gpt-oss-120b",
       messages: [
-        { role: "system", content: "شما یک معلم دلسوز و متخصص مطالعات اجتماعی هستید. به فارسی، کوتاه و ساده پاسخ دهید." },
+        { role: "system", content: systemPrompt },
         { role: "user", content: text }
       ]
     };
@@ -138,6 +205,7 @@ async function sendChatMessage() {
   }
 }
 
+// تابع خلاصه کردن متن درسنامه
 async function summarizeText() {
   let lessonText = document.body.innerText;
   lessonText = lessonText.substring(0, 3000); 
@@ -181,95 +249,4 @@ async function summarizeText() {
     document.getElementById(loadingId).remove();
     messages.innerHTML += `<div class="ai-msg bot" style="color:red;">❌ خطا در خلاصه کردن. لطفاً فیلترشکن را روشن کنید.</div>`;
   }
-}
-
-// ==========================================
-// توابع خواندن درس (نسخه ضد باگ کروم)
-// ==========================================
-let isSpeaking = false;
-let currentUtterances = [];
-let resumeInterval;
-
-function toggleTTS() {
-    const btn = document.getElementById('ai-tts-btn');
-    const synth = window.speechSynthesis;
-
-    if (isSpeaking) {
-        synth.cancel(); 
-        clearInterval(resumeInterval);
-        isSpeaking = false;
-        btn.innerHTML = '🔊 خواندن درس';
-        btn.classList.remove('speaking');
-        return;
-    }
-
-    let contentBox = document.querySelector('.container') || document.body;
-    let clone = contentBox.cloneNode(true);
-    const elementsToRemove = clone.querySelectorAll('.ai-tools-container, .ai-chat-window, .ai-chat-btn, button, script, style, .back-btn');
-    elementsToRemove.forEach(el => el.remove());
-    
-    let fullText = clone.innerText.trim();
-    if (!fullText) {
-        alert("متنی برای خواندن پیدا نشد!");
-        return;
-    }
-
-    const sentences = fullText.match(/[^.!?\n]+[.!?\n]*/g) || [fullText];
-    btn.innerHTML = '⏳ در حال آماده‌سازی...';
-
-    let voices = synth.getVoices();
-    if (voices.length === 0) {
-        synth.onvoiceschanged = () => {
-            playTTS(sentences, btn, synth.getVoices());
-        };
-    } else {
-        playTTS(sentences, btn, voices);
-    }
-}
-
-function playTTS(sentences, btn, voices) {
-    const synth = window.speechSynthesis;
-    const faVoice = voices.find(v => v.lang === 'fa-IR' || v.lang.includes('fa'));
-
-    synth.cancel();
-    currentUtterances = [];
-
-    sentences.forEach((sentence, index) => {
-        if (sentence.trim() === "") return; 
-        
-        const utterance = new SpeechSynthesisUtterance(sentence.trim());
-        utterance.lang = 'fa-IR';
-        utterance.rate = 0.9; 
-        if (faVoice) utterance.voice = faVoice;
-
-        utterance.onend = () => {
-            if (index === sentences.length - 1) {
-                isSpeaking = false;
-                btn.innerHTML = '🔊 خواندن درس';
-                btn.classList.remove('speaking');
-                clearInterval(resumeInterval);
-            }
-        };
-
-        currentUtterances.push(utterance);
-    });
-
-    if (currentUtterances.length === 0) {
-        alert("متنی برای خواندن پیدا نشد.");
-        return;
-    }
-
-    synth.speak(currentUtterances[0]); 
-    
-    clearInterval(resumeInterval);
-    resumeInterval = setInterval(() => {
-        if (synth.speaking && !synth.paused) {
-            synth.pause();
-            synth.resume();
-        }
-    }, 10000);
-
-    isSpeaking = true;
-    btn.innerHTML = '⏸️ توقف خواندن';
-    btn.classList.add('speaking');
 }
