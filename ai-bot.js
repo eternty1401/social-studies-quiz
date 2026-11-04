@@ -74,7 +74,7 @@ styleSheet.innerText = aiBotStyles;
 document.head.appendChild(styleSheet);
 
 const botHTML = `
-  <button class="ai-chat-btn" onclick="toggleChat()">🤖</button>
+  <button class="ai-chat-btn" onclick="toggleChat()">🥷</button>
   <div class="ai-chat-window" id="aiChatWindow">
     <div class="ai-chat-header">
       <span>دستیار هوشمند</span>
