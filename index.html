@@ -574,6 +574,32 @@ body.dark-mode .history-banner {
   .history-banner-text p { font-size: 0.82rem; }
   .history-banner-btn { padding: 10px 20px; font-size: 0.8rem; }
 */
+ /* بنر مهارت زندگی */
+.life-banner {
+  display: block; text-decoration: none; color: #fff;
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.3) 0%, rgba(56, 189, 248, 0.3) 100%);
+  backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.4);
+  border-radius: 24px; padding: 28px 25px; margin-bottom: 30px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.15); position: relative; overflow: hidden;
+  transition: all 0.4s; animation: fadeInUp 1s ease 1.45s backwards;
+}
+.life-banner:hover { transform: translateY(-6px) scale(1.01); box-shadow: 0 20px 50px rgba(139, 92, 246, 0.35); }
+.life-banner-content { display: flex; align-items: center; gap: 20px; position: relative; z-index: 1; }
+.life-banner-icon { font-size: 3.5rem; flex-shrink: 0; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.3)); transition: transform 0.5s; }
+.life-banner:hover .life-banner-icon { transform: scale(1.15) rotate(-8deg); }
+.life-banner-text { flex: 1; text-align: right; }
+.life-banner-text h3 { font-size: 1.25rem; font-weight: 900; margin-bottom: 6px; text-shadow: 0 2px 8px rgba(0,0,0,0.2); }
+.life-banner-text p { font-size: 0.88rem; color: rgba(255,255,255,0.92); line-height: 1.7; }
+.life-banner-btn { background: rgba(255,255,255,0.95); color: #764ba2; padding: 11px 22px; border-radius: 30px; font-weight: 900; font-size: 0.85rem; white-space: nowrap; transition: 0.3s; box-shadow: 0 4px 15px rgba(0,0,0,0.15); }
+.life-banner:hover .life-banner-btn { transform: scale(1.05); background: #fff; }
+
+@media(max-width:600px) {
+  .life-banner { padding: 22px 18px; }
+  .life-banner-content { flex-direction: column; text-align: center; gap: 12px; }
+  .life-banner-text { text-align: center; }
+  .life-banner-icon { font-size: 3rem; }
+  .life-banner-btn { padding: 10px 20px; font-size: 0.8rem; }
+}
 </style>
 </head>
 <body>
@@ -652,6 +678,17 @@ body.dark-mode .history-banner {
     <span class="history-banner-btn">شروع گفتگو ←</span>
   </div>
 </a>
+   <!-- 🌟 بخش مهارت زندگی -->
+<a href="اسم_فایل_خودت.html" class="life-banner">
+  <div class="life-banner-content">
+    <span class="life-banner-icon">🌟</span>
+    <div class="life-banner-text">
+      <h3>مهارت زندگی</h3>
+      <p>آزادی، پارلمان، سواد رسانه‌ای و مهارت‌هایی که برای یک زندگی عالی لازم داری!</p>
+    </div>
+    <span class="life-banner-btn">ورود به بخش مهارت‌ها ←</span>
+  </div>
+</a>
     <!-- بخش درباره -->
     <div class="about-section">
       <h2>✨ درباره این سایت</h2>
@@ -668,6 +705,7 @@ body.dark-mode .history-banner {
         <span class="feature-chip">🎮 بازی آموزشی</span>
         <span class="feature-chip">🏛️ موزه گردی</span>
        <span class="feature-chip">⏳ گفتگو با تاریخ</span>
+       <span class="feature-chip">🌟 مهارت زندگی</span>
       </div>
     </div>
 
