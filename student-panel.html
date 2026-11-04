@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>پنل من | مطالعات اجتماعی</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: Tahoma, Vazirmatn, sans-serif;
+    background: #f0f4f8;
+    color: #1a202c;
+    padding: 16px;
+    line-height: 1.9;
+  }
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  }
+  .header {
+    text-align: center;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid #ebf8ff;
+  }
+  .header h1 {
+    font-size: 1.3rem;
+    color: #2b6cb0;
+    margin-bottom: 6px;
+  }
+  .header .user-name {
+    color: #4a5568;
+    font-size: 0.9rem;
+  }
+  .header .user-name strong { color: #2c5282; }
+
+  .stats {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+  }
+  .stat-card {
+    flex: 1;
+    min-width: 140px;
+    background: linear-gradient(135deg, #4299e1, #2b6cb0);
+    color: #fff;
+    padding: 14px;
+    border-radius: 12px;
+    text-align: center;
+  }
+  .stat-card .num {
+    font-size: 1.8rem;
+    font-weight: bold;
+    display: block;
+  }
+  .stat-card .label {
+    font-size: 0.85rem;
+    opacity: 0.9;
+  }
+
+  .loader {
+    display: none;
+    width: 24px;
+    height: 24px;
+    border: 3px solid #bee3f8;
+    border-top-color: #2b6cb0;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 10px auto;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  h2 {
+    font-size: 1rem;
+    color: #2b6cb0;
+    margin: 16px 0 10px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+  }
+  thead { background: #2b6cb0; color: #fff; }
+  th, td {
+    padding: 10px 8px;
+    text-align: center;
+    border-bottom: 1px solid #e2e8f0;
+  }
+  tbody tr:nth-child(even) { background: #f7fafc; }
+  tbody tr:hover { background: #ebf8ff; }
+
+  .empty-msg { text-align: center; color: #888; padding: 20px; }
+  .error-msg { text-align: center; color: #e53e3e; padding: 20px; }
+
+  .quiz-links {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 10px;
+    margin-top: 10px;
+  }
+  .quiz-link {
+    display: block;
+    padding: 14px;
+    background: #f0fff4;
+    border: 2px solid #9ae6b4;
+    border-radius: 10px;
+    color: #2f855a;
+    text-decoration: none;
+    text-align: center;
+    font-weight: bold;
+    font-size: 0.9rem;
+    transition: all 0.15s;
+  }
+  .quiz-link:hover { background: #c6f6d5; }
+
+  .logout-btn {
+    display: block;
+    width: 100%;
+    margin-top: 20px;
+    padding: 10px;
+    background: #e53e3e;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    cursor: pointer;
+  }
+  .logout-btn:hover { background: #c53030; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>👤 پنل من</h1>
+    <div class="user-name" id="userName">در حال بارگذاری...</div>
+  </div>
+
+  <div class="stats">
+    <div class="stat-card">
+      <span class="num" id="totalGrades">0</span>
+      <span class="label">آزمون‌های داده‌شده</span>
+    </div>
+    <div class="stat-card">
+      <span class="num" id="avgScore">0</span>
+      <span class="label">میانگین نمرات</span>
+    </div>
+  </div>
+
+  <h2>📚 نمرات من</h2>
+  <div class="loader" id="loading"></div>
+  <table>
+    <thead>
+      <tr>
+        <th>آزمون</th>
+        <th>نمره</th>
+        <th>تاریخ</th>
+      </tr>
+    </thead>
+    <tbody id="gradesList"></tbody>
+  </table>
+
+  <h2>🎯 آزمون‌های در دسترس</h2>
+  <div class="quiz-links">
+    <a href="haftom-lesson1-quiz.html" class="quiz-link">📝 آزمون درس ۱ — من حق دارم</a>
+  </div>
+
+  <button class="logout-btn" onclick="logout()">🚪 خروج از حساب</button>
+</div>
+
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
+<script>
+// ==== تنظیمات Firebase ====
+const firebaseConfig = {
+  apiKey: "AIzaSyXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+  authDomain: "social-studies-app-6b600.firebaseapp.com",
+  projectId: "social-studies-app-6b600",
+  storageBucket: "social-studies-app-6b600.appspot.com",
+  messagingSenderId: "000000000000",
+  appId: "1:000000000000:web:xxxxxxxxxxxxxxxxxxxxxx"
+};
+
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+}
+const auth = firebase.auth();
+const db = firebase.firestore();
+
+let currentUser = null;
+
+// ==== بررسی لاگین ====
+auth.onAuthStateChanged((user) => {
+  if (!user) {
+    window.location.href = "login.html";
+    return;
+  }
+  currentUser = user;
+  const displayName = user.displayName || user.email || "دانش‌آموز";
+  document.getElementById("userName").innerHTML = `خوش آمدی، <strong>${displayName}</strong>`;
+  loadMyGrades();
+});
+
+// ==== بارگذاری نمرات خودم ====
+async function loadMyGrades() {
+  const gradesList = document.getElementById("gradesList");
+  const totalGradesEl = document.getElementById("totalGrades");
+  const avgScoreEl = document.getElementById("avgScore");
+  const loadingEl = document.getElementById("loading");
+
+  if (loadingEl) loadingEl.style.display = "block";
+  if (gradesList) gradesList.innerHTML = "";
+
+  try {
+    const snapshot = await db.collection("grades")
+      .where("userId", "==", currentUser.uid)
+      .orderBy("timestamp", "desc")
+      .get();
+
+    const total = snapshot.size;
+    if (totalGradesEl) totalGradesEl.textContent = total;
+
+    if (snapshot.empty) {
+      if (avgScoreEl) avgScoreEl.textContent = "0";
+      gradesList.innerHTML = `<tr><td colspan="3" class="empty-msg">هنوز در آزمونی شرکت نکرده‌ای.</td></tr>`;
+      return;
+    }
+
+    let rowsHtml = "";
+    let sum = 0;
+    let count = 0;
+
+    snapshot.forEach((doc) => {
+      const data = doc.data() || {};
+      const quiz = data.quizName || "—";
+      const score = (typeof data.score === "number") ? data.score : "—";
+      const date = (data.timestamp && data.timestamp.toDate)
+        ? data.timestamp.toDate().toLocaleDateString("fa-IR")
+        : "—";
+
+      if (typeof data.score === "number") {
+        sum += data.score;
+        count++;
+      }
+
+      rowsHtml += `
+        <tr>
+          <td>${quiz}</td>
+          <td>${score}</td>
+          <td>${date}</td>
+        </tr>`;
+    });
+
+    gradesList.innerHTML = rowsHtml;
+    const avg = count > 0 ? (sum / count).toFixed(1) : "0";
+    if (avgScoreEl) avgScoreEl.textContent = avg;
+
+  } catch (error) {
+    console.error("خطا در بارگذاری نمرات:", error);
+    if (gradesList) {
+      gradesList.innerHTML = `<tr><td colspan="3" class="error-msg">خطا: ${error.message}</td></tr>`;
+    }
+    if (totalGradesEl) totalGradesEl.textContent = "0";
+    if (avgScoreEl) avgScoreEl.textContent = "0";
+  } finally {
+    if (loadingEl) loadingEl.style.display = "none";
+  }
+}
+
+// ==== خروج ====
+function logout() {
+  auth.signOut().then(() => {
+    window.location.href = "login.html";
+  }).catch((error) => {
+    console.error("خطا در خروج:", error);
+    alert("خطا در خروج: " + error.message);
+  });
+}
+</script>
+</body>
+</html>
