@@ -250,3 +250,37 @@ function playTTS(text, btn, voices) {
     btn.innerHTML = '⏸️ توقف خواندن';
     btn.classList.add('speaking');
 }
+function playTTS(text, btn, voices) {
+    const synth = window.speechSynthesis;
+    const utterance = new SpeechSynthesisUtterance(text);
+    
+    // تنظیم زبان فارسی
+    utterance.lang = 'fa-IR'; 
+    utterance.rate = 0.9;
+
+    // پیدا کردن صدای فارسی (اگر بود)
+    const faVoice = voices.find(v => v.lang.includes('fa'));
+    if (faVoice) {
+        utterance.voice = faVoice;
+    }
+    // اگر صدای فارسی نبود، از صدای پیش‌فرض گوشی استفاده می‌کنه
+
+    utterance.onend = () => {
+        isSpeaking = false;
+        btn.innerHTML = '🔊 خواندن درس';
+        btn.classList.remove('speaking');
+    };
+
+    utterance.onerror = (e) => {
+        isSpeaking = false;
+        btn.innerHTML = '🔊 خواندن درس';
+        btn.classList.remove('speaking');
+        // به جای الارم مزاحم، فقط در کنسول خطا میده
+        console.log("TTS Error: ", e);
+    };
+
+    synth.speak(utterance);
+    isSpeaking = true;
+    btn.innerHTML = '⏸️ توقف خواندن';
+    btn.classList.add('speaking');
+}
