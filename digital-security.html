@@ -255,11 +255,9 @@
       }
     ];
 
-    async function loadNextScenario() {
-      // مخفی کردن تحلیل قبلی
+    function loadNextScenario() {
       document.getElementById('aiAnalysis').style.display = 'none';
       
-      // اگر به انتهای لیست رسیدیم، برگرد به اول
       if (currentScenarioIndex >= scenarios.length) {
         currentScenarioIndex = 0;
         alert("شما تمام سناریوها را دیدید! از اول شروع می‌کنیم.");
@@ -267,11 +265,9 @@
 
       const scenario = scenarios[currentScenarioIndex];
       
-      // آپدیت هدر گوشی
       document.getElementById('chatTitle').innerText = scenario.title;
       document.getElementById('chatSubtitle').innerText = "پیام جدید";
 
-      // ساخت پیام‌ها در چت
       const chatBody = document.getElementById('chatBody');
       chatBody.innerHTML = `
         <div class="message sender">
@@ -279,7 +275,7 @@
           ${scenario.message}
           
           ${scenario.file ? `
-          <div class="file-attachment" onclick="makeChoice('download', 'danger', '${scenario.promptContext}')">
+          <div class="file-attachment" onclick="makeChoice(${currentScenarioIndex}, 'download')">
             <div class="file-icon">📄</div>
             <div class="file-info">
               <div class="file-name">${scenario.file}</div>
@@ -293,7 +289,7 @@
           <p style="font-size: 0.9rem; margin-bottom: 15px; color: #38bdf8; font-weight: bold;">شما چه کار می‌کنید؟</p>
           <div class="choices-container" id="choicesContainer">
             ${scenario.choices.map((choice, index) => `
-              <button class="choice-btn ${choice.type}" onclick="makeChoice('${choice.text}', '${choice.type}', '${scenario.promptContext}')">
+              <button class="choice-btn ${choice.type}" onclick="makeChoice(${currentScenarioIndex}, ${index})">
                 ${index + 1}. ${choice.text}
               </button>
             `).join('')}
@@ -304,7 +300,19 @@
       chatBody.scrollTop = 0;
     }
 
-    async function makeChoice(choiceText, choiceType, promptContext) {
+    async function makeChoice(scenarioIdx, choiceIdx) {
+      const scenario = scenarios[scenarioIdx];
+      
+      // اگر کاربر روی فایل کلیک کرده باشد
+      let choiceType = "danger";
+      let choiceText = "دانلود فایل";
+      
+      // اگر روی دکمه‌های گزینه کلیک کرده باشد
+      if (typeof choiceIdx === 'number') {
+          choiceType = scenario.choices[choiceIdx].type;
+          choiceText = scenario.choices[choiceIdx].text;
+      }
+
       const aiAnalysis = document.getElementById('aiAnalysis');
       const resultText = document.getElementById('resultText');
       const resultTitle = document.getElementById('resultTitle');
@@ -330,16 +338,20 @@
 
       const prompt = `
         شما یک کارشناس امنیت سایبری هستید.
-        موقعیت (Context): ${promptContext}
+        موقعیت (Context): ${scenario.promptContext}
         دانش‌آموز این واکنش را انتخاب کرده است: "${choiceText}"
         نوع واکنش: ${choiceType === 'safe' ? 'ایمن و هوشمندانه' : 'خطرناک و پرریسک'}
 
         لطفاً به زبان ساده، صمیمی و آموزشی تحلیل کنید:
-        ۱. اگر انتخابش خطرناک بوده، دقیقاً توضیح دهید چه بلایی سرش می‌آید (مثلاً هک شدن، خالی شدن حساب، از دست رفتن اطلاعات).
+        ۱. اگر انتخابش خطرناک بوده، دقیقاً توضیح دهید چه بلایی سرش می‌آید.
         ۲. اگر انتخابش ایمن بوده، تشویقش کنید و بگویید چرا کارش درست بوده.
         ۳. یک نکته طلایی برای دفعات بعد به او یاد بدهید.
-        پاسخ در قالب ۲ پاراگراف کوتاه باشد.
+        پاسخ در قالب ۲ پاراگراف کوتاه و کاملاً فارسی باشد.
       `;
+
+      // ساخت تایم‌اوت برای جلوگیری از گیر کردن در حالت لودینگ
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 ثانیه
 
       try {
         const payload = {
@@ -353,9 +365,11 @@
         const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
           method: "POST",
           headers: { "Authorization": `Bearer ${GROQ_API_KEY}` },
-          body: new Blob([JSON.stringify(payload)], { type: 'application/json' })
+          body: new Blob([JSON.stringify(payload)], { type: 'application/json' }),
+          signal: controller.signal // اتصال تایم‌اوت
         });
 
+        clearTimeout(timeoutId);
         const data = await response.json();
         loadingSpinner.style.display = 'none';
         
@@ -364,13 +378,17 @@
         resultText.innerText = data.choices[0].message.content;
         nextBtn.style.display = 'block';
         
-        // رفتن به سناریوی بعدی برای بار بعد
         currentScenarioIndex++;
 
       } catch (error) {
+        clearTimeout(timeoutId);
         loadingSpinner.style.display = 'none';
         resultIcon.innerText = "❌";
-        resultText.innerText = "خطا در ارتباط با هوش مصنوعی. لطفاً از فیلترشکن استفاده کنید.";
+        if (error.name === 'AbortError') {
+            resultText.innerText = "⏳ زمان پاسخگویی سرور به پایان رسید. لطفاً اینترنت یا فیلترشکن خود را بررسی کرده و صفحه را رفرش کنید.";
+        } else {
+            resultText.innerText = "❌ خطا در ارتباط با هوش مصنوعی. لطفاً از فیلترشکن استفاده کنید.";
+        }
         nextBtn.style.display = 'block';
         console.error(error);
       }
