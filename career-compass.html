@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>قطب‌نمای استعداد و مشاغل | مهارت زندگی</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; font-family:'Vazirmatn',sans-serif; }
+  body {
+    background: linear-gradient(135deg, #0b0f19 0%, #1a1a3a 50%, #2a1b38 100%); /* تم فضایی و مرموز */
+    min-height: 100vh; color: #fff; padding: 30px 20px;
+    display: flex; flex-direction: column; align-items: center;
+  }
+
+  .header { text-align: center; margin-bottom: 30px; }
+  .header h1 { font-size: 2rem; font-weight: 900; margin-bottom: 10px; color: #fbbf24; text-shadow: 0 0 15px rgba(251, 191, 36, 0.3); }
+  .header p { color: #94a3b8; font-size: 0.95rem; line-height: 1.6; }
+
+  /* کارت اصلی */
+  .game-card {
+    background: rgba(30, 41, 59, 0.6); border: 1px solid #475569;
+    border-radius: 24px; padding: 30px 25px; width: 100%; max-width: 650px;
+    backdrop-filter: blur(15px); box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+    position: relative; overflow: hidden; min-height: 400px;
+    display: flex; flex-direction: column;
+  }
+
+  /* صفحه شروع */
+  #start-screen { text-align: center; display: flex; flex-direction: column; justify-content: center; height: 100%; flex: 1; }
+  .start-btn {
+    background: #fbbf24; color: #1a1a3a; border: none; padding: 15px 40px;
+    border-radius: 12px; font-size: 1.2rem; font-weight: 900; font-family: inherit;
+    cursor: pointer; transition: 0.3s; margin-top: 25px; box-shadow: 0 4px 15px rgba(251, 191, 36, 0.4);
+  }
+  .start-btn:hover { background: #fff; transform: translateY(-3px); }
+
+  /* صفحه کوییز */
+  #quiz-screen { display: none; flex: 1; flex-direction: column; }
+  
+  .progress-container {
+    width: 100%; height: 8px; background: rgba(255,255,255,0.1);
+    border-radius: 10px; margin-bottom: 25px; overflow: hidden;
+  }
+  .progress-bar {
+    height: 100%; background: #fbbf24; width: 0%; transition: width 0.4s ease;
+    border-radius: 10px;
+  }
+
+  .question-number { font-size: 0.85rem; color: #fbbf24; margin-bottom: 10px; font-weight: bold; }
+  .question-text { font-size: 1.3rem; font-weight: 900; line-height: 1.7; margin-bottom: 30px; }
+  
+  .options { display: flex; flex-direction: column; gap: 12px; }
+  .option-btn {
+    background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.2);
+    padding: 15px 20px; border-radius: 12px; color: #fff; font-family: inherit;
+    font-size: 1rem; font-weight: 700; cursor: pointer; transition: 0.2s;
+    text-align: right; display: flex; align-items: center; gap: 15px;
+  }
+  .option-btn:hover { background: rgba(251, 191, 36, 0.15); border-color: #fbbf24; transform: translateX(-5px); }
+  .option-btn .icon { font-size: 1.5rem; }
+
+  /* صفحه نتیجه */
+  #result-screen { display: none; flex: 1; flex-direction: column; }
+  
+  .loading-spinner { text-align: center; color: #fbbf24; font-weight: bold; margin: 40px 0; font-size: 1.1rem; display: none; flex: 1; justify-content: center; align-items: center; flex-direction: column; gap: 20px;}
+  
+  .result-box {
+    display: none; background: rgba(16, 185, 129, 0.1); border: 1px solid #10b981;
+    padding: 25px; border-radius: 16px; line-height: 1.9; font-size: 1rem; color: #ecfdf5;
+    white-space: pre-wrap; text-align: justify; flex: 1;
+  }
+  .result-box h3 { color: #10b981; margin-bottom: 15px; font-size: 1.2rem; text-align: center; }
+
+  .restart-btn {
+    display: none; width: 100%; padding: 15px; background: #38bdf8; color: #0f172a;
+    border: none; border-radius: 12px; font-size: 1.1rem; font-weight: 900;
+    font-family: inherit; cursor: pointer; margin-top: 20px; transition: 0.3s;
+  }
+  .restart-btn:hover { background: #fff; transform: translateY(-2px); }
+
+  .spinner {
+    width: 50px; height: 50px; border: 5px solid rgba(251, 191, 36, 0.3);
+    border-top: 5px solid #fbbf24; border-radius: 50%; animation: spin 1s linear infinite;
+  }
+  @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+
+  <div class="header">
+    <h1>🧭 قطب‌نمای استعداد</h1>
+    <p>آینده‌ات رو کشف کن! به ۷ سوال جواب بده تا مشاغلی که بهشون می‌خوری رو پیدا کنیم.</p>
+  </div>
+
+  <div class="game-card">
+    
+    <!-- صفحه شروع -->
+    <div id="start-screen">
+      <div style="font-size: 4rem; margin-bottom: 20px;">🚀</div>
+      <h2 style="color: #fbbf24; margin-bottom: 15px;">آماده‌ای خودت رو بشناسی؟</h2>
+      <p style="line-height: 2; color: #cbd5e1; text-align: justify; font-size: 0.95rem;">
+        هیچ جواب درست یا غلطی وجود نداره. فقط با صداقت به سوالات جواب بده تا هوش مصنوعی بتونه استعدادهای پنهان تو رو کشف کنه و بهترین مسیر شغلی رو بهت پیشنهاد بده.
+      </p>
+      <button class="start-btn" onclick="startQuiz()">شروع آزمون استعداد</button>
+    </div>
+
+    <!-- صفحه کوییز -->
+    <div id="quiz-screen">
+      <div class="progress-container"><div class="progress-bar" id="progressBar"></div></div>
+      <div class="question-number" id="questionNumber">سوال ۱ از ۷</div>
+      <div class="question-text" id="questionText">متن سوال...</div>
+      <div class="options" id="optionsContainer">
+        <!-- گزینه‌ها اینجا قرار میگیرند -->
+      </div>
+    </div>
+
+    <!-- صفحه نتیجه -->
+    <div id="result-screen">
+      <div class="loading-spinner" id="loading">
+        <div class="spinner"></div>
+        <div>مشاور هوشمند در حال تحلیل شخصیت شماست... ⏳</div>
+      </div>
+      <div class="result-box" id="result-box">
+        <h3>🌟 نقشه راه اختصاصی شما</h3>
+        <div id="result-text"></div>
+      </div>
+      <button class="restart-btn" id="restart-btn" onclick="resetQuiz()">🔄 آزمون مجدد</button>
+    </div>
+
+  </div>
+
+  <script>
+    const GROQ_API_KEY = "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";
+    
+    // سوالات و گزینه‌ها
+    const questions = [
+      {
+        q: "وقتی وقت آزاد داری، بیشتر دوست داری چه کاری انجام بدی؟",
+        options: [
+          { icon: "🎨", text: "نقاشی، طراحی یا ساختن چیزهای خلاقانه", tag: "خلاقیت" },
+          { icon: "💻", text: "کار با کامپیوتر، بازی یا کدنویسی", tag: "تکنولوژی" },
+          { icon: "⚽", text: "ورزش، بازی‌های گروهی یا فعالیت بدنی", tag: "ورزش و حرکت" },
+          { icon: "📚", text: "خواندن کتاب، تماشای مستند یا یادگیری چیزهای جدید", tag: "دانش‌محوری" }
+        ]
+      },
+      {
+        q: "توی مدرسه، کدوم درس رو بیشتر دوست داری؟",
+        options: [
+          { icon: "🧮", text: "ریاضی و علوم تجربی", tag: "تحلیل‌گری" },
+          { icon: "📖", text: "ادبیات، تاریخ و مطالعات اجتماعی", tag: "علوم انسانی" },
+          { icon: "🎨", text: "هنر و کار و فناوری", tag: "هنر" },
+          { icon: "🗣️", text: "زبان انگلیسی و ارتباطات", tag: "زبان و ارتباطات" }
+        ]
+      },
+      {
+        q: "وقتی با مشکلی روبرو می‌شی، چطور حلش می‌کنی؟",
+        options: [
+          { icon: "🧠", text: "دقیق فکر می‌کنم و دنبال یک راه‌حل منطقی می‌گردم", tag: "منطق" },
+          { icon: "🗣️", text: "با دیگران مشورت می‌کنم و از تجربه‌شون استفاده می‌کنم", tag: "کار تیمی" },
+          { icon: "💡", text: "دنبال یک راه‌حل جدید و خلاقانه می‌گردم که کسی بهش فکر نکرده", tag: "خلاقیت" },
+          { icon: "✋", text: "سعی می‌کنم آرامشمو حفظ کنم و قدم به قدم جلو برم", tag: "صبر و دقت" }
+        ]
+      },
+      {
+        q: "دوست داری در آینده توی چه محیطی کار کنی؟",
+        options: [
+          { icon: "🏢", text: "یک دفتر مدرن با کامپیوتر و تکنولوژی", tag: "اداری/فنی" },
+          { icon: "🏥", text: "بیمارستان یا محیطی که به مردم کمک می‌کنم", tag: "خدمات درمانی" },
+          { icon: "🌳", text: "طبیعت، فضای باز یا سفر به نقاط مختلف", tag: "طبیعت" },
+          { icon: "🎬", text: "یک استودیو، کارگاه هنری یا فضای خلاقانه", tag: "هنری" }
+        ]
+      },
+      {
+        q: "کدوم یکی از این ویژگی‌ها رو بیشتر توی خودت می‌بینی؟",
+        options: [
+          { icon: "🎤", text: "توانایی متقاعد کردن و رهبری دیگران", tag: "رهبری" },
+          { icon: "🔍", text: "دقت بالا و توجه به جزئیات", tag: "دقت" },
+          { icon: "🤝", text: "مهارت بالا در ارتباط و همدلی با دیگران", tag: "ارتباط" },
+          { icon: "🎯", text: "تمرکز بالا و استقلال در کار", tag: "استقلال" }
+        ]
+      },
+      {
+        q: "اگر بخوای یک پروژه بزرگ بسازی، ترجیح می‌دی چه نقشی داشته باشی؟",
+        options: [
+          { icon: "👨‍💼", text: "مدیر و رهبر تیم باشم", tag: "مدیریت" },
+          { icon: "🛠️", text: "کسی که تکنولوژی و ابزارها رو می‌سازه", tag: "فنی" },
+          { icon: "✍️", text: "کسی که ایده و محتوا رو طراحی می‌کنه", tag: "خلاقیت" },
+          { icon: "📊", text: "کسی که برنامه‌ریزی و حساب‌کتاب‌ها رو انجام می‌ده", tag: "تحلیل" }
+        ]
+      },
+      {
+        q: "آینده رو چطور تصور می‌کنی؟",
+        options: [
+          { icon: "🤖", text: "دنیایی پر از ربات‌ها و هوش مصنوعی", tag: "تکنولوژی" },
+          { icon: "🌍", text: "دنیایی که در اون به محیط زیست و طبیعت توجه می‌شه", tag: "محیط زیست" },
+          { icon: "🧬", text: "دنیایی که بیماری‌ها ریشه‌کن می‌شن و انسان‌ها بیشتر عمر می‌کنن", tag: "سلامت" },
+          { icon: "🎭", text: "دنیایی پر از هنر، موسیقی و خلاقیت", tag: "هنر" }
+        ]
+      }
+    ];
+
+    let currentQuestion = 0;
+    let userAnswers = [];
+
+    function startQuiz() {
+      document.getElementById('start-screen').style.display = 'none';
+      document.getElementById('quiz-screen').style.display = 'flex';
+      currentQuestion = 0;
+      userAnswers = [];
+      showQuestion();
+    }
+
+    function showQuestion() {
+      if (currentQuestion >= questions.length) {
+        finishQuiz();
+        return;
+      }
+
+      const q = questions[currentQuestion];
+      document.getElementById('questionNumber').innerText = `سوال ${currentQuestion + 1} از ${questions.length}`;
+      document.getElementById('questionText').innerText = q.q;
+      
+      // آپدیت نوار پیشرفت
+      const progress = ((currentQuestion) / questions.length) * 100;
+      document.getElementById('progressBar').style.width = `${progress}%`;
+
+      const optionsContainer = document.getElementById('optionsContainer');
+      optionsContainer.innerHTML = '';
+
+      q.options.forEach(opt => {
+        const btn = document.createElement('button');
+        btn.className = 'option-btn';
+        btn.innerHTML = `<span class="icon">${opt.icon}</span> <span>${opt.text}</span>`;
+        btn.onclick = () => selectOption(opt.text, opt.tag);
+        optionsContainer.appendChild(btn);
+      });
+    }
+
+    function selectOption(text, tag) {
+      // ذخیره جواب
+      userAnswers.push({ question: questions[currentQuestion].q, answer: text, tag: tag });
+      
+      // رفتن به سوال بعدی
+      currentQuestion++;
+      if (currentQuestion < questions.length) {
+        showQuestion();
+      } else {
+        document.getElementById('progressBar').style.width = '100%';
+        finishQuiz();
+      }
+    }
+
+    async function finishQuiz() {
+      document.getElementById('quiz-screen').style.display = 'none';
+      document.getElementById('result-screen').style.display = 'flex';
+      document.getElementById('loading').style.display = 'flex';
+      document.getElementById('result-box').style.display = 'none';
+      document.getElementById('restart-btn').style.display = 'none';
+
+      // تبدیل جواب‌ها به متن برای فرستادن به هوش مصنوعی
+      let answersText = userAnswers.map((a, i) => `${i+1}. ${a.question} -> پاسخ: ${a.answer} (ویژگی: ${a.tag})`).join('\n');
+
+      const prompt = `
+        شما یک مشاور شغلی و استعدادیاب حرفه‌ای برای دانش‌آموزان دوره متوسطه هستید.
+        دانش‌آموز به این سوالات این‌طور پاسخ داده است:
+        ${answersText}
+
+        لطفاً بر اساس این پاسخ‌ها، شخصیت و استعدادهای او را تحلیل کنید و خروجی را دقیقاً در قالب زیر به زبان فارسی روان و صمیمی بنویسید:
+
+        ۱. **تحلیل شخصیت:** یک پاراگراف کوتاه درباره اینکه چه تیپ شخصیتی داره (مثلاً خلاق، تحلیلگر، اجتماعی).
+        ۲. **۳ شغل پیشنهادی:** سه شغل مدرن و آینده‌دار که کاملاً با روحیات او هم‌خوانی دارد را معرفی کنید و برای هر کدام یک جمله توضیح دهید چرا به او می‌خورد.
+        ۳. **دروس کلیدی:** بگویید برای رسیدن به این مشاغل، باید روی کدام درس‌های مدرسه (مثل ریاضی، علوم، ادبیات، زبان) بیشتر تمرکز کند.
+        ۴. **یک جمله انگیزشی:** در پایان یک جمله انگیزشی و امیدوارکننده برای آینده او بنویسید.
+
+        (خروجی را با شماره‌گذاری و کاملاً خوانا بنویسید).
+      `;
+
+      try {
+        const payload = {
+          model: "openai/gpt-oss-120b",
+          messages: [
+            { role: "system", content: "شما یک مشاور شغلی دلسوز و متخصص هستید. پاسخ‌ها را به فارسی روان و با لحنی صمیمی و تشویق‌آمیز بنویسید." },
+            { role: "user", content: prompt }
+          ]
+        };
+
+        const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+          method: "POST",
+          headers: { "Authorization": `Bearer ${GROQ_API_KEY}` },
+          body: new Blob([JSON.stringify(payload)], { type: 'application/json' })
+        });
+
+        const data = await response.json();
+        document.getElementById('loading').style.display = 'none';
+        
+        if (data.error) throw new Error(data.error.message);
+        
+        document.getElementById('result-box').style.display = 'block';
+        document.getElementById('result-text').innerText = data.choices[0].message.content;
+        document.getElementById('restart-btn').style.display = 'block';
+
+      } catch (error) {
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('result-box').style.display = 'block';
+        document.getElementById('result-text').innerText = "❌ خطا در ارتباط با هوش مصنوعی. لطفاً از فیلترشکن استفاده کنید.";
+        document.getElementById('restart-btn').style.display = 'block';
+      }
+    }
+
+    function resetQuiz() {
+      document.getElementById('result-screen').style.display = 'none';
+      document.getElementById('start-screen').style.display = 'flex';
+    }
+  </script>
+</body>
+</html>
