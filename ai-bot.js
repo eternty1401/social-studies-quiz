@@ -1,5 +1,5 @@
 // ==========================================
-// اسکریپت دستیار هوشمند، خلاصه‌ساز و خواندن صوتی
+// اسکریپت دستیار هوشمند، خلاصه‌ساز و خواندن صوتی (نسخه نهایی)
 // ==========================================
 
 const aiBotStyles = `
@@ -39,7 +39,7 @@ styleSheet.innerText = aiBotStyles;
 document.head.appendChild(styleSheet);
 
 const botHTML = `
-  <button class="ai-chat-btn" onclick="toggleChat()">🥷</button>
+  <button class="ai-chat-btn" onclick="toggleChat()">🤖</button>
   <div class="ai-chat-window" id="aiChatWindow">
     <div class="ai-chat-header">
       <span>دستیار هوشمند</span>
@@ -184,16 +184,19 @@ async function summarizeText() {
 }
 
 // ==========================================
-// توابع خواندن درس (اصلاح‌شده برای کروم)
+// توابع خواندن درس (نسخه ضد باگ کروم)
 // ==========================================
 let isSpeaking = false;
+let currentUtterances = [];
+let resumeInterval;
 
 function toggleTTS() {
     const btn = document.getElementById('ai-tts-btn');
     const synth = window.speechSynthesis;
 
     if (isSpeaking) {
-        synth.cancel();
+        synth.cancel(); 
+        clearInterval(resumeInterval);
         isSpeaking = false;
         btn.innerHTML = '🔊 خواندن درس';
         btn.classList.remove('speaking');
@@ -205,81 +208,67 @@ function toggleTTS() {
     const elementsToRemove = clone.querySelectorAll('.ai-tools-container, .ai-chat-window, .ai-chat-btn, button, script, style, .back-btn');
     elementsToRemove.forEach(el => el.remove());
     
-    let textToRead = clone.innerText.trim();
-    if (!textToRead) return;
+    let fullText = clone.innerText.trim();
+    if (!fullText) {
+        alert("متنی برای خواندن پیدا نشد!");
+        return;
+    }
 
+    const sentences = fullText.match(/[^.!?\n]+[.!?\n]*/g) || [fullText];
     btn.innerHTML = '⏳ در حال آماده‌سازی...';
 
-    // رفع باگ کروم: گاهی لیست صداها کمی دیر لود می‌شود
     let voices = synth.getVoices();
     if (voices.length === 0) {
         synth.onvoiceschanged = () => {
-            voices = synth.getVoices();
-            playTTS(textToRead, btn, voices);
+            playTTS(sentences, btn, synth.getVoices());
         };
     } else {
-        playTTS(textToRead, btn, voices);
+        playTTS(sentences, btn, voices);
     }
 }
 
-function playTTS(text, btn, voices) {
+function playTTS(sentences, btn, voices) {
     const synth = window.speechSynthesis;
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = 'fa-IR'; 
-    utterance.rate = 0.9;
+    const faVoice = voices.find(v => v.lang === 'fa-IR' || v.lang.includes('fa'));
 
-    // پیدا کردن صدای فارسی
-    const faVoice = voices.find(v => v.lang.includes('fa'));
-    if (faVoice) utterance.voice = faVoice;
+    synth.cancel();
+    currentUtterances = [];
 
-    utterance.onend = () => {
-        isSpeaking = false;
-        btn.innerHTML = '🔊 خواندن درس';
-        btn.classList.remove('speaking');
-    };
+    sentences.forEach((sentence, index) => {
+        if (sentence.trim() === "") return; 
+        
+        const utterance = new SpeechSynthesisUtterance(sentence.trim());
+        utterance.lang = 'fa-IR';
+        utterance.rate = 0.9; 
+        if (faVoice) utterance.voice = faVoice;
 
-    utterance.onerror = (e) => {
-        isSpeaking = false;
-        btn.innerHTML = '🔊 خواندن درس';
-        btn.classList.remove('speaking');
-        alert("⚠️ خواندن متن ممکن نشد. لطفاً لینک سایت را کپی کرده و مستقیماً در اپلیکیشن کروم (Chrome) باز کنید. مرورگرهای داخل تلگرام یا اینستاگرام این قابلیت را مسدود می‌کنند.");
-    };
+        utterance.onend = () => {
+            if (index === sentences.length - 1) {
+                isSpeaking = false;
+                btn.innerHTML = '🔊 خواندن درس';
+                btn.classList.remove('speaking');
+                clearInterval(resumeInterval);
+            }
+        };
 
-    synth.speak(utterance);
-    isSpeaking = true;
-    btn.innerHTML = '⏸️ توقف خواندن';
-    btn.classList.add('speaking');
-}
-function playTTS(text, btn, voices) {
-    const synth = window.speechSynthesis;
-    const utterance = new SpeechSynthesisUtterance(text);
+        currentUtterances.push(utterance);
+    });
+
+    if (currentUtterances.length === 0) {
+        alert("متنی برای خواندن پیدا نشد.");
+        return;
+    }
+
+    synth.speak(currentUtterances[0]); 
     
-    // تنظیم زبان فارسی
-    utterance.lang = 'fa-IR'; 
-    utterance.rate = 0.9;
+    clearInterval(resumeInterval);
+    resumeInterval = setInterval(() => {
+        if (synth.speaking && !synth.paused) {
+            synth.pause();
+            synth.resume();
+        }
+    }, 10000);
 
-    // پیدا کردن صدای فارسی (اگر بود)
-    const faVoice = voices.find(v => v.lang.includes('fa'));
-    if (faVoice) {
-        utterance.voice = faVoice;
-    }
-    // اگر صدای فارسی نبود، از صدای پیش‌فرض گوشی استفاده می‌کنه
-
-    utterance.onend = () => {
-        isSpeaking = false;
-        btn.innerHTML = '🔊 خواندن درس';
-        btn.classList.remove('speaking');
-    };
-
-    utterance.onerror = (e) => {
-        isSpeaking = false;
-        btn.innerHTML = '🔊 خواندن درس';
-        btn.classList.remove('speaking');
-        // به جای الارم مزاحم، فقط در کنسول خطا میده
-        console.log("TTS Error: ", e);
-    };
-
-    synth.speak(utterance);
     isSpeaking = true;
     btn.innerHTML = '⏸️ توقف خواندن';
     btn.classList.add('speaking');
