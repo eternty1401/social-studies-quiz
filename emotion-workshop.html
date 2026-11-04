@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>کارگاه هوش هیجانی | مهارت زندگی</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; font-family:'Vazirmatn',sans-serif; }
+  body {
+    background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
+    min-height: 100vh; color: #fff; padding: 30px 20px;
+    display: flex; flex-direction: column; align-items: center;
+  }
+
+  .header { text-align: center; margin-bottom: 30px; }
+  .header h1 { font-size: 2rem; font-weight: 900; margin-bottom: 10px; color: #a78bfa; text-shadow: 0 0 15px rgba(167, 139, 250, 0.3); }
+  .header p { color: #cbd5e1; font-size: 0.95rem; line-height: 1.6; }
+
+  .game-card {
+    background: rgba(30, 41, 59, 0.6); border: 1px solid #475569;
+    border-radius: 20px; padding: 30px 25px; width: 100%; max-width: 650px;
+    backdrop-filter: blur(10px); box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    position: relative; overflow: hidden;
+  }
+
+  /* بخش سناریو */
+  .scenario-box {
+    background: #fff; color: #1e293b; padding: 25px; border-radius: 15px;
+    font-size: 1.1rem; line-height: 1.9; margin-bottom: 25px; min-height: 120px;
+    display: flex; flex-direction: column; justify-content: center;
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
+  }
+  .scenario-title { color: #7c3aed; font-weight: 900; margin-bottom: 10px; display: block; font-size: 0.9rem;}
+
+  /* دکمه‌های انتخاب */
+  .choices { display: flex; flex-direction: column; gap: 12px; }
+  .choice-btn {
+    background: rgba(255,255,255,0.05); color: #e2e8f0; border: 1px solid #64748b;
+    padding: 15px 20px; border-radius: 12px; font-family: inherit; font-size: 1rem;
+    font-weight: 700; cursor: pointer; transition: 0.3s; text-align: right;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .choice-btn:hover { background: rgba(255,255,255,0.15); border-color: #a78bfa; transform: translateX(-5px); }
+  .choice-btn .num {
+    background: #a78bfa; color: #1e1b4b; width: 25px; height: 25px; border-radius: 50%;
+    display: flex; justify-content: center; align-items: center; font-weight: 900; font-size: 0.85rem; flex-shrink: 0;
+  }
+
+  /* بخش تحلیل هوش مصنوعی */
+  .ai-analysis {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(30, 27, 75, 0.98); backdrop-filter: blur(5px);
+    padding: 25px; display: none; flex-direction: column; z-index: 10;
+    animation: fadeIn 0.4s ease; overflow-y: auto;
+  }
+  .ai-analysis h3 { color: #a78bfa; font-size: 1.2rem; margin-bottom: 15px; text-align: center; }
+  .ai-analysis p { font-size: 0.95rem; line-height: 1.8; color: #e2e8f0; margin-bottom: 20px; text-align: justify; white-space: pre-wrap; }
+  .ai-analysis .result-icon { font-size: 3rem; text-align: center; margin-bottom: 15px; }
+  
+  .next-btn {
+    background: #a78bfa; color: #1e1b4b; border: none; padding: 15px;
+    border-radius: 12px; font-family: inherit; font-size: 1rem; font-weight: 900;
+    cursor: pointer; width: 100%; transition: 0.3s; margin-top: auto;
+  }
+  .next-btn:hover { background: #c4b5fd; transform: translateY(-2px); }
+
+  .loading-spinner { text-align: center; color: #a78bfa; font-weight: bold; display: none; margin: 20px 0; font-size: 1.1rem; }
+
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+</style>
+</head>
+<body>
+
+  <div class="header">
+    <h1>🧠 کارگاه هوش هیجانی</h1>
+    <p>موقعیت‌های سخت توی زندگی زیادن. بیا یاد بگیریم چطور بهترین واکنش رو نشون بدیم.</p>
+  </div>
+
+  <div class="game-card">
+    
+    <!-- سناریو -->
+    <div id="game-area">
+      <div class="scenario-box" id="scenario-text">
+        <!-- متن سناریو اینجا قرار میگیره -->
+      </div>
+
+      <div class="choices" id="choices-container">
+        <!-- گزینه‌ها اینجا قرار میگیرن -->
+      </div>
+    </div>
+
+    <!-- بخش تحلیل -->
+    <div class="ai-analysis" id="aiAnalysis">
+      <div class="result-icon" id="resultIcon">🤖</div>
+      <h3>مشاور هوشمند شما</h3>
+      <p id="resultText"></p>
+      <div class="loading-spinner" id="loadingSpinner">مشاور در حال بررسی احساسات شماست... ⏳</div>
+      <button class="next-btn" id="nextBtn" onclick="loadNextScenario()" style="display: none;">موقعیت بعدی ←</button>
+    </div>
+
+  </div>
+
+  <script>
+    const GROQ_API_KEY = "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";
+    let currentScenarioIndex = 0;
+
+    // سناریوها و انتخاب‌ها
+    const scenarios = [
+      {
+        title: "😡 مدیریت خشم",
+        text: "در زنگ تفریح، یکی از همکلاسی‌هات جلوی همه صدات می‌کنه و مسخره‌ات می‌کنه. همه می‌خندن و تو خیلی عصبانی و خجالت‌زده شدی. چیکار می‌کنی؟",
+        choices: [
+          { text: "با مشت می‌زنم توی دهنش تا حساب کار دستش بیاد!", type: "aggressive" },
+          { text: "چیزی نمی‌گم، ولی تا آخر سال باهاش قهر می‌کنم.", type: "passive" },
+          { text: "با اعتماد به نفس می‌گم: «فکر نمی‌کنم این رفتارت اصلاً بامزه باشه» و می‌رم پیش مشاور.", type: "assertive" }
+        ]
+      },
+      {
+        title: "📚 استرس امتحان",
+        text: "فردا امتحان ریاضی داری و هنوز هیچی نخوندی. خیلی استرس داری و قلبت تند می‌زنه. شب شده و خیلی خسته‌ای. واکنشت چیه؟",
+        choices: [
+          { text: "تا صبح بیدار می‌مونم و با استرس و گریه همه‌چیز رو حفظ می‌کنم.", type: "panic" },
+          { text: "اصلاً می‌خوابم! فردا هر چی شد شد، دیگه نمی‌تونم کاری کنم.", type: "avoidant" },
+          { text: "چند نفس عمیق می‌کشم، مهم‌ترین بخش‌ها رو با آرامش می‌خونم و می‌خوابم که صبح سرحال باشم.", type: "healthy" }
+        ]
+      },
+      {
+        title: "👥 فشار دوستان",
+        text: "دوستانت ازت می‌خوان که با هم یه کار خطرناک (مثلاً رفتن به یه جای خیلی خطرناک یا کار خلاف) رو انجام بدید. اگر نری میگن تو ترسویی و بچه نیستی. چیکار می‌کنی؟",
+        choices: [
+          { text: "برای اینکه فکر نکنن ترسوام، با اونا می‌رم.", type: "peer_pressure" },
+          { text: "با عصبانیت بهشون می‌گم: «شماها احمقید!» و بهشون بی‌احترامی می‌کنم.", type: "aggressive" },
+          { text: "با آرامش می‌گم: «نه، من این کار رو نمی‌کنم. اگه دوست واقعی من هستید، این رو قبول کنید» و می‌رم.", type: "assertive" }
+        ]
+      },
+      {
+        title: "😔 شکست و ناامیدی",
+        text: "نتیجه یک مسابقه یا آزمون مهم رو زدن و تو قبول نشدی، در حالی که خیلی تلاش کرده بودی. خیلی ناراحتی. چیکار می‌کنی؟",
+        choices: [
+          { text: "کلاً بی‌خیال می‌شم و می‌گم «من هیچ‌وقت موفق نمی‌شم».", type: "hopeless" },
+          { text: "ناراحتیم رو قبول می‌کنم، یه بار گریه می‌کنم، بعد بررسی می‌کنم کجا اشتباه کردم تا دفعه بعد بهتر بشم.", type: "healthy" },
+          { text: "تقصیر رو می‌ندازم گردن معلم و شرایط و میگم همه‌چیز ناعادلانه بود.", type: "blaming" }
+        ]
+      }
+    ];
+
+    function loadNextScenario() {
+      // انتخاب تصادفی یک سناریو (یا به ترتیب)
+      currentScenarioIndex = (currentScenarioIndex + 1) % scenarios.length;
+      const scenario = scenarios[currentScenarioIndex];
+
+      // آپدیت UI
+      document.getElementById('aiAnalysis').style.display = 'none';
+      document.getElementById('game-area').style.display = 'block';
+      
+      document.getElementById('scenario-text').innerHTML = `<span class="scenario-title">${scenario.title}</span>${scenario.text}`;
+
+      const choicesContainer = document.getElementById('choices-container');
+      choicesContainer.innerHTML = '';
+
+      scenario.choices.forEach((choice, index) => {
+        const btn = document.createElement('button');
+        btn.className = 'choice-btn';
+        btn.innerHTML = `<span class="num">${index + 1}</span> <span>${choice.text}</span>`;
+        btn.onclick = () => makeChoice(choice.text, choice.type, scenario.title);
+        choicesContainer.appendChild(btn);
+      });
+    }
+
+    async function makeChoice(choiceText, choiceType, scenarioTitle) {
+      const aiAnalysis = document.getElementById('aiAnalysis');
+      const resultText = document.getElementById('resultText');
+      const resultIcon = document.getElementById('resultIcon');
+      const loadingSpinner = document.getElementById('loadingSpinner');
+      const nextBtn = document.getElementById('nextBtn');
+
+      // نمایش تحلیل و لودینگ
+      aiAnalysis.style.display = 'flex';
+      loadingSpinner.style.display = 'block';
+      nextBtn.style.display = 'none';
+      resultText.innerText = "";
+      resultIcon.innerText = "⏳";
+
+      // پرامپت برای هوش مصنوعی
+      const prompt = `
+        شما یک مشاور روانشناس و متخصص هوش هیجانی برای نوجوانان هستید.
+        موضوع سناریو: "${scenarioTitle}"
+        دانش‌آموز این گزینه را انتخاب کرده است: "${choiceText}"
+        نوع واکنش: ${choiceType} (ممکن است Aggressive=پرخاشگرانه، Passive=منفعل، Assertive=قاطعانه، Healthy=سالم، Panic=هول کردن باشد).
+
+        لطفاً به زبان صمیمی، دلسوزانه و کاملاً غیرقضاوتی پاسخ دهید:
+        ۱. اول احساسش را تأیید کنید (مثلاً "کاملاً درک می‌کنم که عصبانی شدی").
+        ۲. نوع واکنش او را تحلیل کنید (آیا باعث آسیب به خودش یا دیگران می‌شود؟).
+        ۳. بهترین راهکار جایگزین (مثلاً واکنش قاطعانه و سالم) را با مثال به او یاد دهید.
+        
+        پاسخ در قالب ۲ تا ۳ پاراگراف کوتاه و قابل فهم باشد.
+      `;
+
+      try {
+        const payload = {
+          model: "openai/gpt-oss-120b",
+          messages: [
+            { role: "system", content: "شما یک مشاور دلسوز و متخصص هوش هیجانی هستید که به زبان فارسی صحبت می‌کنید. لحن شما باید آرامش‌بخش و آموزشی باشد." },
+            { role: "user", content: prompt }
+          ]
+        };
+
+        const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+          method: "POST",
+          headers: { "Authorization": `Bearer ${GROQ_API_KEY}` },
+          body: new Blob([JSON.stringify(payload)], { type: 'application/json' })
+        });
+
+        const data = await response.json();
+        loadingSpinner.style.display = 'none';
+        
+        if (data.error) throw new Error(data.error.message);
+        
+        // انتخاب آیکون بر اساس نوع واکنش
+        if (choiceType === 'assertive' || choiceType === 'healthy') {
+          resultIcon.innerText = "🌟";
+        } else if (choiceType === 'aggressive' || choiceType === 'panic') {
+          resultIcon.innerText = "💡";
+        } else {
+          resultIcon.innerText = "🤔";
+        }
+
+        resultText.innerText = data.choices[0].message.content;
+        nextBtn.style.display = 'block';
+
+      } catch (error) {
+        loadingSpinner.style.display = 'none';
+        resultIcon.innerText = "❌";
+        resultText.innerText = "خطا در ارتباط با مشاور. لطفاً از فیلترشکن استفاده کنید.";
+        nextBtn.style.display = 'block';
+        console.error(error);
+      }
+    }
+
+    // شروع بازی با بارگذاری اولین سناریو
+    window.onload = () => {
+      // برای اینکه هر بار سناریو متفاوت باشه، یک ایندکس تصادفی انتخاب میکنیم
+      currentScenarioIndex = Math.floor(Math.random() * scenarios.length) - 1;
+      loadNextScenario();
+    };
+  </script>
+</body>
+</html>
