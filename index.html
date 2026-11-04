@@ -29,8 +29,7 @@
   }
   body.dark-mode .grade-card,
   body.dark-mode .teacher-badge,
-  body.dark-mode .about-section,
-  body.dark-mode .auth-bar {
+  body.dark-mode .about-section {
     background: rgba(0, 0, 0, 0.4);
     border-color: rgba(255, 255, 255, 0.1);
   }
@@ -51,32 +50,6 @@
     z-index: 100; transition: 0.3s; color: #fff;
   }
   .theme-toggle:hover { transform: scale(1.1); background: rgba(255,255,255,0.3); }
-
-  .auth-bar {
-    position: fixed; top: 20px; right: 20px;
-    display: none; align-items: center; gap: 8px;
-    background: rgba(255,255,255,0.2);
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
-    border: 1px solid rgba(255,255,255,0.3);
-    padding: 8px 14px; border-radius: 50px;
-    z-index: 100;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-    font-size: 0.85rem;
-  }
-  .auth-bar .user-name {
-    font-weight: 700; max-width: 120px;
-    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-  }
-  .auth-bar button {
-    background: rgba(255,255,255,0.95); color: #764ba2;
-    border: none; padding: 6px 14px; border-radius: 20px;
-    font-family: inherit; font-weight: 700; font-size: 0.8rem;
-    cursor: pointer; transition: 0.2s;
-  }
-  .auth-bar button:hover { transform: scale(1.05); background: #fff; }
-  .auth-bar .logout-btn { background: #ff6b9d; color: #fff; }
-  .auth-bar .logout-btn:hover { background: #e05a8a; }
 
   @keyframes gradientShift {
     0% { background-position: 0% 50%; }
@@ -103,7 +76,7 @@
 
   .header {
     text-align: center; margin-bottom: 40px;
-    z-index: 1; position: relative; margin-top: 50px;
+    z-index: 1; position: relative;
   }
   .header h1 {
     font-size: 2.6rem; font-weight: 900; margin-bottom: 15px;
@@ -179,7 +152,6 @@
     box-shadow: 0 8px 32px rgba(0,0,0,0.15);
     position: relative; overflow: hidden;
     animation: fadeInUp 1s ease backwards;
-    cursor: pointer;
   }
   .grade-card:nth-child(1) { animation-delay: 0.8s; }
   .grade-card:nth-child(2) { animation-delay: 1s; }
@@ -238,7 +210,6 @@
     position: relative; overflow: hidden;
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     animation: fadeInUp 1s ease 1.35s backwards;
-    cursor: pointer;
   }
   .museum-banner::before {
     content: ''; position: absolute; inset: 0;
@@ -298,7 +269,6 @@
     position: relative; overflow: hidden;
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     animation: fadeInUp 1s ease 1.4s backwards;
-    cursor: pointer;
   }
   .history-banner::before {
     content: ''; position: absolute; inset: 0;
@@ -350,7 +320,6 @@
     border-radius: 24px; padding: 28px 25px; margin-bottom: 30px;
     box-shadow: 0 8px 32px rgba(0,0,0,0.15); position: relative; overflow: hidden;
     transition: all 0.4s; animation: fadeInUp 1s ease 1.45s backwards;
-    cursor: pointer;
   }
   .life-banner:hover { transform: translateY(-6px) scale(1.01); box-shadow: 0 20px 50px rgba(139, 92, 246, 0.35); }
   .life-banner-content { display: flex; align-items: center; gap: 20px; position: relative; z-index: 1; }
@@ -409,7 +378,6 @@
     body { padding: 25px 15px; }
     .header h1 { font-size: 1.9rem; }
     .header .subtitle { font-size: 0.95rem; }
-    .header { margin-top: 60px; }
     .teacher-badge { padding: 10px 22px; font-size: 0.9rem; }
     .section-title { font-size: 1.2rem; }
     .grade-card { padding: 30px 20px; }
@@ -419,8 +387,6 @@
     .about-section h2 { font-size: 1.1rem; }
     .about-section p { font-size: 0.9rem; }
     .theme-toggle { top: 15px; left: 15px; width: 40px; height: 40px; font-size: 1.2rem; }
-    .auth-bar { top: 15px; right: 15px; padding: 6px 12px; font-size: 0.78rem; }
-    .auth-bar .user-name { max-width: 80px; }
     .museum-banner { padding: 22px 18px; }
     .museum-banner-content { flex-direction: column; text-align: center; gap: 12px; }
     .museum-banner-text { text-align: center; }
@@ -447,15 +413,6 @@
 
   <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">🌙</button>
 
-  <!-- نوار احراز هویت -->
-  <div class="auth-bar" id="authBar">
-    <span class="user-name" id="userNameBar">...</span>
-    <button class="logout-btn" onclick="logout()">خروج</button>
-  </div>
-  <div class="auth-bar" id="guestBar">
-    <button onclick="goToLogin()">🔑 ورود / ثبت‌نام</button>
-  </div>
-
   <div class="bubble"></div>
   <div class="bubble"></div>
   <div class="bubble"></div>
@@ -476,29 +433,29 @@
     <h2 class="section-title">🎯 پایه تحصیلی خود را انتخاب کنید</h2>
 
     <div class="grades-grid">
-      <div class="grade-card" onclick="goToPage('haftom.html')">
+      <a href="haftom.html" class="grade-card">
         <span class="grade-icon">📗</span>
         <div class="grade-num">پایه هفتم</div>
         <div class="grade-desc">۲۴ درس کامل با درسنامه، آزمون، فلش کارت و فایل‌ها</div>
         <span class="grade-btn">ورود به پایه هفتم ←</span>
-      </div>
+      </a>
 
-      <div class="grade-card" onclick="goToPage('hashtom.html')">
+      <a href="hashtom.html" class="grade-card">
         <span class="grade-icon">📘</span>
         <div class="grade-num">پایه هشتم</div>
         <div class="grade-desc">۲۴ درس کامل با درسنامه، آزمون، فلش کارت و فایل‌ها</div>
         <span class="grade-btn">ورود به پایه هشتم ←</span>
-      </div>
+      </a>
 
-      <div class="grade-card" onclick="goToPage('nohom.html')">
+      <a href="nohom.html" class="grade-card">
         <span class="grade-icon">📙</span>
         <div class="grade-num">پایه نهم</div>
         <div class="grade-desc">۲۴ درس کامل با درسنامه، آزمون، فلش کارت و فایل‌ها</div>
         <span class="grade-btn">ورود به پایه نهم ←</span>
-      </div>
+      </a>
     </div>
 
-    <div class="museum-banner" onclick="goToPage('museum.html')">
+    <a href="museum.html" class="museum-banner">
       <div class="museum-banner-content">
         <span class="museum-banner-icon">🏛️</span>
         <div class="museum-banner-text">
@@ -507,9 +464,9 @@
         </div>
         <span class="museum-banner-btn">شروع سفر ۳۶۰° ←</span>
       </div>
-    </div>
+    </a>
 
-    <div class="history-banner" onclick="goToPage('history-chat.html')">
+    <a href="history-chat.html" class="history-banner">
       <div class="history-banner-content">
         <span class="history-banner-icon">⏳</span>
         <div class="history-banner-text">
@@ -518,9 +475,9 @@
         </div>
         <span class="history-banner-btn">شروع گفتگو ←</span>
       </div>
-    </div>
+    </a>
 
-    <div class="life-banner" onclick="goToPage('life-skills.html')">
+    <a href="life-skills.html" class="life-banner">
       <div class="life-banner-content">
         <span class="life-banner-icon">🌟</span>
         <div class="life-banner-text">
@@ -529,7 +486,7 @@
         </div>
         <span class="life-banner-btn">ورود به بخش مهارت‌ها ←</span>
       </div>
-    </div>
+    </a>
 
     <div class="about-section">
       <h2>✨ درباره این سایت</h2>
@@ -556,79 +513,8 @@
     ساخته شده با <span class="heart">❤️</span> برای دانش‌آموزان عزیز
   </div>
 
-<!-- Firebase SDK -->
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-
 <script>
-  // ===== تنظیمات Firebase =====
-  const firebaseConfig = {
-    apiKey: "AIzaSyAo0zfeqp_BfJEqAHLir6xiYD0N9NqQcvE",
-    authDomain: "social-studies-app-6b600.firebaseapp.com",
-    projectId: "social-studies-app-6b600",
-    storageBucket: "social-studies-app-6b600.firebasestorage.app",
-    messagingSenderId: "887286568529",
-    appId: "1:887286568529:web:151feabe0c5c3c42a00a70",
-    measurementId: "G-2ZZLN7ZB9N"
-  };
-
-  let auth = null;
-  let currentUser = null;
-
-  try {
-    if (!firebase.apps.length) {
-      firebase.initializeApp(firebaseConfig);
-    }
-    auth = firebase.auth();
-  } catch (e) {
-    console.warn("Firebase راه‌اندازی نشد:", e);
-  }
-
-  // ===== بررسی وضعیت لاگین =====
-  if (auth) {
-    auth.onAuthStateChanged((user) => {
-      currentUser = user;
-      const authBar = document.getElementById("authBar");
-      const guestBar = document.getElementById("guestBar");
-      const userNameBar = document.getElementById("userNameBar");
-
-      if (user) {
-        const displayName = user.displayName || user.email || "دانش‌آموز";
-        userNameBar.textContent = "👤 " + displayName;
-        authBar.style.display = "flex";
-        guestBar.style.display = "none";
-      } else {
-        authBar.style.display = "none";
-        guestBar.style.display = "flex";
-      }
-    });
-  } else {
-    document.getElementById("guestBar").style.display = "flex";
-  }
-
-  // ===== 🟢 ناوبری آزاد — همه بخش‌ها بدون لاگین باز هستند =====
-  function goToPage(destination) {
-    window.location.href = destination;
-  }
-
-  // ===== رفتن به لاگین (از دکمه بالا) =====
-  function goToLogin() {
-    sessionStorage.setItem("redirectAfterLogin", "index.html");
-    window.location.href = "login.html";
-  }
-
-  // ===== خروج =====
-  function logout() {
-    if (auth) {
-      auth.signOut().then(() => {
-        location.reload();
-      }).catch((error) => {
-        alert("خطا در خروج: " + error.message);
-      });
-    }
-  }
-
-  // ===== تم تاریک/روشن =====
+  // تم تاریک/روشن
   const themeBtn = document.getElementById('themeBtn');
   const currentTheme = localStorage.getItem('theme');
   
