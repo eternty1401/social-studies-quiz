@@ -120,7 +120,7 @@
     <!-- بخش تحلیل هوش مصنوعی -->
     <div class="ai-analysis" id="aiAnalysis">
       <div class="result-icon" id="resultIcon">🤖</div>
-      <h3>تحلیل هوش مصنوعی</h3>
+      <h3 id="resultTitle">تحلیل هوش مصنوعی</h3>
       <p id="resultText"></p>
       <div class="loading-spinner" id="loadingSpinner">هوش مصنوعی در حال بررسی تصمیم شماست... ⏳</div>
       <button class="next-btn" id="nextBtn" onclick="loadNextScenario()" style="display: none;">سناریوی بعدی ←</button>
@@ -269,13 +269,20 @@
       document.getElementById('chatSubtitle').innerText = "پیام جدید";
 
       const chatBody = document.getElementById('chatBody');
+      
+      // استفاده از حلقه برای ساخت دکمه‌ها بدون مشکل
+      let choicesHTML = '';
+      scenario.choices.forEach((choice, index) => {
+          choicesHTML += `<button class="choice-btn ${choice.type}" onclick="makeChoice(${index})">${index + 1}. ${choice.text}</button>`;
+      });
+
       chatBody.innerHTML = `
         <div class="message sender">
           <span class="name">${scenario.sender}</span>
           ${scenario.message}
           
           ${scenario.file ? `
-          <div class="file-attachment" onclick="makeChoice(${currentScenarioIndex}, 'download')">
+          <div class="file-attachment" onclick="makeChoice('download')">
             <div class="file-icon">📄</div>
             <div class="file-info">
               <div class="file-name">${scenario.file}</div>
@@ -288,11 +295,7 @@
         <div style="background: rgba(56, 189, 248, 0.1); border: 1px dashed #38bdf8; padding: 15px; border-radius: 10px; margin-top: 10px;">
           <p style="font-size: 0.9rem; margin-bottom: 15px; color: #38bdf8; font-weight: bold;">شما چه کار می‌کنید؟</p>
           <div class="choices-container" id="choicesContainer">
-            ${scenario.choices.map((choice, index) => `
-              <button class="choice-btn ${choice.type}" onclick="makeChoice(${currentScenarioIndex}, ${index})">
-                ${index + 1}. ${choice.text}
-              </button>
-            `).join('')}
+            ${choicesHTML}
           </div>
         </div>
       `;
@@ -300,14 +303,12 @@
       chatBody.scrollTop = 0;
     }
 
-    async function makeChoice(scenarioIdx, choiceIdx) {
-      const scenario = scenarios[scenarioIdx];
+    async function makeChoice(choiceIdx) {
+      const scenario = scenarios[currentScenarioIndex];
       
-      // اگر کاربر روی فایل کلیک کرده باشد
       let choiceType = "danger";
       let choiceText = "دانلود فایل";
       
-      // اگر روی دکمه‌های گزینه کلیک کرده باشد
       if (typeof choiceIdx === 'number') {
           choiceType = scenario.choices[choiceIdx].type;
           choiceText = scenario.choices[choiceIdx].text;
@@ -349,9 +350,8 @@
         پاسخ در قالب ۲ پاراگراف کوتاه و کاملاً فارسی باشد.
       `;
 
-      // ساخت تایم‌اوت برای جلوگیری از گیر کردن در حالت لودینگ
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 ثانیه
+      const timeoutId = setTimeout(() => controller.abort(), 15000); 
 
       try {
         const payload = {
@@ -366,7 +366,7 @@
           method: "POST",
           headers: { "Authorization": `Bearer ${GROQ_API_KEY}` },
           body: new Blob([JSON.stringify(payload)], { type: 'application/json' }),
-          signal: controller.signal // اتصال تایم‌اوت
+          signal: controller.signal 
         });
 
         clearTimeout(timeoutId);
@@ -394,7 +394,7 @@
       }
     }
 
-    // شروع بازی با بارگذاری اولین سناریو
+    // شروع بازی
     window.onload = loadNextScenario;
   </script>
 </body>
