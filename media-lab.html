@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>آزمایشگاه سواد رسانه‌ای | کارآگاه خبر</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; font-family:'Vazirmatn',sans-serif; }
+  body {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    min-height: 100vh; color: #fff; padding: 30px 20px;
+    display: flex; flex-direction: column; align-items: center;
+  }
+
+  .header { text-align: center; margin-bottom: 30px; }
+  .header h1 { font-size: 2rem; font-weight: 900; margin-bottom: 10px; color: #38bdf8; }
+  .header p { color: #94a3b8; font-size: 0.95rem; line-height: 1.6; }
+
+  /* کارت بازی */
+  .game-card {
+    background: rgba(30, 41, 59, 0.7); border: 1px solid #334155;
+    border-radius: 20px; padding: 30px 25px; width: 100%; max-width: 650px;
+    backdrop-filter: blur(10px); box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    text-align: center;
+  }
+
+  .score-board {
+    display: inline-block; background: rgba(56, 189, 248, 0.1);
+    padding: 8px 20px; border-radius: 30px; font-weight: bold; margin-bottom: 20px;
+    border: 1px solid rgba(56, 189, 248, 0.3);
+  }
+
+  .news-box {
+    background: #fff; color: #1e293b; padding: 25px; border-radius: 15px;
+    font-size: 1.1rem; line-height: 1.9; margin-bottom: 25px; min-height: 150px;
+    display: flex; flex-direction: column; justify-content: center; position: relative;
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
+  }
+  .news-source {
+    font-size: 0.8rem; color: #64748b; margin-top: 15px; text-align: left;
+    border-top: 1px dashed #cbd5e1; padding-top: 10px;
+  }
+
+  /* دکمه‌های انتخاب */
+  .choices { display: flex; gap: 15px; margin-bottom: 20px; }
+  .choice-btn {
+    flex: 1; padding: 15px; border: none; border-radius: 12px;
+    font-size: 1.1rem; font-weight: 900; font-family: inherit; cursor: pointer; transition: 0.3s;
+  }
+  .btn-real { background: #10b981; color: white; }
+  .btn-real:hover { background: #059669; transform: translateY(-2px); }
+  .btn-fake { background: #ef4444; color: white; }
+  .btn-fake:hover { background: #dc2626; transform: translateY(-2px); }
+  .choice-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+  /* دکمه خبر بعدی */
+  .next-btn {
+    display: none; width: 100%; padding: 15px; background: #38bdf8; color: #0f172a;
+    border: none; border-radius: 12px; font-size: 1.1rem; font-weight: 900;
+    font-family: inherit; cursor: pointer; transition: 0.3s;
+  }
+  .next-btn:hover { background: #fff; transform: translateY(-2px); }
+
+  /* بخش نتیجه و توضیح */
+  .result-box {
+    display: none; margin-top: 25px; padding: 20px; border-radius: 12px;
+    text-align: right; line-height: 1.8; font-size: 0.95rem; animation: fadeIn 0.5s;
+  }
+  .result-box.correct { background: rgba(16, 185, 129, 0.15); border: 1px solid #10b981; color: #d1fae5; }
+  .result-box.wrong { background: rgba(239, 68, 68, 0.15); border: 1px solid #ef4444; color: #fee2e2; }
+  
+  .result-box h3 { margin-bottom: 10px; font-size: 1.2rem; }
+  .result-box .explanation { background: rgba(0,0,0,0.2); padding: 15px; border-radius: 8px; margin-top: 10px; }
+
+  /* لودینگ */
+  .loading-text { color: #38bdf8; font-weight: bold; display: none; margin-top: 20px; font-size: 1.1rem; }
+
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  @media(max-width: 600px) { .choices { flex-direction: column; } }
+</style>
+</head>
+<body>
+
+  <div class="header">
+    <h1>📰 کارآگاه خبر</h1>
+    <p>در دنیای امروز، تشخیص خبر واقعی از شایعه یک ابرقدرت است! آماده‌ای؟</p>
+  </div>
+
+  <div class="game-card">
+    <div class="score-board">امتیاز شما: <span id="score">۰</span> از <span id="total">۰</span></div>
+
+    <div id="game-area">
+      <div class="news-box" id="news-text">
+        در حال دریافت خبر جدید از هوش مصنوعی... ⏳
+      </div>
+
+      <div class="choices" id="choices">
+        <button class="choice-btn btn-real" onclick="checkAnswer(true)" disabled>✅ واقعی است</button>
+        <button class="choice-btn btn-fake" onclick="checkAnswer(false)" disabled>❌ جعلی است</button>
+      </div>
+      
+      <div class="loading-text" id="loading">هوش مصنوعی در حال ساختن یک خبر جدید است... ⏳</div>
+    </div>
+
+    <div class="result-box" id="result-box">
+      <h3 id="result-title"></h3>
+      <p id="result-desc"></p>
+      <div class="explanation" id="result-explanation"></div>
+    </div>
+
+    <button class="next-btn" id="next-btn" onclick="getNewNews()">دریافت خبر بعدی ←</button>
+  </div>
+
+  <script>
+    const GROQ_API_KEY = "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";
+    let currentNews = null;
+    let score = 0;
+    let totalQuestions = 0;
+    let isAnswered = false;
+
+    // دریافت خبر جدید از هوش مصنوعی
+    async function getNewNews() {
+      const newsText = document.getElementById('news-text');
+      const choices = document.getElementById('choices');
+      const resultBox = document.getElementById('result-box');
+      const nextBtn = document.getElementById('next-btn');
+      const loading = document.getElementById('loading');
+
+      // ریست کردن وضعیت
+      isAnswered = false;
+      resultBox.style.display = 'none';
+      nextBtn.style.display = 'none';
+      loading.style.display = 'block';
+      newsText.innerHTML = 'در حال دریافت خبر جدید... ⏳';
+      newsText.style.color = '#64748b';
+      document.querySelectorAll('.choice-btn').forEach(btn => btn.disabled = true);
+      document.querySelectorAll('.choice-btn').forEach(btn => btn.style.display = 'block');
+
+      const prompt = `
+        شما یک تولیدکننده سوال برای بازی "سواد رسانه‌ای" هستید.
+        یک خبر (حدود ۲ تا ۳ جمله) به زبان فارسی تولید کنید. 
+        به صورت تصادفی (۵۰-۵۰)، خبر باید یکی از این دو حالت باشد:
+        ۱. یک خبر واقعی و علمی/تاریخی/جغرافیایی که برای دانش‌آموز متوسطه مناسب است.
+        ۲. یک خبر جعلی (شایعه) که شبیه واقعیت است اما نشانه‌های یک خبر جعلی را دارد (مثل منبع نامشخص، اغراق، ادعای عجیب).
+
+        خروجی را دقیقاً به فرمت JSON زیر بدهید (هیچ متن اضافه‌ای نباشد):
+        {
+          "news": "متن خبر اینجا",
+          "is_real": true یا false (اگر واقعی بود true),
+          "explanation": "توضیح دهید چرا این خبر واقعی یا جعلی است و دانش‌آموز باید به چه نشانه‌هایی توجه می‌کرد."
+        }
+      `;
+
+      try {
+        const payload = {
+          model: "openai/gpt-oss-120b",
+          messages: [
+            { role: "system", content: "You are a JSON generator. Output valid JSON only." },
+            { role: "user", content: prompt }
+          ],
+          response_format: { type: "json_object" }
+        };
+
+        const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+          method: "POST",
+          headers: { "Authorization": `Bearer ${GROQ_API_KEY}` },
+          body: new Blob([JSON.stringify(payload)], { type: 'application/json' })
+        });
+
+        const data = await response.json();
+        
+        if (data.error) throw new Error(data.error.message);
+
+        const aiResult = JSON.parse(data.choices[0].message.content);
+        currentNews = aiResult;
+
+        // نمایش خبر
+        loading.style.display = 'none';
+        newsText.innerHTML = `<div>${aiResult.news}</div><div class="news-source">📱 منبع: نامشخص (شبکه‌های اجتماعی)</div>`;
+        newsText.style.color = '#1e293b';
+        
+        // فعال کردن دکمه‌ها
+        document.querySelectorAll('.choice-btn').forEach(btn => btn.disabled = false);
+
+      } catch (error) {
+        loading.style.display = 'none';
+        newsText.innerHTML = "❌ خطا در دریافت خبر. لطفاً از فیلترشکن استفاده کنید.";
+        newsText.style.color = '#ef4444';
+      }
+    }
+
+    // بررسی جواب دانش‌آموز
+    function checkAnswer(userGuess) {
+      if (isAnswered || !currentNews) return;
+      isAnswered = true;
+
+      // مخفی کردن دکمه‌ها
+      document.querySelectorAll('.choice-btn').forEach(btn => btn.style.display = 'none');
+      
+      const isCorrect = (userGuess === currentNews.is_real);
+      
+      // آپدیت امتیاز
+      totalQuestions++;
+      if (isCorrect) score++;
+      document.getElementById('score').innerText = score.toLocaleString('fa-IR');
+      document.getElementById('total').innerText = totalQuestions.toLocaleString('fa-IR');
+
+      // نمایش نتیجه
+      const resultBox = document.getElementById('result-box');
+      const resultTitle = document.getElementById('result-title');
+      const resultDesc = document.getElementById('result-desc');
+      const resultExp = document.getElementById('result-explanation');
+      const nextBtn = document.getElementById('next-btn');
+
+      resultBox.style.display = 'block';
+      resultBox.className = `result-box ${isCorrect ? 'correct' : 'wrong'}`;
+
+      if (isCorrect) {
+        resultTitle.innerText = "🎉 آفرین! کاملاً درست تشخیص دادی.";
+        resultDesc.innerText = currentNews.is_real ? "این یک خبر واقعی بود." : "این یک خبر جعلی بود.";
+      } else {
+        resultTitle.innerText = "❌ اشتباه شد! گول خوردی.";
+        resultDesc.innerText = currentNews.is_real ? "در واقع این یک خبر واقعی بود." : "در واقع این یک خبر جعلی (شایعه) بود.";
+      }
+
+      resultExp.innerText = currentNews.explanation;
+      nextBtn.style.display = 'block';
+    }
+
+    // شروع بازی با بارگذاری اولین خبر
+    window.onload = getNewNews;
+  </script>
+</body>
+</html>
