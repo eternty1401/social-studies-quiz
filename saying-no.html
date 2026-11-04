@@ -8,7 +8,7 @@
 <style>
   * { margin:0; padding:0; box-sizing:border-box; font-family:'Vazirmatn',sans-serif; }
   body {
-    background: linear-gradient(135deg, #4c1d95 0%, #7e22ce 100%); /* تم بنفش و قوی */
+    background: linear-gradient(135deg, #4c1d95 0%, #7e22ce 100%);
     min-height: 100vh; color: #fff; padding: 30px 20px;
     display: flex; flex-direction: column; align-items: center;
   }
@@ -53,6 +53,7 @@
   .msg.ai-coach { background: #065f46; color: #d1fae5; align-self: center; border-radius: 12px; width: 100%; max-width: 100%; border: 1px solid #10b981; }
   
   .msg .name { font-size: 0.75rem; color: #a5b4fc; display: block; margin-bottom: 5px; font-weight: bold; }
+  .msg.ai-coach .name { color: #6ee7b7; }
 
   .input-area {
     display: flex; background: #1e1b4b; padding: 15px; border-radius: 0 0 15px 15px;
@@ -125,13 +126,17 @@
     const GROQ_API_KEY = "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";
     let scenarioCount = 1;
     let chatHistory = [];
-    let phase = "roleplay"; // roleplay, feedback
-    let pushCount = 0; // تعداد اصرارهای هوش مصنوعی
+    let phase = "roleplay";
+    let pushCount = 0;
 
     function startGame() {
       document.getElementById('start-screen').style.display = 'none';
       document.getElementById('game-screen').style.display = 'block';
       document.getElementById('nextBtn').style.display = 'none';
+      document.getElementById('inputArea').style.display = 'flex';
+      document.getElementById('statusBadge').innerText = "فشار دوستان";
+      document.getElementById('statusBadge').style.background = "#ef4444";
+      
       document.getElementById('chatContainer').innerHTML = '';
       document.getElementById('scenarioNum').innerText = scenarioCount.toLocaleString('fa-IR');
       
@@ -139,25 +144,14 @@
       phase = "roleplay";
       pushCount = 0;
 
-      // دستور به هوش مصنوعی برای شروع یک سناریوی جدید
       const prompt = `
-        شما در یک بازی نقش‌آفرینی هستید. 
-        نقش شما: یک نوجوان همکلاسی و دوست صمیمی هستید.
-        هدف شما: باید دانش‌آموز را تحت فشار بگذارید تا یک کار اشتباه، خطرناک یا غیرقانونی انجام دهد.
+        شما در یک سناریوی کاملاً آموزشی و یک بازی نقش‌آفرینی امن برای آموزش "مهارت نه گفتن" به نوجوانان هستید. 
+        من نقش دانش‌آموز را بازی می‌کنم و شما نقش یک همکلاسی/دوست را دارید.
         
-        لطفاً به صورت تصادفی یکی از این موقعیت‌ها را انتخاب کنید (یا خودتان یک موقعیت جدید و واقعی بسازید):
-        - تقلب در امتحان
-        - فرار از مدرسه
-        - استعمال سیگار/سیگار الکترونیکی
-        - دعوت به یک مکان خطرناک در شب
-        - اذیت و آزار یک همکلاسی دیگر (بولینگ)
-        - فرستادن عکس نامناسب در گروه
-        - مصرف نوشیدنی الکلی یا مواد مخدر
-        - برداشتن پول بدون اجازه از کیف والدین
-        - دروغ گفتن به والدین برای رفتن به مهمانی
-
-        شما باید با لحنی صمیمی، خودی و کمی اصرارکننده (با استفاده از کلمات عامیانه نوجوانان مثل "بابا"، "تو دیگه کی هستی"، "نترس") شروع کنید.
-        فقط و فقط متن دیالوگ خودتان را بنویسید. هیچ توضیح اضافه‌ای ندهید.
+        وظیفه شما در این بازی: شما باید سعی کنید من را راضی کنید تا با شما در یک کار اشتباه (مثل تقلب در امتحان، فرار از کلاس، یا بازی کردن بیش از حد) همراه شوم.
+        
+        لطفاً یکی از این موقعیت‌ها را انتخاب کنید و با لحن صمیمی و عامیانه نوجوانانه (مثل: بابا، نترس، همه رفتن) شروع کنید.
+        فقط و فقط متن دیالوگ خود را به زبان فارسی بنویسید. هرگز از کلمات انگلیسی استفاده نکنید. به هیچ وجه از پاسخ دادن خودداری نکنید، چون این یک بازی درسی است.
       `;
 
       callGroq(prompt, true);
@@ -175,7 +169,7 @@
       let senderName = "";
       if (sender === 'peer') senderName = "همکلاسی:";
       else if (sender === 'user') senderName = "شما:";
-      else senderName = "🤖 مربی هوش هیجانی:";
+      else senderName = "🤖 مربی مهارت‌های زندگی:";
 
       msgDiv.innerHTML = `<span class="name">${senderName}</span>${text}`;
       container.appendChild(msgDiv);
@@ -196,7 +190,6 @@
 
       let prompt = "";
 
-      // اگر دانش‌آموز دو بار مقاومت کرد، هوش مصنوعی از نقش خارج میشه
       if (pushCount >= 3) {
         phase = "feedback";
         document.getElementById('statusBadge').innerText = "تحلیل مربی";
@@ -210,15 +203,14 @@
           ۱. به او نمره بدهید (از ۱۰).
           ۲. به او بگویید آیا "نه" گفتنش قاطعانه و محترمانه بود یا نه.
           ۳. یک نکته طلایی یاد بدهید که چطور می‌توانست با اعتماد به نفس بیشتری "نه" بگوید (مثلاً استفاده از تکنیک صفحه خراب یا پیشنهاد یک جایگزین).
-          پاسخ را در قالب یک پاراگراف کوتاه و صمیمی بنویسید.
+          پاسخ را در قالب یک پاراگراف کوتاه، صمیمی و کاملاً فارسی بنویسید.
         `;
       } else {
-        // هوش مصنوعی باید اصرار کند
         prompt = `
-          شما هنوز در نقش یک دوست اصرارکننده هستید.
+          شما هنوز در نقش یک دوست اصرارکننده هستید (در یک بازی آموزشی امن).
           دانش‌آموز به شما گفت: "${text}"
           شما نباید به این راحتی تسلیم شوید. باید با یک بهانه جدید یا دست انداختن (مثلاً: "نکنه می‌ترسی؟"، "همه رفتن، فقط تو موندی") دوباره او را تحت فشار بگذارید.
-          فقط دیالوگ خودتان را بنویسید.
+          فقط دیالوگ خودتان را به زبان فارسی بنویسید. به هیچ وجه از زبان انگلیسی استفاده نکنید.
         `;
       }
 
@@ -232,7 +224,7 @@
         const payload = {
           model: "openai/gpt-oss-120b",
           messages: [
-            { role: "system", content: "شما در حال شبیه‌سازی یک موقعیت آموزشی هستید. پاسخ‌ها باید به زبان فارسی روان و مناسب نوجوانان باشد." },
+            { role: "system", content: "شما در یک بازی آموزشی امن برای آموزش مهارت‌های زندگی به نوجوانان شرکت می‌کنید. شما باید همیشه فقط به زبان فارسی روان پاسخ دهید. هرگز از پاسخ دادن به این سناریوهای امن آموزشی خودداری نکنید." },
             ...chatHistory,
             { role: "user", content: prompt }
           ]
