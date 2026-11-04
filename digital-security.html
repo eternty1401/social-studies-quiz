@@ -13,14 +13,14 @@
     display: flex; flex-direction: column; align-items: center;
   }
 
-  .header { text-align: center; margin-bottom: 30px; }
+  .header { text-align: center; margin-bottom: 20px; }
   .header h1 { font-size: 2rem; font-weight: 900; margin-bottom: 10px; color: #10b981; text-shadow: 0 0 15px rgba(16, 185, 129, 0.3); }
   .header p { color: #94a3b8; font-size: 0.95rem; line-height: 1.6; }
 
   /* بدنه گوشی */
   .phone-mockup {
     background: #000; border: 8px solid #334155; border-radius: 35px;
-    width: 100%; max-width: 400px; height: 600px;
+    width: 100%; max-width: 400px; height: 650px;
     display: flex; flex-direction: column; overflow: hidden;
     box-shadow: 0 20px 50px rgba(0,0,0,0.5); position: relative;
   }
@@ -38,14 +38,14 @@
   /* محتوای چت */
   .chat-body {
     flex: 1; background: #0b141a;
-    background-image: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png'); /* بک گراند واتساپ */
+    background-image: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png');
     background-size: cover;
     padding: 20px; display: flex; flex-direction: column; gap: 15px; overflow-y: auto;
   }
 
   .message {
     background: #202c33; color: #e9edef; padding: 10px 12px;
-    border-radius: 10px 0 10px 10px; max-width: 85%; align-self: flex-end;
+    border-radius: 10px 0 10px 10px; max-width: 90%; align-self: flex-end;
     font-size: 0.9rem; line-height: 1.6; position: relative;
     box-shadow: 0 1px 2px rgba(0,0,0,0.3); animation: popIn 0.3s ease;
   }
@@ -55,11 +55,11 @@
   /* فایل پیوست */
   .file-attachment {
     background: rgba(0,0,0,0.2); border-radius: 8px; padding: 12px;
-    margin-top: 8px; display: flex; align-items: center; gap: 10px; cursor: pointer;
+    margin-top: 8px; display: flex; align-items: center; gap: 10px; cursor: pointer; border: 1px dashed #475569;
   }
-  .file-attachment:hover { background: rgba(0,0,0,0.4); }
+  .file-attachment:hover { background: rgba(0,0,0,0.4); border-color: #10b981; }
   .file-icon { font-size: 1.8rem; color: #ef4444; }
-  .file-info .file-name { font-size: 0.85rem; font-weight: bold; }
+  .file-info .file-name { font-size: 0.85rem; font-weight: bold; direction: ltr; text-align: left; }
   .file-info .file-size { font-size: 0.7rem; color: #8696a0; }
 
   /* دکمه‌های انتخاب */
@@ -76,21 +76,22 @@
   /* بخش تحلیل هوش مصنوعی */
   .ai-analysis {
     position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(5px);
+    background: rgba(15, 23, 42, 0.98); backdrop-filter: blur(5px);
     padding: 25px; display: none; flex-direction: column; justify-content: center;
-    z-index: 10; animation: fadeIn 0.4s ease;
+    z-index: 10; animation: fadeIn 0.4s ease; overflow-y: auto;
   }
   .ai-analysis h3 { color: #38bdf8; font-size: 1.2rem; margin-bottom: 15px; text-align: center; }
   .ai-analysis p { font-size: 0.95rem; line-height: 1.8; color: #cbd5e1; margin-bottom: 20px; text-align: justify; white-space: pre-wrap; }
   .ai-analysis .result-icon { font-size: 3rem; text-align: center; margin-bottom: 15px; }
-  .restart-btn {
+  
+  .next-btn {
     background: #38bdf8; color: #0f172a; border: none; padding: 12px;
     border-radius: 10px; font-family: inherit; font-size: 1rem; font-weight: 900;
-    cursor: pointer; width: 100%; margin-top: auto;
+    cursor: pointer; width: 100%; margin-top: auto; transition: 0.3s;
   }
-  .restart-btn:hover { background: #fff; }
+  .next-btn:hover { background: #fff; }
 
-  .loading-spinner { text-align: center; color: #38bdf8; font-weight: bold; display: none; margin-top: 20px; font-size: 1rem; }
+  .loading-spinner { text-align: center; color: #38bdf8; font-weight: bold; display: none; margin: 20px 0; font-size: 1rem; }
 
   @keyframes popIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
   @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
@@ -100,100 +101,245 @@
 
   <div class="header">
     <h1>🛡️ مدرسه امنیت دیجیتال</h1>
-    <p>یک موقعیت واقعی رو شبیه‌سازی کردیم. تصمیم تو چیه؟</p>
+    <p>هر بار یک موقعیت جدید! تصمیم تو چیه؟</p>
   </div>
 
   <div class="phone-mockup">
     <div class="chat-header">
-      <div class="avatar">👥</div>
+      <div class="avatar" id="chatAvatar">👥</div>
       <div class="info">
-        <h3>گروه کلاسی پایه نهم</h3>
-        <p>۲۴ عضو، ۵ نفر آنلاین</p>
+        <h3 id="chatTitle">گروه کلاسی</h3>
+        <p id="chatSubtitle">آنلاین</p>
       </div>
     </div>
 
     <div class="chat-body" id="chatBody">
-      <!-- پیام‌های چت -->
-      <div class="message sender">
-        <span class="name">علی (همکلاسی)</span>
-        سلام بچه‌ها! جدیداً یه سری عکس قدیمی از خودمون پیدا کردم، خیلی باحالن! 😍 فایلش رو پی دی اف کردم که حجمش کم بشه. حتماً دانلود کنید و ببینید!
-        
-        <div class="file-attachment" onclick="makeChoice('download')">
-          <div class="file-icon">📄</div>
-          <div class="file-info">
-            <div class="file-name">عکس_های_قدیمی_کلاس.pdf</div>
-            <div class="file-size">۲.۵ مگابایت</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- سوال از دانش آموز -->
-      <div style="background: rgba(56, 189, 248, 0.1); border: 1px dashed #38bdf8; padding: 15px; border-radius: 10px; margin-top: 10px;">
-        <p style="font-size: 0.9rem; margin-bottom: 15px; color: #38bdf8; font-weight: bold;">شما چه کار می‌کنید؟</p>
-        <div class="choices-container" id="choicesContainer">
-          <button class="choice-btn danger" onclick="makeChoice('download')">۱. سریع دانلودش می‌کنم ببینم چیه!</button>
-          <button class="choice-btn danger" onclick="makeChoice('trust')">۲. چون از گروه کلاسه، دانلودش ضرری نداره.</button>
-          <button class="choice-btn safe" onclick="makeChoice('report')">۳. بهش شک می‌کنم، دانلود نمی‌کنم و به معلم اطلاع می‌دم.</button>
-        </div>
-      </div>
+      <!-- پیام‌ها و سوالات به صورت داینامیک اینجا قرار می‌گیرند -->
     </div>
 
     <!-- بخش تحلیل هوش مصنوعی -->
     <div class="ai-analysis" id="aiAnalysis">
       <div class="result-icon" id="resultIcon">🤖</div>
-      <h3 id="resultTitle">تحلیل هوش مصنوعی</h3>
+      <h3>تحلیل هوش مصنوعی</h3>
       <p id="resultText"></p>
       <div class="loading-spinner" id="loadingSpinner">هوش مصنوعی در حال بررسی تصمیم شماست... ⏳</div>
-      <button class="restart-btn" onclick="resetGame()">🔄 تلاش مجدد (سناریوی بعدی)</button>
+      <button class="next-btn" id="nextBtn" onclick="loadNextScenario()" style="display: none;">سناریوی بعدی ←</button>
     </div>
   </div>
 
   <script>
     const GROQ_API_KEY = "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";
+    let currentScenarioIndex = 0;
 
-    async function makeChoice(choice) {
+    // بانک ۱۰ سناریوی امنیتی
+    const scenarios = [
+      {
+        sender: "علی (همکلاسی)",
+        title: "گروه کلاسی پایه نهم",
+        message: "سلام بچه‌ها! جدیداً یه سری عکس قدیمی از خودمون پیدا کردم، خیلی باحالن! 😍 فایلش رو پی دی اف کردم. حتماً دانلود کنید!",
+        file: "عکس_های_قدیمی_کلاس.pdf",
+        choices: [
+          { text: "سریع دانلودش می‌کنم ببینم چیه!", type: "danger" },
+          { text: "چون از گروه کلاسه، دانلودش ضرری نداره.", type: "danger" },
+          { text: "بهش شک می‌کنم، دانلود نمی‌کنم و به معلم اطلاع می‌دم.", type: "safe" }
+        ],
+        promptContext: "فایلی با پسوند PDF در گروه واتس‌اپی به اشتراک گذاشته شده که ادعا می‌کند عکس‌های قدیمی است."
+      },
+      {
+        sender: "پیامک ناشناس (بانک)",
+        title: "پیامک ناشناس",
+        message: "مشتری گرامی، حساب شما به دلیل فعالیت مشکوک مسدود شده است. جهت رفع مسدودی به لینک زیر مراجعه کنید: \n http://bank-verify.ir",
+        file: null,
+        choices: [
+          { text: "سریع روی لینک می‌زنم تا حسابم باز بشه.", type: "danger" },
+          { text: "لینک رو باز می‌کنم ولی اطلاعاتمو وارد نمی‌کنم.", type: "danger" },
+          { text: "لینک رو باز نمی‌کنم و با شماره رسمی بانک تماس می‌گیرم.", type: "safe" }
+        ],
+        promptContext: "یک پیامک جعلی از طرف بانک ارسال شده که کاربر را به یک لینک فیشینگ هدایت می‌کند."
+      },
+      {
+        sender: "سارا (همکلاسی)",
+        title: "چت خصوصی",
+        message: "سلام! میشه رمز اینستاگرامت رو بهم بدی؟ می‌خوام یه پیج رو ببینم که منو بلاک کرده و نمی‌تونم ببینم.",
+        file: null,
+        choices: [
+          { text: "آره، چون دوستمه رمزمو بهش می‌دم.", type: "danger" },
+          { text: "رمزمو بهش می‌دم ولی میگم به کسی نده.", type: "danger" },
+          { text: "بهش میگم نمی‌تونم رمزم رو بدم و راه دیگه‌ای پیدا می‌کنیم.", type: "safe" }
+        ],
+        promptContext: "یک دوست درخواست رمز عبور اکانت اینستاگرام را دارد."
+      },
+      {
+        sender: "کافه (وای‌فای رایگان)",
+        title: "وای‌فای عمومی",
+        message: "به وای‌فای رایگان کافه متصل شدید. لطفاً برای استفاده از اینترنت، شماره موبایل و کد ملی خود را وارد کنید.",
+        file: null,
+        choices: [
+          { text: "اطلاعاتمو وارد می‌کنم تا اینترنت رایگان بگیرم.", type: "danger" },
+          { text: "برای اتصال به وای‌فای عمومی اطلاعات حساسمو وارد نمی‌کنم.", type: "safe" },
+          { text: "یک اپلیکیشن هک وای‌فای نصب می‌کنم.", type: "danger" }
+        ],
+        promptContext: "وای‌فای عمومی درخواست اطلاعات شخصی حساس دارد."
+      },
+      {
+        sender: "پیام ناشناس (جایزه)",
+        title: "پیام ناشناس",
+        message: "تبریک! شما برنده یک گوشی آیفون ۱۵ شدید! برای دریافت جایزه، فقط کافیه ۵۰ هزار تومن هزینه ارسال رو به این شماره کارت واریز کنید.",
+        file: null,
+        choices: [
+          { text: "۵۰ هزار تومن که پولی نیست، واریز می‌کنم تا جایزه‌مو بگیرم.", type: "danger" },
+          { text: "شماره کارت رو می‌گیرم و پیگیری می‌کنم.", type: "danger" },
+          { text: "این یک کلاهبرداری واضحه، پاکش می‌کنم و بلاکش می‌کنم.", type: "safe" }
+        ],
+        promptContext: "پیام برنده شدن جایزه و درخواست واریز پول برای هزینه ارسال (کلاهبرداری)."
+      },
+      {
+        sender: "پشتیبانی (ناشناس)",
+        title: "تماس تلفنی",
+        message: "سلام، من از پشتیبانی تلگرام هستم. حساب شما هک شده. برای اینکه حسابتون رو نجات بدیم، کد ۶ رقمی که الان براتون پیامک میشه رو به من بگید.",
+        file: null,
+        choices: [
+          { text: "کد رو بهشون می‌گم تا حسابمو نجات بدن.", type: "danger" },
+          { text: "چون از پشتیبانیه، حتماً راست میگه.", type: "danger" },
+          { text: "کد رو نمی‌گم و تماس رو قطع می‌کنم.", type: "safe" }
+        ],
+        promptContext: "تماس تلفنی جعلی از طرف پشتیبانی و درخواست کد یکبار مصرف (OTP)."
+      },
+      {
+        sender: "گروه بازی (ناشناس)",
+        title: "گروه گیمینگ",
+        message: "سلام بچه‌ها! من هک بازی PUBG ساختم که با اون می‌تونید همه اسکین‌ها رو رایگان بگیری. فقط کافیه این فایل نصبی (apk) رو دانلود کنید.",
+        file: "pubg_hack_mod.apk",
+        choices: [
+          { text: "دانلودش می‌کنم تا اسکین‌های رایگان بگیرم!", type: "danger" },
+          { text: "فایل نصبی رو نصب نمی‌کنم چون ممکنه گوشیمو هک کنه.", type: "safe" },
+          { text: "اول با آنتی‌ویروس چکش می‌کنم بعد نصب می‌کنم.", type: "danger" }
+        ],
+        promptContext: "فایل نصبی اندروید (APK) برای هک بازی که در واقع بدافزار است."
+      },
+      {
+        sender: "پست (پیامک)",
+        title: "پیامک پست",
+        message: "مرسوله شما به دلیل نقص آدرس در پست برگشت خورده است. لطفاً برای اصلاح آدرس به لینک زیر مراجعه کنید: \n http://post-track.ir",
+        file: null,
+        choices: [
+          { text: "لینک رو باز می‌کنم و آدرسم رو اصلاح می‌کنم.", type: "danger" },
+          { text: "چون منتظر یه بسته بودم، حتماً درسته.", type: "danger" },
+          { text: "کد رهگیری رو از سایت رسمی پست چک می‌کنم.", type: "safe" }
+        ],
+        promptContext: "پیامک جعلی از طرف پست برای فیشینگ اطلاعات (Phishing)."
+      },
+      {
+        sender: "دوست (اکانت هک شده)",
+        title: "پیام مستقیم (دایرکت)",
+        message: "سلام! من خیلی تو دردسر افتادم، واسم ۲ میلیون پول بریز به این شماره کارت، فردا برات برمی‌گردونم.",
+        file: null,
+        choices: [
+          { text: "سریع پول رو واریز می‌کنم چون دوستمه.", type: "danger" },
+          { text: "بهش زنگ می‌زنم یا با راه دیگه‌ای احراز هویت می‌کنم.", type: "safe" },
+          { text: "بهش میگم من پول ندارم.", type: "danger" }
+        ],
+        promptContext: "درخواست کمک مالی فوری از یک دوست که حسابش هک شده است."
+      },
+      {
+        sender: "گروه کلاسی",
+        title: "گروه عمومی",
+        message: "بچه‌ها یه تست شخصیت‌شناسی خیلی باحال اومده! فقط باید اسم و شماره تلفنتون رو بدید تا شخصیتتون رو تحلیل کنه. \n http://personality-test.ir",
+        file: null,
+        choices: [
+          { text: "شرکت می‌کنم چون کنجکاوم ببینم چه شخصیتی دارم.", type: "danger" },
+          { text: "اطلاعات شخصیمو در سایت‌های ناشناس وارد نمی‌کنم.", type: "safe" },
+          { text: "اسمم رو می‌نویسم ولی شماره تلفنم رو نه.", type: "danger" }
+        ],
+        promptContext: "تست شخصیت آنلاین که در واقع برای جمع‌آوری داده‌های شخصی (Data Harvesting) است."
+      }
+    ];
+
+    async function loadNextScenario() {
+      // مخفی کردن تحلیل قبلی
+      document.getElementById('aiAnalysis').style.display = 'none';
+      
+      // اگر به انتهای لیست رسیدیم، برگرد به اول
+      if (currentScenarioIndex >= scenarios.length) {
+        currentScenarioIndex = 0;
+        alert("شما تمام سناریوها را دیدید! از اول شروع می‌کنیم.");
+      }
+
+      const scenario = scenarios[currentScenarioIndex];
+      
+      // آپدیت هدر گوشی
+      document.getElementById('chatTitle').innerText = scenario.title;
+      document.getElementById('chatSubtitle').innerText = "پیام جدید";
+
+      // ساخت پیام‌ها در چت
+      const chatBody = document.getElementById('chatBody');
+      chatBody.innerHTML = `
+        <div class="message sender">
+          <span class="name">${scenario.sender}</span>
+          ${scenario.message}
+          
+          ${scenario.file ? `
+          <div class="file-attachment" onclick="makeChoice('download', 'danger', '${scenario.promptContext}')">
+            <div class="file-icon">📄</div>
+            <div class="file-info">
+              <div class="file-name">${scenario.file}</div>
+              <div class="file-size">حجم نامشخص</div>
+            </div>
+          </div>` : ''}
+        </div>
+
+        <!-- سوال از دانش آموز -->
+        <div style="background: rgba(56, 189, 248, 0.1); border: 1px dashed #38bdf8; padding: 15px; border-radius: 10px; margin-top: 10px;">
+          <p style="font-size: 0.9rem; margin-bottom: 15px; color: #38bdf8; font-weight: bold;">شما چه کار می‌کنید؟</p>
+          <div class="choices-container" id="choicesContainer">
+            ${scenario.choices.map((choice, index) => `
+              <button class="choice-btn ${choice.type}" onclick="makeChoice('${choice.text}', '${choice.type}', '${scenario.promptContext}')">
+                ${index + 1}. ${choice.text}
+              </button>
+            `).join('')}
+          </div>
+        </div>
+      `;
+      
+      chatBody.scrollTop = 0;
+    }
+
+    async function makeChoice(choiceText, choiceType, promptContext) {
       const aiAnalysis = document.getElementById('aiAnalysis');
       const resultText = document.getElementById('resultText');
       const resultTitle = document.getElementById('resultTitle');
       const resultIcon = document.getElementById('resultIcon');
       const loadingSpinner = document.getElementById('loadingSpinner');
-      const choicesContainer = document.getElementById('choicesContainer');
+      const nextBtn = document.getElementById('nextBtn');
 
       // نمایش بخش تحلیل و لودینگ
       aiAnalysis.style.display = 'flex';
       loadingSpinner.style.display = 'block';
+      nextBtn.style.display = 'none';
       resultText.innerText = "";
-      resultTitle.innerText = "در حال تحلیل...";
-      resultIcon.innerText = "⏳";
-
-      let prompt = "";
-
-      if (choice === 'download' || choice === 'trust') {
-        prompt = `
-          شما یک کارشناس امنیت سایبری هستید.
-          دانش‌آموز در یک گروه واتس‌اپی/تلگرامی پیامی دریافت کرده که می‌گوید "فایل عکس‌های قدیمی" است و از او خواسته شده یک فایل PDF را دانلود کند. 
-          دانش‌آموز تصمیم گرفته است که فایل را دانلود کند (چون فکر می‌کند از همکلاسی‌اش است و ضرری ندارد).
-          
-          لطفاً به زبان ساده و صمیمی به او توضیح دهید که چرا این کار بسیار خطرناک است. 
-          حتماً به این نکته اشاره کنید که هکرها با تغییر نام فایل‌های مخرب (مثل بدافزار یا تروجان) به نام فایل‌های بی‌خطر مثل PDF یا عکس، گوشی را هک می‌کنند. 
-          با دانلود این فایل، هکر می‌تواند به اطلاعات شخصی، رمزهای عبور، و حتی دوربین و میکروفون دسترسی پیدا کند. 
-          به او یادآوری کنید که حتی اگر پیام از طرف یک همکلاسی باشد، ممکن است حساب او هک شده باشد و این پیام به صورت خودکار برای همه ارسال شده باشد.
-          پاسخ را در قالب ۲ پاراگراف کوتاه و بدون کلمات پیچیده بنویسید.
-        `;
+      
+      if (choiceType === 'danger') {
         resultTitle.innerText = "⚠️ زنگ خطر!";
-      } else if (choice === 'report') {
-        prompt = `
-          شما یک کارشناس امنیت سایبری هستید.
-          دانش‌آموز در یک گروه واتس‌اپی/تلگرامی پیامی دریافت کرده که می‌گوید "فایل عکس‌های قدیمی" است و از او خواسته شده یک فایل PDF را دانلود کند. 
-          دانش‌آموز با هوشمندی به این فایل شک کرده، آن را دانلود نکرده و تصمیم گرفته به معلم اطلاع دهد.
-          
-          لطفاً او را تشویق کنید و به او بگویید که چقدر تصمیم درستی گرفته است. 
-          توضیح دهید که این یکی از رایج‌ترین روش‌های هک (مهندسی اجتماعی) است و هکرها با سوءاستفاده از اعتماد ما، فایل‌های مخرب را در قالب PDF یا عکس پخش می‌کنند. 
-          به او بگویید که اطلاع دادن به معلم و آگاه کردن بقیه همکلاسی‌ها بهترین کار ممکن است تا بقیه هم گول نخورند. 
-          پاسخ را در قالب ۱ پاراگراف کوتاه، صمیمی و تشویق‌آمیز بنویسید.
-        `;
+        resultIcon.innerText = "💀";
+        resultText.style.color = "#fca5a5";
+      } else {
         resultTitle.innerText = "🎉 آفرین به هوشیاری تو!";
+        resultIcon.innerText = "🛡️";
+        resultText.style.color = "#a7f3d0";
       }
+
+      const prompt = `
+        شما یک کارشناس امنیت سایبری هستید.
+        موقعیت (Context): ${promptContext}
+        دانش‌آموز این واکنش را انتخاب کرده است: "${choiceText}"
+        نوع واکنش: ${choiceType === 'safe' ? 'ایمن و هوشمندانه' : 'خطرناک و پرریسک'}
+
+        لطفاً به زبان ساده، صمیمی و آموزشی تحلیل کنید:
+        ۱. اگر انتخابش خطرناک بوده، دقیقاً توضیح دهید چه بلایی سرش می‌آید (مثلاً هک شدن، خالی شدن حساب، از دست رفتن اطلاعات).
+        ۲. اگر انتخابش ایمن بوده، تشویقش کنید و بگویید چرا کارش درست بوده.
+        ۳. یک نکته طلایی برای دفعات بعد به او یاد بدهید.
+        پاسخ در قالب ۲ پاراگراف کوتاه باشد.
+      `;
 
       try {
         const payload = {
@@ -215,29 +361,23 @@
         
         if (data.error) throw new Error(data.error.message);
         
-        if (choice === 'download' || choice === 'trust') {
-          resultIcon.innerText = "💀";
-          resultText.style.color = "#fca5a5";
-        } else {
-          resultIcon.innerText = "🛡️";
-          resultText.style.color = "#a7f3d0";
-        }
-
         resultText.innerText = data.choices[0].message.content;
+        nextBtn.style.display = 'block';
+        
+        // رفتن به سناریوی بعدی برای بار بعد
+        currentScenarioIndex++;
 
       } catch (error) {
         loadingSpinner.style.display = 'none';
         resultIcon.innerText = "❌";
-        resultTitle.innerText = "خطا";
         resultText.innerText = "خطا در ارتباط با هوش مصنوعی. لطفاً از فیلترشکن استفاده کنید.";
-        resultText.style.color = "#fca5a5";
+        nextBtn.style.display = 'block';
         console.error(error);
       }
     }
 
-    function resetGame() {
-      document.getElementById('aiAnalysis').style.display = 'none';
-    }
+    // شروع بازی با بارگذاری اولین سناریو
+    window.onload = loadNextScenario;
   </script>
 </body>
 </html>
