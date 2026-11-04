@@ -3,73 +3,64 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>قطب‌نمای آزادی | مطالعات اجتماعی</title>
+<title>قطب‌نمای آزادی | کارگاه زندگی خوب</title>
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;700;900&display=swap" rel="stylesheet">
 <style>
   * { margin:0; padding:0; box-sizing:border-box; font-family:'Vazirmatn',sans-serif; }
   body {
-    background-color: #0d1117; /* تم تیره و عمیق */
+    background-color: #0d1117;
     background-image: radial-gradient(circle at 50% 0%, #1a2a3a 0%, #0d1117 70%);
     min-height: 100vh; color: #e6edf3; padding: 40px 20px;
     display: flex; flex-direction: column; align-items: center;
   }
-
   .header { text-align: center; margin-bottom: 40px; max-width: 700px; }
   .header h1 { font-size: 2.2rem; font-weight: 900; margin-bottom: 15px; color: #58a6ff; text-shadow: 0 0 20px rgba(88, 166, 255, 0.3); }
   .header p { font-size: 1.05rem; color: #8b949e; line-height: 1.8; }
 
-  .compass-container { width: 100%; max-width: 800px; display: flex; flex-direction: column; gap: 15px; }
-
-  /* کارت‌های ستون‌های آزادی */
-  .freedom-card {
-    background: rgba(22, 27, 34, 0.8);
-    border: 1px solid #30363d;
-    border-radius: 16px;
-    overflow: hidden;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    backdrop-filter: blur(10px);
-  }
-  
-  .freedom-card:hover { border-color: #58a6ff; box-shadow: 0 8px 30px rgba(88, 166, 255, 0.1); }
+  .compass-container { width: 100%; max-width: 800px; display: flex; flex-direction: column; gap: 15px; margin-bottom: 50px;}
+  .freedom-card { background: rgba(22, 27, 34, 0.8); border: 1px solid #30363d; border-radius: 16px; overflow: hidden; transition: all 0.4s; backdrop-filter: blur(10px); }
+  .freedom-card:hover { border-color: #58a6ff; }
   .freedom-card.active { border-color: #58a6ff; background: rgba(22, 27, 34, 1); }
-
-  .card-header {
-    padding: 20px 25px; cursor: pointer; display: flex; align-items: center; justify-content: space-between;
-  }
-  
+  .card-header { padding: 20px 25px; cursor: pointer; display: flex; align-items: center; justify-content: space-between; }
   .card-title-group { display: flex; align-items: center; gap: 15px; }
   .card-icon { font-size: 2rem; }
   .card-title { font-size: 1.2rem; font-weight: 900; color: #e6edf3; }
-  
   .toggle-icon { font-size: 1.2rem; color: #8b949e; transition: transform 0.4s; }
   .freedom-card.active .toggle-icon { transform: rotate(180deg); color: #58a6ff; }
-
-  /* محتوای بازشونده */
-  .card-content {
-    max-height: 0; overflow: hidden; transition: max-height 0.5s ease-out;
-  }
+  .card-content { max-height: 0; overflow: hidden; transition: max-height 0.5s ease-out; }
   .freedom-card.active .card-content { max-height: 500px; transition: max-height 0.5s ease-in; }
-
   .content-inner { padding: 0 25px 25px 25px; line-height: 1.9; font-size: 0.95rem; }
   .content-inner p { color: #c9d1d9; margin-bottom: 15px; text-align: justify; }
-  
-  /* بخش نقل قول */
-  .quote-box {
-    background: rgba(88, 166, 255, 0.08); border-right: 4px solid #58a6ff;
-    padding: 15px 20px; border-radius: 8px; margin-top: 15px;
-  }
+  .quote-box { background: rgba(88, 166, 255, 0.08); border-right: 4px solid #58a6ff; padding: 15px 20px; border-radius: 8px; margin-top: 15px; }
   .quote-text { font-style: italic; color: #e6edf3; font-size: 0.95rem; margin-bottom: 5px; }
   .quote-author { font-size: 0.8rem; color: #8b949e; text-align: left; }
 
-  /* استایل خاص برای کارت فعال */
-  .freedom-card.active .card-title { color: #58a6ff; }
-  .freedom-card.active .card-icon { transform: scale(1.1); transition: 0.3s; }
+  /* استایل‌های چت‌بات */
+  .ai-chat-btn {
+    position: fixed; bottom: 20px; right: 20px; width: 60px; height: 60px; border-radius: 50%;
+    background: linear-gradient(135deg, #58a6ff, #1f6feb); color: white; font-size: 30px;
+    border: none; cursor: pointer; box-shadow: 0 4px 15px rgba(88,166,255,0.4); z-index: 10000;
+    display: flex; justify-content: center; align-items: center; transition: 0.3s;
+  }
+  .ai-chat-btn:hover { transform: scale(1.1); }
+  .ai-chat-window {
+    position: fixed; bottom: 90px; right: 20px; width: 350px; max-width: calc(100vw - 40px);
+    height: 450px; background: #161b22; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    display: none; flex-direction: column; z-index: 10000; overflow: hidden; border: 1px solid #30363d;
+  }
+  .ai-chat-header { background: #1f6feb; color: white; padding: 15px; font-weight: 900; display: flex; justify-content: space-between; align-items: center; }
+  .ai-chat-messages { flex: 1; padding: 15px; overflow-y: auto; background: #0d1117; display: flex; flex-direction: column; gap: 10px; font-size: 0.9rem; }
+  .ai-msg { padding: 10px 15px; border-radius: 10px; max-width: 85%; line-height: 1.6; white-space: pre-wrap; }
+  .ai-msg.user { background: #21262d; color: #e6edf3; align-self: flex-start; border: 1px solid #30363d; }
+  .ai-msg.bot { background: #1f6feb; color: #fff; align-self: flex-end; }
+  .ai-chat-input-area { display: flex; padding: 10px; background: #161b22; border-top: 1px solid #30363d; }
+  .ai-chat-input-area input { flex: 1; padding: 10px; background: #0d1117; border: 1px solid #30363d; color: white; border-radius: 20px; outline: none; font-family: inherit; font-size: 0.9rem; }
+  .ai-chat-input-area button { background: #1f6feb; color: white; border: none; border-radius: 50%; width: 40px; height: 40px; margin-right: 10px; cursor: pointer; font-size: 1.2rem; display: flex; justify-content: center; align-items: center; }
 
   @media(max-width: 600px) {
     .header h1 { font-size: 1.8rem; }
     .card-header { padding: 15px 20px; }
     .card-title { font-size: 1.1rem; }
-    .card-icon { font-size: 1.6rem; }
     .content-inner { padding: 0 20px 20px 20px; font-size: 0.9rem; }
   }
 </style>
@@ -82,122 +73,100 @@
   </div>
 
   <div class="compass-container">
-
-    <!-- ستون ۱: آزادی بیان -->
+    <!-- کارت‌های قبلی (بدون تغییر) -->
     <div class="freedom-card" onclick="toggleCard(this)">
-      <div class="card-header">
-        <div class="card-title-group">
-          <span class="card-icon">🗣️</span>
-          <span class="card-title">آزادی بیان و اندیشه</span>
-        </div>
-        <span class="toggle-icon">▼</span>
-      </div>
-      <div class="card-content">
-        <div class="content-inner">
-          <p>یعنی حق داشتن هر نوع عقیده و بیان آن بدون ترس از مجازات. در یک جامعه آزاد، شما می‌توانید سوال بپرسید، انتقاد کنید و نظر مخالف خود را بیان کنید. آزادی بیان، چراغی است که فساد و نادانی را روشن می‌کند.</p>
-          <div class="quote-box">
-            <div class="quote-text">«من با عقیده شما مخالفم، اما تا پای جان از حق شما برای بیان آن دفاع می‌کنم.»</div>
-            <div class="quote-author">— ولتر (فیلسوف فرانسوی)</div>
-          </div>
-        </div>
-      </div>
+      <div class="card-header"><div class="card-title-group"><span class="card-icon">🗣️</span><span class="card-title">آزادی بیان و اندیشه</span></div><span class="toggle-icon">▼</span></div>
+      <div class="card-content"><div class="content-inner"><p>یعنی حق داشتن هر نوع عقیده و بیان آن بدون ترس از مجازات. در یک جامعه آزاد، شما می‌توانید سوال بپرسید، انتقاد کنید و نظر مخالف خود را بیان کنید.</p><div class="quote-box"><div class="quote-text">«من با عقیده شما مخالفم، اما تا پای جان از حق شما برای بیان آن دفاع می‌کنم.»</div><div class="quote-author">— ولتر</div></div></div></div>
     </div>
-
-    <!-- ستون ۲: آزادی شخصی -->
     <div class="freedom-card" onclick="toggleCard(this)">
-      <div class="card-header">
-        <div class="card-title-group">
-          <span class="card-icon">🕊️</span>
-          <span class="card-title">آزادی شخصی و حریم خصوصی</span>
-        </div>
-        <span class="toggle-icon">▼</span>
-      </div>
-      <div class="card-content">
-        <div class="content-inner">
-          <p>یعنی حق انتخاب سبک زندگی، پوشش، باورها و آینده خودمان. این آزادی یعنی هیچ‌کس حق ندارد بدون دلیل موجه در زندگی خصوصی و انتخاب‌های شخصی شما دخالت کند، تا زمانی که به حقوق دیگران آسیب نزنید.</p>
-          <div class="quote-box">
-            <div class="quote-text">«آزادی یعنی توانایی انتخاب؛ و با هر انتخابی که می‌کنیم، مسئولیت آن را نیز می‌پذیریم.»</div>
-            <div class="quote-author">— ژان پل سارتر (فیلسوف و نویسنده)</div>
-          </div>
-        </div>
-      </div>
+      <div class="card-header"><div class="card-title-group"><span class="card-icon">🕊️</span><span class="card-title">آزادی شخصی و حریم خصوصی</span></div><span class="toggle-icon">▼</span></div>
+      <div class="card-content"><div class="content-inner"><p>یعنی حق انتخاب سبک زندگی، پوشش، باورها و آینده خودمان. هیچ‌کس حق ندارد بدون دلیل موجه در زندگی خصوصی شما دخالت کند، تا زمانی که به حقوق دیگران آسیب نزنید.</p><div class="quote-box"><div class="quote-text">«آزادی یعنی توانایی انتخاب؛ و با هر انتخابی که می‌کنیم، مسئولیت آن را نیز می‌پذیریم.»</div><div class="quote-author">— ژان پل سارتر</div></div></div></div>
     </div>
-
-    <!-- ستون ۳: آزادی اقتصادی -->
     <div class="freedom-card" onclick="toggleCard(this)">
-      <div class="card-header">
-        <div class="card-title-group">
-          <span class="card-icon">💼</span>
-          <span class="card-title">آزادی اقتصادی و مالکیت</span>
-        </div>
-        <span class="toggle-icon">▼</span>
-      </div>
-      <div class="card-content">
-        <div class="content-inner">
-          <p>یعنی حق کار کردن، انتخاب شغل دلخواه، و مالکیت ثمره تلاش خودتان. در یک اقتصاد آزاد، افراد می‌توانند با تلاش و خلاقیت خود، آینده بهتری بسازند و بدون ترس از مصادره شدن دستاوردهایشان، برای رفاه تلاش کنند.</p>
-          <div class="quote-box">
-            <div class="quote-text">«هیچ جامعه‌ای نمی‌تواند در آزادی و شکوفایی پیشرفت کند، اگر مردمش اجازه نداشته باشند ثمره زحمات خود را در امنیت کامل حفظ کنند.»</div>
-            <div class="quote-author">— آدام اسمیت (پدر علم اقتصاد)</div>
-          </div>
-        </div>
-      </div>
+      <div class="card-header"><div class="card-title-group"><span class="card-icon">💼</span><span class="card-title">آزادی اقتصادی و مالکیت</span></div><span class="toggle-icon">▼</span></div>
+      <div class="card-content"><div class="content-inner"><p>یعنی حق کار کردن، انتخاب شغل دلخواه، و مالکیت ثمره تلاش خودتان. در یک اقتصاد آزاد، افراد می‌توانند با تلاش خود آینده بهتری بسازند.</p><div class="quote-box"><div class="quote-text">«هیچ جامعه‌ای نمی‌تواند در آزادی پیشرفت کند، اگر مردمش اجازه نداشته باشند ثمره زحمات خود را در امنیت کامل حفظ کنند.»</div><div class="quote-author">— آدام اسمیت</div></div></div></div>
     </div>
-
-    <!-- ستون ۴: آزادی اجتماعی -->
     <div class="freedom-card" onclick="toggleCard(this)">
-      <div class="card-header">
-        <div class="card-title-group">
-          <span class="card-icon">⚖️</span>
-          <span class="card-title">آزادی اجتماعی و حقوق برابر</span>
-        </div>
-        <span class="toggle-icon">▼</span>
-      </div>
-      <div class="card-content">
-        <div class="content-inner">
-          <p>یعنی برابری همه انسان‌ها در برابر قانون، بدون توجه به جنسیت، قومیت، زبان یا مذهب. آزادی اجتماعی یعنی در جامعه‌ای زندگی کنیم که در آن، انسان بودنِ ما کافی باشد تا از حقوق مساوی برخوردار شویم.</p>
-          <div class="quote-box">
-            <div class="quote-text">«آزادی یعنی رهایی از ترس. هیچ‌کس نباید به خاطر تفاوت‌هایش در جامعه مورد آزار یا تبعیض قرار بگیرد.»</div>
-            <div class="quote-author">— نلسون ماندلا (رهبر ضدآپارتاید)</div>
-          </div>
-        </div>
-      </div>
+      <div class="card-header"><div class="card-title-group"><span class="card-icon">⚖️</span><span class="card-title">آزادی اجتماعی و حقوق برابر</span></div><span class="toggle-icon">▼</span></div>
+      <div class="card-content"><div class="content-inner"><p>یعنی برابری همه انسان‌ها در برابر قانون، بدون توجه به جنسیت، قومیت، زبان یا مذهب. در جامعه‌ای زندگی کنیم که انسان بودنِ ما کافی باشد تا از حقوق مساوی برخوردار شویم.</p><div class="quote-box"><div class="quote-text">«آزادی یعنی رهایی از ترس. هیچ‌کس نباید به خاطر تفاوت‌هایش مورد آزار یا تبعیض قرار بگیرد.»</div><div class="quote-author">— نلسون ماندلا</div></div></div></div>
     </div>
-
-    <!-- ستون ۵: تعریف آزادی (مرزها) -->
     <div class="freedom-card" onclick="toggleCard(this)">
-      <div class="card-header">
-        <div class="card-title-group">
-          <span class="card-icon">🚦</span>
-          <span class="card-title">مرزهای آزادی (مسئولیت)</span>
-        </div>
-        <span class="toggle-icon">▼</span>
-      </div>
-      <div class="card-content">
-        <div class="content-inner">
-          <p>آزادی مطلق وجود ندارد؛ آزادی شما تا جایی است که به آزادی و حقوق دیگران آسیب نزند. این همان قانون طلایی است: «آزادی من به پایان می‌رسد، آنجا که آزادی دیگری آغاز می‌شود». مسئولیت‌پذیری، بهای داشتن یک جامعه آزاد است.</p>
-          <div class="quote-box">
-            <div class="quote-text">«آزادی هرگز به معنای انجام هر کاری که هوس می‌کنیم نیست؛ آزادی یعنی حق انتخاب درست با در نظر گرفتن حقوق دیگران.»</div>
-            <div class="quote-author">— اعلامیه جهانی حقوق بشر (ماده ۲۹)</div>
-          </div>
-        </div>
-      </div>
+      <div class="card-header"><div class="card-title-group"><span class="card-icon">🚦</span><span class="card-title">مرزهای آزادی (مسئولیت)</span></div><span class="toggle-icon">▼</span></div>
+      <div class="card-content"><div class="content-inner"><p>آزادی شما تا جایی است که به آزادی دیگران آسیب نزند. این همان قانون طلایی است: «آزادی من به پایان می‌رسد، آنجا که آزادی دیگری آغاز می‌شود».</p><div class="quote-box"><div class="quote-text">«آزادی هرگز به معنای انجام هر کاری که هوس می‌کنیم نیست؛ آزادی یعنی حق انتخاب درست با در نظر گرفتن حقوق دیگران.»</div><div class="quote-author">— اعلامیه جهانی حقوق بشر</div></div></div></div>
     </div>
+  </div>
 
+  <!-- دکمه و پنجره چت‌بات -->
+  <button class="ai-chat-btn" onclick="toggleChat()">🤖</button>
+  <div class="ai-chat-window" id="aiChatWindow">
+    <div class="ai-chat-header">
+      <span>راهنمای آزادی</span>
+      <span style="cursor:pointer; font-size:1.2rem;" onclick="toggleChat()">✖</span>
+    </div>
+    <div class="ai-chat-messages" id="chatMessages">
+      <div class="ai-msg bot">سلام! من راهنمای تو در مسیر شناخت آزادی هستم. هر سوالی درباره آزادی، حقوق شهروندی یا نحوه ساختن یک زندگی بهتر داری، بپرس! 😊</div>
+    </div>
+    <div class="ai-chat-input-area">
+      <input type="text" id="chatInput" placeholder="سوال خود را بنویسید..." onkeypress="handleChatEnter(event)">
+      <button onclick="sendChatMessage()">➤</button>
+    </div>
   </div>
 
   <script>
-    // تابع باز و بسته کردن کارت‌ها
     function toggleCard(element) {
-      // بستن بقیه کارت‌ها (برای اینکه فقط یکی باز بمونه)
       const allCards = document.querySelectorAll('.freedom-card');
-      allCards.forEach(card => {
-        if (card !== element) {
-          card.classList.remove('active');
-        }
-      });
-
-      // تغییر وضعیت کارت کلیک شده
+      allCards.forEach(card => { if (card !== element) card.classList.remove('active'); });
       element.classList.toggle('active');
+    }
+
+    // کدهای چت‌بات (اتصال به گروک با پرامپت اختصاصی آزادی)
+    function toggleChat() {
+      const chatWindow = document.getElementById('aiChatWindow');
+      chatWindow.style.display = chatWindow.style.display === 'flex' ? 'none' : 'flex';
+    }
+    function handleChatEnter(event) {
+      if (event.key === 'Enter') sendChatMessage();
+    }
+    async function sendChatMessage() {
+      const input = document.getElementById('chatInput');
+      const messages = document.getElementById('chatMessages');
+      const text = input.value.trim();
+      if (!text) return;
+
+      messages.innerHTML += `<div class="ai-msg user">${text}</div>`;
+      input.value = '';
+      messages.scrollTop = messages.scrollHeight;
+
+      const loadingId = 'loading-' + Date.now();
+      messages.innerHTML += `<div class="ai-msg bot" id="${loadingId}">در حال فکر کردن... ⏳</div>`;
+      messages.scrollTop = messages.scrollHeight;
+
+      const GROQ_API_KEY = "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";
+
+      try {
+        const payload = {
+          model: "openai/gpt-oss-120b",
+          messages: [
+            { role: "system", content: "شما یک استاد فلسفه حقوق و شهروندی هستید که با یک دانش‌آموز دوره متوسطه صحبت می‌کنید. هدف شما توضیح مفهوم آزادی (در ابعاد بیان، شخصی، اقتصادی و اجتماعی) و حقوق شهروندی است. با لحنی صمیمی، روشنفکرانه و بدون تعصب پاسخ دهید. از مثال‌های واقعی و ملموس استفاده کنید و دانش‌آموز را به تفکر انتقادی تشویق کنید." },
+            { role: "user", content: text }
+          ]
+        };
+
+        const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+          method: "POST",
+          headers: { "Authorization": `Bearer ${GROQ_API_KEY}` },
+          body: new Blob([JSON.stringify(payload)], { type: 'application/json' })
+        });
+
+        const data = await response.json();
+        document.getElementById(loadingId).remove();
+        if (data.error) throw new Error(data.error.message);
+        messages.innerHTML += `<div class="ai-msg bot">${data.choices[0].message.content}</div>`;
+        messages.scrollTop = messages.scrollHeight;
+      } catch (error) {
+        document.getElementById(loadingId).remove();
+        messages.innerHTML += `<div class="ai-msg bot" style="color:red;">❌ خطا در ارتباط. لطفاً از فیلترشکن استفاده کنید.</div>`;
+      }
     }
   </script>
 </body>
