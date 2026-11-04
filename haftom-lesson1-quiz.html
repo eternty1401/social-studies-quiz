@@ -33,27 +33,16 @@
     font-size: 0.85rem;
     margin-bottom: 20px;
   }
-  .student-name-box {
+  .user-box {
     background: #ebf8ff;
     padding: 12px;
     border-radius: 10px;
     margin-bottom: 20px;
-  }
-  .student-name-box label {
-    display: block;
+    text-align: center;
     font-size: 0.9rem;
-    margin-bottom: 6px;
     color: #2b6cb0;
-    font-weight: bold;
   }
-  .student-name-box input {
-    width: 100%;
-    padding: 10px;
-    border: 2px solid #bee3f8;
-    border-radius: 8px;
-    font-size: 1rem;
-    font-family: inherit;
-  }
+  .user-box strong { color: #2c5282; }
   .question {
     background: #f7fafc;
     border-radius: 12px;
@@ -99,8 +88,6 @@
   }
   .submit-btn:hover { background: #2f855a; }
   .submit-btn:disabled { background: #a0aec0; cursor: not-allowed; }
-
-  /* نتایج */
   .result-box {
     display: none;
     text-align: center;
@@ -127,6 +114,10 @@
     border-radius: 8px;
     cursor: pointer;
     font-size: 0.9rem;
+    margin-left: 8px;
+  }
+  .back-btn {
+    background: #718096;
   }
 </style>
 </head>
@@ -135,14 +126,11 @@
   <h1>📝 آزمون درس اول: من حق دارم</h1>
   <p class="subtitle">مطالعات اجتماعی پایه هفتم</p>
 
-  <div class="student-name-box">
-    <label for="studentName">نام و نام خانوادگی:</label>
-    <input type="text" id="studentName" placeholder="نام خود را وارد کنید..." required>
+  <div class="user-box" id="userBox">
+    در حال شناسایی حساب کاربری...
   </div>
 
-  <div id="quizArea">
-    <!-- سوالات توسط جاوااسکریپت ساخته می‌شوند -->
-  </div>
+  <div id="quizArea"></div>
 
   <button class="submit-btn" id="submitBtn" onclick="submitQuiz()">✅ ثبت و ارسال نمره</button>
 
@@ -152,6 +140,7 @@
     <span class="msg" id="resultMsg"></span>
     <br>
     <button class="retry-btn" onclick="location.reload()">🔄 آزمون مجدد</button>
+    <button class="retry-btn back-btn" onclick="location.href='student-panel.html'">🏠 پنل من</button>
   </div>
 </div>
 
@@ -161,7 +150,7 @@
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 
 <script>
-// ==== تنظیمات Firebase (همان مقادیر پروژه خودت را جایگزین کن) ====
+// ==== تنظیمات Firebase ====
 const firebaseConfig = {
   apiKey: "AIzaSyXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
   authDomain: "social-studies-app-6b600.firebaseapp.com",
@@ -174,13 +163,33 @@ const firebaseConfig = {
 if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
 }
+const auth = firebase.auth();
 const db = firebase.firestore();
 
-// ==== تابع ذخیره نمره در فایربیس (با رند به بالا) ====
+let currentUser = null;
+
+// ==== بررسی لاگین ====
+auth.onAuthStateChanged((user) => {
+  const userBox = document.getElementById("userBox");
+  if (!user) {
+    // اگر لاگین نبود، به صفحه لاگین برود
+    window.location.href = "login.html";
+    return;
+  }
+  currentUser = user;
+  const displayName = user.displayName || user.email || "دانش‌آموز";
+  userBox.innerHTML = `👤 خوش آمدی، <strong>${displayName}</strong>`;
+});
+
+// ==== تابع ذخیره نمره (با رند به بالا + userId + email) ====
 window.saveGradeToFirebase = async function(studentName, quizName, score) {
   try {
-    const roundedScore = Math.ceil(score); // رند به سمت بالا
+    if (!currentUser) throw new Error("کاربر لاگین نیست");
+
+    const roundedScore = Math.ceil(score);
     await db.collection("grades").add({
+      userId: currentUser.uid,
+      studentEmail: currentUser.email || "",
       studentName: studentName,
       quizName: quizName,
       score: roundedScore,
@@ -189,6 +198,7 @@ window.saveGradeToFirebase = async function(studentName, quizName, score) {
     console.log("نمره ذخیره شد:", roundedScore);
   } catch (error) {
     console.error("خطا در ذخیره نمره:", error);
+    throw error;
   }
 };
 
@@ -286,7 +296,7 @@ const questions = [
   }
 ];
 
-// ==== ساخت سوالات در صفحه ====
+// ==== ساخت سوالات ====
 const quizArea = document.getElementById("quizArea");
 let selectedAnswers = new Array(questions.length).fill(null);
 
@@ -294,7 +304,6 @@ questions.forEach((item, index) => {
   const qDiv = document.createElement("div");
   qDiv.className = "question";
   qDiv.innerHTML = `<h3>${index + 1}. ${item.q}</h3>`;
-
   item.options.forEach((opt, optIndex) => {
     const label = document.createElement("label");
     label.className = "option";
@@ -304,7 +313,6 @@ questions.forEach((item, index) => {
     `;
     qDiv.appendChild(label);
   });
-
   quizArea.appendChild(qDiv);
 });
 
@@ -317,12 +325,9 @@ function selectOption(qIndex, optIndex, radioEl) {
 
 // ==== ارسال آزمون ====
 async function submitQuiz() {
-  const nameInput = document.getElementById("studentName");
-  const studentName = nameInput.value.trim();
-
-  if (!studentName) {
-    alert("لطفاً نام و نام خانوادگی خود را وارد کنید.");
-    nameInput.focus();
+  if (!currentUser) {
+    alert("لطفاً ابتدا وارد حساب خود شوید.");
+    window.location.href = "login.html";
     return;
   }
 
@@ -334,26 +339,32 @@ async function submitQuiz() {
   // محاسبه نمره
   let correct = 0;
   questions.forEach((item, index) => {
-    if (selectedAnswers[index] === item.answer) {
-      correct++;
-    }
+    if (selectedAnswers[index] === item.answer) correct++;
   });
-
   const rawScore = (correct / questions.length) * 10;
-  const finalScore = Math.ceil(rawScore); // رند به بالا
+  const finalScore = Math.ceil(rawScore);
 
-  // غیرفعال کردن دکمه
+  // نام نمایشی دانش‌آموز
+  const studentName = currentUser.displayName || currentUser.email || "دانش‌آموز";
+
+  // غیرفعال دکمه
   const submitBtn = document.getElementById("submitBtn");
   submitBtn.disabled = true;
   submitBtn.textContent = "در حال ارسال...";
 
-  // ذخیره در فایربیس
-  await window.saveGradeToFirebase(studentName, "درس اول - من حق دارم", rawScore);
+  try {
+    await window.saveGradeToFirebase(studentName, "درس اول - من حق دارم", rawScore);
+  } catch (err) {
+    alert("خطا در ذخیره نمره. لطفاً اتصال اینترنت را بررسی کن.");
+    submitBtn.disabled = false;
+    submitBtn.textContent = "✅ ثبت و ارسال نمره";
+    return;
+  }
 
   // نمایش نتیجه
   document.getElementById("quizArea").style.display = "none";
   submitBtn.style.display = "none";
-  document.querySelector(".student-name-box").style.display = "none";
+  document.getElementById("userBox").style.display = "none";
 
   const resultBox = document.getElementById("resultBox");
   resultBox.style.display = "block";
