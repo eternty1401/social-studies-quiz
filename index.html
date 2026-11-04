@@ -30,7 +30,8 @@
   }
   body.dark-mode .grade-card,
   body.dark-mode .teacher-badge,
-  body.dark-mode .about-section {
+  body.dark-mode .about-section,
+  body.dark-mode .auth-bar {
     background: rgba(0, 0, 0, 0.4);
     border-color: rgba(255, 255, 255, 0.1);
   }
@@ -75,6 +76,47 @@
     background: rgba(255,255,255,0.3);
   }
 
+  /* ===== نوار احراز هویت ===== */
+  .auth-bar {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    display: none;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.2);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(255,255,255,0.3);
+    padding: 8px 14px;
+    border-radius: 50px;
+    z-index: 100;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    font-size: 0.85rem;
+  }
+  .auth-bar .user-name {
+    font-weight: 700;
+    max-width: 120px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .auth-bar button {
+    background: rgba(255,255,255,0.95);
+    color: #764ba2;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-family: inherit;
+    font-weight: 700;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: 0.2s;
+  }
+  .auth-bar button:hover { transform: scale(1.05); background: #fff; }
+  .auth-bar .logout-btn { background: #ff6b9d; color: #fff; }
+  .auth-bar .logout-btn:hover { background: #e05a8a; }
+
   @keyframes gradientShift {
     0% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }
@@ -107,6 +149,7 @@
     margin-bottom: 40px;
     z-index: 1;
     position: relative;
+    margin-top: 50px;
   }
 
   .header h1 {
@@ -206,6 +249,7 @@
     position: relative;
     overflow: hidden;
     animation: fadeInUp 1s ease backwards;
+    cursor: pointer;
   }
 
   .grade-card:nth-child(1) { animation-delay: 0.8s; }
@@ -304,6 +348,7 @@
     overflow: hidden;
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     animation: fadeInUp 1s ease 1.35s backwards;
+    cursor: pointer;
   }
   .museum-banner::before {
     content: '';
@@ -444,11 +489,119 @@
     50% { transform: scale(1.2); }
   }
 
+  /* ===== بنر گفتگو با تاریخ ===== */
+  .history-banner {
+    display: block;
+    text-decoration: none;
+    color: #fff;
+    background: linear-gradient(135deg,
+      rgba(139, 92, 246, 0.4) 0%,
+      rgba(59, 130, 246, 0.4) 50%,
+      rgba(16, 185, 129, 0.4) 100%);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,0.4);
+    border-radius: 24px;
+    padding: 28px 25px;
+    margin-bottom: 30px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    animation: fadeInUp 1s ease 1.4s backwards;
+    cursor: pointer;
+  }
+  .history-banner::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 80% 50%, rgba(255,255,255,0.3), transparent 60%);
+    opacity: 0;
+    transition: opacity 0.5s;
+    pointer-events: none;
+  }
+  .history-banner:hover {
+    transform: translateY(-6px) scale(1.01);
+    box-shadow: 0 20px 50px rgba(139, 92, 246, 0.35);
+  }
+  .history-banner:hover::before { opacity: 1; }
+  .history-banner-content {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    position: relative;
+    z-index: 1;
+  }
+  .history-banner-icon {
+    font-size: 3.5rem;
+    flex-shrink: 0;
+    filter: drop-shadow(0 4px 10px rgba(0,0,0,0.3));
+    transition: transform 0.5s;
+  }
+  .history-banner:hover .history-banner-icon {
+    transform: scale(1.15) rotate(8deg);
+  }
+  .history-banner-text { flex: 1; text-align: right; }
+  .history-banner-text h3 {
+    font-size: 1.25rem;
+    font-weight: 900;
+    margin-bottom: 6px;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  }
+  .history-banner-text p {
+    font-size: 0.88rem;
+    color: rgba(255,255,255,0.92);
+    line-height: 1.7;
+  }
+  .history-banner-btn {
+    background: rgba(255,255,255,0.95);
+    color: #764ba2;
+    padding: 11px 22px;
+    border-radius: 30px;
+    font-weight: 900;
+    font-size: 0.85rem;
+    white-space: nowrap;
+    transition: 0.3s;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+  }
+  .history-banner:hover .history-banner-btn {
+    transform: scale(1.05);
+    background: #fff;
+  }
+  body.dark-mode .history-banner {
+    background: linear-gradient(135deg,
+      rgba(139, 92, 246, 0.2) 0%,
+      rgba(59, 130, 246, 0.2) 50%,
+      rgba(16, 185, 129, 0.2) 100%);
+    border-color: rgba(255,255,255,0.15);
+  }
+
+  /* بنر مهارت زندگی */
+  .life-banner {
+    display: block; text-decoration: none; color: #fff;
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.3) 0%, rgba(56, 189, 248, 0.3) 100%);
+    backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.4);
+    border-radius: 24px; padding: 28px 25px; margin-bottom: 30px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.15); position: relative; overflow: hidden;
+    transition: all 0.4s; animation: fadeInUp 1s ease 1.45s backwards;
+    cursor: pointer;
+  }
+  .life-banner:hover { transform: translateY(-6px) scale(1.01); box-shadow: 0 20px 50px rgba(139, 92, 246, 0.35); }
+  .life-banner-content { display: flex; align-items: center; gap: 20px; position: relative; z-index: 1; }
+  .life-banner-icon { font-size: 3.5rem; flex-shrink: 0; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.3)); transition: transform 0.5s; }
+  .life-banner:hover .life-banner-icon { transform: scale(1.15) rotate(-8deg); }
+  .life-banner-text { flex: 1; text-align: right; }
+  .life-banner-text h3 { font-size: 1.25rem; font-weight: 900; margin-bottom: 6px; text-shadow: 0 2px 8px rgba(0,0,0,0.2); }
+  .life-banner-text p { font-size: 0.88rem; color: rgba(255,255,255,0.92); line-height: 1.7; }
+  .life-banner-btn { background: rgba(255,255,255,0.95); color: #764ba2; padding: 11px 22px; border-radius: 30px; font-weight: 900; font-size: 0.85rem; white-space: nowrap; transition: 0.3s; box-shadow: 0 4px 15px rgba(0,0,0,0.15); }
+  .life-banner:hover .life-banner-btn { transform: scale(1.05); background: #fff; }
+
   /* ===== ریسپانسیو ===== */
   @media(max-width:600px) {
     body { padding: 25px 15px; }
     .header h1 { font-size: 1.9rem; }
     .header .subtitle { font-size: 0.95rem; }
+    .header { margin-top: 60px; }
     .teacher-badge { padding: 10px 22px; font-size: 0.9rem; }
     .section-title { font-size: 1.2rem; }
     .grade-card { padding: 30px 20px; }
@@ -458,154 +611,44 @@
     .about-section h2 { font-size: 1.1rem; }
     .about-section p { font-size: 0.9rem; }
     .theme-toggle { top: 15px; left: 15px; width: 40px; height: 40px; font-size: 1.2rem; }
+    .auth-bar { top: 15px; right: 15px; padding: 6px 12px; font-size: 0.78rem; }
+    .auth-bar .user-name { max-width: 80px; }
     .museum-banner { padding: 22px 18px; }
-    .museum-banner-content {
-      flex-direction: column;
-      text-align: center;
-      gap: 12px;
-    }
+    .museum-banner-content { flex-direction: column; text-align: center; gap: 12px; }
     .museum-banner-text { text-align: center; }
     .museum-banner-icon { font-size: 3rem; }
     .museum-banner-text h3 { font-size: 1.1rem; }
     .museum-banner-text p { font-size: 0.82rem; }
     .museum-banner-btn { padding: 10px 20px; font-size: 0.8rem; }
-   .history-banner { padding: 22px 18px; }
-.history-banner-content { flex-direction: column; text-align: center; gap: 12px; }
-.history-banner-text { text-align: center; }
-.history-banner-icon { font-size: 3rem; }
-.history-banner-text h3 { font-size: 1.1rem; }
-.history-banner-text p { font-size: 0.82rem; }
-.history-banner-btn { padding: 10px 20px; font-size: 0.8rem; display: inline-block; margin-top: 5px; }
+    .history-banner { padding: 22px 18px; }
+    .history-banner-content { flex-direction: column; text-align: center; gap: 12px; }
+    .history-banner-text { text-align: center; }
+    .history-banner-icon { font-size: 3rem; }
+    .history-banner-text h3 { font-size: 1.1rem; }
+    .history-banner-text p { font-size: 0.82rem; }
+    .history-banner-btn { padding: 10px 20px; font-size: 0.8rem; display: inline-block; margin-top: 5px; }
+    .life-banner { padding: 22px 18px; }
+    .life-banner-content { flex-direction: column; text-align: center; gap: 12px; }
+    .life-banner-text { text-align: center; }
+    .life-banner-icon { font-size: 3rem; }
+    .life-banner-btn { padding: 10px 20px; font-size: 0.8rem; }
   }
- /* ===== بنر گفتگو با تاریخ ===== */
-.history-banner {
-  display: block;
-  text-decoration: none;
-  color: #fff;
-  background: linear-gradient(135deg,
-    rgba(139, 92, 246, 0.4) 0%,
-    rgba(59, 130, 246, 0.4) 50%,
-    rgba(16, 185, 129, 0.4) 100%);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255,255,255,0.4);
-  border-radius: 24px;
-  padding: 28px 25px;
-  margin-bottom: 30px;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.15);
-  position: relative;
-  overflow: hidden;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  animation: fadeInUp 1s ease 1.4s backwards;
-}
-.history-banner::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at 80% 50%, rgba(255,255,255,0.3), transparent 60%);
-  opacity: 0;
-  transition: opacity 0.5s;
-  pointer-events: none;
-}
-.history-banner:hover {
-  transform: translateY(-6px) scale(1.01);
-  box-shadow: 0 20px 50px rgba(139, 92, 246, 0.35);
-}
-.history-banner:hover::before { opacity: 1; }
-.history-banner-content {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  position: relative;
-  z-index: 1;
-}
-.history-banner-icon {
-  font-size: 3.5rem;
-  flex-shrink: 0;
-  filter: drop-shadow(0 4px 10px rgba(0,0,0,0.3));
-  transition: transform 0.5s;
-}
-.history-banner:hover .history-banner-icon {
-  transform: scale(1.15) rotate(8deg);
-}
-.history-banner-text { flex: 1; text-align: right; }
-.history-banner-text h3 {
-  font-size: 1.25rem;
-  font-weight: 900;
-  margin-bottom: 6px;
-  text-shadow: 0 2px 8px rgba(0,0,0,0.2);
-}
-.history-banner-text p {
-  font-size: 0.88rem;
-  color: rgba(255,255,255,0.92);
-  line-height: 1.7;
-}
-.history-banner-btn {
-  background: rgba(255,255,255,0.95);
-  color: #764ba2;
-  padding: 11px 22px;
-  border-radius: 30px;
-  font-weight: 900;
-  font-size: 0.85rem;
-  white-space: nowrap;
-  transition: 0.3s;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.15);
-}
-.history-banner:hover .history-banner-btn {
-  transform: scale(1.05);
-  background: #fff;
-}
-body.dark-mode .history-banner {
-  background: linear-gradient(135deg,
-    rgba(139, 92, 246, 0.2) 0%,
-    rgba(59, 130, 246, 0.2) 50%,
-    rgba(16, 185, 129, 0.2) 100%);
-  border-color: rgba(255,255,255,0.15);
-}
-
-/* ریسپانسیو برای موبایل (اضافه شود به بخش media query) */
-/* در بخش @media(max-width:600px) این خطوط را اضافه کن: */
-/*
-  .history-banner { padding: 22px 18px; }
-  .history-banner-content { flex-direction: column; text-align: center; gap: 12px; }
-  .history-banner-text { text-align: center; }
-  .history-banner-icon { font-size: 3rem; }
-  .history-banner-text h3 { font-size: 1.1rem; }
-  .history-banner-text p { font-size: 0.82rem; }
-  .history-banner-btn { padding: 10px 20px; font-size: 0.8rem; }
-*/
- /* بنر مهارت زندگی */
-.life-banner {
-  display: block; text-decoration: none; color: #fff;
-  background: linear-gradient(135deg, rgba(139, 92, 246, 0.3) 0%, rgba(56, 189, 248, 0.3) 100%);
-  backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.4);
-  border-radius: 24px; padding: 28px 25px; margin-bottom: 30px;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.15); position: relative; overflow: hidden;
-  transition: all 0.4s; animation: fadeInUp 1s ease 1.45s backwards;
-}
-.life-banner:hover { transform: translateY(-6px) scale(1.01); box-shadow: 0 20px 50px rgba(139, 92, 246, 0.35); }
-.life-banner-content { display: flex; align-items: center; gap: 20px; position: relative; z-index: 1; }
-.life-banner-icon { font-size: 3.5rem; flex-shrink: 0; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.3)); transition: transform 0.5s; }
-.life-banner:hover .life-banner-icon { transform: scale(1.15) rotate(-8deg); }
-.life-banner-text { flex: 1; text-align: right; }
-.life-banner-text h3 { font-size: 1.25rem; font-weight: 900; margin-bottom: 6px; text-shadow: 0 2px 8px rgba(0,0,0,0.2); }
-.life-banner-text p { font-size: 0.88rem; color: rgba(255,255,255,0.92); line-height: 1.7; }
-.life-banner-btn { background: rgba(255,255,255,0.95); color: #764ba2; padding: 11px 22px; border-radius: 30px; font-weight: 900; font-size: 0.85rem; white-space: nowrap; transition: 0.3s; box-shadow: 0 4px 15px rgba(0,0,0,0.15); }
-.life-banner:hover .life-banner-btn { transform: scale(1.05); background: #fff; }
-
-@media(max-width:600px) {
-  .life-banner { padding: 22px 18px; }
-  .life-banner-content { flex-direction: column; text-align: center; gap: 12px; }
-  .life-banner-text { text-align: center; }
-  .life-banner-icon { font-size: 3rem; }
-  .life-banner-btn { padding: 10px 20px; font-size: 0.8rem; }
-}
 </style>
 </head>
 <body>
 
   <!-- دکمه حالت تاریک/روشن -->
   <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">🌙</button>
+
+  <!-- نوار احراز هویت -->
+  <div class="auth-bar" id="authBar">
+    <span class="user-name" id="userNameBar">...</span>
+    <button onclick="location.href='student-panel.html'">پنل من</button>
+    <button class="logout-btn" onclick="logout()">خروج</button>
+  </div>
+  <div class="auth-bar" id="guestBar">
+    <button onclick="goToLogin()">🔑 ورود / ثبت‌نام</button>
+  </div>
 
   <!-- حباب‌های تزئینی -->
   <div class="bubble"></div>
@@ -631,33 +674,33 @@ body.dark-mode .history-banner {
     <div class="grades-grid">
 
       <!-- پایه هفتم -->
-      <a href="haftom.html" class="grade-card">
+      <div class="grade-card" onclick="goToPage('haftom.html')">
         <span class="grade-icon">📗</span>
         <div class="grade-num">پایه هفتم</div>
         <div class="grade-desc">۲۴ درس کامل با درسنامه، آزمون، فلش کارت و فایل‌ها</div>
         <span class="grade-btn">ورود به پایه هفتم ←</span>
-      </a>
+      </div>
 
       <!-- پایه هشتم -->
-      <a href="hashtom.html" class="grade-card">
+      <div class="grade-card" onclick="goToPage('hashtom.html')">
         <span class="grade-icon">📘</span>
         <div class="grade-num">پایه هشتم</div>
         <div class="grade-desc">۲۴ درس کامل با درسنامه، آزمون، فلش کارت و فایل‌ها</div>
         <span class="grade-btn">ورود به پایه هشتم ←</span>
-      </a>
+      </div>
 
       <!-- پایه نهم -->
-      <a href="nohom.html" class="grade-card">
+      <div class="grade-card" onclick="goToPage('nohom.html')">
         <span class="grade-icon">📙</span>
         <div class="grade-num">پایه نهم</div>
         <div class="grade-desc">۲۴ درس کامل با درسنامه، آزمون، فلش کارت و فایل‌ها</div>
         <span class="grade-btn">ورود به پایه نهم ←</span>
-      </a>
+      </div>
 
     </div>
 
     <!-- 🏛️ بخش موزه گردی مجازی -->
-    <a href="museum.html" class="museum-banner">
+    <div class="museum-banner" onclick="goToPage('museum.html')">
       <div class="museum-banner-content">
         <span class="museum-banner-icon">🏛️</span>
         <div class="museum-banner-text">
@@ -666,29 +709,32 @@ body.dark-mode .history-banner {
         </div>
         <span class="museum-banner-btn">شروع سفر ۳۶۰° ←</span>
       </div>
-    </a>
-<!-- ⏳ بخش گفتگو با تاریخ -->
-<a href="history-chat.html" class="history-banner">
-  <div class="history-banner-content">
-    <span class="history-banner-icon">⏳</span>
-    <div class="history-banner-text">
-      <h3>گفتگو با تاریخ</h3>
-      <p>با کوروش، ابن سینا، امیرکبیر و دیگر شخصیت‌های تاریخی چت کن!</p>
     </div>
-    <span class="history-banner-btn">شروع گفتگو ←</span>
-  </div>
-</a>
-   <!-- 🌟 بخش مهارت زندگی -->
-<a href="life-skills.html" class="life-banner">
-  <div class="life-banner-content">
-    <span class="life-banner-icon">🌟</span>
-    <div class="life-banner-text">
-      <h3>مهارت زندگی</h3>
-      <p>آزادی، پارلمان، سواد رسانه‌ای و مهارت‌هایی که برای یک زندگی عالی لازم داری!</p>
+
+    <!-- ⏳ بخش گفتگو با تاریخ -->
+    <div class="history-banner" onclick="goToPage('history-chat.html')">
+      <div class="history-banner-content">
+        <span class="history-banner-icon">⏳</span>
+        <div class="history-banner-text">
+          <h3>گفتگو با تاریخ</h3>
+          <p>با کوروش، ابن سینا، امیرکبیر و دیگر شخصیت‌های تاریخی چت کن!</p>
+        </div>
+        <span class="history-banner-btn">شروع گفتگو ←</span>
+      </div>
     </div>
-    <span class="life-banner-btn">ورود به بخش مهارت‌ها ←</span>
-  </div>
-</a>
+
+    <!-- 🌟 بخش مهارت زندگی -->
+    <div class="life-banner" onclick="goToPage('life-skills.html')">
+      <div class="life-banner-content">
+        <span class="life-banner-icon">🌟</span>
+        <div class="life-banner-text">
+          <h3>مهارت زندگی</h3>
+          <p>آزادی، پارلمان، سواد رسانه‌ای و مهارت‌هایی که برای یک زندگی عالی لازم داری!</p>
+        </div>
+        <span class="life-banner-btn">ورود به بخش مهارت‌ها ←</span>
+      </div>
+    </div>
+
     <!-- بخش درباره -->
     <div class="about-section">
       <h2>✨ درباره این سایت</h2>
@@ -704,8 +750,8 @@ body.dark-mode .history-banner {
         <span class="feature-chip">📂 فایل‌ها و عکس‌ها</span>
         <span class="feature-chip">🎮 بازی آموزشی</span>
         <span class="feature-chip">🏛️ موزه گردی</span>
-       <span class="feature-chip">⏳ گفتگو با تاریخ</span>
-       <span class="feature-chip">🌟 مهارت زندگی</span>
+        <span class="feature-chip">⏳ گفتگو با تاریخ</span>
+        <span class="feature-chip">🌟 مهارت زندگی</span>
       </div>
     </div>
 
@@ -716,12 +762,94 @@ body.dark-mode .history-banner {
     ساخته شده با <span class="heart">❤️</span> برای دانش‌آموزان عزیز
   </div>
 
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+
 <script>
+  // ===== تنظیمات Firebase (مقادیر واقعی پروژه‌ات را جایگزین کن) =====
+  const firebaseConfig = {
+    apiKey: "AIzaSyXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    authDomain: "social-studies-app-6b600.firebaseapp.com",
+    projectId: "social-studies-app-6b600",
+    storageBucket: "social-studies-app-6b600.appspot.com",
+    messagingSenderId: "000000000000",
+    appId: "1:000000000000:web:xxxxxxxxxxxxxxxxxxxxxx"
+  };
+
+  let auth = null;
+  let currentUser = null;
+  let authReady = false;
+
+  try {
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    }
+    auth = firebase.auth();
+  } catch (e) {
+    console.warn("Firebase راه‌اندازی نشد:", e);
+    authReady = true;
+  }
+
+  // ===== بررسی وضعیت لاگین =====
+  if (auth) {
+    auth.onAuthStateChanged((user) => {
+      currentUser = user;
+      authReady = true;
+
+      const authBar = document.getElementById("authBar");
+      const guestBar = document.getElementById("guestBar");
+      const userNameBar = document.getElementById("userNameBar");
+
+      if (user) {
+        const displayName = user.displayName || user.email || "دانش‌آموز";
+        userNameBar.textContent = "👤 " + displayName;
+        authBar.style.display = "flex";
+        guestBar.style.display = "none";
+      } else {
+        authBar.style.display = "none";
+        guestBar.style.display = "flex";
+      }
+    });
+  } else {
+    document.getElementById("guestBar").style.display = "flex";
+  }
+
+  // ===== تابع ناوبری محافظت‌شده =====
+  function goToPage(destination) {
+    if (!authReady) {
+      setTimeout(() => goToPage(destination), 300);
+      return;
+    }
+    if (currentUser) {
+      window.location.href = destination;
+    } else {
+      sessionStorage.setItem("redirectAfterLogin", destination);
+      window.location.href = "login.html";
+    }
+  }
+
+  // ===== رفتن به لاگین (از دکمه بالا) =====
+  function goToLogin() {
+    sessionStorage.setItem("redirectAfterLogin", "index.html");
+    window.location.href = "login.html";
+  }
+
+  // ===== خروج =====
+  function logout() {
+    if (auth) {
+      auth.signOut().then(() => {
+        location.reload();
+      }).catch((error) => {
+        alert("خطا در خروج: " + error.message);
+      });
+    }
+  }
+
   // اسکریپت حالت تاریک/روشن
   const themeBtn = document.getElementById('themeBtn');
   const currentTheme = localStorage.getItem('theme');
   
-  // بررسی تم ذخیره شده در مرورگر
   if (currentTheme === 'dark') {
     document.body.classList.add('dark-mode');
     themeBtn.textContent = '☀️';
@@ -738,7 +866,7 @@ body.dark-mode .history-banner {
     }
   }
 
-  // کدهای مربوط به Service Worker
+  // Service Worker
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
       navigator.serviceWorker.register('./service-worker.js');
