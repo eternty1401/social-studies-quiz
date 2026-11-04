@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>مدرسه امنیت دیجیتال | مهارت زندگی</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; font-family:'Vazirmatn',sans-serif; }
+  body {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    min-height: 100vh; color: #fff; padding: 30px 20px;
+    display: flex; flex-direction: column; align-items: center;
+  }
+
+  .header { text-align: center; margin-bottom: 30px; }
+  .header h1 { font-size: 2rem; font-weight: 900; margin-bottom: 10px; color: #10b981; text-shadow: 0 0 15px rgba(16, 185, 129, 0.3); }
+  .header p { color: #94a3b8; font-size: 0.95rem; line-height: 1.6; }
+
+  /* بدنه گوشی */
+  .phone-mockup {
+    background: #000; border: 8px solid #334155; border-radius: 35px;
+    width: 100%; max-width: 400px; height: 600px;
+    display: flex; flex-direction: column; overflow: hidden;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5); position: relative;
+  }
+
+  /* هدر چت */
+  .chat-header {
+    background: #075e54; color: white; padding: 15px;
+    display: flex; align-items: center; gap: 10px;
+    border-bottom: 1px solid #1f2c34;
+  }
+  .chat-header .avatar { width: 40px; height: 40px; background: #128c7e; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 1.2rem; }
+  .chat-header .info h3 { font-size: 1rem; }
+  .chat-header .info p { font-size: 0.7rem; color: #8696a0; }
+
+  /* محتوای چت */
+  .chat-body {
+    flex: 1; background: #0b141a;
+    background-image: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png'); /* بک گراند واتساپ */
+    background-size: cover;
+    padding: 20px; display: flex; flex-direction: column; gap: 15px; overflow-y: auto;
+  }
+
+  .message {
+    background: #202c33; color: #e9edef; padding: 10px 12px;
+    border-radius: 10px 0 10px 10px; max-width: 85%; align-self: flex-end;
+    font-size: 0.9rem; line-height: 1.6; position: relative;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.3); animation: popIn 0.3s ease;
+  }
+  .message.sender { background: #005c4b; border-radius: 0 10px 10px 10px; align-self: flex-start; }
+  .message .name { font-size: 0.75rem; color: #53bdeb; margin-bottom: 4px; display: block; font-weight: bold; }
+
+  /* فایل پیوست */
+  .file-attachment {
+    background: rgba(0,0,0,0.2); border-radius: 8px; padding: 12px;
+    margin-top: 8px; display: flex; align-items: center; gap: 10px; cursor: pointer;
+  }
+  .file-attachment:hover { background: rgba(0,0,0,0.4); }
+  .file-icon { font-size: 1.8rem; color: #ef4444; }
+  .file-info .file-name { font-size: 0.85rem; font-weight: bold; }
+  .file-info .file-size { font-size: 0.7rem; color: #8696a0; }
+
+  /* دکمه‌های انتخاب */
+  .choices-container { margin-top: 15px; display: flex; flex-direction: column; gap: 10px; }
+  .choice-btn {
+    background: #1e293b; color: #e2e8f0; border: 1px solid #334155;
+    padding: 12px; border-radius: 10px; font-family: inherit; font-size: 0.9rem;
+    font-weight: bold; cursor: pointer; transition: 0.2s; text-align: right;
+  }
+  .choice-btn:hover { background: #334155; transform: translateX(-5px); }
+  .choice-btn.danger:hover { border-color: #ef4444; color: #ef4444; }
+  .choice-btn.safe:hover { border-color: #10b981; color: #10b981; }
+
+  /* بخش تحلیل هوش مصنوعی */
+  .ai-analysis {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(5px);
+    padding: 25px; display: none; flex-direction: column; justify-content: center;
+    z-index: 10; animation: fadeIn 0.4s ease;
+  }
+  .ai-analysis h3 { color: #38bdf8; font-size: 1.2rem; margin-bottom: 15px; text-align: center; }
+  .ai-analysis p { font-size: 0.95rem; line-height: 1.8; color: #cbd5e1; margin-bottom: 20px; text-align: justify; white-space: pre-wrap; }
+  .ai-analysis .result-icon { font-size: 3rem; text-align: center; margin-bottom: 15px; }
+  .restart-btn {
+    background: #38bdf8; color: #0f172a; border: none; padding: 12px;
+    border-radius: 10px; font-family: inherit; font-size: 1rem; font-weight: 900;
+    cursor: pointer; width: 100%; margin-top: auto;
+  }
+  .restart-btn:hover { background: #fff; }
+
+  .loading-spinner { text-align: center; color: #38bdf8; font-weight: bold; display: none; margin-top: 20px; font-size: 1rem; }
+
+  @keyframes popIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+</style>
+</head>
+<body>
+
+  <div class="header">
+    <h1>🛡️ مدرسه امنیت دیجیتال</h1>
+    <p>یک موقعیت واقعی رو شبیه‌سازی کردیم. تصمیم تو چیه؟</p>
+  </div>
+
+  <div class="phone-mockup">
+    <div class="chat-header">
+      <div class="avatar">👥</div>
+      <div class="info">
+        <h3>گروه کلاسی پایه نهم</h3>
+        <p>۲۴ عضو، ۵ نفر آنلاین</p>
+      </div>
+    </div>
+
+    <div class="chat-body" id="chatBody">
+      <!-- پیام‌های چت -->
+      <div class="message sender">
+        <span class="name">علی (همکلاسی)</span>
+        سلام بچه‌ها! جدیداً یه سری عکس قدیمی از خودمون پیدا کردم، خیلی باحالن! 😍 فایلش رو پی دی اف کردم که حجمش کم بشه. حتماً دانلود کنید و ببینید!
+        
+        <div class="file-attachment" onclick="makeChoice('download')">
+          <div class="file-icon">📄</div>
+          <div class="file-info">
+            <div class="file-name">عکس_های_قدیمی_کلاس.pdf</div>
+            <div class="file-size">۲.۵ مگابایت</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- سوال از دانش آموز -->
+      <div style="background: rgba(56, 189, 248, 0.1); border: 1px dashed #38bdf8; padding: 15px; border-radius: 10px; margin-top: 10px;">
+        <p style="font-size: 0.9rem; margin-bottom: 15px; color: #38bdf8; font-weight: bold;">شما چه کار می‌کنید؟</p>
+        <div class="choices-container" id="choicesContainer">
+          <button class="choice-btn danger" onclick="makeChoice('download')">۱. سریع دانلودش می‌کنم ببینم چیه!</button>
+          <button class="choice-btn danger" onclick="makeChoice('trust')">۲. چون از گروه کلاسه، دانلودش ضرری نداره.</button>
+          <button class="choice-btn safe" onclick="makeChoice('report')">۳. بهش شک می‌کنم، دانلود نمی‌کنم و به معلم اطلاع می‌دم.</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- بخش تحلیل هوش مصنوعی -->
+    <div class="ai-analysis" id="aiAnalysis">
+      <div class="result-icon" id="resultIcon">🤖</div>
+      <h3 id="resultTitle">تحلیل هوش مصنوعی</h3>
+      <p id="resultText"></p>
+      <div class="loading-spinner" id="loadingSpinner">هوش مصنوعی در حال بررسی تصمیم شماست... ⏳</div>
+      <button class="restart-btn" onclick="resetGame()">🔄 تلاش مجدد (سناریوی بعدی)</button>
+    </div>
+  </div>
+
+  <script>
+    const GROQ_API_KEY = "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";
+
+    async function makeChoice(choice) {
+      const aiAnalysis = document.getElementById('aiAnalysis');
+      const resultText = document.getElementById('resultText');
+      const resultTitle = document.getElementById('resultTitle');
+      const resultIcon = document.getElementById('resultIcon');
+      const loadingSpinner = document.getElementById('loadingSpinner');
+      const choicesContainer = document.getElementById('choicesContainer');
+
+      // نمایش بخش تحلیل و لودینگ
+      aiAnalysis.style.display = 'flex';
+      loadingSpinner.style.display = 'block';
+      resultText.innerText = "";
+      resultTitle.innerText = "در حال تحلیل...";
+      resultIcon.innerText = "⏳";
+
+      let prompt = "";
+
+      if (choice === 'download' || choice === 'trust') {
+        prompt = `
+          شما یک کارشناس امنیت سایبری هستید.
+          دانش‌آموز در یک گروه واتس‌اپی/تلگرامی پیامی دریافت کرده که می‌گوید "فایل عکس‌های قدیمی" است و از او خواسته شده یک فایل PDF را دانلود کند. 
+          دانش‌آموز تصمیم گرفته است که فایل را دانلود کند (چون فکر می‌کند از همکلاسی‌اش است و ضرری ندارد).
+          
+          لطفاً به زبان ساده و صمیمی به او توضیح دهید که چرا این کار بسیار خطرناک است. 
+          حتماً به این نکته اشاره کنید که هکرها با تغییر نام فایل‌های مخرب (مثل بدافزار یا تروجان) به نام فایل‌های بی‌خطر مثل PDF یا عکس، گوشی را هک می‌کنند. 
+          با دانلود این فایل، هکر می‌تواند به اطلاعات شخصی، رمزهای عبور، و حتی دوربین و میکروفون دسترسی پیدا کند. 
+          به او یادآوری کنید که حتی اگر پیام از طرف یک همکلاسی باشد، ممکن است حساب او هک شده باشد و این پیام به صورت خودکار برای همه ارسال شده باشد.
+          پاسخ را در قالب ۲ پاراگراف کوتاه و بدون کلمات پیچیده بنویسید.
+        `;
+        resultTitle.innerText = "⚠️ زنگ خطر!";
+      } else if (choice === 'report') {
+        prompt = `
+          شما یک کارشناس امنیت سایبری هستید.
+          دانش‌آموز در یک گروه واتس‌اپی/تلگرامی پیامی دریافت کرده که می‌گوید "فایل عکس‌های قدیمی" است و از او خواسته شده یک فایل PDF را دانلود کند. 
+          دانش‌آموز با هوشمندی به این فایل شک کرده، آن را دانلود نکرده و تصمیم گرفته به معلم اطلاع دهد.
+          
+          لطفاً او را تشویق کنید و به او بگویید که چقدر تصمیم درستی گرفته است. 
+          توضیح دهید که این یکی از رایج‌ترین روش‌های هک (مهندسی اجتماعی) است و هکرها با سوءاستفاده از اعتماد ما، فایل‌های مخرب را در قالب PDF یا عکس پخش می‌کنند. 
+          به او بگویید که اطلاع دادن به معلم و آگاه کردن بقیه همکلاسی‌ها بهترین کار ممکن است تا بقیه هم گول نخورند. 
+          پاسخ را در قالب ۱ پاراگراف کوتاه، صمیمی و تشویق‌آمیز بنویسید.
+        `;
+        resultTitle.innerText = "🎉 آفرین به هوشیاری تو!";
+      }
+
+      try {
+        const payload = {
+          model: "openai/gpt-oss-120b",
+          messages: [
+            { role: "system", content: "شما یک متخصص امنیت سایبری هستید که با دانش‌آموز صحبت می‌کنید. لحن شما باید دلسوزانه، آموزشی و هشداردهنده باشد." },
+            { role: "user", content: prompt }
+          ]
+        };
+
+        const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+          method: "POST",
+          headers: { "Authorization": `Bearer ${GROQ_API_KEY}` },
+          body: new Blob([JSON.stringify(payload)], { type: 'application/json' })
+        });
+
+        const data = await response.json();
+        loadingSpinner.style.display = 'none';
+        
+        if (data.error) throw new Error(data.error.message);
+        
+        if (choice === 'download' || choice === 'trust') {
+          resultIcon.innerText = "💀";
+          resultText.style.color = "#fca5a5";
+        } else {
+          resultIcon.innerText = "🛡️";
+          resultText.style.color = "#a7f3d0";
+        }
+
+        resultText.innerText = data.choices[0].message.content;
+
+      } catch (error) {
+        loadingSpinner.style.display = 'none';
+        resultIcon.innerText = "❌";
+        resultTitle.innerText = "خطا";
+        resultText.innerText = "خطا در ارتباط با هوش مصنوعی. لطفاً از فیلترشکن استفاده کنید.";
+        resultText.style.color = "#fca5a5";
+        console.error(error);
+      }
+    }
+
+    function resetGame() {
+      document.getElementById('aiAnalysis').style.display = 'none';
+    }
+  </script>
+</body>
+</html>
