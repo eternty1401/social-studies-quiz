@@ -1,5 +1,5 @@
 // ==========================================
-// اسکریپت دستیار هوشمند و خلاصه‌ساز
+// اسکریپت دستیار هوشمند، خلاصه‌ساز و خواندن صوتی
 // ==========================================
 
 const aiBotStyles = `
@@ -26,15 +26,32 @@ const aiBotStyles = `
   .ai-chat-input-area input { flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 20px; outline: none; font-family: inherit; font-size: 0.9rem; }
   .ai-chat-input-area button { background: #00acc1; color: white; border: none; border-radius: 50%; width: 40px; height: 40px; margin-right: 10px; cursor: pointer; font-size: 1.2rem; display: flex; justify-content: center; align-items: center; }
 
-  /* استایل جدید دکمه خلاصه ساز (داخل متن) */
+  /* کانتینر دکمه‌های ابزار (خلاصه و خواندن) */
+  .ai-tools-container {
+    display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin: 15px auto;
+  }
+
+  /* دکمه خلاصه ساز */
   .ai-summarize-btn {
     display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-    background: #f39c12; color: white; border: none; padding: 10px 25px;
-    border-radius: 30px; font-family: inherit; font-weight: bold; font-size: 0.95rem;
-    cursor: pointer; margin: 15px auto; box-shadow: 0 4px 10px rgba(243, 156, 18, 0.3);
-    transition: 0.3s; width: fit-content;
+    background: #f39c12; color: white; border: none; padding: 10px 20px;
+    border-radius: 30px; font-family: inherit; font-weight: bold; font-size: 0.9rem;
+    cursor: pointer; box-shadow: 0 4px 10px rgba(243, 156, 18, 0.3);
+    transition: 0.3s;
   }
   .ai-summarize-btn:hover { background: #d68910; transform: translateY(-2px); }
+
+  /* دکمه خواندن درس */
+  .ai-tts-btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    background: #2ecc71; color: white; border: none; padding: 10px 20px;
+    border-radius: 30px; font-family: inherit; font-weight: bold; font-size: 0.9rem;
+    cursor: pointer; box-shadow: 0 4px 10px rgba(46, 204, 113, 0.3);
+    transition: 0.3s;
+  }
+  .ai-tts-btn:hover { background: #27ae60; transform: translateY(-2px); }
+  .ai-tts-btn.speaking { background: #e74c3c; box-shadow: 0 4px 10px rgba(231, 76, 60, 0.3); }
+  .ai-tts-btn.speaking:hover { background: #c0392b; }
 `;
 
 const styleSheet = document.createElement("style");
@@ -61,25 +78,34 @@ const botHTML = `
 document.addEventListener('DOMContentLoaded', () => {
     document.body.insertAdjacentHTML('beforeend', botHTML);
     
-    // اگر در صفحه درسنامه هستیم، دکمه خلاصه ساز را زیر کادر سبز اضافه کن
+    // اگر در صفحه درسنامه هستیم، دکمه‌های ابزار را اضافه کن
     if (window.location.pathname.includes('-note.html')) {
-        // پیدا کردن اولین کادر سبز (هدف کلی درس)
+        // پیدا کردن کادر سبز (هدف کلی درس)
         const targetBox = document.querySelector('.highlight-box, .goal-box, .intro-box, .info-box') || document.querySelector('.container > div:nth-child(3)');
         
+        const toolsContainer = document.createElement('div');
+        toolsContainer.className = 'ai-tools-container';
+
+        // دکمه خلاصه ساز
         const summarizeBtn = document.createElement('button');
         summarizeBtn.className = 'ai-summarize-btn';
         summarizeBtn.innerHTML = '✨ خلاصه کن';
         summarizeBtn.onclick = summarizeText;
+        toolsContainer.appendChild(summarizeBtn);
+
+        // دکمه خواندن درس (TTS)
+        const ttsBtn = document.createElement('button');
+        ttsBtn.className = 'ai-tts-btn';
+        ttsBtn.id = 'ai-tts-btn';
+        ttsBtn.innerHTML = '🔊 خواندن درس';
+        ttsBtn.onclick = toggleTTS;
+        toolsContainer.appendChild(ttsBtn);
 
         if (targetBox) {
-            // قرار دادن دکمه دقیقاً بعد از کادر سبز
-            targetBox.parentNode.insertBefore(summarizeBtn, targetBox.nextSibling);
+            targetBox.parentNode.insertBefore(toolsContainer, targetBox.nextSibling);
         } else {
-            // اگر کادر پیدا نشد، دکمه را بعد از هدر قرار بده
             const header = document.querySelector('h1') || document.querySelector('.header');
-            if(header) {
-                header.parentNode.insertBefore(summarizeBtn, header.nextSibling);
-            }
+            if(header) header.parentNode.insertBefore(toolsContainer, header.nextSibling);
         }
     }
 });
@@ -139,7 +165,6 @@ async function sendChatMessage() {
 
 // تابع خلاصه کردن متن درسنامه
 async function summarizeText() {
-  // پیدا کردن محتوای اصلی درسنامه
   let lessonText = document.body.innerText;
   lessonText = lessonText.substring(0, 3000); 
 
@@ -182,4 +207,63 @@ async function summarizeText() {
     document.getElementById(loadingId).remove();
     messages.innerHTML += `<div class="ai-msg bot" style="color:red;">❌ خطا در خلاصه کردن. لطفاً فیلترشکن را روشن کنید.</div>`;
   }
+}
+
+// ==========================================
+// توابع مربوط به خواندن درس (Text-to-Speech)
+// ==========================================
+let isSpeaking = false;
+
+function toggleTTS() {
+    const btn = document.getElementById('ai-tts-btn');
+    const synth = window.speechSynthesis;
+
+    // اگر در حال خواندن است، متوقف کن
+    if (isSpeaking) {
+        synth.cancel();
+        isSpeaking = false;
+        btn.innerHTML = '🔊 خواندن درس';
+        btn.classList.remove('speaking');
+        return;
+    }
+
+    // پیدا کردن متن برای خواندن (کلاس container یا body)
+    let contentBox = document.querySelector('.container') || document.body;
+    
+    // یک کپی از محتوا می‌گیریم تا دکمه‌ها و چت‌بات رو نخونه
+    let clone = contentBox.cloneNode(true);
+    // حذف منوها و دکمه‌ها و چت‌بات از متن خوانده شده
+    const elementsToRemove = clone.querySelectorAll('.ai-tools-container, .ai-chat-window, .ai-chat-btn, button, script, style, .back-btn');
+    elementsToRemove.forEach(el => el.remove());
+    
+    let textToRead = clone.innerText.trim();
+
+    if (!textToRead) return;
+
+    const utterance = new SpeechSynthesisUtterance(textToRead);
+    utterance.lang = 'fa-IR'; // تنظیم زبان فارسی
+    utterance.rate = 0.9; // کمی کندتر برای یادگیری بهتر
+
+    // پیدا کردن یک صدای فارسی در سیستم
+    const voices = synth.getVoices();
+    const faVoice = voices.find(voice => voice.lang === 'fa-IR' || voice.lang.includes('fa'));
+    if (faVoice) {
+        utterance.voice = faVoice;
+    } else {
+        alert("⚠️ متأسفانه مرورگر یا گوشی شما از صدای فارسی پشتیبانی نمی‌کند. لطفاً از مرورگر کروم استفاده کنید.");
+        return;
+    }
+
+    // وقتی خواندن تمام شد
+    utterance.onend = () => {
+        isSpeaking = false;
+        btn.innerHTML = '🔊 خواندن درس';
+        btn.classList.remove('speaking');
+    };
+
+    // شروع خواندن
+    synth.speak(utterance);
+    isSpeaking = true;
+    btn.innerHTML = '⏸️ توقف خواندن';
+    btn.classList.add('speaking');
 }
