@@ -24,8 +24,14 @@
   h1 {
     font-size: 1.4rem;
     color: #2b6cb0;
-    margin-bottom: 16px;
+    margin-bottom: 8px;
     text-align: center;
+  }
+  .subtitle {
+    text-align: center;
+    color: #718096;
+    font-size: 0.85rem;
+    margin-bottom: 20px;
   }
   .stats {
     display: flex;
@@ -63,10 +69,39 @@
   }
   @keyframes spin { to { transform: rotate(360deg); } }
 
+  .actions-bar {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+  }
+  .action-btn {
+    flex: 1;
+    min-width: 120px;
+    padding: 10px;
+    background: #4299e1;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 0.85rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+  }
+  .action-btn:hover { background: #2b6cb0; }
+  .action-btn.danger { background: #e53e3e; }
+  .action-btn.danger:hover { background: #c53030; }
+
+  .table-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
   table {
     width: 100%;
     border-collapse: collapse;
     font-size: 0.85rem;
+    min-width: 500px;
   }
   thead { background: #2b6cb0; color: #fff; }
   th, td {
@@ -85,6 +120,19 @@
   .empty-msg { text-align: center; color: #888; padding: 20px; }
   .error-msg { text-align: center; color: #e53e3e; padding: 20px; }
 
+  .delete-btn {
+    background: #fed7d7;
+    color: #c53030;
+    border: none;
+    border-radius: 6px;
+    padding: 4px 10px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 0.8rem;
+    font-weight: bold;
+  }
+  .delete-btn:hover { background: #fc8181; color: #fff; }
+
   .logout-btn {
     display: block;
     width: 100%;
@@ -96,41 +144,76 @@
     border-radius: 8px;
     font-size: 0.95rem;
     cursor: pointer;
+    font-family: inherit;
   }
   .logout-btn:hover { background: #c53030; }
+
+  .access-denied {
+    text-align: center;
+    padding: 40px 20px;
+    color: #e53e3e;
+  }
+  .access-denied h2 { font-size: 1.3rem; margin-bottom: 12px; }
+  .access-denied p { color: #4a5568; margin-bottom: 20px; }
+  .access-denied a {
+    display: inline-block;
+    padding: 10px 24px;
+    background: #4299e1;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: bold;
+  }
 </style>
 </head>
 <body>
 <div class="container">
   <h1>📊 پنل مدیریت نمرات</h1>
+  <p class="subtitle" id="teacherInfo">در حال بررسی دسترسی...</p>
 
-  <div class="stats">
-    <div class="stat-card">
-      <span class="num" id="totalGrades">0</span>
-      <span class="label">کل نمرات ثبت‌شده</span>
+  <!-- بخش اصلی — فقط برای معلم -->
+  <div id="adminSection" style="display:none;">
+    <div class="stats">
+      <div class="stat-card">
+        <span class="num" id="totalGrades">0</span>
+        <span class="label">کل نمرات ثبت‌شده</span>
+      </div>
+      <div class="stat-card">
+        <span class="num" id="avgScore">0</span>
+        <span class="label">میانگین نمرات</span>
+      </div>
     </div>
-    <div class="stat-card">
-      <span class="num" id="avgScore">0</span>
-      <span class="label">میانگین نمرات</span>
+
+    <div class="actions-bar">
+      <button class="action-btn" onclick="loadGrades()">🔄 بروزرسانی</button>
+      <button class="action-btn danger" onclick="logout()">🚪 خروج</button>
+    </div>
+
+    <div class="loader" id="loading"></div>
+
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>نام</th>
+            <th>ایمیل</th>
+            <th>آزمون</th>
+            <th>نمره</th>
+            <th>تاریخ</th>
+            <th>حذف</th>
+          </tr>
+        </thead>
+        <tbody id="gradesList"></tbody>
+      </table>
     </div>
   </div>
 
-  <div class="loader" id="loading"></div>
-
-  <table>
-    <thead>
-      <tr>
-        <th>نام</th>
-        <th>ایمیل</th>
-        <th>آزمون</th>
-        <th>نمره</th>
-        <th>تاریخ</th>
-      </tr>
-    </thead>
-    <tbody id="gradesList"></tbody>
-  </table>
-
-  <button class="logout-btn" onclick="logout()">🚪 خروج از حساب</button>
+  <!-- بخش دسترسی رد شده -->
+  <div id="accessDenied" class="access-denied" style="display:none;">
+    <h2>⛔ دسترسی محدود</h2>
+    <p>این صفحه فقط برای معلم قابل دسترسی است.</p>
+    <a href="index.html">بازگشت به صفحه اصلی</a>
+  </div>
 </div>
 
 <!-- Firebase SDK -->
@@ -139,14 +222,18 @@
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 
 <script>
-// ==== تنظیمات Firebase ====
+// ==== 🔑 مهم: ایمیل معلم را اینجا وارد کن ====
+const TEACHER_EMAIL = "esheghi@example.com"; // ← این را با ایمیل خودت جایگزین کن!
+
+// ==== تنظیمات Firebase (از login.html کپی شده) ====
 const firebaseConfig = {
-  apiKey: "AIzaSyXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+  apiKey: "AIzaSyAo0zfeqp_BfJEqAHLir6xiYD0N9NqQcvE",
   authDomain: "social-studies-app-6b600.firebaseapp.com",
   projectId: "social-studies-app-6b600",
-  storageBucket: "social-studies-app-6b600.appspot.com",
-  messagingSenderId: "000000000000",
-  appId: "1:000000000000:web:xxxxxxxxxxxxxxxxxxxxxx"
+  storageBucket: "social-studies-app-6b600.firebasestorage.app",
+  messagingSenderId: "887286568529",
+  appId: "1:887286568529:web:151feabe0c5c3c42a00a70",
+  measurementId: "G-2ZZLN7ZB9N"
 };
 
 if (!firebase.apps.length) {
@@ -155,12 +242,30 @@ if (!firebase.apps.length) {
 const auth = firebase.auth();
 const db = firebase.firestore();
 
-// ==== بررسی لاگین ====
+// ==== بررسی لاگین و دسترسی معلم ====
 auth.onAuthStateChanged((user) => {
+  const adminSection = document.getElementById("adminSection");
+  const accessDenied = document.getElementById("accessDenied");
+  const teacherInfo = document.getElementById("teacherInfo");
+
   if (!user) {
+    // لاگین نکرده → به لاگین برو
     window.location.href = "login.html";
-  } else {
+    return;
+  }
+
+  // بررسی ایمیل معلم
+  if (user.email && user.email.toLowerCase() === TEACHER_EMAIL.toLowerCase()) {
+    // ✅ معلم است
+    teacherInfo.textContent = "👨‍🏫 خوش آمدی " + (user.displayName || user.email);
+    adminSection.style.display = "block";
+    accessDenied.style.display = "none";
     loadGrades();
+  } else {
+    // ❌ دانش‌آموز است
+    teacherInfo.textContent = "دسترسی محدود";
+    adminSection.style.display = "none";
+    accessDenied.style.display = "block";
   }
 });
 
@@ -184,7 +289,7 @@ async function loadGrades() {
 
     if (snapshot.empty) {
       if (avgScoreEl) avgScoreEl.textContent = "0";
-      gradesList.innerHTML = `<tr><td colspan="5" class="empty-msg">هنوز نمره‌ای ثبت نشده است.</td></tr>`;
+      gradesList.innerHTML = `<tr><td colspan="6" class="empty-msg">هنوز نمره‌ای ثبت نشده است.</td></tr>`;
       return;
     }
 
@@ -214,6 +319,7 @@ async function loadGrades() {
           <td>${quiz}</td>
           <td>${score}</td>
           <td>${date}</td>
+          <td><button class="delete-btn" onclick="deleteGrade('${doc.id}')">حذف</button></td>
         </tr>`;
     });
 
@@ -223,11 +329,27 @@ async function loadGrades() {
 
   } catch (error) {
     console.error("خطا در بارگذاری نمرات:", error);
-    gradesList.innerHTML = `<tr><td colspan="5" class="error-msg">خطا: ${error.message}</td></tr>`;
+    let errMsg = error.message;
+    if (error.code === "failed-precondition") {
+      errMsg = "نیاز به ساخت Index در Firestore. لطفاً روی لینک داخل Console بزن.";
+    }
+    gradesList.innerHTML = `<tr><td colspan="6" class="error-msg">خطا: ${errMsg}</td></tr>`;
     if (totalGradesEl) totalGradesEl.textContent = "0";
     if (avgScoreEl) avgScoreEl.textContent = "0";
   } finally {
     if (loadingEl) loadingEl.style.display = "none";
+  }
+}
+
+// ==== حذف یک نمره ====
+async function deleteGrade(docId) {
+  if (!confirm("آیا از حذف این نمره مطمئن هستی؟")) return;
+  try {
+    await db.collection("grades").doc(docId).delete();
+    alert("✅ نمره حذف شد");
+    loadGrades();
+  } catch (error) {
+    alert("خطا در حذف: " + error.message);
   }
 }
 
