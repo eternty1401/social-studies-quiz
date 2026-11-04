@@ -3,18 +3,18 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>کارگاه زندگی خوب</title>
+<title>مهارت زندگی | مطالعات اجتماعی</title>
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700;900&display=swap" rel="stylesheet">
 <style>
   * { margin:0; padding:0; box-sizing:border-box; font-family:'Vazirmatn',sans-serif; }
   body {
-    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
     min-height: 100vh; color: #fff; padding: 40px 20px;
     display: flex; flex-direction: column; align-items: center;
   }
-  .header { text-align: center; margin-bottom: 40px; }
-  .header h1 { font-size: 2.2rem; font-weight: 900; margin-bottom: 15px; color: #38bdf8; }
-  .header p { color: #94a3b8; font-size: 1.05rem; }
+  .header { text-align: center; margin-bottom: 40px; max-width: 800px; }
+  .header h1 { font-size: 2.4rem; font-weight: 900; margin-bottom: 15px; color: #38bdf8; text-shadow: 0 0 20px rgba(56, 189, 248, 0.3); }
+  .header p { color: #94a3b8; font-size: 1.05rem; line-height: 1.8; }
 
   .skills-grid {
     display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -23,39 +23,51 @@
 
   .skill-card {
     background: rgba(30, 41, 59, 0.7);
-    border: 1px solid #334155; border-radius: 20px;
-    padding: 30px 25px; text-decoration: none; color: #fff;
-    text-align: center; transition: all 0.3s; position: relative; overflow: hidden;
-    backdrop-filter: blur(10px);
+    border: 1px solid #334155; border-radius: 24px;
+    padding: 35px 25px; text-decoration: none; color: #fff;
+    text-align: center; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); 
+    position: relative; overflow: hidden; backdrop-filter: blur(10px);
   }
   .skill-card:hover {
-    transform: translateY(-8px);
-    border-color: #38bdf8; box-shadow: 0 15px 30px rgba(56, 189, 248, 0.15);
+    transform: translateY(-8px) scale(1.02);
+    border-color: #38bdf8; box-shadow: 0 15px 40px rgba(56, 189, 248, 0.2);
+    background: rgba(30, 41, 59, 0.9);
   }
 
-  .skill-icon { font-size: 3.5rem; margin-bottom: 15px; display: block; }
-  .skill-title { font-size: 1.3rem; font-weight: 900; margin-bottom: 10px; }
-  .skill-desc { font-size: 0.9rem; color: #cbd5e1; line-height: 1.7; margin-bottom: 20px; }
+  .skill-icon { font-size: 4rem; margin-bottom: 15px; display: block; transition: 0.4s; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.3)); }
+  .skill-card:hover .skill-icon { transform: scale(1.15) translateY(-5px); }
+  
+  .skill-title { font-size: 1.4rem; font-weight: 900; margin-bottom: 10px; }
+  .skill-desc { font-size: 0.95rem; color: #cbd5e1; line-height: 1.8; margin-bottom: 25px; }
   
   .skill-btn {
-    background: #38bdf8; color: #0f172a; padding: 8px 25px;
-    border-radius: 30px; font-weight: 900; font-size: 0.9rem;
-    display: inline-block; transition: 0.3s;
+    background: #38bdf8; color: #0f172a; padding: 12px 30px;
+    border-radius: 30px; font-weight: 900; font-size: 0.95rem;
+    display: inline-block; transition: 0.3s; box-shadow: 0 4px 15px rgba(56, 189, 248, 0.3);
   }
   .skill-card:hover .skill-btn { background: #fff; transform: scale(1.05); }
 
   .soon-badge {
-    background: #ef4444; color: #fff; font-size: 0.7rem;
-    padding: 4px 10px; border-radius: 10px; position: absolute;
-    top: 15px; left: 15px; font-weight: bold;
+    background: #ef4444; color: #fff; font-size: 0.75rem;
+    padding: 5px 12px; border-radius: 10px; position: absolute;
+    top: 20px; left: 20px; font-weight: bold;
+  }
+
+  .disabled-card { opacity: 0.7; cursor: not-allowed; }
+  .disabled-card:hover { transform: none; box-shadow: none; border-color: #334155; background: rgba(30, 41, 59, 0.7); }
+  .disabled-card .skill-btn { background: #475569; color: #94a3b8; box-shadow: none; }
+  .disabled-card:hover .skill-icon { transform: none; }
+
+  @media(max-width: 600px) {
+    .header h1 { font-size: 2rem; }
   }
 </style>
 </head>
 <body>
 
   <div class="header">
-    <h1>🌟 کارگاه زندگی خوب</h1>
-    <p>اینجا مهارت‌هایی یاد می‌گیری که توی مدرسه کمتر گفته می‌شه، اما برای یک زندگی عالی لازمه!</p>
+    <h1>🌟 مهارت زندگی</h1>
+    <p>اینجا مهارت‌هایی یاد می‌گیری که توی مدرسه کمتر گفته می‌شه، اما برای ساختن یک زندگی عالی و یک جامعه بهتر لازمه!</p>
   </div>
 
   <div class="skills-grid">
@@ -77,7 +89,7 @@
     </a>
 
     <!-- سواد رسانه‌ای (به زودی) -->
-    <div class="skill-card" style="opacity: 0.7; cursor: not-allowed;">
+    <div class="skill-card disabled-card">
       <div class="soon-badge">به زودی</div>
       <span class="skill-icon">📰</span>
       <div class="skill-title">آزمایشگاه سواد رسانه‌ای</div>
@@ -86,11 +98,11 @@
     </div>
 
     <!-- سواد مالی (به زودی) -->
-    <div class="skill-card" style="opacity: 0.7; cursor: not-allowed;">
+    <div class="skill-card disabled-card">
       <div class="soon-badge">به زودی</div>
       <span class="skill-icon">💰</span>
       <div class="skill-title">شبیه‌ساز بودجه خانواده</div>
-      <div class="skill-desc">اگر ۱۰ میلیون تومان حقوق داشتی، چطور خرجش می‌کردی؟ مهارت مدیریت پول رو اینجا یاد بگیر.</div>
+      <div class="skill-desc">اگر حقوق ماهانه داشتی، چطور خرجش می‌کردی؟ مهارت مدیریت پول و اقتصاد رو اینجا یاد بگیر.</div>
       <span class="skill-btn">در حال ساخت...</span>
     </div>
 
