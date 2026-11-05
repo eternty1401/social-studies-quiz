@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
  <script src="telegram.js"></script>
+<script type="module" src="firebase-config.js"></script>
+<script type="module" src="firebase-config.js"></script>
+<script type="module" src="firebase-config.js"></script>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -178,6 +181,8 @@
     <div id="score-circle" class="score-circle">
       <div class="score-num" id="score-display">0</div>
       <div class="score-text">از ۱۰۰</div>
+<p id="out-of-20-text" style="font-size:1.2rem; font-weight:700; color:#00838f; margin-bottom:15px;"></p>
+<p id="out-of-20-text" style="font-size:1.2rem; font-weight:700; color:#00838f; margin-bottom:15px;"></p>>
     </div>
     <p id="result-message" style="font-size:1.1rem; font-weight:700; margin-bottom:25px;"></p>
     <div class="result-stats">
@@ -405,7 +410,10 @@
     }, 300);
     // ==========================================
 
-    submitScoreToTelegram(score, correctCount); 
+    submitScoreToTelegram(score, correctCount);
+if (typeof window.saveGradeToFirebase === 'function') {
+  window.saveGradeToFirebase(studentName, document.title, Math.ceil((correctCount / selectedQuestions.length) * 20), correctCount);
+} 
     document.getElementById('quiz-section').style.display = 'none';
     document.getElementById('result-section').style.display = 'block';
     

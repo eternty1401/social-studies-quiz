@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
  <script src="telegram.js"></script>
+<script type="module" src="firebase-config.js"></script>
+<script type="module" src="firebase-config.js"></script>
+<script type="module" src="firebase-config.js"></script>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -295,6 +298,9 @@ function finishQuiz() {
   const wrong = TOTAL_QUESTIONS - correct;
   const percent = Math.round((correct / TOTAL_QUESTIONS) * 100);
  submitScoreToTelegram(score, correctCount);
+if (typeof window.saveGradeToFirebase === 'function') {
+  window.saveGradeToFirebase(studentName, document.title, Math.ceil((correctCount / selectedQuestions.length) * 20), correctCount);
+}
   document.getElementById("correctCount").textContent = toFa(correct);
   document.getElementById("wrongCount").textContent = toFa(wrong);
   document.getElementById("scoreNum").textContent = toFa(percent);

@@ -221,6 +221,9 @@
 
 <!-- بارگذاری اسکریپت تلگرام -->
 <script src="telegram.js"></script>
+<script type="module" src="firebase-config.js"></script>
+<script type="module" src="firebase-config.js"></script>
+<script type="module" src="firebase-config.js"></script>
 
 <script>
 const essayBank = [
@@ -379,6 +382,9 @@ function sendToTelegram() {
     const correctCount = Math.round(score / 2);
     
     submitScoreToTelegram(score, correctCount);
+if (typeof window.saveGradeToFirebase === 'function') {
+  window.saveGradeToFirebase(studentName, document.title, Math.ceil((correctCount / selectedQuestions.length) * 20), correctCount);
+}
     console.log("✅ نمره به تلگرام ارسال شد:", { score, correctCount });
   } catch (err) {
     console.error("❌ خطا در ارسال به تلگرام:", err);
