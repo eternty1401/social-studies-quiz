@@ -37,7 +37,7 @@
   .empty-msg { text-align: center; padding: 30px; color: #94a3b8; }
   .school-badge { background: #f1f5f9; color: #475569; padding: 4px 10px; border-radius: 6px; font-size: 0.8rem; }
   
-  /* باکس خطا */
+  /* باکس نمایش خطا */
   #debug-error { display: none; background: #fee2e2; color: #b91c1c; padding: 15px; border-radius: 10px; margin-bottom: 20px; border: 1px solid #f87171; font-weight: bold; }
 </style>
 </head>
@@ -98,8 +98,7 @@
     }
 
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    // استفاده از getDocsFromServer برای دور زدن کش
-    import { getFirestore, collection, getDocsFromServer } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyAo0zfeqp_BfJEqAHLir6xiYD0N9NqQcvE",
@@ -140,12 +139,12 @@
 
     async function loadGrades() {
       const tbody = document.getElementById('grades-tbody');
-      tbody.innerHTML = '<tr><td colspan="5" class="empty-msg">در حال دریافت اطلاعات از سرور... ⏳</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="5" class="empty-msg">در حال دریافت اطلاعات از دیتابیس... ⏳</td></tr>';
       document.getElementById('debug-error').style.display = 'none'; 
       
       try {
-        // خواندن از سرور (دور زدن کش)
-        const querySnapshot = await getDocsFromServer(collection(db, "grades"));
+        // استفاده از حالت عادی getDocs
+        const querySnapshot = await getDocs(collection(db, "grades"));
         allGradesData = [];
 
         if (querySnapshot.empty) {
@@ -169,7 +168,7 @@
               console.log("خطا در تطبیق نام:", e);
           }
 
-          // مدیریت تاریخ‌ها
+          // مدیریت امن تاریخ‌ها
           let timeValue = 0;
           if (data.timestamp) {
               if (typeof data.timestamp.toDate === 'function') timeValue = data.timestamp.toDate().getTime();
