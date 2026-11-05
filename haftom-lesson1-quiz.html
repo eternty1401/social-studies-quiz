@@ -13,7 +13,6 @@
   }
   .container { background: #fff; width: 100%; max-width: 800px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); padding: 35px; border: 1px solid #eef2f5; }
   
-  /* صفحه شروع */
   #start-section { text-align: center; padding: 20px 0; }
   #start-section h1 { color: #00acc1; font-size: 1.6rem; margin-bottom: 15px; }
   #start-section p { color: #7f8c8d; margin-bottom: 20px; line-height: 1.8; }
@@ -23,7 +22,6 @@
   .start-btn { background: #2ecc71; color: #fff; border: none; padding: 15px 40px; border-radius: 12px; font-size: 1.1rem; font-weight: 900; font-family: inherit; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3); }
   .start-btn:hover { background: #27ae60; transform: translateY(-2px); }
 
-  /* بخش آزمون */
   #quiz-section { display: none; }
   .header-top { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px dashed #eef2f5; padding-bottom: 15px; margin-bottom: 25px; }
   .header-title h1 { color: #00acc1; font-size: 1.3rem; }
@@ -50,7 +48,6 @@
   .next-btn { background: #00acc1; color: #fff; border: none; padding: 12px 35px; border-radius: 30px; font-size: 1rem; font-weight: 700; font-family: inherit; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 12px rgba(0,172,193,0.3); }
   .next-btn:hover { background: #00838f; transform: translateY(-2px); }
 
-  /* کارنامه */
   .result-container { display: none; text-align: center; }
   .student-name-display { font-size: 1.2rem; font-weight: 900; color: #2c3e50; margin-bottom: 20px; background: #ecf0f1; padding: 10px 20px; border-radius: 10px; display: inline-block; }
   .score-circle { width: 150px; height: 150px; border-radius: 50%; margin: 0 auto 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; border: 8px solid #ecf0f1; }
@@ -84,7 +81,6 @@
 
 <div class="container">
   
-  <!-- صفحه شروع -->
   <div id="start-section">
     <h1>📝 آزمون تستی درس ۱</h1>
     <p>من حق دارم — مطالعات اجتماعی پایه هفتم</p>
@@ -99,7 +95,6 @@
     <button class="start-btn" onclick="startQuiz()">شروع آزمون</button>
   </div>
 
-  <!-- بخش آزمون -->
   <div id="quiz-section">
     <div class="header-top">
       <div class="header-title">
@@ -120,7 +115,6 @@
     </div>
   </div>
 
-  <!-- بخش کارنامه -->
   <div id="result-section" class="result-container">
     <h2 style="color:#2c3e50; margin-bottom:20px; font-weight:900;">🎓 کارنامه شما</h2>
     <div class="student-name-display" id="display-student-name">نام دانش‌آموز</div>
@@ -149,7 +143,6 @@
 
 <script src="telegram.js"></script>
 
-<!-- اسکریپت‌های Firebase (ماژول) -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
   import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -177,7 +170,7 @@
         date: new Date().toLocaleDateString('fa-IR'),
         timestamp: Date.now()
       });
-      alert("✅ دیتابیس: نمره با موفقیت ذخیره شد!");
+      alert("✅ نمره شما با موفقیت در دیتابیس ثبت شد.");
     } catch (e) {
       alert("❌ خطای دیتابیس: " + e.message);
     }
@@ -185,9 +178,6 @@
 </script>
 
 <script>
-  // ==========================================
-  // بانک سوالات
-  // ==========================================
   const questionBank = [
     { q: "من حق دارم در مدرسه...", options: ["فقط درس بخوانم", "نظر خود را بیان کنم", "به دیگران توهین کنم", "به کلاس نروم"], answer: 1 },
     { q: "حقوق شهروندی یعنی چه؟", options: ["فقط انجام وظایف", "حقوق و وظایف متقابل", "رعایت نکردن قوانین", "فقط حق رای دادن"], answer: 1 },
@@ -323,13 +313,11 @@
     const wrong = QUESTIONS_COUNT - correct;
     const percent = Math.round((correct / QUESTIONS_COUNT) * 100);
     
-    // محاسبه نمره از ۲۰ (رند به بالا)
     const scoreOutOf20 = (correct / QUESTIONS_COUNT) * 20;
     const roundedScore20 = Math.ceil(scoreOutOf20); 
 
     const examName = document.title;
 
-    // نمایش در کارنامه
     document.getElementById("score-display").textContent = toFa(percent);
     document.getElementById("out-of-20-text").textContent = `نمره شما: ${toFa(roundedScore20)} از ۲۰`;
     document.getElementById("stat-correct").textContent = `تعداد درست: ${toFa(correct)}`;
@@ -349,12 +337,11 @@
       msg.textContent = "📚 نیاز به مرور بیشتر داری. درسنامه رو یه بار دیگه بخون!";
     }
 
-    // ارسال به تلگرام (درصدی)
     if (typeof submitScoreToTelegram === 'function') {
       submitScoreToTelegram(percent, correct);
     }
     
-    // ارسال به فایربیس (نمره از ۲۰)
+    // ذخیره در دیتابیس
     if (typeof window.saveGradeToFirebase === 'function') {
       window.saveGradeToFirebase(studentName, examName, roundedScore20, correct);
     }
