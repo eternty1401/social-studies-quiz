@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>پنل مدیریت نمرات</title>
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700;900&display=swap" rel="stylesheet">
-<script src="students-data.js"></script>
 <style>
   * { margin:0; padding:0; box-sizing:border-box; font-family:'Vazirmatn',sans-serif; }
   body { background: #f0f4f8; color: #333; padding: 20px; }
@@ -37,6 +36,9 @@
   .score-badge { background: #e0f2fe; color: #0284c7; padding: 5px 12px; border-radius: 20px; font-weight: 900; display: inline-block; }
   .empty-msg { text-align: center; padding: 30px; color: #94a3b8; }
   .school-badge { background: #f1f5f9; color: #475569; padding: 4px 10px; border-radius: 6px; font-size: 0.8rem; }
+  
+  /* باکس خطا (برای عیب‌یابی) */
+  #debug-error { display: none; background: #fee2e2; color: #b91c1c; padding: 15px; border-radius: 10px; margin-bottom: 20px; border: 1px solid #f87171; font-weight: bold; word-wrap: break-word; }
 </style>
 </head>
 <body>
@@ -57,6 +59,9 @@
       <h1>📊 پنل مدیریت نمرات</h1>
       <button class="logout-btn" onclick="logout()">خروج</button>
     </div>
+    
+    <!-- باکس نمایش خطا (اگر کدی خراب بود) -->
+    <div id="debug-error">خطا: در حال بارگذاری...</div>
 
     <div class="tabs">
       <button class="tab-btn active" id="tab-all-btn" onclick="switchTab('all')">همه نمرات</button>
@@ -75,11 +80,26 @@
     </div>
   </div>
 
+  <!-- بارگذاری فایل اسامی دانش‌آموزان -->
+  <script src="students-data.js"></script>
+
   <script type="module">
+    // تابع نمایش خطا در صفحه
+    function showError(msg) {
+        const errBox = document.getElementById('debug-error');
+        errBox.style.display = 'block';
+        errBox.innerHTML += `<br>⚠️ ${msg}`;
+        console.error(msg);
+    }
+
+    // اگر فایل اسامی لود نشده بود، به ما خبر بده
+    if (typeof school1_Students === 'undefined' || typeof school2_Students === 'undefined') {
+        showError("فایل 'students-data.js' لود نشده است. لطفاً مطمئن شوید این فایل در گیت‌هاب وجود دارد و اسمش درست است.");
+    }
+
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-    // تنظیمات Firebase
     const firebaseConfig = {
       apiKey: "AIzaSyAo0zfeqp_BfJEqAHLir6xiYD0N9NqQcvE",
       authDomain: "social-studies-app-6b600.firebaseapp.com",
@@ -93,8 +113,8 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    const ADMIN_PASSWORD = "1234"; // 👈 رمز عبور خودت رو اینجا عوض کن
-    let allGradesData = []; // ذخیره همه نمرات برای فیلتر کردن
+    const ADMIN_PASSWORD = "1234";
+    let allGradesData = [];
     let currentTab = 'all';
 
     window.login = function() {
@@ -108,9 +128,7 @@
       }
     };
 
-    window.logout = function() {
-      location.reload();
-    };
+    window.logout = function() { location.reload(); };
 
     window.switchTab = function(tab) {
       currentTab = tab;
@@ -121,41 +139,56 @@
 
     async function loadGrades() {
       const tbody = document.getElementById('grades-tbody');
-      tbody.innerHTML = '<tr><td colspan="5" class="empty-msg">در حال دریافت اطلاعات... ⏳</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="5" class="empty-msg">در حال دریافت اطلاعات از دیتابیس... ⏳</td></tr>';
+      document.getElementById('debug-error').style.display = 'none'; // پاک کردن خطاهای قبلی
       
       try {
         const querySnapshot = await getDocs(collection(db, "grades"));
         allGradesData = [];
 
+        if (querySnapshot.empty) {
+            tbody.innerHTML = '<tr><td colspan="5" class="empty-msg">دیتابیس متصل شد اما هیچ نمره‌ای در آن ثبت نشده است.</td></tr>';
+            return;
+        }
+
         querySnapshot.forEach((doc) => {
           const data = doc.data();
-          const cleanName = data.name.trim().replace(/\s+/g, ' ');
+          const rawName = data.name || "بدون نام";
+          const cleanName = rawName.trim().replace(/\s+/g, ' ');
           
-          // تشخیص مدرسه دانش‌آموز
           let schoolName = "متفرقه";
-          if (school1_Students.some(s => cleanName.includes(s) || s.includes(cleanName))) {
-            schoolName = "حضرت مهدی (سرزه)";
-          } else if (school2_Students.some(s => cleanName.includes(s) || s.includes(cleanName))) {
-            schoolName = "حسن بن علی (نوشهرکلنگی)";
+          try {
+              if (typeof school1_Students !== 'undefined' && school1_Students.some(s => cleanName.includes(s) || s.includes(cleanName))) {
+                schoolName = "حضرت مهدی (سرزه)";
+              } else if (typeof school2_Students !== 'undefined' && school2_Students.some(s => cleanName.includes(s) || s.includes(cleanName))) {
+                schoolName = "حسن بن علی (نوشهرکلنگی)";
+              }
+          } catch (e) {
+              console.log("خطا در خواندن لیست دانش‌آموزان:", e);
+          }
+
+          let timeValue = 0;
+          if (data.timestamp) {
+              if (typeof data.timestamp.toDate === 'function') timeValue = data.timestamp.toDate().getTime();
+              else if (typeof data.timestamp === 'number') timeValue = data.timestamp;
+              else timeValue = new Date(data.timestamp).getTime();
           }
 
           allGradesData.push({
-            name: data.name,
-            exam: data.exam,
-            score: data.score,
-            date: data.date,
+            name: rawName,
+            exam: data.exam || "نامشخص",
+            score: data.score || 0,
+            date: data.date || "نامشخص",
             school: schoolName,
-            timestamp: data.timestamp || new Date(0) // برای مرتب‌سازی
+            timestamp: timeValue
           });
         });
 
-        // مرتب‌سازی از جدیدترین به قدیمی‌ترین
-        allGradesData.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-
+        allGradesData.sort((a, b) => b.timestamp - a.timestamp);
         renderTable();
-
       } catch (error) {
-        tbody.innerHTML = `<tr><td colspan="5" class="empty-msg" style="color:red;">خطا: ${error.message}</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="5" class="empty-msg" style="color:red;">خطا در خواندن دیتابیس: ${error.message}</td></tr>`;
+        showError("خطا در اتصال به Firestore: " + error.message);
       }
     }
 
@@ -163,14 +196,13 @@
       const tbody = document.getElementById('grades-tbody');
       tbody.innerHTML = '';
 
-      // فیلتر کردن داده‌ها بر اساس تب انتخاب شده
       let filteredData = allGradesData;
       if (currentTab === 's1') filteredData = allGradesData.filter(d => d.school === "حضرت مهدی (سرزه)");
       else if (currentTab === 's2') filteredData = allGradesData.filter(d => d.school === "حسن بن علی (نوشهرکلنگی)");
       else if (currentTab === 'other') filteredData = allGradesData.filter(d => d.school === "متفرقه");
 
       if (filteredData.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="5" class="empty-msg">هیچ نمره‌ای برای این بخش ثبت نشده است.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="5" class="empty-msg">هیچ نمره‌ای برای این بخش پیدا نشد.</td></tr>';
         return;
       }
 
