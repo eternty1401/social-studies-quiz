@@ -37,8 +37,8 @@
   .empty-msg { text-align: center; padding: 30px; color: #94a3b8; }
   .school-badge { background: #f1f5f9; color: #475569; padding: 4px 10px; border-radius: 6px; font-size: 0.8rem; }
   
-  /* باکس خطا (برای عیب‌یابی) */
-  #debug-error { display: none; background: #fee2e2; color: #b91c1c; padding: 15px; border-radius: 10px; margin-bottom: 20px; border: 1px solid #f87171; font-weight: bold; word-wrap: break-word; }
+  /* باکس خطا */
+  #debug-error { display: none; background: #fee2e2; color: #b91c1c; padding: 15px; border-radius: 10px; margin-bottom: 20px; border: 1px solid #f87171; font-weight: bold; }
 </style>
 </head>
 <body>
@@ -60,7 +60,7 @@
       <button class="logout-btn" onclick="logout()">خروج</button>
     </div>
     
-    <!-- باکس نمایش خطا (اگر کدی خراب بود) -->
+    <!-- باکس نمایش خطا -->
     <div id="debug-error">خطا: در حال بارگذاری...</div>
 
     <div class="tabs">
@@ -84,7 +84,7 @@
   <script src="students-data.js"></script>
 
   <script type="module">
-    // تابع نمایش خطا در صفحه
+    // تابع نمایش خطا
     function showError(msg) {
         const errBox = document.getElementById('debug-error');
         errBox.style.display = 'block';
@@ -92,13 +92,14 @@
         console.error(msg);
     }
 
-    // اگر فایل اسامی لود نشده بود، به ما خبر بده
+    // بررسی وجود فایل اسامی
     if (typeof school1_Students === 'undefined' || typeof school2_Students === 'undefined') {
-        showError("فایل 'students-data.js' لود نشده است. لطفاً مطمئن شوید این فایل در گیت‌هاب وجود دارد و اسمش درست است.");
+        showError("فایل 'students-data.js' لود نشده است. لطفاً مطمئن شوید این فایل در گیت‌هاب وجود دارد.");
     }
 
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    // استفاده از getDocsFromServer برای دور زدن کش
+    import { getFirestore, collection, getDocsFromServer } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyAo0zfeqp_BfJEqAHLir6xiYD0N9NqQcvE",
@@ -139,11 +140,12 @@
 
     async function loadGrades() {
       const tbody = document.getElementById('grades-tbody');
-      tbody.innerHTML = '<tr><td colspan="5" class="empty-msg">در حال دریافت اطلاعات از دیتابیس... ⏳</td></tr>';
-      document.getElementById('debug-error').style.display = 'none'; // پاک کردن خطاهای قبلی
+      tbody.innerHTML = '<tr><td colspan="5" class="empty-msg">در حال دریافت اطلاعات از سرور... ⏳</td></tr>';
+      document.getElementById('debug-error').style.display = 'none'; 
       
       try {
-        const querySnapshot = await getDocs(collection(db, "grades"));
+        // خواندن از سرور (دور زدن کش)
+        const querySnapshot = await getDocsFromServer(collection(db, "grades"));
         allGradesData = [];
 
         if (querySnapshot.empty) {
@@ -164,9 +166,10 @@
                 schoolName = "حسن بن علی (نوشهرکلنگی)";
               }
           } catch (e) {
-              console.log("خطا در خواندن لیست دانش‌آموزان:", e);
+              console.log("خطا در تطبیق نام:", e);
           }
 
+          // مدیریت تاریخ‌ها
           let timeValue = 0;
           if (data.timestamp) {
               if (typeof data.timestamp.toDate === 'function') timeValue = data.timestamp.toDate().getTime();
@@ -184,10 +187,11 @@
           });
         });
 
+        // مرتب‌سازی از جدیدترین به قدیمی‌ترین
         allGradesData.sort((a, b) => b.timestamp - a.timestamp);
         renderTable();
       } catch (error) {
-        tbody.innerHTML = `<tr><td colspan="5" class="empty-msg" style="color:red;">خطا در خواندن دیتابیس: ${error.message}</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="5" class="empty-msg" style="color:red;">خطا در خواندن دیتابیس</td></tr>`;
         showError("خطا در اتصال به Firestore: " + error.message);
       }
     }
