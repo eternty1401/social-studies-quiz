@@ -7,10 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700;900&display=swap" rel="stylesheet">
 <style>
   * { margin:0; padding:0; box-sizing:border-box; font-family:'Vazirmatn',sans-serif; }
-  body {
-    background-color: #f4f7f6; background-image: radial-gradient(#d1e0e0 1px, transparent 1px);
-    background-size: 20px 20px; color: #2c3e50; padding: 30px 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh;
-  }
+  body { background-color: #f4f7f6; background-image: radial-gradient(#d1e0e0 1px, transparent 1px); background-size: 20px 20px; color: #2c3e50; padding: 30px 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
   .container { background: #fff; width: 100%; max-width: 800px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); padding: 35px; border: 1px solid #eef2f5; }
   
   #start-section { text-align: center; padding: 20px 0; }
@@ -63,24 +60,18 @@
   
   .review-btn { display: inline-block; background: #3498db; color: #fff; text-decoration: none; padding: 12px 30px; border-radius: 30px; font-weight: 700; border: none; cursor: pointer; font-size: 1rem; font-family: inherit; transition: 0.3s; }
   .review-btn:hover { background: #2980b9; }
-
   .review-item { text-align: right; margin-bottom: 15px; padding: 15px; border-radius: 10px; background: #f8f9fa; }
   .review-item .review-q { font-weight: 900; margin-bottom: 10px; }
   .review-item .review-a-correct { color: #27ae60; background: #e8f8f5; padding: 8px 12px; border-radius: 8px; margin-top: 5px; }
   .review-item .review-a-wrong { color: #e74c3c; background: #fdedec; padding: 8px 12px; border-radius: 8px; margin-top: 5px; }
   .review-item .review-a-empty { color: #95a5a6; background: #ecf0f1; padding: 8px 12px; border-radius: 8px; margin-top: 5px; }
 
-  @media(max-width:600px) {
-    .container { padding: 20px; }
-    .header-top { flex-direction: column; gap: 10px; text-align: center; }
-    .result-stats { flex-direction: column; gap: 10px; }
-  }
+  @media(max-width:600px) { .container { padding: 20px; } .header-top { flex-direction: column; gap: 10px; text-align: center; } .result-stats { flex-direction: column; gap: 10px; } }
 </style>
 </head>
 <body>
 
 <div class="container">
-  
   <div id="start-section">
     <h1>📝 آزمون تستی درس ۱</h1>
     <p>من حق دارم — مطالعات اجتماعی پایه هفتم</p>
@@ -103,42 +94,30 @@
       </div>
       <div class="timer-box" id="timer-display">⏱ ۳۰</div>
     </div>
-    
-    <div class="progress-bar-container">
-      <div class="progress-bar" id="progress-bar"></div>
-    </div>
-    
+    <div class="progress-bar-container"><div class="progress-bar" id="progress-bar"></div></div>
     <div id="question-container"></div>
-    
-    <div class="nav-buttons">
-      <button class="next-btn" id="next-btn" onclick="nextQuestion()">سوال بعدی ←</button>
-    </div>
+    <div class="nav-buttons"><button class="next-btn" id="next-btn" onclick="nextQuestion()">سوال بعدی ←</button></div>
   </div>
 
   <div id="result-section" class="result-container">
     <h2 style="color:#2c3e50; margin-bottom:20px; font-weight:900;">🎓 کارنامه شما</h2>
     <div class="student-name-display" id="display-student-name">نام دانش‌آموز</div>
-    
     <div id="score-circle" class="score-circle">
       <div class="score-num" id="score-display">0</div>
       <div class="score-text">از ۱۰۰</div>
     </div>
     <p id="out-of-20-text" style="font-size:1.2rem; font-weight:700; color:#00838f; margin-bottom:15px;"></p>
-    
     <p id="result-message" style="font-size:1.1rem; font-weight:700; margin-bottom:25px;"></p>
     <div class="result-stats">
       <div class="stat-box correct" id="stat-correct">تعداد درست: ۰</div>
       <div class="stat-box wrong" id="stat-wrong">تعداد غلط: ۰</div>
     </div>
-    
     <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">
       <button class="review-btn" onclick="showReview()" style="background:#f39c12;">🔍 مرور پاسخ‌ها</button>
       <a href="haftom.html" class="review-btn" style="background:#3498db;">🔙 بازگشت به دروس</a>
     </div>
-    
     <div id="review-section" style="display:none; margin-top:25px;"></div>
   </div>
-
 </div>
 
 <script src="telegram.js"></script>
@@ -170,7 +149,7 @@
         date: new Date().toLocaleDateString('fa-IR'),
         timestamp: Date.now()
       });
-      alert("✅ نمره شما با موفقیت در دیتابیس ثبت شد.");
+      alert("✅ ۶. نمره با موفقیت در دیتابیس ذخیره شد.");
     } catch (e) {
       alert("❌ خطای دیتابیس: " + e.message);
     }
@@ -281,15 +260,10 @@
     }, 1000);
   }
 
-  function updateTimer() {
-    document.getElementById("timer-display").textContent = `⏱ ${toFa(Math.max(0, timeLeft))}`;
-  }
+  function updateTimer() { document.getElementById("timer-display").textContent = `⏱ ${toFa(Math.max(0, timeLeft))}`; }
 
   function nextQuestion() {
-    if (userAnswers[currentQIndex] === null) {
-      alert("لطفاً یک گزینه را انتخاب کنید");
-      return;
-    }
+    if (userAnswers[currentQIndex] === null) { alert("لطفاً یک گزینه را انتخاب کنید"); return; }
     clearInterval(timerInterval);
     goNext();
   }
@@ -301,22 +275,21 @@
   }
 
   function finishQuiz() {
+    alert("✅ ۱. تابع پایان آزمون شروع شد");
     clearInterval(timerInterval);
     document.getElementById("quiz-section").style.display = "none";
     document.getElementById("result-section").style.display = "block";
     document.getElementById("display-student-name").textContent = studentName;
 
     let correct = 0;
-    shuffledQuestions.forEach((q, i) => {
-      if (userAnswers[i] === q.correctIndex) correct++;
-    });
+    shuffledQuestions.forEach((q, i) => { if (userAnswers[i] === q.correctIndex) correct++; });
     const wrong = QUESTIONS_COUNT - correct;
     const percent = Math.round((correct / QUESTIONS_COUNT) * 100);
-    
     const scoreOutOf20 = (correct / QUESTIONS_COUNT) * 20;
     const roundedScore20 = Math.ceil(scoreOutOf20); 
-
     const examName = document.title;
+    
+    alert("✅ ۲. نمره محاسبه شد: " + roundedScore20);
 
     document.getElementById("score-display").textContent = toFa(percent);
     document.getElementById("out-of-20-text").textContent = `نمره شما: ${toFa(roundedScore20)} از ۲۰`;
@@ -326,24 +299,24 @@
     const circle = document.getElementById("score-circle");
     circle.classList.remove("excellent", "good", "fail");
     const msg = document.getElementById("result-message");
-    if (percent >= 80) {
-      circle.classList.add("excellent");
-      msg.textContent = "🌟 عالی بود! تسلط خوبی روی درس داری.";
-    } else if (percent >= 50) {
-      circle.classList.add("good");
-      msg.textContent = "👍 خوب بود، با کمی تلاش بیشتر می‌تونی عالی بشی.";
-    } else {
-      circle.classList.add("fail");
-      msg.textContent = "📚 نیاز به مرور بیشتر داری. درسنامه رو یه بار دیگه بخون!";
-    }
+    if (percent >= 80) { circle.classList.add("excellent"); msg.textContent = "🌟 عالی بود!"; }
+    else if (percent >= 50) { circle.classList.add("good"); msg.textContent = "👍 خوب بود."; }
+    else { circle.classList.add("fail"); msg.textContent = "📚 نیاز به مرور بیشتر."; }
+    
+    alert("✅ ۳. کارنامه نمایش داده شد");
 
     if (typeof submitScoreToTelegram === 'function') {
+      alert("✅ ۴. در حال ارسال به تلگرام...");
       submitScoreToTelegram(percent, correct);
+    } else {
+      alert("❌ خطا: تابع تلگرام پیدا نشد! (فایل telegram.js)");
     }
     
-    // ذخیره در دیتابیس
     if (typeof window.saveGradeToFirebase === 'function') {
+      alert("✅ ۵. در حال ارسال به دیتابیس...");
       window.saveGradeToFirebase(studentName, examName, roundedScore20, correct);
+    } else {
+      alert("❌ خطا: تابع فایربیس پیدا نشد! (مشکل از اسکریپت فایربیس)");
     }
   }
 
@@ -356,15 +329,10 @@
       const isCorrect = userAns === q.correctIndex;
       html += `<div class="review-item"><div class="review-q">${toFa(i + 1)}. ${q.q}</div>`;
       q.options.forEach((opt, j) => {
-        if (j === q.correctIndex) {
-          html += `<div class="review-a-correct">✓ ${letters[j]}) ${opt.text}</div>`;
-        } else if (j === userAns && !isCorrect) {
-          html += `<div class="review-a-wrong">✗ ${letters[j]}) ${opt.text} (پاسخ شما)</div>`;
-        }
+        if (j === q.correctIndex) { html += `<div class="review-a-correct">✓ ${letters[j]}) ${opt.text}</div>`; }
+        else if (j === userAns && !isCorrect) { html += `<div class="review-a-wrong">✗ ${letters[j]}) ${opt.text} (پاسخ شما)</div>`; }
       });
-      if (userAns === null) {
-        html += `<div class="review-a-empty">⚠️ بدون پاسخ</div>`;
-      }
+      if (userAns === null) { html += `<div class="review-a-empty">⚠️ بدون پاسخ</div>`; }
       html += `</div>`;
     });
     reviewSection.innerHTML = html;
