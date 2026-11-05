@@ -9,56 +9,41 @@
   * { margin:0; padding:0; box-sizing:border-box; font-family:'Vazirmatn',sans-serif; }
   body { background: #eef2f5; color: #333; padding: 15px; }
 
-  /* صفحه ورود */
   #login-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 80vh; text-align: center; }
   .login-box { background: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 100%; max-width: 400px; }
   .login-box h2 { color: #2c3e50; margin-bottom: 20px; }
   .login-box input { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-family: inherit; font-size: 1rem; text-align: center; margin-bottom: 15px; outline: none; }
   .login-box button { background: #2980b9; color: white; border: none; padding: 12px; border-radius: 8px; width: 100%; font-family: inherit; font-size: 1rem; font-weight: bold; cursor: pointer; transition: 0.3s; }
-  .login-box button:hover { background: #1c5980; }
 
-  /* کانتینر اصلی */
   #panel-screen { display: none; max-width: 900px; margin: 0 auto; }
-  
-  .top-nav { 
-    display: flex; justify-content: space-between; align-items: center; 
-    background: #fff; padding: 15px 20px; border-radius: 12px; 
-    box-shadow: 0 2px 10px rgba(0,0,0,0.05); margin-bottom: 20px; 
-  }
+  .top-nav { display: flex; justify-content: space-between; align-items: center; background: #fff; padding: 15px 20px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); margin-bottom: 20px; }
   .top-nav h1 { color: #2c3e50; font-size: 1.2rem; }
   .logout-btn { background: #e74c3c; color: white; border: none; padding: 8px 15px; border-radius: 8px; font-family: inherit; cursor: pointer; font-weight: bold; }
 
-  /* مسیر (Breadcrumb) */
   .breadcrumb { font-size: 0.9rem; color: #64748b; margin-bottom: 15px; display: flex; align-items: center; gap: 5px; }
   .breadcrumb span { cursor: pointer; color: #2980b9; font-weight: bold; }
   .breadcrumb span:hover { text-decoration: underline; }
 
-  /* کارت‌های انتخاب مدرسه و پایه */
   .grid-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
-  .card-btn { 
-    background: #fff; padding: 30px 20px; border-radius: 12px; border: 2px solid #e2e8f0;
-    text-align: center; cursor: pointer; transition: 0.3s; box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-  }
+  .card-btn { background: #fff; padding: 25px 20px; border-radius: 12px; border: 2px solid #e2e8f0; text-align: center; cursor: pointer; transition: 0.3s; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
   .card-btn:hover { border-color: #2980b9; transform: translateY(-3px); box-shadow: 0 5px 15px rgba(41,128,185,0.15); }
   .card-icon { font-size: 2.5rem; margin-bottom: 10px; display: block; }
   .card-title { font-size: 1.1rem; font-weight: 900; color: #2c3e50; }
 
-  /* جدول نمرات */
   .table-wrapper { background: #fff; border-radius: 12px; overflow-x: auto; border: 1px solid #cbd5e1; margin-top: 20px; }
   table { width: 100%; border-collapse: collapse; text-align: center; }
-  th, td { border: 1px solid #e2e8f0; padding: 12px 10px; font-size: 0.95rem; }
+  th, td { border: 1px solid #e2e8f0; padding: 12px 10px; font-size: 0.95rem; vertical-align: middle; }
   th { background-color: #f8fafc; color: #475569; font-weight: bold; }
   tr:nth-child(even) { background-color: #f8fafc; }
   tr:hover { background-color: #f1f5f9; }
-  .score { font-weight: bold; color: #2980b9; font-size: 1.1rem; }
+  
+  .exam-row { display: flex; justify-content: space-between; border-bottom: 1px dashed #e2e8f0; padding: 5px 0; }
+  .exam-row:last-child { border-bottom: none; }
+  .exam-name { font-size: 0.85rem; color: #475569; text-align: right; flex: 1; }
+  .exam-score { font-weight: bold; color: #2980b9; font-size: 1rem; margin-right: 10px; }
   .no-score { color: #94a3b8; font-size: 0.85rem; }
 
-  /* دکمه دانلود اکسل */
-  .excel-btn {
-    display: block; width: 100%; padding: 12px; margin-top: 15px; background: #10b981; color: white;
-    border: none; border-radius: 8px; font-family: inherit; font-weight: bold; font-size: 1rem;
-    cursor: pointer; transition: 0.3s; text-align: center;
-  }
+  .excel-btn { display: block; width: 100%; padding: 12px; margin-top: 15px; background: #10b981; color: white; border: none; border-radius: 8px; font-family: inherit; font-weight: bold; font-size: 1rem; cursor: pointer; transition: 0.3s; text-align: center; }
   .excel-btn:hover { background: #059669; }
 
   .hidden { display: none !important; }
@@ -66,7 +51,6 @@
 </head>
 <body>
 
-  <!-- صفحه ورود -->
   <div id="login-screen">
     <div class="login-box">
       <h2>🔐 ورود به پنل مدیریت</h2>
@@ -76,7 +60,6 @@
     </div>
   </div>
 
-  <!-- صفحه اصلی پنل -->
   <div id="panel-screen">
     <div class="top-nav">
       <h1>📊 پنل مدیریت</h1>
@@ -85,29 +68,25 @@
 
     <div class="breadcrumb" id="breadcrumb"></div>
 
-    <!-- بخش انتخاب مدرسه -->
     <div id="schools-view">
       <div class="grid-cards" id="schools-grid"></div>
     </div>
 
-    <!-- بخش انتخاب پایه -->
     <div id="grades-view" class="hidden">
       <div class="grid-cards" id="grades-grid"></div>
     </div>
 
-    <!-- بخش نمایش نمرات دانش‌آموزان -->
     <div id="students-view" class="hidden">
       <div class="table-wrapper">
         <table>
           <thead>
-            <tr><th>ردیف</th><th>نام دانش‌آموز</th><th>نام آزمون</th><th>نمره</th><th>تاریخ</th></tr>
+            <tr><th>ردیف</th><th>نام دانش‌آموز</th><th>سابقه آزمون‌ها و نمرات</th><th>آخرین تاریخ</th></tr>
           </thead>
           <tbody id="students-tbody"></tbody>
         </table>
       </div>
-      <button class="excel-btn" onclick="downloadExcel()">📥 دانلود فایل اکسل این پایه</button>
+      <button class="excel-btn" onclick="downloadExcel()">📥 دانلود فایل اکسل این لیست</button>
     </div>
-
   </div>
 
   <script src="students-data.js"></script>
@@ -130,14 +109,57 @@
     const db = getFirestore(app);
 
     const ADMIN_PASSWORD = "1234";
-    
-    // متغیرهای وضعیت
     let allGradesData = [];
     let currentSchoolId = null;
     let currentGradeLevel = null;
     let currentStudentsList = [];
+    let currentFilteredData = []; // برای دانلود اکسل
 
-    // ورود
+    // --- توابع تطبیق هوشمند نام‌ها ---
+    function normalizeName(str) {
+        if (!str) return "";
+        return str.trim()
+            .replace(/ي/g, 'ی')
+            .replace(/ك/g, 'ک')
+            .replace(/ة/g, 'ه')
+            .replace(/أ|إ|آ/g, 'ا')
+            .replace(/\u200c/g, '') // حذف نیم‌فاصله
+            .replace(/\s+/g, '');   // حذف تمام فاصله‌ها
+    }
+
+    function levenshteinDistance(a, b) {
+        if (a.length === 0) return b.length;
+        if (b.length === 0) return a.length;
+        const matrix = [];
+        for (let i = 0; i <= b.length; i++) matrix[i] = [i];
+        for (let j = 0; j <= a.length; j++) matrix[0][j] = j;
+        for (let i = 1; i <= b.length; i++) {
+            for (let j = 1; j <= a.length; j++) {
+                if (b.charAt(i - 1) === a.charAt(j - 1)) {
+                    matrix[i][j] = matrix[i - 1][j - 1];
+                } else {
+                    matrix[i][j] = Math.min(matrix[i - 1][j - 1] + 1, Math.min(matrix[i][j - 1] + 1, matrix[i - 1][j] + 1));
+                }
+            }
+        }
+        return matrix[b.length][a.length];
+    }
+
+    function isMatch(name1, name2) {
+        const n1 = normalizeName(name1);
+        const n2 = normalizeName(name2);
+        
+        if (n1 === n2) return true;
+        if (n1.includes(n2) || n2.includes(n1)) return true;
+        
+        // تحمل غلط املایی تا ۲ حرف برای اسم‌های طولانی
+        const maxDist = Math.max(1, Math.floor(Math.min(n1.length, n2.length) / 4)); 
+        if (levenshteinDistance(n1, n2) <= maxDist) return true;
+        
+        return false;
+    }
+
+    // --- توابع ورود و بارگذاری ---
     window.login = function() {
       const pass = document.getElementById('password-input').value;
       if (pass === ADMIN_PASSWORD) {
@@ -151,21 +173,18 @@
 
     window.logout = function() { location.reload(); };
 
-    // بارگذاری اولیه دیتابیس
     async function loadInitialData() {
       try {
         const querySnapshot = await getDocs(collection(db, "grades"));
         allGradesData = [];
-        querySnapshot.forEach((doc) => {
-          allGradesData.push(doc.data());
-        });
+        querySnapshot.forEach((doc) => { allGradesData.push(doc.data()); });
         renderSchools();
       } catch (error) {
         alert("خطا در اتصال به دیتابیس: " + error.message);
       }
     }
 
-    // نمایش مدارس
+    // --- توابع نمایش ---
     function renderSchools() {
       document.getElementById('schools-view').classList.remove('hidden');
       document.getElementById('grades-view').classList.add('hidden');
@@ -175,6 +194,7 @@
       const grid = document.getElementById('schools-grid');
       grid.innerHTML = '';
       
+      // مدارس
       for (const [id, school] of Object.entries(schoolData)) {
         const div = document.createElement('div');
         div.className = 'card-btn';
@@ -182,13 +202,18 @@
         div.innerHTML = `<span class="card-icon">🏫</span><div class="card-title">${school.name}</div>`;
         grid.appendChild(div);
       }
+
+      // دکمه متفرقه
+      const divOther = document.createElement('div');
+      divOther.className = 'card-btn';
+      divOther.onclick = () => openUnmatched();
+      divOther.innerHTML = `<span class="card-icon">👤</span><div class="card-title">دانش‌آموزان متفرقه</div>`;
+      grid.appendChild(divOther);
     }
 
-    // ورود به یک مدرسه
     window.openSchool = function(schoolId) {
       currentSchoolId = schoolId;
       const school = schoolData[schoolId];
-      
       document.getElementById('schools-view').classList.add('hidden');
       document.getElementById('grades-view').classList.remove('hidden');
       document.getElementById('students-view').classList.add('hidden');
@@ -196,7 +221,6 @@
       
       const grid = document.getElementById('grades-grid');
       grid.innerHTML = '';
-      
       const gradeNames = { "7": "پایه هفتم", "8": "پایه هشتم", "9": "پایه نهم" };
       
       for (const [level, students] of Object.entries(school.grades)) {
@@ -208,7 +232,6 @@
       }
     };
 
-    // ورود به یک پایه
     window.openGrade = function(level) {
       currentGradeLevel = level;
       const school = schoolData[currentSchoolId];
@@ -218,55 +241,112 @@
       document.getElementById('students-view').classList.remove('hidden');
       updateBreadcrumb(school.name, gradeNames[level]);
       
-      // مرتب‌سازی اسامی به ترتیب حروف الفبا
+      // مرتب‌سازی الفبایی
       currentStudentsList = [...school.grades[level]].sort((a, b) => a.localeCompare(b, 'fa'));
+      currentFilteredData = [];
       
       renderStudentsTable();
     };
 
-    // نمایش جدول دانش‌آموزان
-    function renderStudentsTable() {
+    window.openUnmatched = function() {
+      document.getElementById('schools-view').classList.add('hidden');
+      document.getElementById('grades-view').classList.add('hidden');
+      document.getElementById('students-view').classList.remove('hidden');
+      updateBreadcrumb('متفرقه');
+      
+      currentStudentsList = []; // خالی برای اینکه فقط از دیتابیس بخونه
+      currentFilteredData = [];
+      
+      renderStudentsTable(true); // true یعنی حالت متفرقه
+    };
+
+    function renderStudentsTable(isUnmatched = false) {
       const tbody = document.getElementById('students-tbody');
       tbody.innerHTML = '';
       
+      if (!isUnmatched && currentStudentsList.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="4" style="padding:20px; color:#64748b;">هیچ دانش‌آموزی برای این پایه ثبت نشده است.</td></tr>`;
+        return;
+      }
+
+      let matchedDbRecords = new Set(); // برای پیدا کردن متفرقه‌ها
+
+      if (isUnmatched) {
+         // حالت نمایش متفرقه‌ها
+         allGradesData.forEach((record, idx) => {
+             let matched = false;
+             // چک میکنیم آیا این رکورد به یکی از دانش‌آموزان هر دو مدرسه میخوره یا نه
+             for (const school of Object.values(schoolData)) {
+                 for (const list of Object.values(school.grades)) {
+                     if (list.some(sName => isMatch(record.name, sName))) {
+                         matched = true; break;
+                     }
+                 }
+                 if (matched) break;
+             }
+             
+             if (!matched) {
+                 currentFilteredData.push(record);
+                 tbody.innerHTML += `
+                  <tr>
+                    <td>${idx + 1}</td>
+                    <td><b>${record.name}</b></td>
+                    <td><div class="exam-row"><span class="exam-name">${record.exam}</span><span class="exam-score">${record.score}</span></div></td>
+                    <td style="font-size:0.85rem; color:#666;">${record.date}</td>
+                  </tr>
+                 `;
+             }
+         });
+         
+         if (currentFilteredData.length === 0) {
+             tbody.innerHTML = `<tr><td colspan="4" style="padding:20px; color:#64748b;">هیچ نمره‌ای برای دانش‌آموزان متفرقه ثبت نشده است.</td></tr>`;
+         }
+         return;
+      }
+
+      // حالت عادی (لیست دانش‌آموزان کلاس)
       currentStudentsList.forEach((studentName, index) => {
-        // پیدا کردن نمره این دانش‌آموز در دیتابیس (اگر وجود داشته باشد)
-        const records = allGradesData.filter(d => d.name === studentName);
+        const records = allGradesData.filter(d => isMatch(d.name, studentName));
         
+        let examsHtml = "";
+        let lastDate = "-";
+
         if (records.length === 0) {
-          // دانش‌آموز امتحان نداده
-          tbody.innerHTML += `
-            <tr>
-              <td>${index + 1}</td>
-              <td><b>${studentName}</b></td>
-              <td class="no-score">هنوز امتحان نداده</td>
-              <td class="no-score">-</td>
-              <td class="no-score">-</td>
-            </tr>
-          `;
+          examsHtml = `<span class="no-score">هنوز امتحانی ثبت نشده است</span>`;
         } else {
-          // دانش‌آموز امتحان داده (ممکن است چند آزمون داده باشد)
-          records.forEach(record => {
-            tbody.innerHTML += `
-              <tr>
-                <td>${index + 1}</td>
-                <td><b>${studentName}</b></td>
-                <td>${record.exam || "نامشخص"}</td>
-                <td class="score">${record.score}</td>
-                <td style="font-size:0.85rem;">${record.date || "-"}</td>
-              </tr>
+          records.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+          lastDate = records[0].date || "-";
+
+          records.forEach(r => {
+            currentFilteredData.push({name: studentName, ...r});
+            matchedDbRecords.add(r);
+            examsHtml += `
+              <div class="exam-row">
+                <span class="exam-name">${r.exam || "آزمون نامشخص"}</span>
+                <span class="exam-score">${r.score}</span>
+              </div>
             `;
           });
         }
+
+        tbody.innerHTML += `
+          <tr>
+            <td>${index + 1}</td>
+            <td><b>${studentName}</b></td>
+            <td style="text-align:right; padding: 5px 15px;">${examsHtml}</td>
+            <td style="font-size:0.85rem; color:#666;">${lastDate}</td>
+          </tr>
+        `;
       });
     }
 
-    // به‌روزرسانی مسیر (Breadcrumb)
     function updateBreadcrumb(schoolName, gradeName) {
       const bc = document.getElementById('breadcrumb');
       let html = `<span onclick="renderSchools()">همه مدارس</span>`;
-      if (schoolName) {
-        html += ` <span style="color:#94a3b8; cursor:default;">/</span> <span onclick="openSchool('${currentSchoolId}')">${schoolName}</span>`;
+      if (schoolName && schoolName !== 'متفرقه') {
+          html += ` <span style="color:#94a3b8; cursor:default;">/</span> <span onclick="openSchool('${currentSchoolId}')">${schoolName}</span>`;
+      } else if (schoolName === 'متفرقه') {
+          html += ` <span style="color:#94a3b8; cursor:default;">/</span> متفرقه`;
       }
       if (gradeName) {
         html += ` <span style="color:#94a3b8; cursor:default;">/</span> ${gradeName}`;
@@ -274,29 +354,35 @@
       bc.innerHTML = html;
     }
 
-    // دانلود فایل اکسل (CSV)
     window.downloadExcel = function() {
-      if (currentStudentsList.length === 0) return;
+      if (currentFilteredData.length === 0 && currentStudentsList.length === 0) return;
       
-      let csvContent = "\uFEFF"; // برای پشتیبانی از فارسی در اکسل
-      csvContent += "ردیف,نام دانش‌آموز,نام آزمون,نمره,تاریخ\n";
+      let csvContent = "\uFEFF"; // پشتیبانی از فارسی
+      csvContent += "ردیف,نام دانش‌آموز,آزمون,نمره,تاریخ\n";
       
-      currentStudentsList.forEach((studentName, index) => {
-        const records = allGradesData.filter(d => d.name === studentName);
-        if (records.length === 0) {
-          csvContent += `${index + 1},${studentName},-, -, -\n`;
-        } else {
-          records.forEach(record => {
-            csvContent += `${index + 1},${studentName},${record.exam || "-"},${record.score || "-"},${record.date || "-"}\n`;
+      let row = 1;
+      
+      if (document.getElementById('students-view').classList.contains('hidden')) return;
+
+      if (currentFilteredData.length > 0) {
+          // اگر داده‌های فیلتر شده داریم (یعنی امتحان داده)
+          currentFilteredData.forEach(r => {
+              csvContent += `${row},${r.name},${r.exam},${r.score},${r.date}\n`;
+              row++;
           });
-        }
-      });
+      } else {
+          // فقط لیست دانش‌آموزان بدون نمره
+          currentStudentsList.forEach(name => {
+              csvContent += `${row},${name},-, -, -\n`;
+              row++;
+          });
+      }
       
       const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
       const link = document.createElement("a");
       const url = URL.createObjectURL(blob);
       link.setAttribute("href", url);
-      link.setAttribute("download", `نمرات_${schoolData[currentSchoolId].name}_پایه_${currentGradeLevel}.csv`);
+      link.setAttribute("download", `نمرات_${currentSchoolId ? schoolData[currentSchoolId].name : 'متفرقه'}_پایه_${currentGradeLevel || ''}.csv`);
       link.style.visibility = 'hidden';
       document.body.appendChild(link);
       link.click();
