@@ -120,7 +120,7 @@
     <!-- بخش تحلیل هوش مصنوعی -->
     <div class="ai-analysis" id="aiAnalysis">
       <div class="result-icon" id="resultIcon">🤖</div>
-      <h3 id="resultTitle">تحلیل هوش مصنوعی</h3>
+      <h3>تحلیل هوش مصنوعی</h3>
       <p id="resultText"></p>
       <div class="loading-spinner" id="loadingSpinner">هوش مصنوعی در حال بررسی تصمیم شماست... ⏳</div>
       <button class="next-btn" id="nextBtn" onclick="loadNextScenario()" style="display: none;">سناریوی بعدی ←</button>
@@ -255,9 +255,11 @@
       }
     ];
 
-    function loadNextScenario() {
+    async function loadNextScenario() {
+      // مخفی کردن تحلیل قبلی
       document.getElementById('aiAnalysis').style.display = 'none';
       
+      // اگر به انتهای لیست رسیدیم، برگرد به اول
       if (currentScenarioIndex >= scenarios.length) {
         currentScenarioIndex = 0;
         alert("شما تمام سناریوها را دیدید! از اول شروع می‌کنیم.");
@@ -265,24 +267,19 @@
 
       const scenario = scenarios[currentScenarioIndex];
       
+      // آپدیت هدر گوشی
       document.getElementById('chatTitle').innerText = scenario.title;
       document.getElementById('chatSubtitle').innerText = "پیام جدید";
 
+      // ساخت پیام‌ها در چت
       const chatBody = document.getElementById('chatBody');
-      
-      // استفاده از حلقه برای ساخت دکمه‌ها بدون مشکل
-      let choicesHTML = '';
-      scenario.choices.forEach((choice, index) => {
-          choicesHTML += `<button class="choice-btn ${choice.type}" onclick="makeChoice(${index})">${index + 1}. ${choice.text}</button>`;
-      });
-
       chatBody.innerHTML = `
         <div class="message sender">
           <span class="name">${scenario.sender}</span>
           ${scenario.message}
           
           ${scenario.file ? `
-          <div class="file-attachment" onclick="makeChoice('download')">
+          <div class="file-attachment" onclick="makeChoice('download', 'danger', '${scenario.promptContext}')">
             <div class="file-icon">📄</div>
             <div class="file-info">
               <div class="file-name">${scenario.file}</div>
@@ -295,7 +292,11 @@
         <div style="background: rgba(56, 189, 248, 0.1); border: 1px dashed #38bdf8; padding: 15px; border-radius: 10px; margin-top: 10px;">
           <p style="font-size: 0.9rem; margin-bottom: 15px; color: #38bdf8; font-weight: bold;">شما چه کار می‌کنید؟</p>
           <div class="choices-container" id="choicesContainer">
-            ${choicesHTML}
+            ${scenario.choices.map((choice, index) => `
+              <button class="choice-btn ${choice.type}" onclick="makeChoice('${choice.text}', '${choice.type}', '${scenario.promptContext}')">
+                ${index + 1}. ${choice.text}
+              </button>
+            `).join('')}
           </div>
         </div>
       `;
@@ -303,17 +304,7 @@
       chatBody.scrollTop = 0;
     }
 
-    async function makeChoice(choiceIdx) {
-      const scenario = scenarios[currentScenarioIndex];
-      
-      let choiceType = "danger";
-      let choiceText = "دانلود فایل";
-      
-      if (typeof choiceIdx === 'number') {
-          choiceType = scenario.choices[choiceIdx].type;
-          choiceText = scenario.choices[choiceIdx].text;
-      }
-
+    async function makeChoice(choiceText, choiceType, promptContext) {
       const aiAnalysis = document.getElementById('aiAnalysis');
       const resultText = document.getElementById('resultText');
       const resultTitle = document.getElementById('resultTitle');
@@ -339,19 +330,16 @@
 
       const prompt = `
         شما یک کارشناس امنیت سایبری هستید.
-        موقعیت (Context): ${scenario.promptContext}
+        موقعیت (Context): ${promptContext}
         دانش‌آموز این واکنش را انتخاب کرده است: "${choiceText}"
         نوع واکنش: ${choiceType === 'safe' ? 'ایمن و هوشمندانه' : 'خطرناک و پرریسک'}
 
         لطفاً به زبان ساده، صمیمی و آموزشی تحلیل کنید:
-        ۱. اگر انتخابش خطرناک بوده، دقیقاً توضیح دهید چه بلایی سرش می‌آید.
+        ۱. اگر انتخابش خطرناک بوده، دقیقاً توضیح دهید چه بلایی سرش می‌آید (مثلاً هک شدن، خالی شدن حساب، از دست رفتن اطلاعات).
         ۲. اگر انتخابش ایمن بوده، تشویقش کنید و بگویید چرا کارش درست بوده.
         ۳. یک نکته طلایی برای دفعات بعد به او یاد بدهید.
-        پاسخ در قالب ۲ پاراگراف کوتاه و کاملاً فارسی باشد.
+        پاسخ در قالب ۲ پاراگراف کوتاه باشد.
       `;
-
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 15000); 
 
       try {
         const payload = {
@@ -365,11 +353,9 @@
         const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
           method: "POST",
           headers: { "Authorization": `Bearer ${GROQ_API_KEY}` },
-          body: new Blob([JSON.stringify(payload)], { type: 'application/json' }),
-          signal: controller.signal 
+          body: new Blob([JSON.stringify(payload)], { type: 'application/json' })
         });
 
-        clearTimeout(timeoutId);
         const data = await response.json();
         loadingSpinner.style.display = 'none';
         
@@ -378,23 +364,19 @@
         resultText.innerText = data.choices[0].message.content;
         nextBtn.style.display = 'block';
         
+        // رفتن به سناریوی بعدی برای بار بعد
         currentScenarioIndex++;
 
       } catch (error) {
-        clearTimeout(timeoutId);
         loadingSpinner.style.display = 'none';
         resultIcon.innerText = "❌";
-        if (error.name === 'AbortError') {
-            resultText.innerText = "⏳ زمان پاسخگویی سرور به پایان رسید. لطفاً اینترنت یا فیلترشکن خود را بررسی کرده و صفحه را رفرش کنید.";
-        } else {
-            resultText.innerText = "❌ خطا در ارتباط با هوش مصنوعی. لطفاً از فیلترشکن استفاده کنید.";
-        }
+        resultText.innerText = "خطا در ارتباط با هوش مصنوعی. لطفاً از فیلترشکن استفاده کنید.";
         nextBtn.style.display = 'block';
         console.error(error);
       }
     }
 
-    // شروع بازی
+    // شروع بازی با بارگذاری اولین سناریو
     window.onload = loadNextScenario;
   </script>
 </body>
