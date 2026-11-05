@@ -154,7 +154,6 @@
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
   import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-  // تنظیمات فایربیس
   const firebaseConfig = {
     apiKey: "AIzaSyAo0zfeqp_BfJEqAHLir6xiYD0N9NqQcvE",
     authDomain: "social-studies-app-6b600.firebaseapp.com",
@@ -168,7 +167,6 @@
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
 
-  // تابعی برای ذخیره نمره در فایربیس
   window.saveGradeToFirebase = async function(studentName, examName, score, correctCount) {
     try {
       await addDoc(collection(db, "grades"), {
@@ -177,11 +175,11 @@
         score: score,
         correct: correctCount,
         date: new Date().toLocaleDateString('fa-IR'),
-        timestamp: new Date()
+        timestamp: Date.now()
       });
-      console.log("نمره در دیتابیس ذخیره شد.");
+      alert("✅ دیتابیس: نمره با موفقیت ذخیره شد!");
     } catch (e) {
-      console.error("خطا در ذخیره نمره در دیتابیس: ", e);
+      alert("❌ خطای دیتابیس: " + e.message);
     }
   };
 </script>
