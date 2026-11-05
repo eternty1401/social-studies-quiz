@@ -3,362 +3,389 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>آزمون درس اول - من حق دارم (هفتم)</title>
+<title>آزمون تستی درس ۱: من حق دارم</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700;900&display=swap" rel="stylesheet">
 <style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+  * { margin:0; padding:0; box-sizing:border-box; font-family:'Vazirmatn',sans-serif; }
   body {
-    font-family: Tahoma, Vazirmatn, sans-serif;
-    background: #f0f4f8;
-    color: #1a202c;
-    padding: 16px;
-    line-height: 1.9;
+    background-color: #f4f7f6; background-image: radial-gradient(#d1e0e0 1px, transparent 1px);
+    background-size: 20px 20px; color: #2c3e50; padding: 30px 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh;
   }
-  .quiz-container {
-    max-width: 700px;
-    margin: 0 auto;
-    background: #fff;
-    border-radius: 16px;
-    padding: 20px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-  }
-  h1 {
-    font-size: 1.3rem;
-    color: #2b6cb0;
-    margin-bottom: 8px;
-    text-align: center;
-  }
-  .subtitle {
-    text-align: center;
-    color: #718096;
-    font-size: 0.85rem;
-    margin-bottom: 20px;
-  }
-  .student-name-box {
-    background: #ebf8ff;
-    padding: 12px;
-    border-radius: 10px;
-    margin-bottom: 20px;
-  }
-  .student-name-box label {
-    display: block;
-    font-size: 0.9rem;
-    margin-bottom: 6px;
-    color: #2b6cb0;
-    font-weight: bold;
-  }
-  .student-name-box input {
-    width: 100%;
-    padding: 10px;
-    border: 2px solid #bee3f8;
-    border-radius: 8px;
-    font-size: 1rem;
-    font-family: inherit;
-  }
-  .question {
-    background: #f7fafc;
-    border-radius: 12px;
-    padding: 16px;
-    margin-bottom: 14px;
-    border-right: 4px solid #4299e1;
-  }
-  .question h3 {
-    font-size: 0.95rem;
-    margin-bottom: 12px;
-    color: #2d3748;
-  }
-  .option {
-    display: flex;
-    align-items: center;
-    padding: 10px 12px;
-    margin-bottom: 6px;
-    background: #fff;
-    border: 2px solid #e2e8f0;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 0.9rem;
-    transition: all 0.15s;
-  }
-  .option:hover { border-color: #90cdf4; }
-  .option.selected {
-    border-color: #2b6cb0;
-    background: #ebf8ff;
-  }
-  .option input { margin-left: 10px; accent-color: #2b6cb0; }
-  .submit-btn {
-    display: block;
-    width: 100%;
-    padding: 14px;
-    background: #38a169;
-    color: #fff;
-    border: none;
-    border-radius: 12px;
-    font-size: 1rem;
-    font-weight: bold;
-    cursor: pointer;
-    margin-top: 10px;
-    font-family: inherit;
-  }
-  .submit-btn:hover { background: #2f855a; }
-  .submit-btn:disabled { background: #a0aec0; cursor: not-allowed; }
+  .container { background: #fff; width: 100%; max-width: 800px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); padding: 35px; border: 1px solid #eef2f5; }
+  
+  /* صفحه شروع */
+  #start-section { text-align: center; padding: 20px 0; }
+  #start-section h1 { color: #00acc1; font-size: 1.6rem; margin-bottom: 15px; }
+  #start-section p { color: #7f8c8d; margin-bottom: 20px; line-height: 1.8; }
+  .info-box { background: #e0f7fa; border-radius: 12px; padding: 15px 20px; margin-bottom: 25px; font-size: 0.9rem; color: #00acc1; text-align: right; }
+  .name-input { width: 100%; max-width: 400px; padding: 15px; margin-bottom: 20px; border: 2px solid #e2e8f0; border-radius: 12px; font-family: inherit; font-size: 1rem; text-align: center; outline: none; transition: 0.3s; }
+  .name-input:focus { border-color: #00acc1; box-shadow: 0 0 10px rgba(0,172,193,0.2); }
+  .start-btn { background: #2ecc71; color: #fff; border: none; padding: 15px 40px; border-radius: 12px; font-size: 1.1rem; font-weight: 900; font-family: inherit; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3); }
+  .start-btn:hover { background: #27ae60; transform: translateY(-2px); }
 
-  .status-msg {
-    text-align: center;
-    font-size: 0.85rem;
-    margin-top: 10px;
-    min-height: 20px;
-    color: #718096;
-  }
-  .status-msg.error { color: #e53e3e; }
-  .status-msg.success { color: #38a169; }
+  /* بخش آزمون */
+  #quiz-section { display: none; }
+  .header-top { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px dashed #eef2f5; padding-bottom: 15px; margin-bottom: 25px; }
+  .header-title h1 { color: #00acc1; font-size: 1.3rem; }
+  .header-title p { color: #7f8c8d; font-size: 0.85rem; margin-top: 5px; }
+  .timer-box { background: #fdedec; color: #e74c3c; padding: 8px 18px; border-radius: 50px; font-weight: 900; font-size: 1.1rem; border: 1px solid #fadbd8; display: flex; align-items: center; gap: 8px; direction: ltr; transition: all 0.3s; }
+  .timer-box.warning { background: #fef9e7; color: #f39c12; border-color: #fae5d3; animation: pulse 1s infinite; }
+  @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
 
-  .result-box {
-    display: none;
-    text-align: center;
-    padding: 20px;
-    background: #f0fff4;
-    border: 2px solid #9ae6b4;
-    border-radius: 12px;
-    margin-top: 20px;
+  .progress-bar-container { width: 100%; height: 8px; background: #ecf0f1; border-radius: 10px; margin-bottom: 25px; overflow: hidden; }
+  .progress-bar { height: 100%; background: linear-gradient(90deg, #00acc1, #26c6da); border-radius: 10px; transition: width 0.4s ease; width: 0%; }
+
+  .question-box { background: #fafbfc; border: 1px solid #eef2f5; border-radius: 12px; padding: 25px; margin-bottom: 20px; min-height: 300px; animation: slideIn 0.4s ease; }
+  @keyframes slideIn { from { opacity: 0; transform: translateX(30px); } to { opacity: 1; transform: translateX(0); } }
+  .q-number { font-size: 0.85rem; color: #00acc1; font-weight: 900; margin-bottom: 10px; }
+  .q-title { font-weight: 900; font-size: 1.1rem; margin-bottom: 20px; line-height: 1.7; }
+  
+  .options { display: flex; flex-direction: column; gap: 10px; }
+  .option-label { display: flex; align-items: center; gap: 10px; padding: 14px 18px; background: #fff; border: 2px solid #e2e8f0; border-radius: 10px; cursor: pointer; transition: 0.2s; font-size: 0.95rem; }
+  .option-label:hover { background: #e0f7fa; border-color: #00acc1; }
+  .option-label input[type="radio"] { display: none; }
+  .option-label.selected { background: #e0f7fa; border-color: #00acc1; font-weight: 700; color: #00838f; }
+  
+  .nav-buttons { display: flex; justify-content: flex-end; margin-top: 20px; }
+  .next-btn { background: #00acc1; color: #fff; border: none; padding: 12px 35px; border-radius: 30px; font-size: 1rem; font-weight: 700; font-family: inherit; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 12px rgba(0,172,193,0.3); }
+  .next-btn:hover { background: #00838f; transform: translateY(-2px); }
+
+  /* کارنامه */
+  .result-container { display: none; text-align: center; }
+  .student-name-display { font-size: 1.2rem; font-weight: 900; color: #2c3e50; margin-bottom: 20px; background: #ecf0f1; padding: 10px 20px; border-radius: 10px; display: inline-block; }
+  .score-circle { width: 150px; height: 150px; border-radius: 50%; margin: 0 auto 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; border: 8px solid #ecf0f1; }
+  .score-circle.excellent { border-color: #2ecc71; color: #2ecc71; }
+  .score-circle.good { border-color: #f39c12; color: #f39c12; }
+  .score-circle.fail { border-color: #e74c3c; color: #e74c3c; }
+  .score-num { font-size: 2.8rem; font-weight: 900; line-height: 1; }
+  .score-text { font-size: 0.9rem; color: #7f8c8d; margin-top: 5px; font-weight: 700; }
+  .result-stats { display: flex; justify-content: center; gap: 15px; margin-bottom: 30px; }
+  .stat-box { padding: 15px 25px; border-radius: 10px; font-weight: 700; font-size: 0.95rem; }
+  .stat-box.correct { color: #2ecc71; background: #e8f8f5; }
+  .stat-box.wrong { color: #e74c3c; background: #fdedec; }
+  
+  .review-btn { display: inline-block; background: #3498db; color: #fff; text-decoration: none; padding: 12px 30px; border-radius: 30px; font-weight: 700; border: none; cursor: pointer; font-size: 1rem; font-family: inherit; transition: 0.3s; }
+  .review-btn:hover { background: #2980b9; }
+
+  .review-item { text-align: right; margin-bottom: 15px; padding: 15px; border-radius: 10px; background: #f8f9fa; }
+  .review-item .review-q { font-weight: 900; margin-bottom: 10px; }
+  .review-item .review-a-correct { color: #27ae60; background: #e8f8f5; padding: 8px 12px; border-radius: 8px; margin-top: 5px; }
+  .review-item .review-a-wrong { color: #e74c3c; background: #fdedec; padding: 8px 12px; border-radius: 8px; margin-top: 5px; }
+  .review-item .review-a-empty { color: #95a5a6; background: #ecf0f1; padding: 8px 12px; border-radius: 8px; margin-top: 5px; }
+
+  @media(max-width:600px) {
+    .container { padding: 20px; }
+    .header-top { flex-direction: column; gap: 10px; text-align: center; }
+    .result-stats { flex-direction: column; gap: 10px; }
   }
-  .result-box .score {
-    font-size: 2.5rem;
-    font-weight: bold;
-    color: #2b6cb0;
-    display: block;
-    margin: 10px 0;
-  }
-  .result-box .msg { color: #4a5568; font-size: 0.95rem; }
-  .retry-btn {
-    margin-top: 14px;
-    padding: 10px 24px;
-    background: #2b6cb0;
-    color: #fff;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 0.9rem;
-    font-family: inherit;
-  }
-  .retry-btn:hover { background: #2c5282; }
 </style>
 </head>
 <body>
-<div class="quiz-container">
-  <h1>📝 آزمون درس اول: من حق دارم</h1>
-  <p class="subtitle">مطالعات اجتماعی پایه هفتم</p>
 
-  <div class="student-name-box">
-    <label for="studentName">نام و نام خانوادگی:</label>
-    <input type="text" id="studentName" placeholder="نام خود را وارد کنید...">
-  </div>
-
-  <div id="quizArea"></div>
-
-  <button class="submit-btn" id="submitBtn" onclick="submitQuiz()">✅ ثبت و ارسال نمره</button>
-  <div class="status-msg" id="statusMsg"></div>
-
-  <div class="result-box" id="resultBox">
-    <span class="msg">نمره شما (از ۱۰):</span>
-    <span class="score" id="finalScore">0</span>
-    <span class="msg" id="resultMsg"></span>
+<div class="container">
+  
+  <!-- صفحه شروع -->
+  <div id="start-section">
+    <h1>📝 آزمون تستی درس ۱</h1>
+    <p>من حق دارم — مطالعات اجتماعی پایه هفتم</p>
+    <div class="info-box">
+      <strong>📌 اطلاعات آزمون:</strong><br>
+      • ۱۵ سوال تصادفی از بانک سوالات<br>
+      • هر سوال <strong>۳۰ ثانیه</strong> زمان دارد<br>
+      • در پایان، کارنامه و مرور پاسخ‌ها نمایش داده می‌شود
+    </div>
+    <input type="text" id="student-name" class="name-input" placeholder="نام و نام خانوادگی خود را وارد کنید">
     <br>
-    <button class="retry-btn" onclick="location.reload()">🔄 آزمون مجدد</button>
+    <button class="start-btn" onclick="startQuiz()">شروع آزمون</button>
   </div>
+
+  <!-- بخش آزمون -->
+  <div id="quiz-section">
+    <div class="header-top">
+      <div class="header-title">
+        <h1>📝 آزمون تستی درس ۱</h1>
+        <p id="progress-text">سوال ۱ از ۱۵</p>
+      </div>
+      <div class="timer-box" id="timer-display">⏱ ۳۰</div>
+    </div>
+    
+    <div class="progress-bar-container">
+      <div class="progress-bar" id="progress-bar"></div>
+    </div>
+    
+    <div id="question-container"></div>
+    
+    <div class="nav-buttons">
+      <button class="next-btn" id="next-btn" onclick="nextQuestion()">سوال بعدی ←</button>
+    </div>
+  </div>
+
+  <!-- بخش کارنامه -->
+  <div id="result-section" class="result-container">
+    <h2 style="color:#2c3e50; margin-bottom:20px; font-weight:900;">🎓 کارنامه شما</h2>
+    <div class="student-name-display" id="display-student-name">نام دانش‌آموز</div>
+    
+    <div id="score-circle" class="score-circle">
+      <div class="score-num" id="score-display">0</div>
+      <div class="score-text">از ۱۰۰</div>
+    </div>
+    <p id="out-of-20-text" style="font-size:1.2rem; font-weight:700; color:#00838f; margin-bottom:15px;"></p>
+    
+    <p id="result-message" style="font-size:1.1rem; font-weight:700; margin-bottom:25px;"></p>
+    <div class="result-stats">
+      <div class="stat-box correct" id="stat-correct">تعداد درست: ۰</div>
+      <div class="stat-box wrong" id="stat-wrong">تعداد غلط: ۰</div>
+    </div>
+    
+    <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">
+      <button class="review-btn" onclick="showReview()" style="background:#f39c12;">🔍 مرور پاسخ‌ها</button>
+      <a href="haftom.html" class="review-btn" style="background:#3498db;">🔙 بازگشت به دروس</a>
+    </div>
+    
+    <div id="review-section" style="display:none; margin-top:25px;"></div>
+  </div>
+
 </div>
 
-<!-- فایل تلگرام -->
 <script src="telegram.js"></script>
 
-<script>
-// ==== بانک سوالات درس اول (من حق دارم) ====
-const questions = [
-  {
-    q: "خداوند در قرآن درباره مقام انسان چه می‌فرماید؟",
-    options: [
-      "ما فرزندان آدم را بسیار گرامی داشتیم و بر بسیاری مخلوقات برتری بخشیدیم.",
-      "ما فرزندان آدم را تنها مخلوق با عقل قرار دادیم.",
-      "ما فرزندان آدم را مسئول تمام مخلوقات قرار دادیم.",
-      "ما فرزندان آدم را به دلیل ثروت گرامی داشتیم."
-    ],
-    answer: 0
-  },
-  {
-    q: "منظور از «حق» چیست؟",
-    options: [
-      "هر چیزی که انسان بتواند به دست آورد.",
-      "چیزهایی که یک انسان به دلیل مقام انسانی‌اش شایستگی داشتن آن‌ها را دارد.",
-      "چیزهایی که قانون برای انسان تعیین می‌کند.",
-      "چیزهایی که دیگران به انسان می‌دهند."
-    ],
-    answer: 1
-  },
-  {
-    q: "مهم‌ترین حق انسان‌ها کدام است؟",
-    options: ["حق تحصیل", "حق آزادی", "حق حیات", "حق مالکیت"],
-    answer: 2
-  },
-  {
-    q: "کدام مورد از حقوق طبیعی انسان نیست؟",
-    options: ["حق حیات", "حق ازدواج", "حق برخورداری از نعمت‌های الهی", "حق داشتن ماشین شخصی"],
-    answer: 3
-  },
-  {
-    q: "انسان از ابتدای خلقت با چه کسانی ارتباط برقرار می‌کند؟",
-    options: [
-      "با فرشتگان",
-      "با پدر، مادر، خواهر، برادر و خویشاوندان",
-      "با همسایگان و دوستان",
-      "با حکومت و قانون"
-    ],
-    answer: 1
-  },
-  {
-    q: "تبعه یک کشور بودن چه حقوقی برای افراد ایجاد می‌کند؟",
-    options: [
-      "حقوقی بر اساس عرف و عادت",
-      "حقوقی بر مبنای قوانین آن کشور",
-      "حقوقی بر اساس ثروت افراد",
-      "حقوقی بر اساس نژاد و قومیت"
-    ],
-    answer: 1
-  },
-  {
-    q: "کدام مورد جزو حقوق افراد در خانه و خانواده نیست؟",
-    options: [
-      "داشتن نام و نام خانوادگی و شناسنامه",
-      "حق داشتن سواد و تحصیل",
-      "داشتن تلفن همراه گران‌قیمت",
-      "برخورداری از محبت پدر و مادر"
-    ],
-    answer: 2
-  },
-  {
-    q: "خانواده تا چه حدی امکانات زندگی را فراهم می‌کند؟",
-    options: [
-      "تا حدی که توان مالی داشته باشد",
-      "تا حدی که تمام آرزوها را برآورده کند",
-      "تا حدی که تمام نیازها را برآورده کند",
-      "بدون محدودیت"
-    ],
-    answer: 0
-  },
-  {
-    q: "دانش‌آموزان در مدرسه چه حقی دارند؟",
-    options: [
-      "حق دارند نمرات بالایی کسب کنند",
-      "حق دارند در مدرسه به آن‌ها توجه شود و تبعیضی بین آن‌ها و دیگران نباشد",
-      "حق دارند هر کاری دوست دارند انجام دهند",
-      "حق دارند معلم را انتخاب کنند"
-    ],
-    answer: 1
-  },
-  {
-    q: "کدام مورد از حقوق افراد در محیط زندگی و کشور نیست؟",
-    options: [
-      "حق زندگی در محیط پاک و سالم",
-      "حق استفاده از خدمات بهداشتی و پزشکی",
-      "حق امنیت در کوچه و خیابان",
-      "حق داشتن هر شغلی بدون توجه به تخصص"
-    ],
-    answer: 3
-  }
-];
+<!-- اسکریپت‌های Firebase (ماژول) -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-// ==== ساخت سوالات در صفحه ====
-const quizArea = document.getElementById("quizArea");
-let selectedAnswers = new Array(questions.length).fill(null);
+  // تنظیمات فایربیس
+  const firebaseConfig = {
+    apiKey: "AIzaSyAo0zfeqp_BfJEqAHLir6xiYD0N9NqQcvE",
+    authDomain: "social-studies-app-6b600.firebaseapp.com",
+    projectId: "social-studies-app-6b600",
+    storageBucket: "social-studies-app-6b600.firebasestorage.app",
+    messagingSenderId: "887286568529",
+    appId: "1:887286568529:web:151feabe0c5c3c42a00a70",
+    measurementId: "G-2ZZLN7ZB9N"
+  };
 
-questions.forEach((item, index) => {
-  const qDiv = document.createElement("div");
-  qDiv.className = "question";
-  qDiv.innerHTML = `<h3>${index + 1}. ${item.q}</h3>`;
-  item.options.forEach((opt, optIndex) => {
-    const label = document.createElement("label");
-    label.className = "option";
-    label.innerHTML = `
-      <input type="radio" name="q${index}" value="${optIndex}" onchange="selectOption(${index}, ${optIndex}, this)">
-      <span>${opt}</span>
-    `;
-    qDiv.appendChild(label);
-  });
-  quizArea.appendChild(qDiv);
-});
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
 
-function selectOption(qIndex, optIndex, radioEl) {
-  selectedAnswers[qIndex] = optIndex;
-  const parent = radioEl.closest(".question");
-  parent.querySelectorAll(".option").forEach(el => el.classList.remove("selected"));
-  radioEl.closest(".option").classList.add("selected");
-}
-
-// ==== نمایش پیام وضعیت ====
-function showStatus(text, type) {
-  const statusEl = document.getElementById("statusMsg");
-  statusEl.textContent = text;
-  statusEl.className = "status-msg" + (type ? " " + type : "");
-}
-
-// ==== ارسال آزمون ====
-function submitQuiz() {
-  const nameInput = document.getElementById("studentName");
-  const studentName = nameInput.value.trim();
-
-  if (!studentName) {
-    showStatus("⚠️ لطفاً نام و نام خانوادگی خود را وارد کنید.", "error");
-    nameInput.focus();
-    return;
-  }
-
-  if (selectedAnswers.includes(null)) {
-    showStatus("⚠️ لطفاً به همه سوالات پاسخ دهید.", "error");
-    return;
-  }
-
-  // محاسبه نمره
-  let correct = 0;
-  questions.forEach((item, index) => {
-    if (selectedAnswers[index] === item.answer) correct++;
-  });
-
-  const percentage = Math.round((correct / questions.length) * 100); // برای تلگرام (درصد)
-  const finalScore = Math.ceil((correct / questions.length) * 10);  // برای نمایش (از ۱۰)
-
-  // غیرفعال کردن دکمه
-  const submitBtn = document.getElementById("submitBtn");
-  submitBtn.disabled = true;
-  submitBtn.textContent = "در حال ارسال...";
-  showStatus("");
-
-  // ارسال به تلگرام
-  try {
-    if (typeof submitScoreToTelegram === "function") {
-      submitScoreToTelegram(percentage, correct);
-      showStatus("✅ نمره شما با موفقیت ارسال شد.", "success");
-    } else {
-      console.warn("تابع submitScoreToTelegram پیدا نشد. telegram.js را بررسی کن.");
-      showStatus("⚠️ فایل telegram.js بارگذاری نشده است.", "error");
+  // تابعی برای ذخیره نمره در فایربیس
+  window.saveGradeToFirebase = async function(studentName, examName, score, correctCount) {
+    try {
+      await addDoc(collection(db, "grades"), {
+        name: studentName,
+        exam: examName,
+        score: score,
+        correct: correctCount,
+        date: new Date().toLocaleDateString('fa-IR'),
+        timestamp: new Date()
+      });
+      console.log("نمره در دیتابیس ذخیره شد.");
+    } catch (e) {
+      console.error("خطا در ذخیره نمره در دیتابیس: ", e);
     }
-  } catch (err) {
-    console.error("خطا در ارسال به تلگرام:", err);
-    showStatus("⚠️ خطا در ارسال به تلگرام. لطفاً به معلم اطلاع دهید.", "error");
+  };
+</script>
+
+<script>
+  // ==========================================
+  // بانک سوالات
+  // ==========================================
+  const questionBank = [
+    { q: "من حق دارم در مدرسه...", options: ["فقط درس بخوانم", "نظر خود را بیان کنم", "به دیگران توهین کنم", "به کلاس نروم"], answer: 1 },
+    { q: "حقوق شهروندی یعنی چه؟", options: ["فقط انجام وظایف", "حقوق و وظایف متقابل", "رعایت نکردن قوانین", "فقط حق رای دادن"], answer: 1 },
+    { q: "مسئولیت یعنی چه؟", options: ["تنها انجام کارهای دلخواه", "پذیرش عواقب کارهایمان", "فقط حق داشتن", "آزادی بدون محدودیت"], answer: 1 },
+    { q: "یکی از حقوق مهم دانش‌آموزان در مدرسه چیست؟", options: ["حق استفاده از امکانات آموزشی", "حق تنبل بودن", "حق بی‌احترامی به معلم", "حق فرار از درس"], answer: 0 },
+    { q: "کدام‌یک از موارد زیر مسئولیت شهروندی است؟", options: ["دور ریختن زباله در خیابان", "رعایت قوانین راهنمایی و رانندگی", "بی‌توجهی به محیط زیست", "پرداخت نکردن مالیات"], answer: 1 },
+    { q: "در خانه، مسئولیت شما چیست؟", options: ["فقط بازی کردن", "کمک به کارهای خانه", "بی‌توجهی به خانواده", "تحمیل نظر خود به دیگران"], answer: 1 },
+    { q: "رعایت حقوق دیگران به چه معناست؟", options: ["توجه به خواسته‌های ما", "احترام به حقوق و حریم دیگران", "نادیده گرفتن دیگران", "فقط انجام وظایف خودمان"], answer: 1 },
+    { q: "یکی از راه‌های دفاع از حقوق خود چیست؟", options: ["دعوا و خشونت", "گفتگو و مذاکره منطقی", "بی‌توجهی به مشکل", "توهین به دیگران"], answer: 1 },
+    { q: "قانون برای چیست؟", options: ["محدود کردن مردم", "برقراری نظم و امنیت", "فقط برای مجازات کردن", "برای نفع خودخواهانه"], answer: 1 },
+    { q: "کدام‌یک از موارد زیر حق شهروندان است؟", options: ["حق رای دادن", "حق آزار و اذیت دیگران", "حق قانون‌شکنی", "حق تخریب اموال عمومی"], answer: 0 },
+    { q: "چه کسی مسئول حفاظت از محیط زیست است؟", options: ["فقط دولت", "همه ما (شهروندان)", "فقط سازمان محیط زیست", "هیچ‌کس"], answer: 1 },
+    { q: "پرداخت مالیات چه تأثیری دارد؟", options: ["فقط هزینه برای مردم", "تأمین هزینه‌های عمومی جامعه", "کاهش درآمد مردم", "هیچ تأثیری ندارد"], answer: 1 },
+    { q: "یکی از مهم‌ترین وظایف شهروندان در انتخابات چیست؟", options: ["عدم شرکت در انتخابات", "شرکت آگاهانه و رای دادن", "تحریم انتخابات", "انتخاب بر اساس تعصب"], answer: 1 },
+    { q: "کدام‌یک از موارد زیر حق دانش‌آموز نیست؟", options: ["حق داشتن معلم دلسوز", "حق داشتن فضای آموزشی مناسب", "حق تحقیر سایر دانش‌آموزان", "حق مطالعه و یادگیری"], answer: 2 },
+    { q: "احترام به والدین و معلم از چه نوعی است؟", options: ["فقط وظیفه", "هم حق و هم وظیفه", "فقط حق", "هیچ‌کدام"], answer: 1 }
+  ];
+
+  const QUESTIONS_COUNT = 15;
+  const TIME_PER_Q = 30;
+  const faDigits = "۰۱۲۳۴۵۶۷۸۹";
+  let studentName = "";
+  let shuffledQuestions = [];
+  let currentQIndex = 0;
+  let userAnswers = [];
+  let timerInterval = null;
+  let timeLeft = TIME_PER_Q;
+
+  function toFa(n) { return String(n).replace(/\d/g, d => faDigits[d]); }
+  function shuffleArray(arr) { const a = [...arr]; for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+
+  function startQuiz() {
+    const nameInput = document.getElementById("student-name");
+    const name = nameInput.value.trim();
+    if (!name) {
+      nameInput.focus();
+      nameInput.style.borderColor = "#e74c3c";
+      nameInput.placeholder = "⚠️ لطفاً نام خود را وارد کنید";
+      return;
+    }
+    studentName = name;
+    const picked = shuffleArray(questionBank).slice(0, QUESTIONS_COUNT);
+    shuffledQuestions = picked.map(q => {
+      const opts = q.options.map((text, i) => ({ text, isCorrect: i === q.answer }));
+      const shuffled = shuffleArray(opts);
+      return { q: q.q, options: shuffled, correctIndex: shuffled.findIndex(o => o.isCorrect) };
+    });
+    currentQIndex = 0;
+    userAnswers = new Array(QUESTIONS_COUNT).fill(null);
+    document.getElementById("start-section").style.display = "none";
+    document.getElementById("quiz-section").style.display = "block";
+    document.getElementById("result-section").style.display = "none";
+    renderQuestion();
   }
 
-  // نمایش نتیجه به دانش‌آموز
-  document.getElementById("quizArea").style.display = "none";
-  submitBtn.style.display = "none";
-  document.querySelector(".student-name-box").style.display = "none";
+  function renderQuestion() {
+    if (currentQIndex >= QUESTIONS_COUNT) { finishQuiz(); return; }
+    const q = shuffledQuestions[currentQIndex];
+    document.getElementById("progress-text").textContent = `سوال ${toFa(currentQIndex + 1)} از ${toFa(QUESTIONS_COUNT)}`;
+    const letters = ["الف", "ب", "ج", "د"];
+    const container = document.getElementById("question-container");
+    container.innerHTML = `
+      <div class="question-box">
+        <div class="q-number">سوال ${toFa(currentQIndex + 1)}</div>
+        <div class="q-title">${q.q}</div>
+        <div class="options">
+          ${q.options.map((opt, i) => `
+            <label class="option-label" data-index="${i}" onclick="selectOption(${i}, this)">
+              <span style="font-weight:900; color:#00acc1; min-width:24px;">${letters[i]}</span>
+              <span>${opt.text}</span>
+            </label>
+          `).join("")}
+        </div>
+      </div>
+    `;
+    document.getElementById("progress-bar").style.width = `${(currentQIndex / QUESTIONS_COUNT) * 100}%`;
+    document.getElementById("next-btn").textContent = currentQIndex === QUESTIONS_COUNT - 1 ? "پایان آزمون ←" : "سوال بعدی ←";
+    startTimer();
+  }
 
-  const resultBox = document.getElementById("resultBox");
-  resultBox.style.display = "block";
-  document.getElementById("finalScore").textContent = finalScore;
+  function selectOption(idx, el) {
+    document.querySelectorAll(".option-label").forEach(x => x.classList.remove("selected"));
+    el.classList.add("selected");
+    userAnswers[currentQIndex] = idx;
+  }
 
-  let msg = "";
-  if (finalScore >= 9) msg = "عالی! 🌟";
-  else if (finalScore >= 7) msg = "خوب! 👏";
-  else if (finalScore >= 5) msg = "قابل قبول. 💪";
-  else msg = "نیاز به مطالعه بیشتر. 📚";
-  document.getElementById("resultMsg").textContent = msg;
-}
+  function startTimer() {
+    clearInterval(timerInterval);
+    timeLeft = TIME_PER_Q;
+    updateTimer();
+    const timerBox = document.getElementById("timer-display");
+    timerBox.classList.remove("warning");
+    timerInterval = setInterval(() => {
+      timeLeft--;
+      updateTimer();
+      if (timeLeft <= 5 && timeLeft > 0) timerBox.classList.add("warning");
+      if (timeLeft <= 0) {
+        clearInterval(timerInterval);
+        goNext();
+      }
+    }, 1000);
+  }
+
+  function updateTimer() {
+    document.getElementById("timer-display").textContent = `⏱ ${toFa(Math.max(0, timeLeft))}`;
+  }
+
+  function nextQuestion() {
+    if (userAnswers[currentQIndex] === null) {
+      alert("لطفاً یک گزینه را انتخاب کنید");
+      return;
+    }
+    clearInterval(timerInterval);
+    goNext();
+  }
+
+  function goNext() {
+    currentQIndex++;
+    if (currentQIndex >= QUESTIONS_COUNT) finishQuiz();
+    else renderQuestion();
+  }
+
+  function finishQuiz() {
+    clearInterval(timerInterval);
+    document.getElementById("quiz-section").style.display = "none";
+    document.getElementById("result-section").style.display = "block";
+    document.getElementById("display-student-name").textContent = studentName;
+
+    let correct = 0;
+    shuffledQuestions.forEach((q, i) => {
+      if (userAnswers[i] === q.correctIndex) correct++;
+    });
+    const wrong = QUESTIONS_COUNT - correct;
+    const percent = Math.round((correct / QUESTIONS_COUNT) * 100);
+    
+    // محاسبه نمره از ۲۰ (رند به بالا)
+    const scoreOutOf20 = (correct / QUESTIONS_COUNT) * 20;
+    const roundedScore20 = Math.ceil(scoreOutOf20); 
+
+    const examName = document.title;
+
+    // نمایش در کارنامه
+    document.getElementById("score-display").textContent = toFa(percent);
+    document.getElementById("out-of-20-text").textContent = `نمره شما: ${toFa(roundedScore20)} از ۲۰`;
+    document.getElementById("stat-correct").textContent = `تعداد درست: ${toFa(correct)}`;
+    document.getElementById("stat-wrong").textContent = `تعداد غلط: ${toFa(wrong)}`;
+
+    const circle = document.getElementById("score-circle");
+    circle.classList.remove("excellent", "good", "fail");
+    const msg = document.getElementById("result-message");
+    if (percent >= 80) {
+      circle.classList.add("excellent");
+      msg.textContent = "🌟 عالی بود! تسلط خوبی روی درس داری.";
+    } else if (percent >= 50) {
+      circle.classList.add("good");
+      msg.textContent = "👍 خوب بود، با کمی تلاش بیشتر می‌تونی عالی بشی.";
+    } else {
+      circle.classList.add("fail");
+      msg.textContent = "📚 نیاز به مرور بیشتر داری. درسنامه رو یه بار دیگه بخون!";
+    }
+
+    // ارسال به تلگرام (درصدی)
+    if (typeof submitScoreToTelegram === 'function') {
+      submitScoreToTelegram(percent, correct);
+    }
+    
+    // ارسال به فایربیس (نمره از ۲۰)
+    if (typeof window.saveGradeToFirebase === 'function') {
+      window.saveGradeToFirebase(studentName, examName, roundedScore20, correct);
+    }
+  }
+
+  function showReview() {
+    const reviewSection = document.getElementById("review-section");
+    const letters = ["الف", "ب", "ج", "د"];
+    let html = '<h3 style="margin-bottom:15px; color:#2c3e50;">🔍 مرور پاسخ‌ها</h3>';
+    shuffledQuestions.forEach((q, i) => {
+      const userAns = userAnswers[i];
+      const isCorrect = userAns === q.correctIndex;
+      html += `<div class="review-item"><div class="review-q">${toFa(i + 1)}. ${q.q}</div>`;
+      q.options.forEach((opt, j) => {
+        if (j === q.correctIndex) {
+          html += `<div class="review-a-correct">✓ ${letters[j]}) ${opt.text}</div>`;
+        } else if (j === userAns && !isCorrect) {
+          html += `<div class="review-a-wrong">✗ ${letters[j]}) ${opt.text} (پاسخ شما)</div>`;
+        }
+      });
+      if (userAns === null) {
+        html += `<div class="review-a-empty">⚠️ بدون پاسخ</div>`;
+      }
+      html += `</div>`;
+    });
+    reviewSection.innerHTML = html;
+    reviewSection.style.display = "block";
+    reviewSection.scrollIntoView({ behavior: "smooth" });
+  }
 </script>
 </body>
 </html>
