@@ -9,7 +9,7 @@ function submitScoreToTelegram(score, correctCount) {
     const today = new Date().toLocaleDateString('fa-IR');
 
     // 👇 آدرس با https
-    const apiUrl = "https://45.139.11.210/~motada/save_grade.php"; 
+    const apiUrl = "https://api.motadars.ir/save_grade.php"; 
 
     fetch(apiUrl, {
         method: "POST",
