@@ -8,8 +8,8 @@ function submitScoreToTelegram(score, correctCount) {
     const examName = document.title; 
     const today = new Date().toLocaleDateString('fa-IR');
 
-    // 👇 آدرس موقت هاست پارس‌پک
-    const apiUrl = "http://45.139.11.210/~motada/save_grade.php"; 
+    // 👇 آدرس با https
+    const apiUrl = "https://45.139.11.210/~motada/save_grade.php"; 
 
     fetch(apiUrl, {
         method: "POST",
@@ -26,13 +26,14 @@ function submitScoreToTelegram(score, correctCount) {
     .then(data => {
         if(data.status === 'success') {
             console.log("✅ نمره در دیتابیس هاست ذخیره شد.");
-            alert("✅ نمره شما در دیتابیس ثبت شد.");
+            alert("✅ نمره شما با موفقیت ثبت شد.");
         } else {
             console.error("❌ خطای دیتابیس:", data.message);
+            alert("❌ خطای دیتابیس: " + data.message);
         }
     })
     .catch(error => {
         console.error("❌ خطای شبکه:", error);
-        alert("❌ خطا در ارتباط با سرور هاست.");
+        alert("❌ خطا در ارتباط با سرور. لطفا اینترنت خود را بررسی کنید.");
     });
 }
