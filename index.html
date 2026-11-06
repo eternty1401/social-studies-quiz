@@ -663,10 +663,16 @@ body.dark-mode .history-banner {
       <h2>منوی اصلی</h2>
     </div>
     <a href="index.html">🏠 صفحه اصلی</a>
-    <a href="login.html">👤 ورود / ثبت‌نام</a>
+
+<!-- لینک ورود (با آیدی مشخص) -->
+<a href="login.html" id="menu-auth-link">👤 ورود / ثبت‌نام</a>
+
 <a href="student-panel.html">🎓 پنل دانش‌آموز</a>
-    <a href="teacher-panel.html">👨‍🏫 پنل معلم</a>
-    <a href="#">📞 تماس با ما</a>
+<a href="teacher-panel.html">👨‍🏫 پنل معلم</a>
+<a href="#">📞 تماس با ما</a>
+
+<!-- دکمه خروج (در ابتدا مخفی است) -->
+<a href="#" id="menu-logout-link" style="display: none; color: #ff6b6b;" onclick="logoutStudent(event)">🚪 خروج از حساب</a>
   </div>
   
   <!-- لایه تاریک پشت منو -->
