@@ -211,6 +211,8 @@
   .grade-card:nth-child(1) { animation-delay: 0.8s; }
   .grade-card:nth-child(2) { animation-delay: 1s; }
   .grade-card:nth-child(3) { animation-delay: 1.2s; }
+  .grade-card:nth-child(4) { animation-delay: 1.3s; }
+  .grade-card:nth-child(5) { animation-delay: 1.4s; }
 
   .grade-card::before {
     content: '';
@@ -253,6 +255,7 @@
     font-size: 0.9rem;
     color: rgba(255,255,255,0.85);
     margin-bottom: 20px;
+    line-height: 1.6;
   }
 
   .grade-btn {
@@ -444,39 +447,6 @@
     50% { transform: scale(1.2); }
   }
 
-  /* ===== ریسپانسیو ===== */
-  @media(max-width:600px) {
-    body { padding: 25px 15px; }
-    .header h1 { font-size: 1.9rem; }
-    .header .subtitle { font-size: 0.95rem; }
-    .teacher-badge { padding: 10px 22px; font-size: 0.9rem; }
-    .section-title { font-size: 1.2rem; }
-    .grade-card { padding: 30px 20px; }
-    .grade-icon { font-size: 3rem; }
-    .grade-num { font-size: 1.5rem; }
-    .about-section { padding: 25px 20px; }
-    .about-section h2 { font-size: 1.1rem; }
-    .about-section p { font-size: 0.9rem; }
-    .theme-toggle { top: 15px; left: 15px; width: 40px; height: 40px; font-size: 1.2rem; }
-    .museum-banner { padding: 22px 18px; }
-    .museum-banner-content {
-      flex-direction: column;
-      text-align: center;
-      gap: 12px;
-    }
-    .museum-banner-text { text-align: center; }
-    .museum-banner-icon { font-size: 3rem; }
-    .museum-banner-text h3 { font-size: 1.1rem; }
-    .museum-banner-text p { font-size: 0.82rem; }
-    .museum-banner-btn { padding: 10px 20px; font-size: 0.8rem; }
-   .history-banner { padding: 22px 18px; }
-.history-banner-content { flex-direction: column; text-align: center; gap: 12px; }
-.history-banner-text { text-align: center; }
-.history-banner-icon { font-size: 3rem; }
-.history-banner-text h3 { font-size: 1.1rem; }
-.history-banner-text p { font-size: 0.82rem; }
-.history-banner-btn { padding: 10px 20px; font-size: 0.8rem; display: inline-block; margin-top: 5px; }
-  }
  /* ===== بنر گفتگو با تاریخ ===== */
 .history-banner {
   display: block;
@@ -563,17 +533,6 @@ body.dark-mode .history-banner {
   border-color: rgba(255,255,255,0.15);
 }
 
-/* ریسپانسیو برای موبایل (اضافه شود به بخش media query) */
-/* در بخش @media(max-width:600px) این خطوط را اضافه کن: */
-/*
-  .history-banner { padding: 22px 18px; }
-  .history-banner-content { flex-direction: column; text-align: center; gap: 12px; }
-  .history-banner-text { text-align: center; }
-  .history-banner-icon { font-size: 3rem; }
-  .history-banner-text h3 { font-size: 1.1rem; }
-  .history-banner-text p { font-size: 0.82rem; }
-  .history-banner-btn { padding: 10px 20px; font-size: 0.8rem; }
-*/
  /* بنر مهارت زندگی */
 .life-banner {
   display: block; text-decoration: none; color: #fff;
@@ -593,19 +552,125 @@ body.dark-mode .history-banner {
 .life-banner-btn { background: rgba(255,255,255,0.95); color: #764ba2; padding: 11px 22px; border-radius: 30px; font-weight: 900; font-size: 0.85rem; white-space: nowrap; transition: 0.3s; box-shadow: 0 4px 15px rgba(0,0,0,0.15); }
 .life-banner:hover .life-banner-btn { transform: scale(1.05); background: #fff; }
 
-@media(max-width:600px) {
-  .life-banner { padding: 22px 18px; }
-  .life-banner-content { flex-direction: column; text-align: center; gap: 12px; }
-  .life-banner-text { text-align: center; }
-  .life-banner-icon { font-size: 3rem; }
-  .life-banner-btn { padding: 10px 20px; font-size: 0.8rem; }
-}
+  /* ===== استایل‌های منوی همبرگری ===== */
+  .menu-btn {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 45px;
+    height: 45px;
+    background: rgba(255,255,255,0.2);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 50%;
+    z-index: 1000;
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    cursor: pointer; transition: 0.3s; gap: 5px;
+  }
+  .menu-btn:hover { transform: scale(1.1); background: rgba(255,255,255,0.3); }
+  .menu-btn span { display: block; width: 22px; height: 2px; background: #fff; transition: 0.3s; border-radius: 2px;}
+  
+  /* منوی کشویی */
+  .side-menu {
+    position: fixed; top: 0; right: -300px;
+    width: 280px; height: 100vh;
+    background: rgba(30, 30, 50, 0.95);
+    backdrop-filter: blur(20px);
+    z-index: 1002; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex; flex-direction: column;
+    box-shadow: -5px 0 30px rgba(0,0,0,0.5);
+  }
+  body.dark-mode .side-menu { background: rgba(10, 15, 30, 0.98); }
+  .side-menu.open { right: 0; }
+  
+  .close-btn { position: absolute; top: 15px; left: 20px; font-size: 35px; color: #fff; text-decoration: none; line-height: 1; }
+  .menu-header { text-align: center; padding: 30px 20px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 10px; }
+  .menu-header h2 { font-size: 1.2rem; color: #fff; font-weight: 700; }
+  
+  .side-menu a:not(.close-btn) {
+    padding: 16px 25px; color: #fff; text-decoration: none;
+    font-size: 1rem; border-bottom: 1px solid rgba(255,255,255,0.05);
+    transition: 0.2s; display: flex; align-items: center; gap: 12px; font-weight: 500;
+  }
+  .side-menu a:not(.close-btn):hover { background: rgba(255,255,255,0.1); padding-right: 30px; }
+  
+  /* پس‌زمینه تاریک منو */
+  .overlay {
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+    background: rgba(0,0,0,0.6); backdrop-filter: blur(4px);
+    z-index: 1001; opacity: 0; visibility: hidden; transition: 0.3s;
+  }
+  .overlay.show { opacity: 1; visibility: visible; }
+
+  /* استایل کارت بزودی */
+  .grade-card.coming-soon .grade-icon { filter: grayscale(100%); opacity: 0.7; }
+  .grade-card.coming-soon .grade-btn { background: rgba(255,255,255,0.3); color: #fff; border: 1px dashed rgba(255,255,255,0.5); }
+
+  /* ===== ریسپانسیو ===== */
+  @media(max-width:600px) {
+    body { padding: 25px 15px; }
+    .header h1 { font-size: 1.9rem; }
+    .header .subtitle { font-size: 0.95rem; }
+    .teacher-badge { padding: 10px 22px; font-size: 0.9rem; }
+    .section-title { font-size: 1.2rem; }
+    .grade-card { padding: 30px 20px; }
+    .grade-icon { font-size: 3rem; }
+    .grade-num { font-size: 1.5rem; }
+    .about-section { padding: 25px 20px; }
+    .about-section h2 { font-size: 1.1rem; }
+    .about-section p { font-size: 0.9rem; }
+    .theme-toggle { top: 15px; left: 15px; width: 40px; height: 40px; font-size: 1.2rem; }
+    .menu-btn { top: 15px; right: 15px; width: 40px; height: 40px; }
+    .museum-banner { padding: 22px 18px; }
+    .museum-banner-content { flex-direction: column; text-align: center; gap: 12px; }
+    .museum-banner-text { text-align: center; }
+    .museum-banner-icon { font-size: 3rem; }
+    .museum-banner-text h3 { font-size: 1.1rem; }
+    .museum-banner-text p { font-size: 0.82rem; }
+    .museum-banner-btn { padding: 10px 20px; font-size: 0.8rem; }
+    .history-banner { padding: 22px 18px; }
+    .history-banner-content { flex-direction: column; text-align: center; gap: 12px; }
+    .history-banner-text { text-align: center; }
+    .history-banner-icon { font-size: 3rem; }
+    .history-banner-text h3 { font-size: 1.1rem; }
+    .history-banner-text p { font-size: 0.82rem; }
+    .history-banner-btn { padding: 10px 20px; font-size: 0.8rem; display: inline-block; margin-top: 5px; }
+    .life-banner { padding: 22px 18px; }
+    .life-banner-content { flex-direction: column; text-align: center; gap: 12px; }
+    .life-banner-text { text-align: center; }
+    .life-banner-icon { font-size: 3rem; }
+    .life-banner-btn { padding: 10px 20px; font-size: 0.8rem; }
+  }
 </style>
 </head>
 <body>
 
   <!-- دکمه حالت تاریک/روشن -->
   <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">🌙</button>
+
+  <!-- دکمه منوی همبرگری -->
+  <div class="menu-btn" onclick="toggleMenu()">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+
+  <!-- منوی کشویی کناری -->
+  <div id="sideMenu" class="side-menu">
+    <a href="javascript:void(0)" class="close-btn" onclick="toggleMenu()">&times;</a>
+    <div class="menu-header">
+      <h2>منوی اصلی</h2>
+    </div>
+    <a href="index.html">🏠 صفحه اصلی</a>
+    <a href="#">👤 ورود / ثبت‌نام</a>
+    <a href="#">🎓 پنل دانش‌آموز</a>
+    <a href="#">👨‍🏫 پنل معلم</a>
+    <a href="#">📞 تماس با ما</a>
+  </div>
+  
+  <!-- لایه تاریک پشت منو -->
+  <div id="menuOverlay" class="overlay" onclick="toggleMenu()"></div>
 
   <!-- حباب‌های تزئینی -->
   <div class="bubble"></div>
@@ -654,68 +719,85 @@ body.dark-mode .history-banner {
         <span class="grade-btn">ورود به پایه نهم ←</span>
       </a>
 
-    </div>
+      <!-- کلاس آنلاین (قفل شده) -->
+      <a href="#" class="grade-card coming-soon">
+        <span class="grade-icon">🎥</span>
+        <div class="grade-num">کلاس آنلاین</div>
+        <div class="grade-desc">کلاس‌های زنده و تعاملی با دبیر</div>
+        <span class="grade-btn">به زودی... ⏳</span>
+      </a>
 
-    <!-- 🏛️ بخش موزه گردی مجازی -->
-    <a href="museum.html" class="museum-banner">
-      <div class="museum-banner-content">
-        <span class="museum-banner-icon">🏛️</span>
-        <div class="museum-banner-text">
-          <h3>موزه گردی مجازی</h3>
-          <p>از تخت جمشید تا کاخ گلستان — با یک کلیک به دل تاریخ سفر کن</p>
-        </div>
-        <span class="museum-banner-btn">شروع سفر ۳۶۰° ←</span>
+      <!-- امتحان دلخواه -->
+      <a href="custom-exam.html" class="grade-card">
+        <span class="grade-icon">🤖</span>
+        <div class="grade-num">امتحان دلخواه</div>
+        <div class="grade-desc">ترکیب دروس را انتخاب کنید تا هوش مصنوعی آزمون بسازد</div>
+        <span class="grade-btn">ساخت آزمون ←</span>
+      </a>
+
+    </div>
+      <!-- 🏛️ بخش موزه گردی مجازی -->
+  <a href="museum.html" class="museum-banner">
+    <div class="museum-banner-content">
+      <span class="museum-banner-icon">🏛️</span>
+      <div class="museum-banner-text">
+        <h3>موزه گردی مجازی</h3>
+        <p>از تخت جمشید تا کاخ گلستان -- با یک کلیک به دل تاریخ سفر کن</p>
       </div>
-    </a>
-<!-- ⏳ بخش گفتگو با تاریخ -->
-<a href="history-chat.html" class="history-banner">
-  <div class="history-banner-content">
-    <span class="history-banner-icon">⏳</span>
-    <div class="history-banner-text">
-      <h3>گفتگو با تاریخ</h3>
-      <p>با کوروش، ابن سینا، امیرکبیر و دیگر شخصیت‌های تاریخی چت کن!</p>
+      <span class="museum-banner-btn">شروع سفر ۳۶۰° ←</span>
     </div>
-    <span class="history-banner-btn">شروع گفتگو ←</span>
-  </div>
-</a>
-   <!-- 🌟 بخش مهارت زندگی -->
-<a href="life-skills.html" class="life-banner">
-  <div class="life-banner-content">
-    <span class="life-banner-icon">🌟</span>
-    <div class="life-banner-text">
-      <h3>مهارت زندگی</h3>
-      <p>آزادی، پارلمان، سواد رسانه‌ای و مهارت‌هایی که برای یک زندگی عالی لازم داری!</p>
-    </div>
-    <span class="life-banner-btn">ورود به بخش مهارت‌ها ←</span>
-  </div>
-</a>
-    <!-- بخش درباره -->
-    <div class="about-section">
-      <h2>✨ درباره این سایت</h2>
-      <p>
-        این سایت آموزشی به منظور کمک به دانش‌آموزان عزیز در یادگیری بهتر و عمیق‌تر درس مطالعات اجتماعی طراحی شده است. 
-        امیدواریم با استفاده از درسنامه‌ها، آزمون‌ها و فلش کارت‌ها، تجربه‌ای لذت‌بخش از یادگیری داشته باشید.
-      </p>
-      <div class="features-row">
-        <span class="feature-chip">📖 درسنامه</span>
-        <span class="feature-chip">📝 آزمون تستی</span>
-        <span class="feature-chip">✍️ آزمون تشریحی</span>
-        <span class="feature-chip">🎴 فلش کارت</span>
-        <span class="feature-chip">📂 فایل‌ها و عکس‌ها</span>
-        <span class="feature-chip">🎮 بازی آموزشی</span>
-        <span class="feature-chip">🏛️ موزه گردی</span>
-       <span class="feature-chip">⏳ گفتگو با تاریخ</span>
-       <span class="feature-chip">🌟 مهارت زندگی</span>
+  </a>
+
+  <!-- ⏳ بخش گفتگو با تاریخ -->
+  <a href="history-chat.html" class="history-banner">
+    <div class="history-banner-content">
+      <span class="history-banner-icon">⏳</span>
+      <div class="history-banner-text">
+        <h3>گفتگو با تاریخ</h3>
+        <p>با کوروش، ابن سینا، امیرکبیر و دیگر شخصیت‌های تاریخی چت کن!</p>
       </div>
+      <span class="history-banner-btn">شروع گفتگو ←</span>
     </div>
+  </a>
 
+  <!-- 🌟 بخش مهارت زندگی -->
+  <a href="life-skills.html" class="life-banner">
+    <div class="life-banner-content">
+      <span class="life-banner-icon">🌟</span>
+      <div class="life-banner-text">
+        <h3>مهارت زندگی</h3>
+        <p>آزادی، پارلمان، سواد رسانه‌ای و مهارت‌هایی که برای یک زندگی عالی لازم داری!</p>
+      </div>
+      <span class="life-banner-btn">ورود به بخش مهارت‌ها ←</span>
+    </div>
+  </a>
+
+  <!-- بخش درباره -->
+  <div class="about-section">
+    <h2>✨ درباره این سایت</h2>
+    <p>
+      این سایت آموزشی به منظور کمک به دانش‌آموزان عزیز در یادگیری بهتر و عمیق‌تر درس مطالعات اجتماعی طراحی شده است. 
+      امیدواریم با استفاده از درسنامه‌ها، آزمون‌ها و فلش کارت‌ها، تجربه‌ای لذت‌بخش از یادگیری داشته باشید.
+    </p>
+    <div class="features-row">
+      <span class="feature-chip">📖 درسنامه</span>
+      <span class="feature-chip">📝 آزمون تستی</span>
+      <span class="feature-chip">✍️ آزمون تشریحی</span>
+      <span class="feature-chip">🎴 فلش کارت</span>
+      <span class="feature-chip">📂 فایل‌ها و عکس‌ها</span>
+      <span class="feature-chip">🎮 بازی آموزشی</span>
+      <span class="feature-chip">🏛️ موزه گردی</span>
+      <span class="feature-chip">⏳ گفتگو با تاریخ</span>
+      <span class="feature-chip">🌟 مهارت زندگی</span>
+    </div>
   </div>
 
-  <!-- فوتر -->
-  <div class="footer">
-    ساخته شده با <span class="heart">❤️</span> برای دانش‌آموزان عزیز
-  </div>
+</div>
 
+<!-- فوتر -->
+<div class="footer">
+  ساخته شده با <span class="heart">❤️</span> برای دانش‌آموزان عزیز
+</div>
 <script>
   // اسکریپت حالت تاریک/روشن
   const themeBtn = document.getElementById('themeBtn');
@@ -736,6 +818,12 @@ body.dark-mode .history-banner {
       localStorage.setItem('theme', 'light');
       themeBtn.textContent = '🌙';
     }
+  }
+
+  // کدهای مربوط به منوی همبرگری
+  function toggleMenu() {
+    document.getElementById('sideMenu').classList.toggle('open');
+    document.getElementById('menuOverlay').classList.toggle('show');
   }
 
   // کدهای مربوط به Service Worker
