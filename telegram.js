@@ -1,9 +1,8 @@
-function submitScoreToTelegram(score, correctCount) {
-    // گرفتن خودکار نام و مدرسه از پروفایل (بعد از ورود)
+// پارامتر سوم (examType) مشخص می‌کنه آزمون تستیه یا تشریحی
+function submitScoreToTelegram(score, correctCount, examType = "testi") {
     let studentName = localStorage.getItem('student_name');
     let schoolName = localStorage.getItem('school_name');
     
-    // اگر دانش‌آموز وارد نشده بود، ازش بخواه وارد شود
     if (!studentName || !schoolName) {
         alert("⚠️ لطفاً ابتدا از منوی سایت وارد حساب کاربری خود شوید.");
         return;
@@ -20,6 +19,7 @@ function submitScoreToTelegram(score, correctCount) {
             student_name: studentName,
             school_name: schoolName,
             exam_name: examName,
+            exam_type: examType, // 👈 ارسال نوع آزمون (testi یا tashrihi)
             score: score,
             correct_count: correctCount,
             exam_date: today
