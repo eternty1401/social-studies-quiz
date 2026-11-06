@@ -9,7 +9,7 @@ function submitScoreToTelegram(score, correctCount) {
     const today = new Date().toLocaleDateString('fa-IR');
 
     // 👇 آدرس فایل PHP روی هاست خودت (آدرس موقت تا وقتی دامنه وصل بشه)
-    const apiUrl = "https://4087250.cloudylink.com/save_grade.php"; 
+    const apiUrl = "http://motadars.ir/save_grade.php"; 
 
     fetch(apiUrl, {
         method: "POST",
