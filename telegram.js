@@ -1,21 +1,16 @@
 function submitScoreToTelegram(score, correctCount) {
-    // گرفتن نام دانش‌آموز و مدرسه از فرم‌های موجود در صفحه
-    const nameInput = document.getElementById('student-name') || document.getElementById('studentName');
-    const schoolSelect = document.getElementById('school-select');
+    // گرفتن خودکار نام و مدرسه از پروفایل (بعد از ورود)
+    let studentName = localStorage.getItem('student_name');
+    let schoolName = localStorage.getItem('school_name');
     
-    let studentName = "ناشناس";
-    if (nameInput && nameInput.value.trim() !== "") {
-        studentName = nameInput.value.trim();
-    }
-    
-    let schoolName = "متفرقه";
-    if (schoolSelect && schoolSelect.value) {
-        schoolName = schoolSelect.value;
+    // اگر دانش‌آموز وارد نشده بود، ازش بخواه وارد شود
+    if (!studentName || !schoolName) {
+        alert("⚠️ لطفاً ابتدا از منوی سایت وارد حساب کاربری خود شوید.");
+        return;
     }
 
     const examName = document.title; 
     const today = new Date().toLocaleDateString('fa-IR');
-
     const apiUrl = "https://api.motadars.ir/save_grade.php"; 
 
     fetch(apiUrl, {
@@ -23,7 +18,7 @@ function submitScoreToTelegram(score, correctCount) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
             student_name: studentName,
-            school_name: schoolName, // 👈 ارسال نام مدرسه
+            school_name: schoolName,
             exam_name: examName,
             score: score,
             correct_count: correctCount,
@@ -33,15 +28,12 @@ function submitScoreToTelegram(score, correctCount) {
     .then(response => response.json())
     .then(data => {
         if(data.status === 'success') {
-            console.log("✅ نمره در دیتابیس هاست ذخیره شد.");
             alert("✅ نمره شما با موفقیت ثبت شد.");
         } else {
-            console.error("❌ خطای دیتابیس:", data.message);
             alert("❌ خطای دیتابیس: " + data.message);
         }
     })
     .catch(error => {
-        console.error("❌ خطای شبکه:", error);
-        alert("❌ خطا در ارتباط با سرور. لطفا اینترنت خود را بررسی کنید.");
+        alert("❌ خطا در ارتباط با سرور.");
     });
 }
