@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ثبت‌نام دانش‌آموز</title>
+    <style>
+        body { font-family: Tahoma, sans-serif; background: #667eea; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .form-box { background: white; padding: 30px; border-radius: 15px; width: 90%; max-width: 400px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
+        h2 { text-align: center; color: #333; margin-bottom: 20px; }
+        input, select { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; font-family: inherit; }
+        button { width: 100%; padding: 12px; background: #28a745; color: white; border: none; border-radius: 8px; font-size: 16px; cursor: pointer; }
+        button:hover { background: #218838; }
+        .msg { text-align: center; margin-top: 10px; font-size: 14px; }
+    </style>
+</head>
+<body>
+    <div class="form-box">
+        <h2>ثبت‌نام دانش‌آموز</h2>
+        <input type="text" id="fullName" placeholder="نام و نام خانوادگی" required>
+        
+        <select id="schoolName">
+            <option value="مدرسه حسن بن علی نوشهر کلنگی">مدرسه حسن بن علی نوشهر کلنگی</option>
+            <option value="مدرسه حضرت مهدی سرزه">مدرسه حضرت مهدی سرزه</option>
+            <option value="متفرقه">سایر مدارس (متفرقه)</option>
+        </select>
+
+        <input type="text" id="username" placeholder="نام کاربری (مثلاً شماره موبایل)" required>
+        <input type="password" id="password" placeholder="رمز عبور" required>
+        
+        <button onclick="register()">ثبت‌نام</button>
+        <div id="message" class="msg"></div>
+        <p style="text-align:center; margin-top:15px; font-size:14px;">قبلاً ثبت‌نام کردی؟ <a href="login.html">وارد شو</a></p>
+    </div>
+
+    <script>
+        async function register() {
+            const full_name = document.getElementById('fullName').value;
+            const school_name = document.getElementById('schoolName').value;
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const msg = document.getElementById('message');
+
+            if(!full_name || !username || !password) {
+                msg.style.color = 'red'; msg.innerText = 'لطفاً همه فیلدها را پر کنید.'; return;
+            }
+
+            msg.style.color = 'blue'; msg.innerText = 'در حال ثبت‌نام...';
+
+            try {
+                const res = await fetch('https://api.motadars.ir/register.php', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({full_name, school_name, username, password})
+                });
+                const data = await res.json();
+                
+                if(data.status === 'success') {
+                    msg.style.color = 'green'; msg.innerText = '✅ ثبت‌نام موفق! در حال انتقال به صفحه ورود...';
+                    setTimeout(() => window.location.href = 'login.html', 2000);
+                } else {
+                    msg.style.color = 'red'; msg.innerText = '❌ ' + data.message;
+                }
+            } catch (e) {
+                msg.style.color = 'red'; msg.innerText = 'خطا در ارتباط با سرور.';
+            }
+        }
+    </script>
+</body>
+</html>
