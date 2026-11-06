@@ -1,1 +1,195 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>پنل معلم | مطالعات اجتماعی</title>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; font-family:'Vazirmatn',sans-serif; }
+        body { min-height: 100vh; background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%); padding: 20px; color: #333; }
+        
+        .container { max-width: 900px; margin: 0 auto; }
+        
+        /* فرم ورود */
+        .login-box { background: white; padding: 40px; border-radius: 20px; max-width: 400px; margin: 100px auto; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+        .login-box h2 { color: #2c3e50; margin-bottom: 20px; }
+        .login-box input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 8px; font-family: inherit; font-size: 16px; }
+        .login-box button { width: 100%; padding: 12px; background: #3498db; color: white; border: none; border-radius: 8px; font-size: 16px; cursor: pointer; }
+        
+        /* داشبورد */
+        #dashboard { display: none; }
+        .header { display: flex; justify-content: space-between; align-items: center; background: white; padding: 20px; border-radius: 15px; margin-bottom: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .header h2 { color: #2c3e50; }
+        .logout-btn { background: #dc3545; color: white; padding: 8px 15px; border-radius: 8px; text-decoration: none; border: none; cursor: pointer; }
+        
+        /* فیلترها */
+        .filters { background: white; padding: 15px; border-radius: 15px; margin-bottom: 20px; display: flex; gap: 10px; flex-wrap: wrap; }
+        .filters select { padding: 10px; border-radius: 8px; border: 1px solid #ccc; font-family: inherit; flex: 1; }
+        
+        /* تب‌ها */
+        .tabs { display: flex; gap: 10px; margin-bottom: 20px; }
+        .tab-btn { flex: 1; padding: 15px; background: rgba(255,255,255,0.7); border: none; border-radius: 10px; cursor: pointer; font-weight: bold; font-size: 16px; transition: 0.3s; }
+        .tab-btn.active { background: white; color: #3498db; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        
+        /* لیست‌ها */
+        .content-box { background: white; border-radius: 15px; padding: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .item-row { display: flex; justify-content: space-between; align-items: center; padding: 15px; border-bottom: 1px solid #eee; }
+        .item-row:last-child { border-bottom: none; }
+        .item-info h4 { margin-bottom: 5px; color: #333; }
+        .item-info span { font-size: 13px; color: #888; }
+        .score-badge { background: #e3f2fd; color: #007bff; padding: 5px 15px; border-radius: 8px; font-weight: bold; font-size: 18px; }
+        .school-badge { background: #f8f9fa; color: #555; padding: 3px 8px; border-radius: 5px; font-size: 12px; }
+    </style>
+</head>
+<body>
 
+    <div class="container">
+        <!-- صفحه ورود -->
+        <div class="login-box" id="loginBox">
+            <h2>👨‍🏫 ورود به پنل معلم</h2>
+            <p style="margin-bottom:20px; color:#666; font-size:14px;">لطفاً رمز عبور مدیریت را وارد کنید</p>
+            <input type="password" id="teacherPass" placeholder="رمز عبور">
+            <button onclick="loginTeacher()">ورود</button>
+        </div>
+
+        <!-- داشبورد -->
+        <div id="dashboard">
+            <div class="header">
+                <h2>پنل مدیریت دبیر</h2>
+                <button class="logout-btn" onclick="logout()">خروج</button>
+            </div>
+
+            <!-- فیلتر مدرسه -->
+            <div class="filters">
+                <select id="schoolFilter" onchange="renderData()">
+                    <option value="all">همه مدارس</option>
+                    <option value="مدرسه حسن بن علی نوشهر کلنگی">مدرسه حسن بن علی نوشهر کلنگی</option>
+                    <option value="مدرسه حضرت مهدی سرزه">مدرسه حضرت مهدی سرزه</option>
+                    <option value="متفرقه">متفرقه</option>
+                </select>
+            </div>
+
+            <!-- تب‌ها -->
+            <div class="tabs">
+                <button class="tab-btn active" onclick="switchTab('grades')">📊 لیست نمرات</button>
+                <button class="tab-btn" onclick="switchTab('students')">🎓 لیست دانش‌آموزان</button>
+            </div>
+
+            <!-- باکس محتوا -->
+            <div class="content-box" id="contentBox">
+                <!-- اطلاعات به صورت خودکار اینجا قرار می‌گیرد -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let allData = { students: [], grades: [] };
+        let currentTab = 'grades'; // یا 'students'
+
+        // چک کردن اینکه آیا معلم قبلاً وارد شده
+        if(localStorage.getItem('teacher_logged_in') === 'true') {
+            document.getElementById('loginBox').style.display = 'none';
+            document.getElementById('dashboard').style.display = 'block';
+            fetchData();
+        }
+
+        async function loginTeacher() {
+            const pass = document.getElementById('teacherPass').value;
+            if(!pass) return alert('رمز را وارد کنید');
+
+            try {
+                const res = await fetch('https://api.motadars.ir/get_teacher_data.php', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ password: pass })
+                });
+                const data = await res.json();
+                
+                if(data.status === 'success') {
+                    localStorage.setItem('teacher_logged_in', 'true');
+                    document.getElementById('loginBox').style.display = 'none';
+                    document.getElementById('dashboard').style.display = 'block';
+                    allData = data;
+                    renderData();
+                } else {
+                    alert('❌ ' + data.message);
+                }
+            } catch (e) {
+                alert('خطا در ارتباط با سرور');
+            }
+        }
+
+        async function fetchData() {
+            const pass = prompt("برای امنیت، لطفاً رمز عبور را دوباره وارد کنید:");
+            if(!pass) { logout(); return; }
+            
+            try {
+                const res = await fetch('https://api.motadars.ir/get_teacher_data.php', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ password: pass })
+                });
+                const data = await res.json();
+                if(data.status === 'success') {
+                    allData = data;
+                    renderData();
+                } else {
+                    alert('رمز اشتباه است.'); logout();
+                }
+            } catch (e) { alert('خطای شبکه'); }
+        }
+
+        function switchTab(tab) {
+            currentTab = tab;
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            renderData();
+        }
+
+        function renderData() {
+            const box = document.getElementById('contentBox');
+            const filter = document.getElementById('schoolFilter').value;
+            box.innerHTML = '';
+
+            if(currentTab === 'grades') {
+                const filteredGrades = allData.grades.filter(g => filter === 'all' || g.school_name === filter);
+                if(filteredGrades.length === 0) { box.innerHTML = '<p style="text-align:center; padding:20px;">نمره‌ای یافت نشد.</p>'; return; }
+                
+                filteredGrades.forEach(g => {
+                    let typeLabel = g.exam_type === 'tashrihi' ? 'تشریحی' : 'تستی';
+                    box.innerHTML += `
+                        <div class="item-row">
+                            <div class="item-info">
+                                <h4>${g.student_name} <span class="school-badge">${g.school_name || 'متفرقه'}</span></h4>
+                                <span>${g.exam_name} | ${typeLabel} | ${g.exam_date}</span>
+                            </div>
+                            <div class="score-badge">${g.score}</div>
+                        </div>
+                    `;
+                });
+            } else {
+                const filteredStudents = allData.students.filter(s => filter === 'all' || s.school_name === filter);
+                if(filteredStudents.length === 0) { box.innerHTML = '<p style="text-align:center; padding:20px;">دانش‌آموزی یافت نشد.</p>'; return; }
+
+                filteredStudents.forEach(s => {
+                    box.innerHTML += `
+                        <div class="item-row">
+                            <div class="item-info">
+                                <h4>${s.full_name}</h4>
+                                <span>نام کاربری: ${s.username}</span>
+                            </div>
+                            <div class="school-badge">${s.school_name}</div>
+                        </div>
+                    `;
+                });
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('teacher_logged_in');
+            location.reload();
+        }
+    </script>
+</body>
+</html>
