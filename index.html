@@ -838,6 +838,35 @@ body.dark-mode .history-banner {
       navigator.serviceWorker.register('./service-worker.js');
     });
   }
+ // بررسی وضعیت ورود دانش‌آموز برای تغییر منو
+document.addEventListener("DOMContentLoaded", function() {
+    const studentName = localStorage.getItem('student_name');
+    const authLink = document.getElementById('menu-auth-link');
+    const logoutLink = document.getElementById('menu-logout-link');
+
+    if (studentName) {
+        // دانش‌آموز لاگین است
+        authLink.innerHTML = `👋 خوش آمدی، ${studentName}`;
+        authLink.href = 'student-panel.html'; // با کلیک روی اسمش بره به پنل
+        
+        // نمایش دکمه خروج
+        logoutLink.style.display = 'flex';
+    }
+});
+
+// تابع خروج از حساب کاربری
+function logoutStudent(event) {
+    event.preventDefault(); // جلوگیری از رفرش شدن صفحه
+    localStorage.removeItem('student_name');
+    localStorage.removeItem('school_name');
+    
+    // بستن منو و بستن پیام
+    toggleMenu();
+    alert("با موفقیت از حساب کاربری خارج شدید.");
+    
+    // رفرش صفحه برای اعمال تغییرات
+    window.location.reload();
+}
 </script>
 </body>
 </html>
