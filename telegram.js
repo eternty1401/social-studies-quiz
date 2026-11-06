@@ -9,29 +9,21 @@ function submitScoreToTelegram(score, correctCount) {
     // گرفتن نام آزمون از عنوان صفحه
     const examName = document.title; 
 
-    // 👇 توکن و آیدی چت تو
+    // 👇👇 این دو خط رو با اطلاعات خودت پر کن 👇👇
     const botToken = "9142270513:AAEvR5jPojPtQ4WOJ9aIDFzJFebUeTYJXlo";
     const chatId = "7129110141";
 
     // متن پیامی که قراره به تلگرامت بیاد
     const message = `📝 نتیجه یک آزمون جدید!\n\n👤 نام دانش‌آموز: ${studentName}\n📚 آزمون: ${examName}\n🎯 نمره: ${score}٪\n✅ تعداد درست: ${correctCount}`;
 
-    // 👇 آدرس اسکریپت گوگل خودت (واسط برای دور زدن فیلترینگ)
-    const proxyUrl = "https://script.google.com/macros/s/AKfycby3JTbfX1T03L1yYIn9GZ4cz5MpD-AYuVk14YhnHZKiMX2zpWWomHtKNCt-Mro9SVBuuw/exec";
+    // اتصال به تلگرام
+    const url = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`;
 
-    // ارسال پیام به واسط گوگل
-    fetch(proxyUrl, {
-        method: "POST",
-        mode: "no-cors", // برای جلوگیری از خطای CORS
-        headers: { "Content-Type": "text/plain" }, 
-        body: JSON.stringify({ 
-            token: botToken, 
-            chatId: chatId, 
-            message: message 
-        })
+    // ارسال پیام
+    fetch(url)
+    .then(response => response.json())
+    .then(data => { 
+        if(data.ok) console.log("نمره به تلگرام ارسال شد!"); 
     })
-    .then(() => { 
-        console.log("✅ درخواست به سرور گوگل ارسال شد."); 
-    })
-    .catch(error => console.error("❌ خطای ارسال:", error));
+    .catch(error => console.error("خطای ارسال:", error));
 }
