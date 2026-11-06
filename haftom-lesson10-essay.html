@@ -408,7 +408,7 @@ function sendToTelegram() {
   try {
     const score = Math.max(0, Math.min(20, aiResult.total_score || 0));
     const correctCount = Math.round(score / 2);
-    submitScoreToTelegram(score, correctCount);
+    submitScoreToTelegram(submitScoreToTelegram(score, correctCount, "tashrihi");
 if (typeof window.saveGradeToFirebase === 'function') {
   window.saveGradeToFirebase(studentName, document.title, Math.ceil((correctCount / selectedQuestions.length) * 20), correctCount);
 }
