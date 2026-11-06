@@ -113,18 +113,12 @@
     let currentSchoolId = null;
     let currentGradeLevel = null;
     let currentStudentsList = [];
-    let currentFilteredData = []; // برای دانلود اکسل
+    let currentFilteredData = [];
 
-    // --- توابع تطبیق هوشمند نام‌ها ---
+    // توابع تطبیق هوشمند نام‌ها (اصلاح‌شده)
     function normalizeName(str) {
         if (!str) return "";
-        return str.trim()
-            .replace(/ي/g, 'ی')
-            .replace(/ك/g, 'ک')
-            .replace(/ة/g, 'ه')
-            .replace(/أ|إ|آ/g, 'ا')
-            .replace(/\u200c/g, '') // حذف نیم‌فاصله
-            .replace(/\s+/g, '');   // حذف تمام فاصله‌ها
+        return str.trim().replace(/ي/g, 'ی').replace(/ك/g, 'ک').replace(/ة/g, 'ه').replace(/أ|إ|آ/g, 'ا').replace(/\u200c/g, '').replace(/\s+/g, '');
     }
 
     function levenshteinDistance(a, b) {
@@ -135,26 +129,28 @@
         for (let j = 0; j <= a.length; j++) matrix[0][j] = j;
         for (let i = 1; i <= b.length; i++) {
             for (let j = 1; j <= a.length; j++) {
-                if (b.charAt(i - 1) === a.charAt(j - 1)) {
-                    matrix[i][j] = matrix[i - 1][j - 1];
-                } else {
-                    matrix[i][j] = Math.min(matrix[i - 1][j - 1] + 1, Math.min(matrix[i][j - 1] + 1, matrix[i - 1][j] + 1));
-                }
+                if (b.charAt(i - 1) === a.charAt(j - 1)) matrix[i][j] = matrix[i - 1][j - 1];
+                else matrix[i][j] = Math.min(matrix[i - 1][j - 1] + 1, Math.min(matrix[i][j - 1] + 1, matrix[i - 1][j] + 1));
             }
         }
         return matrix[b.length][a.length];
     }
 
-    function isMatch(name1, name2) {
-        const n1 = normalizeName(name1);
-        const n2 = normalizeName(name2);
+    function isMatch(dbName, listName) {
+        const n1 = normalizeName(dbName);
+        const n2 = normalizeName(listName);
         
+        // اگر دقیقاً یکی بودند
         if (n1 === n2) return true;
-        if (n1.includes(n2) || n2.includes(n1)) return true;
         
-        // تحمل غلط املایی تا ۲ حرف برای اسم‌های طولانی
-        const maxDist = Math.max(1, Math.floor(Math.min(n1.length, n2.length) / 4)); 
-        if (levenshteinDistance(n1, n2) <= maxDist) return true;
+        // اگر یکی داخل دیگری بود، فقط در صورتی قبول کن که اختلاف طولشان خیلی زیاد نباشد (مثلاً "جعفر" با "محمدجعفری" یکی نیست)
+        if (n1.includes(n2) || n2.includes(n1)) {
+            if (Math.abs(n1.length - n2.length) <= 5) return true;
+        }
+        
+        // تحمل غلط املایی خیلی جزئی
+        const maxDist = Math.max(1, Math.floor(Math.min(n1.length, n2.length) / 6)); 
+        if (levenshteinDistance(n1, n2) <= maxDist && Math.abs(n1.length - n2.length) <= 2) return true;
         
         return false;
     }
@@ -194,7 +190,6 @@
       const grid = document.getElementById('schools-grid');
       grid.innerHTML = '';
       
-      // مدارس
       for (const [id, school] of Object.entries(schoolData)) {
         const div = document.createElement('div');
         div.className = 'card-btn';
@@ -203,7 +198,6 @@
         grid.appendChild(div);
       }
 
-      // دکمه متفرقه
       const divOther = document.createElement('div');
       divOther.className = 'card-btn';
       divOther.onclick = () => openUnmatched();
@@ -241,7 +235,6 @@
       document.getElementById('students-view').classList.remove('hidden');
       updateBreadcrumb(school.name, gradeNames[level]);
       
-      // مرتب‌سازی الفبایی
       currentStudentsList = [...school.grades[level]].sort((a, b) => a.localeCompare(b, 'fa'));
       currentFilteredData = [];
       
@@ -254,10 +247,10 @@
       document.getElementById('students-view').classList.remove('hidden');
       updateBreadcrumb('متفرقه');
       
-      currentStudentsList = []; // خالی برای اینکه فقط از دیتابیس بخونه
+      currentStudentsList = []; 
       currentFilteredData = [];
       
-      renderStudentsTable(true); // true یعنی حالت متفرقه
+      renderStudentsTable(true); 
     };
 
     function renderStudentsTable(isUnmatched = false) {
@@ -269,13 +262,9 @@
         return;
       }
 
-      let matchedDbRecords = new Set(); // برای پیدا کردن متفرقه‌ها
-
       if (isUnmatched) {
-         // حالت نمایش متفرقه‌ها
          allGradesData.forEach((record, idx) => {
              let matched = false;
-             // چک میکنیم آیا این رکورد به یکی از دانش‌آموزان هر دو مدرسه میخوره یا نه
              for (const school of Object.values(schoolData)) {
                  for (const list of Object.values(school.grades)) {
                      if (list.some(sName => isMatch(record.name, sName))) {
@@ -304,7 +293,6 @@
          return;
       }
 
-      // حالت عادی (لیست دانش‌آموزان کلاس)
       currentStudentsList.forEach((studentName, index) => {
         const records = allGradesData.filter(d => isMatch(d.name, studentName));
         
@@ -319,7 +307,6 @@
 
           records.forEach(r => {
             currentFilteredData.push({name: studentName, ...r});
-            matchedDbRecords.add(r);
             examsHtml += `
               <div class="exam-row">
                 <span class="exam-name">${r.exam || "آزمون نامشخص"}</span>
@@ -357,21 +344,18 @@
     window.downloadExcel = function() {
       if (currentFilteredData.length === 0 && currentStudentsList.length === 0) return;
       
-      let csvContent = "\uFEFF"; // پشتیبانی از فارسی
+      let csvContent = "\uFEFF"; 
       csvContent += "ردیف,نام دانش‌آموز,آزمون,نمره,تاریخ\n";
       
       let row = 1;
-      
       if (document.getElementById('students-view').classList.contains('hidden')) return;
 
       if (currentFilteredData.length > 0) {
-          // اگر داده‌های فیلتر شده داریم (یعنی امتحان داده)
           currentFilteredData.forEach(r => {
               csvContent += `${row},${r.name},${r.exam},${r.score},${r.date}\n`;
               row++;
           });
       } else {
-          // فقط لیست دانش‌آموزان بدون نمره
           currentStudentsList.forEach(name => {
               csvContent += `${row},${name},-, -, -\n`;
               row++;
