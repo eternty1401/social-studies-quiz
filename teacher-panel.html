@@ -8,31 +8,25 @@
     <style>
         * { margin:0; padding:0; box-sizing:border-box; font-family:'Vazirmatn',sans-serif; }
         body { min-height: 100vh; background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%); padding: 20px; color: #333; }
-        
         .container { max-width: 900px; margin: 0 auto; }
         
-        /* فرم ورود */
         .login-box { background: white; padding: 40px; border-radius: 20px; max-width: 400px; margin: 100px auto; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
         .login-box h2 { color: #2c3e50; margin-bottom: 20px; }
         .login-box input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 8px; font-family: inherit; font-size: 16px; }
         .login-box button { width: 100%; padding: 12px; background: #3498db; color: white; border: none; border-radius: 8px; font-size: 16px; cursor: pointer; }
         
-        /* داشبورد */
         #dashboard { display: none; }
         .header { display: flex; justify-content: space-between; align-items: center; background: white; padding: 20px; border-radius: 15px; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); flex-wrap: wrap; gap: 10px; }
         .header h2 { color: #2c3e50; }
         .header-actions { display: flex; gap: 10px; flex-wrap: wrap; }
-        
         .btn-export { background: #10b981; color: white; padding: 8px 15px; border-radius: 8px; border: none; cursor: pointer; font-family: inherit; font-weight: bold; display: flex; align-items: center; gap: 5px; transition: 0.3s; }
         .btn-export:hover { background: #059669; }
         .logout-btn { background: #dc3545; color: white; padding: 8px 15px; border-radius: 8px; text-decoration: none; border: none; cursor: pointer; font-family: inherit; }
         
-        /* تب‌ها */
         .tabs { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
-        .tab-btn { flex: 1; min-width: 120px; padding: 15px; background: rgba(255,255,255,0.7); border: none; border-radius: 10px; cursor: pointer; font-weight: bold; font-size: 1rem; transition: 0.3s; color: #475569; font-family: inherit; }
+        .tab-btn { flex: 1; min-width: 100px; padding: 15px; background: rgba(255,255,255,0.7); border: none; border-radius: 10px; cursor: pointer; font-weight: bold; font-size: 0.95rem; transition: 0.3s; color: #475569; font-family: inherit; }
         .tab-btn.active { background: white; color: #3498db; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
 
-        /* بخش‌بندی مدارس و پایه‌ها */
         .school-section { background: white; border-radius: 15px; padding: 20px; margin-bottom: 25px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
         .school-title { font-size: 1.3rem; color: #1e293b; border-bottom: 2px solid #3498db; padding-bottom: 10px; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
         
@@ -69,7 +63,6 @@
         
         .search-box { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #ccc; margin-bottom: 20px; font-family: inherit; font-size: 1rem; outline: none; }
 
-        /* استایل‌های تب مدیریت اکانت‌ها */
         .account-row { background: white; border-radius: 10px; padding: 15px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05); flex-wrap: wrap; gap: 10px; }
         .account-info h4 { color: #1e293b; margin-bottom: 5px; }
         .account-info span { font-size: 0.8rem; color: #64748b; }
@@ -79,11 +72,22 @@
         .btn-edit { background: #3b82f6; }
         .btn-delete { background: #ef4444; }
 
-        /* استایل‌های حضور و غیاب */
         .attendance-status { font-weight: bold; padding: 3px 8px; border-radius: 5px; font-size: 0.85rem; display: inline-block; }
         .status-present { background: #dcfce7; color: #166534; }
         .status-absent { background: #fee2e2; color: #991b1b; }
         .btn-mark-all { background: #8b5cf6; color: white; border: none; padding: 5px 10px; border-radius: 6px; font-size: 0.8rem; cursor: pointer; font-family: inherit; font-weight: bold; }
+
+        /* استایل‌های تب تصحیح تشریحی */
+        .submission-card { background: white; padding: 20px; border-radius: 15px; margin-bottom: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border-right: 5px solid #8b5cf6; }
+        .sub-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e2e8f0; padding-bottom: 10px; margin-bottom: 15px; }
+        .sub-header h3 { color: #1e293b; font-size: 1.1rem; }
+        .sub-header span { background: #f1f5f9; padding: 3px 10px; border-radius: 5px; font-size: 0.8rem; color: #475569; }
+        .q-item { background: #f8fafc; padding: 10px; border-radius: 8px; margin-bottom: 10px; border: 1px solid #e2e8f0; }
+        .q-text { font-weight: bold; color: #334155; font-size: 0.9rem; margin-bottom: 5px; }
+        .a-text { color: #475569; font-size: 0.9rem; line-height: 1.6; }
+        .grading-box { background: #f0fdf4; padding: 15px; border-radius: 10px; border: 1px dashed #22c55e; margin-top: 15px; display: flex; align-items: center; gap: 15px; }
+        .grading-box input { width: 80px; padding: 8px; border: 1px solid #ccc; border-radius: 5px; text-align: center; font-family: inherit; font-size: 1.1rem; font-weight: bold; }
+        .btn-submit-grade { background: #22c55e; color: white; border: none; padding: 8px 20px; border-radius: 5px; font-family: inherit; font-weight: bold; cursor: pointer; }
 
         /* Modal */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); display: none; justify-content: center; align-items: center; z-index: 1000; padding: 20px; }
@@ -118,9 +122,10 @@
 
             <!-- تب‌ها -->
             <div class="tabs">
-                <button class="tab-btn active" id="tab-class" onclick="switchTab('class')">📚 لیست کلاس و نمرات</button>
+                <button class="tab-btn active" id="tab-class" onclick="switchTab('class')">📚 نمرات</button>
                 <button class="tab-btn" id="tab-attendance" onclick="switchTab('attendance')">📋 حضور و غیاب</button>
-                <button class="tab-btn" id="tab-accounts" onclick="switchTab('accounts')">👥 مدیریت اکانت‌ها</button>
+                <button class="tab-btn" id="tab-essay" onclick="switchTab('essay')">📝 تصحیح تشریحی</button>
+                <button class="tab-btn" id="tab-accounts" onclick="switchTab('accounts')">👥 اکانت‌ها</button>
             </div>
 
             <!-- بخش کلاس -->
@@ -135,6 +140,12 @@
                     <h3 style="color: #1e293b; margin-bottom: 10px;">تاریخ امروز: <span id="todayDateDisplay" style="color: #3498db;"></span></h3>
                 </div>
                 <div id="attendanceBox"></div>
+            </div>
+
+            <!-- بخش تصحیح تشریحی -->
+            <div id="essaySection" style="display: none;">
+                <h3 style="color: white; margin-bottom: 15px; text-align: center;">پاسخ‌های در انتظار تصحیح</h3>
+                <div id="essayBox"></div>
             </div>
 
             <!-- بخش مدیریت اکانت‌ها -->
@@ -192,7 +203,7 @@
         let allData = { students: [], grades: [] };
         let currentStudentForGrade = { name: "", school: "" };
         let currentTab = 'class';
-        let todayAttendance = []; 
+        let todayAttendance = [];
 
         if(localStorage.getItem('teacher_logged_in') === 'true') {
             document.getElementById('loginBox').style.display = 'none';
@@ -243,6 +254,7 @@
             document.getElementById('classSection').style.display = 'none';
             document.getElementById('accountsSection').style.display = 'none';
             document.getElementById('attendanceSection').style.display = 'none';
+            document.getElementById('essaySection').style.display = 'none';
 
             if(tabName === 'class') {
                 document.getElementById('tab-class').classList.add('active');
@@ -256,6 +268,93 @@
                 document.getElementById('attendanceSection').style.display = 'block';
                 document.getElementById('todayDateDisplay').innerText = new Date().toLocaleDateString('fa-IR');
                 renderAttendance();
+            } else if(tabName === 'essay') {
+                document.getElementById('tab-essay').classList.add('active');
+                document.getElementById('essaySection').style.display = 'block';
+                renderEssays();
+            }
+        }
+
+        // ------------------ بخش تصحیح تشریحی ------------------
+        async function renderEssays() {
+            const box = document.getElementById('essayBox');
+            box.innerHTML = '<p style="text-align:center; color:white;">در حال دریافت پاسخ‌ها...</p>';
+
+            try {
+                const res = await fetch('https://api.motadars.ir/get_essay_submissions.php');
+                const result = await res.json();
+                
+                if(result.status === 'success') {
+                    if(result.data.length === 0) {
+                        box.innerHTML = '<p style="text-align:center; color:white;">هیچ پاسخ جدیدی برای تصحیح وجود ندارد.</p>';
+                        return;
+                    }
+                    
+                    box.innerHTML = '';
+                    result.data.forEach(sub => {
+                        const answers = JSON.parse(sub.answers_data);
+                        let questionsHtml = '';
+                        
+                        answers.forEach((item, index) => {
+                            questionsHtml += `
+                                <div class="q-item">
+                                    <div class="q-text">سوال ${index + 1}: ${item.question}</div>
+                                    <div class="a-text">پاسخ دانش‌آموز: ${item.answer || '<span style="color:red;">[بدون پاسخ]</span>'}</div>
+                                </div>
+                            `;
+                        });
+
+                        box.innerHTML += `
+                            <div class="submission-card" id="sub-${sub.id}">
+                                <div class="sub-header">
+                                    <h3>👤 ${sub.student_name}</h3>
+                                    <span>${sub.exam_name}</span>
+                                </div>
+                                <div style="margin-bottom: 15px; font-size: 0.85rem; color: #64748b;">مدرسه: ${sub.school_name} | تاریخ ارسال: ${sub.submitted_at}</div>
+                                ${questionsHtml}
+                                
+                                <div class="grading-box">
+                                    <label style="font-weight: bold; color: #166534;">نمره (از ۲۰):</label>
+                                    <input type="number" id="score-${sub.id}" min="0" max="20" step="0.25">
+                                    <button class="btn-submit-grade" onclick="submitEssayGrade(${sub.id}, '${sub.student_name}', '${sub.school_name}', '${sub.exam_name}')">ثبت نمره نهایی</button>
+                                </div>
+                            </div>
+                        `;
+                    });
+                }
+            } catch (e) {
+                box.innerHTML = '<p style="text-align:center; color:white;">خطا در دریافت اطلاعات.</p>';
+            }
+        }
+
+        async function submitEssayGrade(id, studentName, schoolName, examName) {
+            const scoreInput = document.getElementById(`score-${id}`).value;
+            if(scoreInput === '') return alert('لطفاً نمره را وارد کنید.');
+            if(scoreInput < 0 || scoreInput > 20) return alert('نمره باید بین ۰ تا ۲۰ باشد.');
+
+            try {
+                const res = await fetch('https://api.motadars.ir/grade_essay_submission.php', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        id: id,
+                        student_name: studentName,
+                        school_name: schoolName,
+                        exam_name: examName,
+                        score: parseFloat(scoreInput)
+                    })
+                });
+                const data = await res.json();
+                
+                if(data.status === 'success') {
+                    alert('✅ نمره با موفقیت ثبت شد و به کارنامه دانش‌آموز اضافه گردید.');
+                    document.getElementById(`sub-${id}`).remove(); // حذف کارت از صفحه
+                    fetchData(); // آپدیت نمرات
+                } else {
+                    alert('❌ خطا: ' + data.message);
+                }
+            } catch(e) {
+                alert('❌ خطا در ارتباط با سرور.');
             }
         }
 
@@ -478,7 +577,6 @@
                     const studentsInGrade = school.grades[gradeNum];
                     if (studentsInGrade.length === 0) continue;
 
-                    // 👇 دکمه خروجی اکسل اختصاصی برای حضور و غیاب اینجا اضافه شد
                     schoolHtml += `
                         <div class="grade-section">
                             <div class="grade-header" onclick="toggleGrade(this)">
@@ -573,11 +671,9 @@
             renderAttendance(); 
         }
 
-        // 👇 تابع جدید برای خروجی اکسل حضور و غیاب هر پایه
         function exportAttendanceToCSV(schoolName, gradeNum, event) {
-            event.stopPropagation(); // جلوگیری از بسته شدن لیست
-            
-            let csvContent = "\uFEFF"; // برای نمایش درست فارسی در اکسل
+            event.stopPropagation(); 
+            let csvContent = "\uFEFF"; 
             csvContent += "ردیف,مدرسه,پایه,نام دانش‌آموز,وضعیت,ساعت ثبت,تاریخ\n";
 
             let schoolKey = null;
@@ -589,22 +685,16 @@
             let rowNumber = 1;
 
             studentsInGrade.forEach(studentName => {
-                // پیدا کردن وضعیت دانش‌آموز در لیست حاضری‌های امروز
                 const record = todayAttendance.find(item => item.student_name === studentName);
-                
                 let status = "غایب";
                 let timeStr = "-";
-                
                 if (record && record.status === 'present') {
                     status = "حاضر";
                     timeStr = record.attendance_time || "-";
                 }
-
                 csvContent += `"${rowNumber}","${schoolName}","${gradeNum}","${studentName}","${status}","${timeStr}","${todayDate}"\n`;
                 rowNumber++;
             });
-
-            // استفاده از تابع دانلود که قبلاً ساختیم
             downloadCSV(csvContent, `حضور_غیاب_پایه_${gradeNum}_${schoolName}`);
         }
 
