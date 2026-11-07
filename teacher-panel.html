@@ -19,9 +19,13 @@
         
         /* داشبورد */
         #dashboard { display: none; }
-        .header { display: flex; justify-content: space-between; align-items: center; background: white; padding: 20px; border-radius: 15px; margin-bottom: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .header { display: flex; justify-content: space-between; align-items: center; background: white; padding: 20px; border-radius: 15px; margin-bottom: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); flex-wrap: wrap; gap: 10px; }
         .header h2 { color: #2c3e50; }
-        .logout-btn { background: #dc3545; color: white; padding: 8px 15px; border-radius: 8px; text-decoration: none; border: none; cursor: pointer; }
+        .header-actions { display: flex; gap: 10px; }
+        
+        .btn-export { background: #10b981; color: white; padding: 8px 15px; border-radius: 8px; border: none; cursor: pointer; font-family: inherit; font-weight: bold; display: flex; align-items: center; gap: 5px; transition: 0.3s; }
+        .btn-export:hover { background: #059669; }
+        .logout-btn { background: #dc3545; color: white; padding: 8px 15px; border-radius: 8px; text-decoration: none; border: none; cursor: pointer; font-family: inherit; }
         
         /* بخش‌بندی مدارس و پایه‌ها */
         .school-section { background: white; border-radius: 15px; padding: 20px; margin-bottom: 25px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
@@ -78,7 +82,10 @@
         <div id="dashboard">
             <div class="header">
                 <h2>پنل مدیریت دبیر</h2>
-                <button class="logout-btn" onclick="logout()">خروج</button>
+                <div class="header-actions">
+                    <button class="btn-export" onclick="exportToCSV()">📥 دانلود خروجی اکسل (CSV)</button>
+                    <button class="logout-btn" onclick="logout()">خروج</button>
+                </div>
             </div>
 
             <input type="text" id="searchInput" class="search-box" placeholder="🔍 جستجوی نام دانش‌آموز..." oninput="filterStudents()">
@@ -204,7 +211,6 @@
                             gradesHtml = `<div class="grades-container">`;
                             studentGrades.forEach(g => {
                                 let typeLabel = (g.exam_type === 'tashrihi') ? 'تشریحی' : 'تستی';
-                                // 👇 اینجا تاریخ و ساعت رو در کنار هم نمایش میدیم
                                 gradesHtml += `
                                     <div class="grade-item">
                                         <div>
@@ -291,7 +297,6 @@
             btn.disabled = true;
             btn.innerText = 'در حال ذخیره... ⏳';
 
-            // 👇 گرفتن تاریخ و ساعت برای ثبت نمره دستی
             const now = new Date();
             const manualDate = now.toLocaleDateString('fa-IR') + ' - ساعت ' + now.toLocaleTimeString('fa-IR', { hour: '2-digit', minute: '2-digit' });
 
@@ -301,7 +306,7 @@
                 exam_name: examName,
                 score: parseFloat(score),
                 exam_type: examType,
-                exam_date: manualDate // ارسال تاریخ و ساعت
+                exam_date: manualDate
             };
 
             try {
@@ -315,7 +320,7 @@
                 if(data.status === 'success') {
                     alert('✅ نمره با موفقیت ثبت شد.');
                     closeModal();
-                    fetchData(); // دریافت مجدد اطلاعات برای آپدیت لیست
+                    fetchData();
                 } else {
                     alert('❌ خطا: ' + data.message);
                 }
@@ -325,6 +330,61 @@
                 btn.disabled = false;
                 btn.innerText = '💾 ذخیره نمره';
             }
+        }
+
+        // 📥 تابع خروجی گرفتن به صورت CSV (اکسل)
+        function exportToCSV() {
+            if (typeof schoolData === 'undefined' || allData.grades.length === 0) {
+                alert('اطلاعاتی برای خروجی گرفتن وجود ندارد.');
+                return;
+            }
+
+            // استفاده از BOM (Byte Order Mark) برای اینکه اکسل فارسی را درست نشان دهد
+            let csvContent = "\uFEFF"; 
+            
+            // هدر جدول
+            csvContent += "ردیف,مدرسه,پایه,نام دانش‌آموز,نام آزمون,نوع آزمون,نمره,تاریخ و ساعت\n";
+
+            let rowNumber = 1;
+
+            for (const schoolKey in schoolData) {
+                const school = schoolData[schoolKey];
+                for (const gradeNum in school.grades) {
+                    const studentsInGrade = school.grades[gradeNum];
+                    
+                    studentsInGrade.forEach(studentName => {
+                        const studentGrades = allData.grades.filter(g => g.student_name.trim() === studentName.trim());
+                        
+                        if (studentGrades.length === 0) {
+                            // اگر دانش‌آموز امتحان نداده بود
+                            csvContent += `"${rowNumber}","${school.name}","${gradeNum}","${studentName}","ندارد","ندارد","ندارد","ندارد"\n`;
+                            rowNumber++;
+                        } else {
+                            // برای هر آزمونی که داده
+                            studentGrades.forEach(g => {
+                                let typeLabel = (g.exam_type === 'tashrihi') ? 'تشریحی' : 'تستی';
+                                // پاک کردن کاماهای احتمالی در متن‌ها برای جلوگیری از به هم ریختن جدول اکسل
+                                let safeExamName = (g.exam_name || '').replace(/,/g, ' ');
+                                let safeDate = (g.exam_date || '').replace(/,/g, ' ');
+                                
+                                csvContent += `"${rowNumber}","${school.name}","${gradeNum}","${studentName}","${safeExamName}","${typeLabel}","${g.score}","${safeDate}"\n`;
+                                rowNumber++;
+                            });
+                        }
+                    });
+                }
+            }
+
+            // ساخت فایل و دانلود
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement("a");
+            const url = URL.createObjectURL(blob);
+            link.setAttribute("href", url);
+            link.setAttribute("download", `نمرات_دانش‌آموزان_${new Date().toLocaleDateString('fa-IR').replace(/\//g, '-')}.csv`);
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         }
 
         function logout() {
