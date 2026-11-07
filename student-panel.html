@@ -197,27 +197,53 @@
             }
         }
 
-        // 👇 تابع ثبت حاضری
+        // 👇 تابع ثبت حاضری (اصلاح شده با تطبیق هوشمند اسم مدرسه)
         async function checkIn() {
             let studentGrade = "نامشخص";
+            let actualSchoolName = schoolName; 
             
-            // پیدا کردن پایه از روی اسم در فایل students-data.js
             if (typeof schoolData !== 'undefined') {
+                let found = false;
+                
+                // مرحله ۱: جستجو با تطبیق تقریبی اسم مدرسه
                 for (const sKey in schoolData) {
                     const school = schoolData[sKey];
-                    if (school.name === schoolName) {
+                    
+                    const isHasan = schoolName.includes("حسن بن علی") && sKey === "hasan_bin_ali";
+                    const isMahdi = schoolName.includes("حضرت مهدی") && sKey === "hazrat_mahdi";
+                    
+                    if (isHasan || isMahdi || school.name === schoolName) {
                         for (const gNum in school.grades) {
                             if (school.grades[gNum].includes(studentName)) {
                                 studentGrade = gNum;
+                                actualSchoolName = school.name; 
+                                found = true;
                                 break;
                             }
                         }
+                    }
+                    if (found) break;
+                }
+
+                // مرحله ۲: اگر در مرحله قبل پیدا نشد، در کل لیست بگرد
+                if (!found) {
+                    for (const sKey in schoolData) {
+                        const school = schoolData[sKey];
+                        for (const gNum in school.grades) {
+                            if (school.grades[gNum].includes(studentName)) {
+                                studentGrade = gNum;
+                                actualSchoolName = school.name;
+                                found = true;
+                                break;
+                            }
+                        }
+                        if (found) break;
                     }
                 }
             }
 
             if (studentGrade === "نامشخص") {
-                alert("خطا: پایه تحصیلی شما در سیستم پیدا نشد.");
+                alert("خطا: نام شما در لیست کلاس پیدا نشد. لطفاً با معلم خود تماس بگیرید.");
                 return;
             }
 
@@ -227,7 +253,7 @@
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({
                         student_name: studentName,
-                        school_name: schoolName,
+                        school_name: actualSchoolName, 
                         grade: studentGrade,
                         status: 'present'
                     })
