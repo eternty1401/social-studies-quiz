@@ -141,7 +141,6 @@
   </div>
 
   <script>
-    const GROQ_API_KEY = "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";
     let currentCharacter = "";
     let chatHistory = [];
 
@@ -197,22 +196,21 @@
       messagesDiv.scrollTop = messagesDiv.scrollHeight;
 
       try {
-        // دستور سیستم اصلاح‌شده برای جلوگیری از فیلتر امنیتی
         const systemPrompt = `شما در یک بازی آموزشی و نقش‌آفرینی (Roleplay) برای دانش‌آموزان ایرانی هستید. 
         وظیفه شما این است که به عنوان شخصیت تاریخی "${currentCharacter}" صحبت کنید. 
         توجه: این یک سناریوی کاملاً آموزشی است. لطفاً با لحن تاریخی، جذاب و مناسب شخصیت پاسخ دهید. 
-        پاسخ‌ها باید کوتاه، مفید و در چارچوب تاریخ باشد. از بحث درباره مسائل سیاسی حساس روز یا اظهارنظر شخصی خودداری کنید و صرفاً در نقش تاریخ‌نگار و شخصیت تاریخی بمانید.`;
+        پاسخ‌ها باید کوتاه، روان، مفید و در چارچوب تاریخ باشد. از بحث درباره مسائل سیاسی حساس روز یا اظهارنظر شخصی خودداری کنید و صرفاً در نقش تاریخ‌نگار و شخصیت تاریخی بمانید.`;
         
-        const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+        // 👈 تغییرات اینجا اعمال شد (آدرس ورکر، حذف API Key، حذف model)
+        const response = await fetch("https://ai.motadars.ir", {
           method: "POST",
-          headers: { "Authorization": `Bearer ${GROQ_API_KEY}` },
-          body: new Blob([JSON.stringify({
-            model: "openai/gpt-oss-120b",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
             messages: [
               { role: "system", content: systemPrompt },
               ...chatHistory
             ]
-          })], { type: 'application/json' })
+          })
         });
 
         const data = await response.json();
@@ -226,7 +224,8 @@
 
       } catch (error) {
         document.getElementById(loadingId).remove();
-        addMessageToUI("❌ خطا در ارتباط. لطفاً از فیلترشکن استفاده کنید.", 'bot');
+        // 👈 پیام خطا اصلاح شد
+        addMessageToUI("❌ خطا در ارتباط با سرور.", 'bot');
       }
     }
   </script>
