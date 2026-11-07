@@ -9,7 +9,14 @@ function submitScoreToTelegram(score, correctCount, examType = "testi") {
     }
 
     const examName = document.title; 
-    const today = new Date().toLocaleDateString('fa-IR');
+    
+    // 👇 تغییر در این بخش: گرفتن تاریخ و ساعت دقیق
+    const now = new Date();
+    const datePart = now.toLocaleDateString('fa-IR');
+    const timePart = now.toLocaleTimeString('fa-IR', { hour: '2-digit', minute: '2-digit' });
+    const today = datePart + ' - ساعت ' + timePart;
+    // 👆 پایان تغییر
+
     const apiUrl = "https://api.motadars.ir/save_grade.php"; 
 
     fetch(apiUrl, {
@@ -22,7 +29,7 @@ function submitScoreToTelegram(score, correctCount, examType = "testi") {
             exam_type: examType, // 👈 ارسال نوع آزمون (testi یا tashrihi)
             score: score,
             correct_count: correctCount,
-            exam_date: today
+            exam_date: today // 👈 اینجا حالا شامل تاریخ و ساعت هست
         })
     })
     .then(response => response.json())
