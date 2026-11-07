@@ -78,7 +78,7 @@
         .btn-delete { background: #ef4444; }
 
         /* استایل‌های حضور و غیاب */
-        .attendance-status { font-weight: bold; padding: 3px 8px; border-radius: 5px; font-size: 0.85rem; }
+        .attendance-status { font-weight: bold; padding: 3px 8px; border-radius: 5px; font-size: 0.85rem; display: inline-block; }
         .status-present { background: #dcfce7; color: #166534; }
         .status-absent { background: #fee2e2; color: #991b1b; }
         .btn-mark-all { background: #8b5cf6; color: white; border: none; padding: 5px 10px; border-radius: 6px; font-size: 0.8rem; cursor: pointer; font-family: inherit; font-weight: bold; }
@@ -190,7 +190,7 @@
         let allData = { students: [], grades: [] };
         let currentStudentForGrade = { name: "", school: "" };
         let currentTab = 'class';
-        let todayAttendance = [];
+        let todayAttendance = []; // برای ذخیره آبجکت حاضری‌ها
 
         if(localStorage.getItem('teacher_logged_in') === 'true') {
             document.getElementById('loginBox').style.display = 'none';
@@ -446,7 +446,7 @@
             } catch(e) { alert('خطای شبکه'); }
         }
 
-        // ------------------ بخش حضور و غیاب ------------------
+        // ------------------ بخش حضور و غیاب (اصلاح شده) ------------------
         async function renderAttendance() {
             const box = document.getElementById('attendanceBox');
             box.innerHTML = '<p style="text-align:center; color:white;">در حال دریافت لیست حاضران...</p>';
@@ -460,7 +460,7 @@
                 });
                 const data = await res.json();
                 if (data.status === 'success') {
-                    todayAttendance = data.data.map(item => item.student_name);
+                    todayAttendance = data.data; // حالا آبجکت کامل (با ساعت) ذخیره میشه
                 }
             } catch (e) {
                 console.error("خطا در دریافت حاضری‌ها");
@@ -490,9 +490,15 @@
                     `;
 
                     studentsInGrade.forEach(studentName => {
-                        const isPresent = todayAttendance.includes(studentName);
-                        const statusText = isPresent ? '✅ حاضر' : '❌ غایب';
+                        // پیدا کردن رکورد این دانش‌آموز در لیست حاضری‌ها
+                        const record = todayAttendance.find(item => item.student_name === studentName);
+                        const isPresent = record && record.status === 'present';
+                        
+                        // ساخت متن نمایشی با ساعت
+                        const timeStr = (record && record.attendance_time) ? ` - ساعت ${record.attendance_time}` : '';
+                        const statusText = isPresent ? `✅ حاضر ${timeStr}` : '❌ غایب';
                         const statusClass = isPresent ? 'status-present' : 'status-absent';
+                        
                         const btnColor = isPresent ? '#ef4444' : '#10b981';
                         const btnText = isPresent ? 'ثبت غیبت' : 'ثبت حضور';
                         const bgStyle = isPresent ? 'background:#f0fdf4;' : 'background:#fef2f2;';
@@ -540,9 +546,8 @@
             }
         }
 
-        // تابع خودکار کردن حضور یک پایه کامل
         async function markGradeAllPresent(schoolName, gradeNum, event) {
-            event.stopPropagation(); // جلوگیری از بسته شدن لیست
+            event.stopPropagation(); 
             if(!confirm(`آیا مطمئنید می‌خواهید همه دانش‌آموزان پایه ${gradeNum} را حاضر ثبت کنید؟`)) return;
 
             let schoolKey = null;
@@ -551,7 +556,6 @@
 
             const studentsInGrade = schoolData[schoolKey].grades[gradeNum] || [];
             
-            // ارسال درخواست برای همه (به صورت پشت سر هم تا سرور قفل نکند)
             for(let i=0; i < studentsInGrade.length; i++) {
                 await fetch('https://api.motadars.ir/save_attendance.php', {
                     method: 'POST',
@@ -565,7 +569,7 @@
                 });
             }
             alert(`حاضری همه دانش‌آموزان پایه ${gradeNum} ثبت شد.`);
-            renderAttendance(); // رفرش
+            renderAttendance();
         }
 
         // ------------------ ثبت نمره دستی و اکسل ------------------
