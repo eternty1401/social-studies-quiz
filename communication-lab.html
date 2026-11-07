@@ -130,7 +130,6 @@
   </div>
 
   <script>
-    const GROQ_API_KEY = "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";
     let currentScenario = "";
 
     function startGame() {
@@ -171,17 +170,18 @@
 
       try {
         const payload = {
-          model: "openai/gpt-oss-120b",
+          // فیلد model حذف شد
           messages: [
             { role: "system", content: "شما یک سناریوساز آموزشی هستید. فقط متن سناریو را به فارسی بنویسید." },
             { role: "user", content: prompt }
           ]
         };
 
-        const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+        // آدرس ورکر کلادفلر و حذف هدر Authorization
+        const response = await fetch("https://ai.motadars.ir", {
           method: "POST",
-          headers: { "Authorization": `Bearer ${GROQ_API_KEY}` },
-          body: new Blob([JSON.stringify(payload)], { type: 'application/json' })
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
         });
 
         const data = await response.json();
@@ -194,7 +194,7 @@
 
       } catch (error) {
         loading.style.display = 'none';
-        scenarioText.innerText = "❌ خطا در دریافت سناریو. لطفاً از فیلترشکن استفاده کنید.";
+        scenarioText.innerText = "❌ خطا در دریافت سناریو. لطفاً دوباره تلاش کنید.";
       }
     }
 
@@ -231,17 +231,18 @@
 
       try {
         const payload = {
-          model: "openai/gpt-oss-120b",
+          // فیلد model حذف شد
           messages: [
             { role: "system", content: "شما یک مربی دلسوز و متخصص مهارت‌های ارتباطی هستید. به فارسی روان و ساده پاسخ دهید." },
             { role: "user", content: prompt }
           ]
         };
 
-        const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+        // آدرس ورکر کلادفلر و حذف هدر Authorization
+        const response = await fetch("https://ai.motadars.ir", {
           method: "POST",
-          headers: { "Authorization": `Bearer ${GROQ_API_KEY}` },
-          body: new Blob([JSON.stringify(payload)], { type: 'application/json' })
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
         });
 
         const data = await response.json();
@@ -257,7 +258,7 @@
       } catch (error) {
         loading.style.display = 'none';
         submitBtn.disabled = false;
-        alert("❌ خطا در ارتباط با هوش مصنوعی. لطفاً فیلترشکن را روشن کنید.");
+        alert("❌ خطا در ارتباط با هوش مصنوعی. لطفاً دوباره تلاش کنید.");
       }
     }
   </script>
