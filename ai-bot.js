@@ -177,15 +177,15 @@ async function sendChatMessage() {
 
   try {
     const payload = {
-      model: "openai/gpt-oss-120b",
+      // 👈 فیلد model حذف شد تا خود ورکر تصمیم بگیرد
       messages: [
         { role: "system", content: systemPrompt },
         { role: "user", content: text }
       ]
     };
 
-    // 👈 آدرس تغییر کرد به ورکر کلادفلر
-    const response = await fetch("https://motadars-ai.nematian773.workers.dev", {
+    // 👈 آدرس جدید دامنه اختصاصی (که به زودی در کلادفلر می‌سازیم)
+    const response = await fetch("https://ai.motadars.ir", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload)
@@ -200,7 +200,7 @@ async function sendChatMessage() {
     messages.scrollTop = messages.scrollHeight;
   } catch (error) {
     document.getElementById(loadingId).remove();
-    messages.innerHTML += `<div class="ai-msg bot" style="color:red;">❌ خطا در ارتباط با سرور.</div>`;
+    messages.innerHTML += `<div class="ai-msg bot" style="color:red;">❌ خطا: ${error.message}</div>`;
   }
 }
 
@@ -222,15 +222,14 @@ async function summarizeText() {
 
   try {
     const payload = {
-      model: "openai/gpt-oss-120b",
       messages: [
         { role: "system", content: "شما یک معلم مطالعات اجتماعی هستید. متن زیر را به صورت بسیار ساده، کوتاه و به شکل چند نکته کلیدی (Bullet point) برای دانش‌آموز خلاصه کن." },
         { role: "user", content: lessonText }
       ]
     };
 
-    // 👈 آدرس تغییر کرد به ورکر کلادفلر
-    const response = await fetch("https://motadars-ai.nematian773.workers.dev", {
+    // 👈 آدرس جدید دامنه اختصاصی
+    const response = await fetch("https://ai.motadars.ir", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload)
@@ -245,6 +244,6 @@ async function summarizeText() {
     messages.scrollTop = messages.scrollHeight;
   } catch (error) {
     document.getElementById(loadingId).remove();
-    messages.innerHTML += `<div class="ai-msg bot" style="color:red;">❌ خطا در خلاصه کردن درس.</div>`;
+    messages.innerHTML += `<div class="ai-msg bot" style="color:red;">❌ خطا: ${error.message}</div>`;
   }
 }
