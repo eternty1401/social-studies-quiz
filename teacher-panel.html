@@ -42,10 +42,11 @@
         .btn-manual-grade { background: #10b981; color: white; border: none; padding: 6px 12px; border-radius: 8px; font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; gap: 5px; font-family: inherit; transition: 0.3s; }
         .btn-manual-grade:hover { background: #059669; transform: scale(1.05); }
         
-        .grades-container { display: flex; flex-wrap: wrap; gap: 10px; }
-        .grade-item { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 8px 12px; display: flex; align-items: center; gap: 10px; font-size: 0.85rem; }
-        .grade-item .exam-title { color: #64748b; }
-        .grade-item .score-badge { background: #dbeafe; color: #1d4ed8; font-weight: bold; padding: 3px 10px; border-radius: 6px; font-size: 1rem; }
+        .grades-container { display: flex; flex-direction: column; gap: 10px; }
+        .grade-item { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 10px 15px; display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; }
+        .grade-item .exam-title { color: #334155; font-weight: bold; }
+        .grade-item .exam-date { color: #94a3b8; font-size: 0.75rem; margin-top: 5px; display: block; }
+        .grade-item .score-badge { background: #dbeafe; color: #1d4ed8; font-weight: bold; padding: 5px 15px; border-radius: 8px; font-size: 1.1rem; }
         .no-grade { color: #ef4444; font-size: 0.85rem; background: #fee2e2; padding: 5px 10px; border-radius: 5px; display: inline-block; }
         
         .search-box { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #ccc; margin-bottom: 20px; font-family: inherit; font-size: 1rem; outline: none; }
@@ -203,9 +204,13 @@
                             gradesHtml = `<div class="grades-container">`;
                             studentGrades.forEach(g => {
                                 let typeLabel = (g.exam_type === 'tashrihi') ? 'تشریحی' : 'تستی';
+                                // 👇 اینجا تاریخ و ساعت رو در کنار هم نمایش میدیم
                                 gradesHtml += `
                                     <div class="grade-item">
-                                        <span class="exam-title">${g.exam_name} (${typeLabel})</span>
+                                        <div>
+                                            <span class="exam-title">${g.exam_name} (${typeLabel})</span>
+                                            <span class="exam-date">⏰ ${g.exam_date || 'نامشخص'}</span>
+                                        </div>
                                         <span class="score-badge">${g.score}</span>
                                     </div>
                                 `;
@@ -286,13 +291,17 @@
             btn.disabled = true;
             btn.innerText = 'در حال ذخیره... ⏳';
 
+            // 👇 گرفتن تاریخ و ساعت برای ثبت نمره دستی
+            const now = new Date();
+            const manualDate = now.toLocaleDateString('fa-IR') + ' - ساعت ' + now.toLocaleTimeString('fa-IR', { hour: '2-digit', minute: '2-digit' });
+
             const payload = {
                 student_name: currentStudentForGrade.name,
                 school_name: currentStudentForGrade.school,
                 exam_name: examName,
                 score: parseFloat(score),
                 exam_type: examType,
-                exam_date: new Date().toLocaleDateString('fa-IR')
+                exam_date: manualDate // ارسال تاریخ و ساعت
             };
 
             try {
