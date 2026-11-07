@@ -1,547 +1,190 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>آزمون تشریحی درس ۲ | مطالعات اجتماعی پایه هفتم</title>
-<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;900&display=swap" rel="stylesheet">
-<style>
-  * { margin:0; padding:0; box-sizing:border-box; font-family:'Vazirmatn',sans-serif; }
-  body { min-height:100vh; background-color:#fff8f0; background-image:radial-gradient(#ffe0cc 1px, transparent 1px); background-size:20px 20px; color:#2c3e50; padding:30px 20px; display:flex; flex-direction:column; align-items:center; }
-  
-  .container { width:100%; max-width:800px; background:#fff; border-radius:20px; padding:35px 28px; box-shadow:0 8px 30px rgba(0,0,0,0.08); border-top:6px solid #e67e22; margin-bottom:20px; }
-  
-  /* صفحه شروع */
-  #start-section { text-align: center; }
-  #start-section h1 { color: #d35400; font-size: 1.5rem; margin-bottom: 10px; font-weight: 900; }
-  #start-section .subtitle { color: #7f8c8d; font-size: 0.95rem; margin-bottom: 25px; }
-  
-  .info-list { background:#fef5e7; border-radius:14px; padding:18px 22px; margin-bottom:25px; list-style:none; text-align:right; }
-  .info-list li { display:flex; align-items:center; gap:10px; font-size:0.95rem; padding:7px 0; font-weight:500; color:#a04000; }
-  .info-list li .ico { font-size:1.2rem; }
-  
-  .name-input { width:100%; padding:14px 18px; border:2px solid #f8cba6; border-radius:12px; font-size:1rem; font-family:inherit; margin-bottom:18px; outline:none; transition:0.25s; text-align:center; }
-  .name-input:focus { border-color:#e67e22; box-shadow:0 0 0 4px rgba(230,126,34,0.12); }
-  
-  .start-btn { width:100%; padding:15px; background:linear-gradient(135deg,#e67e22,#d35400); color:#fff; border:none; border-radius:12px; font-size:1.05rem; font-weight:900; font-family:inherit; cursor:pointer; transition:0.3s; box-shadow:0 6px 18px rgba(230,126,34,0.3); }
-  .start-btn:hover { transform:translateY(-2px); box-shadow:0 10px 25px rgba(230,126,34,0.4); }
-
-  /* هدر و تایمر آزمون */
-  .header-top { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px dashed #f8cba6; padding-bottom: 15px; margin-bottom: 25px; }
-  .header-title h1 { color: #d35400; font-size: 1.3rem; }
-  .header-title p { color: #7f8c8d; font-size: 0.85rem; margin-top: 5px; }
-  .timer-box {
-    background: #fef5e7; color: #a04000; padding: 8px 18px; border-radius: 50px;
-    font-weight: 900; font-size: 1.1rem; display: flex; align-items: center; gap: 8px; direction: ltr;
-    transition: 0.3s;
-  }
-  .timer-box.warning { background: #fdedec; color: #e74c3c; animation: pulseTimer 0.8s infinite; }
-  @keyframes pulseTimer { 0%,100% { transform:scale(1); } 50% { transform:scale(1.08); } }
-
-  /* سوالات تشریحی */
-  .question-box {
-    background: #fafbfc; border: 1px solid #f8cba6; border-radius: 12px;
-    padding: 20px; margin-bottom: 20px;
-  }
-  .q-title { font-weight: 800; font-size: 1.05rem; margin-bottom: 15px; line-height: 1.8; color: #2c3e50; }
-  .essay-textarea {
-    width: 100%; min-height: 120px; padding: 15px; border: 2px solid #e2e8f0;
-    border-radius: 10px; font-family: inherit; font-size: 0.95rem; resize: vertical;
-    background: #fff; outline: none; transition: 0.3s; line-height: 1.9;
-  }
-  .essay-textarea:focus { border-color: #e67e22; box-shadow: 0 0 8px rgba(230,126,34,0.1); }
-  
-  .submit-btn {
-    display: block; width: 100%; padding: 15px; margin-top: 30px;
-    background: linear-gradient(135deg,#e67e22,#d35400); color: #fff; border: none; border-radius: 12px;
-    font-size: 1.1rem; font-weight: 900; font-family: inherit; cursor: pointer;
-    transition: 0.3s; box-shadow: 0 6px 18px rgba(230,126,34,0.3);
-  }
-  .submit-btn:hover { transform:translateY(-2px); }
-  .submit-btn:disabled { background: #bdc3c7; cursor: not-allowed; box-shadow: none; transform:none; }
-
-  /* کارنامه و لودینگ */
-  .result-container { display: none; text-align: center; }
-  .student-name-display {
-    font-size: 1.1rem; font-weight: 900; color: #2c3e50; margin-bottom: 20px;
-    background: #fef5e7; padding: 10px 20px; border-radius: 10px; display: inline-block;
-  }
-
-  .ai-loading { text-align: center; padding: 40px 20px; }
-  .spinner {
-    width: 55px; height: 55px; margin: 0 auto 20px;
-    border: 5px solid #fef5e7; border-top-color: #e67e22;
-    border-radius: 50%; animation: spin 1s linear infinite;
-  }
-  @keyframes spin { to { transform: rotate(360deg); } }
-  .ai-loading p { color: #d35400; font-weight: 900; font-size: 1.1rem; }
-  .ai-loading .sub { font-size: 0.85rem; color: #95a5a6; margin-top: 10px; font-weight: 400; }
-
-  /* کارت نمره */
-  .score-card {
-    background: linear-gradient(135deg, #e67e22, #d35400);
-    color: #fff; padding: 30px 25px; border-radius: 18px;
-    margin-bottom: 25px; text-align: center;
-    box-shadow: 0 10px 30px rgba(230,126,34,0.35);
-  }
-  .score-card .score-value { font-size: 3.2rem; font-weight: 900; line-height: 1; }
-  .score-card .score-value small { font-size: 1.2rem; opacity: 0.85; }
-  .score-card .score-label { font-size: 0.9rem; opacity: 0.9; margin-top: 8px; }
-  .score-card .score-message {
-    font-size: 1rem; margin-top: 18px; font-weight: 700;
-    background: rgba(255,255,255,0.15); padding: 12px; border-radius: 10px;
-  }
-
-  /* بازبینی پاسخ‌ها */
-  .answers-review-box {
-    text-align: right; background: #f8f9fa; border: 1px dashed #bdc3c7;
-    padding: 20px; border-radius: 12px; margin-bottom: 25px;
-  }
-  .answers-review-box h3 { color: #d35400; margin-bottom: 15px; font-size: 1.1rem; }
-  .review-item { margin-bottom: 18px; padding-bottom: 18px; border-bottom: 1px solid #ecf0f1; }
-  .review-item:last-child { border-bottom: none; }
-  .review-q {
-    font-weight: 800; color: #2c3e50; margin-bottom: 8px;
-    display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; line-height:1.8;
-  }
-  .review-q span { flex: 1; }
-  .q-score-badge {
-    background: #f39c12; color: #fff; padding: 3px 12px;
-    border-radius: 20px; font-size: 0.8rem; font-weight: 900; white-space: nowrap;
-  }
-  .q-score-badge.full { background: #2ecc71; }
-  .q-score-badge.zero { background: #e74c3c; }
-  .review-a {
-    color: #2c3e50; background: #e8f8f5; padding: 12px;
-    border-radius: 8px; line-height: 1.8; white-space: pre-wrap;
-    font-size: 0.92rem; border: 1px solid #d1f2eb;
-  }
-  .review-a.empty { color: #e74c3c; background: #fdedec; font-style: italic; border-color: #fadbd8; }
-  .ai-feedback {
-    background: #fff8e1; border-right: 4px solid #f39c12;
-    padding: 12px; border-radius: 8px; margin-top: 10px;
-    font-size: 0.88rem; line-height: 1.7; color: #5d4e1f;
-  }
-  .ai-feedback strong { color: #e67e22; }
-
-  /* دکمه‌ها */
-  .action-btns { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
-  .review-btn {
-    background: #fff; color: #d35400; text-decoration: none; border: 2px solid #e67e22;
-    padding: 12px 25px; border-radius: 30px; font-weight: 900; cursor: pointer;
-    font-size: 1rem; transition: 0.3s; font-family: inherit; box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-  }
-  .review-btn:hover { background: #fef5e7; transform:translateY(-2px); }
-  .copy-btn { background: #e67e22; color: #fff; border: none; box-shadow: 0 4px 15px rgba(230,126,34,0.3); }
-  .copy-btn:hover { background: #d35400; }
-
-  /* تلاش مجدد */
-  .retry-section {
-    background: #fdedec; border: 2px dashed #e74c3c;
-    padding: 30px 20px; border-radius: 14px; text-align: center;
-    margin: 20px 0;
-  }
-  .retry-section .error-icon { font-size: 2.5rem; margin-bottom: 15px; }
-  .retry-section h3 { color: #e74c3c; margin-bottom: 12px; font-size: 1.15rem; }
-  .retry-section p { color: #7f8c8d; margin-bottom: 20px; font-size: 0.92rem; line-height: 1.7; }
-  .retry-section .preserve-note {
-    background: #fff; border-radius: 8px; padding: 10px 14px;
-    color: #27ae60; font-weight: 700; font-size: 0.88rem;
-    margin-bottom: 20px; display: inline-block;
-  }
-  .try-again-btn {
-    background: #e74c3c; color: #fff; border: none;
-    padding: 14px 35px; border-radius: 30px; font-weight: 900;
-    font-size: 1rem; cursor: pointer; font-family: inherit;
-    box-shadow: 0 4px 15px rgba(231,76,60,0.4);
-    transition: 0.3s;
-  }
-  .try-again-btn:hover { background: #c0392b; transform: translateY(-2px); }
-
-  @media(max-width:600px) {
-    body { padding: 15px 10px; }
-    .container { padding: 20px; border-radius: 15px; }
-    .header-top { flex-direction: column; gap: 10px; text-align: center; }
-    .score-card .score-value { font-size: 2.5rem; }
-  }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>آزمون تشریحی درس ۲: من مسئول هستم</title>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; }
+        body { font-family: 'Vazirmatn', Tahoma, sans-serif; background: #f4f7f6; padding: 20px; direction: rtl; color: #333; }
+        .container { max-width: 650px; margin: 0 auto; background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        h2 { color: #1e3c72; text-align: center; margin-bottom: 25px; font-weight: 900; }
+        
+        .question-box { background: #e0f2fe; padding: 20px; border-radius: 15px; margin-bottom: 25px; border-right: 6px solid #0284c7; }
+        .question-box p { margin: 0; font-weight: 700; color: #0f172a; line-height: 1.8; font-size: 1.1rem; }
+        
+        textarea { width: 100%; height: 180px; padding: 15px; border: 2px solid #cbd5e1; border-radius: 12px; font-family: inherit; font-size: 1rem; resize: vertical; outline: none; transition: 0.3s; }
+        textarea:focus { border-color: #0284c7; }
+        
+        .btn { width: 100%; padding: 15px; background: #0284c7; color: white; border: none; border-radius: 12px; font-size: 1.1rem; font-weight: bold; cursor: pointer; margin-top: 20px; transition: 0.3s; font-family: inherit; }
+        .btn:hover { background: #0369a1; }
+        .btn:disabled { background: #94a3b8; cursor: not-allowed; }
+        
+        .result-box { display: none; margin-top: 25px; padding: 25px; border-radius: 15px; background: #f0fdf4; border: 2px solid #22c55e; line-height: 1.9; color: #166534; }
+        .result-box h3 { color: #15803d; margin-top: 0; font-weight: 900; }
+        
+        .loading { display: none; text-align: center; color: #0284c7; font-weight: bold; margin-top: 20px; font-size: 1.1rem; }
+        
+        .score-highlight { font-size: 1.3rem; font-weight: 900; color: #15803d; background: #dcfce7; padding: 10px; border-radius: 10px; text-align: center; margin-bottom: 15px; display: none; }
+    </style>
 </head>
 <body>
 
-<div class="container">
-  
-  <div id="start-section">
-    <h1>✍️ آزمون تشریحی درس ۲</h1>
-    <p class="subtitle">من مسئول هستم — مطالعات اجتماعی پایه هفتم</p>
-    
-    <ul class="info-list">
-      <li><span class="ico">📝</span> ۱۰ سوال تشریحی تصادفی (از بانک ۳۰ سوالی)</li>
-      <li><span class="ico">⏱️</span> ۲۰ دقیقه زمان کلی برای پاسخگویی</li>
-      <li><span class="ico">🤖</span> تصحیح خودکار با هوش مصنوعی و نمره از ۲۰</li>
-      <li><span class="ico">📋</span> دریافت کارنامه با بازخورد معلم</li>
-    </ul>
-
-    <input type="text" id="student-name" class="name-input" placeholder="نام و نام خانوادگی خود را وارد کنید">
-    <button class="start-btn" onclick="startQuiz()">🚀 شروع آزمون</button>
-  </div>
-
-  <div id="quiz-section" style="display: none;">
-    <div class="header-top">
-      <div class="header-title">
-        <h1>✍️ آزمون تشریحی درس ۲</h1>
-        <p>من مسئول هستم</p>
-      </div>
-      <div class="timer-box" id="timer-display">⏱ ۲۰:۰۰</div>
-    </div>
-    <form id="quiz-form">
-      <div id="questions-container"></div>
-      <button type="submit" class="submit-btn" id="submit-btn">پایان آزمون و تصحیح هوشمند</button>
-    </form>
-  </div>
-
-  <div id="loading-section" style="display: none;">
-    <div class="ai-loading">
-      <div class="spinner"></div>
-      <p>🤖 در حال تصحیح پاسخ‌های شما...</p>
-      <p class="sub">هوش مصنوعی پاسخ‌ها را با کلید مقایسه می‌کند، لطفاً صبر کنید</p>
-    </div>
-  </div>
-
-  <div id="error-section" style="display: none;">
-    <div class="retry-section">
-      <div class="error-icon">⚠️</div>
-      <h3>اتصال به هوش مصنوعی برقرار نشد</h3>
-      <p>لطفاً اتصال اینترنت یا فیلترشکن خود را بررسی کنید و دوباره تلاش کنید.</p>
-      <div class="preserve-note">✅ نگران نباشید، پاسخ‌های شما کاملاً محفوظ هستند</div>
-      <br>
-      <button class="try-again-btn" onclick="retryAI()">🔄 تلاش مجدد</button>
-    </div>
-  </div>
-
-  <div id="result-section" class="result-container">
-    <h2 style="color:#d35400; margin-bottom:20px; font-weight:900; text-align:center;">🎓 کارنامه آزمون تشریحی</h2>
-    <div style="text-align:center;">
-      <div class="student-name-display" id="display-student-name">نام دانش‌آموز</div>
-    </div>
-    
-    <div class="score-card" id="score-card">
-      <div class="score-value"><span id="score-value">۰</span><small> / ۲۰</small></div>
-      <div class="score-label">نمره نهایی</div>
-      <div class="score-message" id="score-message">...</div>
-    </div>
-    
-    <div class="answers-review-box" id="copyable-answers"></div>
-    
-    <div class="action-btns">
-      <button class="review-btn copy-btn" onclick="copyAnswers()">📋 کپی کارنامه</button>
-      <a href="haftom.html" class="review-btn">🔙 بازگشت به دروس</a>
-    </div>
-  </div>
-
-</div>
-
-<!-- بارگذاری اسکریپت تلگرام -->
-<script src="telegram.js"></script>
-<script type="module" src="firebase-config.js"></script>
-<script type="module" src="firebase-config.js"></script>
-<script type="module" src="firebase-config.js"></script>
-
-<script>
-// ==========================================
-// بانک ۳۰ سوال تشریحی درس ۲ (هفتم) + کلید پاسخ
-// ==========================================
-const essayBank = [
-  { q: "منظور از مسئولیت چیست؟ توضیح دهید.", key: "تعهد و وظیفه‌ای است که انسان در برابر خدا، خود، دیگران و محیط زیست بر عهده دارد و باید به آن عمل کند." },
-  { q: "چرا هیچ فردی نیست که مسئولیتی نداشته باشد؟", key: "چون همه انسان‌ها در برابر نعمت‌های الهی، اجتماع و محیط پیرامون خود وظایفی دارند." },
-  { q: "سه مورد از مسئولیت‌های خود در برابر خداوند را بنویسید.", key: "۱. شکرگزاری نعمت‌ها ۲. انجام عبادت ۳. رعایت حلال و حرام و دوری از گناه." },
-  { q: "شکرگزاری نعمت‌های خداوند را به طور مختصر توضیح دهید.", key: "استفاده صحیح از نعمت‌ها و انجام کارهای خوب برای رضای خدا در برابر نعمت‌هایی که به ما داده است." },
-  { q: "چگونه می‌توانیم از بدن خود مراقبت کنیم؟ (سه مورد بنویسید)", key: "تغذیه سالم، ورزش منظم، خواب کافی و پرهیز از مواد مضر." },
-  { q: "سه مورد از مسئولیت‌های خود در خانه و خانواده را نام ببرید.", key: "کمک به والدین، رعایت نظم و نظافت، محبت به اعضای خانواده." },
-  { q: "سه مورد از وظایف دانش‌آموز در کلاس و مدرسه را بنویسید.", key: "احترام به معلم و همکلاسی‌ها، انجام تکالیف، حفظ اموال مدرسه." },
-  { q: "در برابر اموال عمومی مدرسه چه مسئولیتی داریم؟ چرا؟", key: "باید از آن‌ها محافظت کنیم، چون متعلق به همه دانش‌آموزان است و آسیب به آن‌ها به همه ضرر می‌زند." },
-  { q: "سه مورد از مسئولیت‌های ما نسبت به همسایگان و اعضای جامعه را بنویسید.", key: "احترام به همسایه، کمک به نیازمندان، رعایت آرامش و آسایش همسایگان." },
-  { q: "در هنگام وقوع حوادث طبیعی مانند سیل یا زلزله، چه مسئولیتی نسبت به هم‌وطنان خود داریم؟", key: "کمک به آسیب‌دیدگان، اهدای خون، کمک نقدی، و همکاری با نهادهای امدادی." },
-  { q: "انجمن اسلامی دانش‌آموزی و بسیج دانش‌آموزی چه نقشی در تقویت توانمندی‌های دانش‌آموزان دارند؟", key: "با برگزاری برنامه‌های فرهنگی، آموزشی و اجتماعی، مهارت‌های دانش‌آموزان را تقویت می‌کنند و مسئولیت‌پذیری را رشد می‌دهند." },
-  { q: "سه مورد از مسئولیت‌های ما در برابر محیط زیست و عالم آفرینش را بنویسید.", key: "حفظ پاکیزگی محیط، کاشت درخت، صرفه‌جویی در مصرف آب و برق." },
-  { q: "چرا کاشت درخت و حفظ پاکیزگی محیط زیست از وظایف ماست؟", key: "چون محیط سالم حق همه موجودات زنده است و ما در برابر آن مسئولیم." },
-  { q: "امام سجاد (ع) در رساله حقوق، درباره حق اعضای بدن چه فرموده‌اند؟ توضیح دهید.", key: "برای هر عضو بدن حقی است: چشم حق دارد به حرام نگاه نکند، گوش حق دارد به گناه گوش ندهد، و زبان حق دارد از دروغ و ناسزا بپرهیزد." },
-  { q: "آیه ۴۰ سوره نمل چه پیامی درباره نعمت‌های خداوند و وظیفه ما دارد؟", key: "این آیه می‌فرماید: «این از فضل پروردگار من است تا مرا بیازماید که شکرگزارم یا ناسپاس». یعنی نعمت‌ها آزمون الهی است و ما باید شکرگزار باشیم." },
-  { q: "چرا مسئولیت‌های افراد در نقش‌های مختلف متفاوت است؟ با مثال توضیح دهید.", key: "چون هر نقش وظایف خاص خود را دارد. مثلاً مسئولیت یک معلم با مسئولیت یک دانش‌آموز متفاوت است." },
-  { q: "چرا مسلمانان در برابر مسلمانان و انسان‌های دیگر جهان مسئولیت دارند؟", key: "چون در اسلام همه انسان‌ها برادر و برابرند و مسلمانان باید به فکر رفع نیاز دیگران باشند." },
-  { q: "چگونه با خوب درس خواندن، می‌توانیم به پیشرفت و آبادانی کشور کمک کنیم؟", key: "با یادگیری علم و تخصص، در آینده می‌توانیم به عنوان متخصص و نیروی کار ماهر به سازندگی و پیشرفت کشور کمک کنیم." },
-  { q: "به نظر شما چرا حفاظت از محیط زیست یک مسئولیت همگانی است؟", key: "چون همه ما از محیط زیست استفاده می‌کنیم و آسیب به آن به همه آسیب می‌زند." },
-  { q: "چرا رعایت حقوق دیگران همراه با انجام مسئولیت‌ها می‌تواند جامعه را بهتر کند؟", key: "چون این دو با هم موجب نظم، عدالت و همبستگی در جامعه می‌شوند و همه در آرامش زندگی می‌کنند." },
-  { q: "چند نمونه از مسئولیت‌های ما در قبال نعمت‌های طبیعی (آب، هوا، خاک) بنویسید.", key: "عدم آلوده کردن آن‌ها، صرفه‌جویی، استفاده صحیح و جلوگیری از اسراف." },
-  { q: "حق و مسئولیت چه ارتباطی با هم دارند؟", key: "انسان در برابر هر حق، مسئولیتی نیز بر عهده دارد. مثلاً حق حیات داریم و در برابر حفظ سلامت خود نیز مسئولیم." },
-  { q: "مسئولیت‌پذیری در زندگی چه تأثیری دارد؟", key: "اعتماد به نفس، رشد شخصیت، احترام دیگران و شکل‌گیری جامعه‌ای منظم و پایدار." },
-  { q: "چگونه می‌توانیم در خانواده، مسئولیت‌پذیری خود را تقویت کنیم؟", key: "با انجام وظایف مشخص، کمک به والدین، و عمل به قول‌هایی که می‌دهیم." },
-  { q: "نقش مدرسه در آموزش مسئولیت‌پذیری به دانش‌آموزان چیست؟", key: "با سپردن مسئولیت‌های کوچک، تشویق کارهای گروهی و آموزش اهمیت نظم و قانون." },
-  { q: "اگر در محله‌ای زباله‌های زیادی جمع شده باشد، چه اقدامی باید بکنیم؟", key: "با همکاری همسایگان و شهرداری، به پاکسازی محیط کمک می‌کنیم و از ایجاد آلودگی جلوگیری می‌کنیم." },
-  { q: "مسئولیت اجتماعی شهروندان در قبال محیط زیست چیست؟", key: "رعایت پاکیزگی، تفکیک زباله، عدم آلودگی محیط و همکاری در طرح‌های زیست‌محیطی." },
-  { q: "چرا کمک به همنوعان در حوادث طبیعی یک مسئولیت همگانی است؟", key: "چون همه انسان‌ها دارای کرامت‌اند و کمک به هم‌وطنان در شرایط سخت، وظیفه انسانی و دینی است." },
-  { q: "چرا مسئولیت در برابر خودمان هم وجود دارد؟", key: "چون ما باید از سلامت جسم و روان، استعدادها و زمان خود مراقبت کنیم و از فرصت‌ها بهره‌مند شویم." },
-  { q: "چند نمونه از آسیب‌های عدم مسئولیت‌پذیری در جامعه را نام ببرید.", key: "تخریب اموال عمومی، آلودگی محیط، نقض حقوق دیگران، بی‌نظمی، و کاهش اعتماد عمومی." }
-];
-
-const numQuestionsToShow = 10;
-const totalTime = 1200; // ۲۰ دقیقه
-const GROQ_API_KEY = "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";
-const GROQ_URL = "https://api.groq.com/openai/v1/chat/completions";
-
-let selectedQuestions = [];
-let studentAnswers = {};
-let timerInterval;
-let timeLeft = totalTime;
-let studentName = "";
-let aiResult = null;
-
-function shuffle(array) {
-  let currentIndex = array.length, randomIndex;
-  while (currentIndex != 0) {
-    randomIndex = Math.floor(Math.random() * currentIndex);
-    currentIndex--;
-    [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
-  }
-  return array;
-}
-
-function showSection(name) {
-  const sections = { start:'start-section', quiz:'quiz-section', loading:'loading-section', error:'error-section', result:'result-section' };
-  Object.entries(sections).forEach(([key, id]) => {
-    const el = document.getElementById(id);
-    if (el) el.style.display = (key === name) ? 'block' : 'none';
-  });
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-function toPersianNumber(num) {
-  const persianDigits = ['۰','۱','۲','۳','۴','۵','۶','۷','۸','۹'];
-  return String(num).replace(/\d/g, d => persianDigits[d]).replace('.', '٫');
-}
-
-function escapeHtml(text) {
-  const div = document.createElement('div');
-  div.textContent = String(text);
-  return div.innerHTML;
-}
-
-function startQuiz() {
-  studentName = document.getElementById('student-name').value.trim();
-  if (studentName === "") {
-    alert("لطفاً نام و نام خانوادگی خود را وارد کنید.");
-    document.getElementById('student-name').focus();
-    return;
-  }
-  showSection('quiz');
-  initQuiz();
-}
-
-function initQuiz() {
-  const shuffledBank = shuffle([...essayBank]);
-  selectedQuestions = shuffledBank.slice(0, numQuestionsToShow);
-  const container = document.getElementById('questions-container');
-  container.innerHTML = '';
-  
-  selectedQuestions.forEach((item, index) => {
-    const qBox = document.createElement('div');
-    qBox.className = 'question-box';
-    qBox.innerHTML = `
-      <div class="q-title">${index + 1}. ${item.q}</div>
-      <textarea class="essay-textarea" name="a${index}" placeholder="پاسخ خود را اینجا بنویسید..."></textarea>
-    `;
-    container.appendChild(qBox);
-  });
-  startTimer();
-}
-
-function startTimer() {
-  const display = document.getElementById('timer-display');
-  timerInterval = setInterval(() => {
-    timeLeft--;
-    const minutes = Math.floor(timeLeft / 60);
-    const seconds = timeLeft % 60;
-    display.innerHTML = `⏱ ${minutes < 10 ? '0'+minutes : minutes}:${seconds < 10 ? '0'+seconds : seconds}`;
-    if (timeLeft <= 60) display.classList.add('warning');
-    if (timeLeft <= 0) {
-      clearInterval(timerInterval);
-      document.getElementById('quiz-form').dispatchEvent(new Event('submit'));
-    }
-  }, 1000);
-}
-
-document.getElementById('quiz-form').addEventListener('submit', function(e) {
-  e.preventDefault();
-  clearInterval(timerInterval);
-  
-  studentAnswers = {};
-  selectedQuestions.forEach((_, i) => {
-    const ta = document.querySelector(`textarea[name="a${i}"]`);
-    studentAnswers[i] = ta ? ta.value.trim() : "";
-  });
-  
-  showSection('loading');
-  gradeWithAI();
-});
-
-async function gradeWithAI() {
-  try {
-    const result = await callGroq();
-    aiResult = result;
-    renderResult();
-    showSection('result');
-    
-    // ارسال نمره به تلگرام
-    sendToTelegram();
-    
-  } catch (err) {
-    console.error("خطای تصحیح:", err);
-    showSection('error');
-  }
-}
-
-function sendToTelegram() {
-  if (typeof submitScoreToTelegram !== 'function') {
-    console.warn("تابع submitScoreToTelegram پیدا نشد. telegram.js بارگذاری نشده؟");
-    return;
-  }
-  
-  try {
-    const score = Math.max(0, Math.min(20, aiResult.total_score || 0));
-    const correctCount = Math.round(score / 2);
-    submitScoreToTelegram(score, correctCount);
-if (typeof window.saveGradeToFirebase === 'function') {
-  window.saveGradeToFirebase(studentName, document.title, Math.ceil((correctCount / selectedQuestions.length) * 20), correctCount);
-}
-    console.log("✅ نمره به تلگرام ارسال شد:", { score, correctCount });
-  } catch (err) {
-    console.error("❌ خطا در ارسال به تلگرام:", err);
-  }
-}
-
-function retryAI() {
-  showSection('loading');
-  gradeWithAI();
-}
-
-async function callGroq() {
-  const questionsForPrompt = selectedQuestions.map((item, i) => ({
-    index: i,
-    question: item.q,
-    answer_key: item.key,
-    student_answer: studentAnswers[i] || ""
-  }));
-
-  const systemPrompt = `شما یک معلم مهربان و باتجربه مطالعات اجتماعی پایه هفتم هستید که آزمون تشریحی دانش‌آموزان را تصحیح می‌کنید.
-
-قوانین مهم تصحیح:
-۱. بسیار سهل‌گیر و مهربان باشید. هدف اصلی تشویق و دلگرمی دانش‌آموز است.
-۲. هر سوال ۲ نمره دارد (کل آزمون ۲۰ نمره).
-۳. اگر دانش‌آموز حتی بخشی از مفهوم اصلی را فهمیده باشد، نمره کامل یا نزدیک به کامل (۱٫۵ تا ۲) بدهید.
-۴. اگر پاسخ کاملاً خالی است، صفر بدهید.
-۵. اگر پاسخ کاملاً بی‌ربط است، صفر بدهید.
-۶. برای پاسخ ناقص ولی مرتبط، نمره بین ۱ تا ۱٫۵ بدهید.
-۷. بازخورد هر سوال کوتاه، محبت‌آمیز و سازنده باشد (حداکثر دو جمله).
-۸. overall_message یک پیام دلگرم‌کننده کلی درباره عملکرد دانش‌آموز باشد.
-
-خروجی را فقط به صورت یک JSON معتبر و بدون هیچ متن اضافه برگردانید:
-{
-  "total_score": <عدد بین 0 تا 20>,
-  "overall_message": "<پیام دلگرم‌کننده>",
-  "questions": [
-    {"index": 0, "score": <0 تا 2>, "feedback": "<بازخورد>"},
-    ...برای هر ۱۰ سوال...
-  ]
-}`;
-
-  const userPrompt = `نام دانش‌آموز: ${studentName}\n\nاطلاعات سوالات، پاسخ‌های دانش‌آموز و کلید پاسخ:\n${JSON.stringify(questionsForPrompt, null, 2)}`;
-
-  const payload = {
-    model: "openai/gpt-oss-120b",
-    messages: [
-      { role: "system", content: systemPrompt },
-      { role: "user", content: userPrompt }
-    ],
-    temperature: 0.3,
-    response_format: { type: "json_object" }
-  };
-
-  const blob = new Blob([JSON.stringify(payload)], { type: "application/json" });
-
-  const response = await fetch(GROQ_URL, {
-    method: "POST",
-    headers: {
-      "Authorization": `Bearer ${GROQ_API_KEY}`,
-      "Content-Type": "application/json"
-    },
-    body: blob
-  });
-
-  if (!response.ok) throw new Error("Groq API error: " + response.status);
-
-  const data = await response.json();
-  let content = data.choices[0].message.content;
-  content = content.replace(/```json\s*/g, '').replace(/```\s*/g, '').trim();
-
-  let parsed;
-  try {
-    parsed = JSON.parse(content);
-  } catch (e) {
-    const match = content.match(/\{[\s\S]*\}/);
-    if (match) parsed = JSON.parse(match[0]);
-    else throw new Error("پاسخ JSON نامعتبر است");
-  }
-  return parsed;
-}
-
-function renderResult() {
-  document.getElementById('display-student-name').innerText = `دانش‌آموز: ${studentName}`;
-  const score = Math.max(0, Math.min(20, aiResult.total_score || 0));
-  document.getElementById('score-value').innerText = toPersianNumber(score);
-  document.getElementById('score-message').innerText = aiResult.overall_message || "آفرین بر تلاش شما!";
-  
-  const reviewContainer = document.getElementById('copyable-answers');
-  reviewContainer.innerHTML = `<h3>📝 پاسخ‌ها و بازخورد معلم:</h3>`;
-  const qResults = Array.isArray(aiResult.questions) ? aiResult.questions : [];
-  
-  selectedQuestions.forEach((item, index) => {
-    const answerText = studentAnswers[index] || "";
-    const answerHTML = answerText === "" 
-      ? `<div class="review-a empty">[بدون پاسخ]</div>` 
-      : `<div class="review-a">${escapeHtml(answerText)}</div>`;
-    const qResult = qResults.find(r => r.index === index) || { score: 0, feedback: "پاسخی ثبت نشده است." };
-    const qScore = Math.max(0, Math.min(2, qResult.score || 0));
-    const badgeClass = qScore >= 2 ? 'full' : (qScore === 0 ? 'zero' : '');
-    
-    reviewContainer.innerHTML += `
-      <div class="review-item">
-        <div class="review-q">
-          <span>سوال ${index + 1}: ${item.q}</span>
-          <span class="q-score-badge ${badgeClass}">${toPersianNumber(qScore)} از ۲</span>
+    <div class="container">
+        <h2>📝 آزمون تشریحی درس ۲</h2>
+        
+        <div class="question-box">
+            <p id="questionText">در حال دریافت سوال از متن کتاب... ⏳</p>
         </div>
-        ${answerHTML}
-        <div class="ai-feedback">💬 <strong>بازخورد معلم:</strong> ${escapeHtml(qResult.feedback || "")}</div>
-      </div>
-    `;
-  });
-}
 
-function copyAnswers() {
-  const score = aiResult ? aiResult.total_score : 0;
-  const message = aiResult ? aiResult.overall_message : "";
-  const textToCopy = `📋 کارنامه آزمون تشریحی درس ۲ (من مسئول هستم)\n` +
-    `👤 دانش‌آموز: ${studentName}\n` +
-    `📚 پایه: هفتم | مطالعات اجتماعی\n` +
-    `📊 نمره: ${toPersianNumber(score)} از ۲۰\n` +
-    `💬 ${message}\n\n` +
-    `─────────────────────\n\n` +
-    document.getElementById('copyable-answers').innerText;
-  
-  navigator.clipboard.writeText(textToCopy).then(() => {
-    alert("✅ کارنامه با موفقیت کپی شد.");
-  }).catch(() => {
-    alert("❌ خطا در کپی. لطفاً متن را به صورت دستی انتخاب و کپی کنید.");
-  });
-}
-</script>
+        <textarea id="studentAnswer" placeholder="پاسخ خود را بر اساس کتاب درسی اینجا بنویسید..."></textarea>
+        
+        <button class="btn" id="submitBtn" onclick="submitAnswer()" disabled>ارسال پاسخ برای تصحیح هوشمند</button>
+        
+        <div class="loading" id="loadingText">هوش مصنوعی در حال تصحیح پاسخ شماست... ⏳</div>
+
+        <div class="result-box" id="resultBox">
+            <div class="score-highlight" id="scoreDisplay"></div>
+            <h3>📊 نظر معلم هوشمند:</h3>
+            <div id="aiFeedback"></div>
+        </div>
+    </div>
+
+    <!-- بارگذاری متن درس و فایل اصلی هوش مصنوعی -->
+    <script src="lesson2-text.js"></script>
+    <script src="telegram.js"></script> <!-- 👈 این خط برای ذخیره نمره ضروری است -->
+
+    <script>
+        // تولید سوال از متن کتاب
+        document.addEventListener('DOMContentLoaded', () => {
+            generateQuestion();
+        });
+
+        async function generateQuestion() {
+            const questionText = document.getElementById('questionText');
+            
+            const prompt = `
+                شما یک معلم دلسوز مطالعات اجتماعی پایه هفتم هستید.
+                وظیفه شما طراحی یک سوال تشریحی از متن کتاب درسی زیر است.
+
+                **قوانین بسیار مهم:**
+                ۱. سوال باید ۱۰۰٪ مستقیماً از متن زیر استخراج شده باشد. به هیچ وجه از دانش بیرونی استفاده نکنید.
+                ۲. سطح سوال باید «متوسط به پایین» (ساده و مفهومی) باشد. هدف، سنجش درک اولیه دانش‌آموز است.
+                ۳. پاسخ سوال باید دقیقاً در یک یا دو جمله در متن موجود باشد.
+                ۴. از عبارت «بر اساس متن درس» در صورت سوال استفاده کنید.
+
+                متن کتاب درسی:
+                ${lesson2Text}
+
+                خروجی: فقط و فقط متن سوال را بنویسید. هیچ توضیح اضافه‌ای ندهید.
+            `;
+
+            try {
+                const response = await fetch("https://ai.motadars.ir", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ messages: [{ role: "user", content: prompt }] })
+                });
+                const data = await response.json();
+                
+                questionText.innerText = data.choices[0].message.content;
+                document.getElementById('submitBtn').disabled = false;
+            } catch (error) {
+                questionText.innerText = "بر اساس متن درس، ما در برابر چه کسانی مسئول هستیم؟ (سه مورد را نام ببرید)";
+                document.getElementById('submitBtn').disabled = false;
+            }
+        }
+
+        // تصحیح پاسخ و ذخیره نمره
+        async function submitAnswer() {
+            const answer = document.getElementById('studentAnswer').value.trim();
+            const question = document.getElementById('questionText').innerText;
+            
+            if (!answer) return alert('لطفاً پاسخ خود را بنویسید.');
+
+            document.getElementById('submitBtn').disabled = true;
+            document.getElementById('loadingText').style.display = 'block';
+            document.getElementById('resultBox').style.display = 'none';
+
+            // پرامپت تصحیح (با تاکید بر انصاف و خروجی استاندارد)
+            const systemPrompt = `
+                شما یک معلم مطالعات اجتماعی هستید که پاسخ دانش‌آموز را تصحیح می‌کنید.
+                پاسخ دانش‌آموز را صرفاً بر اساس متن کتاب درسی که در ادامه آمده ارزیابی کنید.
+
+                **نکات مهم در تصحیح:**
+                ۱. با ارفاق و لحنی تشویق‌آمیز رفتار کنید. اگر دانش‌آموز «مفهوم اصلی» را متوجه شده باشد، نمره کامل بدهید.
+                ۲. اگر پاسخ ناقص بود، بر اساس تلاش او نمره بدهید.
+                ۳. اگر پاسخ کاملاً بی‌ربط بود، نمره صفر بدهید.
+
+                **قالب خروجی اجباری:**
+                در ابتدا یک توضیح کوتاه و تشویق‌آمیز بنویسید.
+                سپس در خط آخر، دقیقاً به این شکل عدد نمره را بنویسید: [نمره: (عدد از ۲۰)]
+                
+                متن کتاب درسی:
+                ${lesson2Text}
+            `;
+
+            const userPrompt = `
+                سوال: ${question}
+                پاسخ دانش‌آموز: ${answer}
+            `;
+
+            try {
+                const response = await fetch("https://ai.motadars.ir", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ 
+                        messages: [
+                            { role: "system", content: systemPrompt },
+                            { role: "user", content: userPrompt }
+                        ] 
+                    })
+                });
+                const data = await response.json();
+                
+                const aiText = data.choices[0].message.content;
+                
+                // 👇 استخراج نمره از متن هوش مصنوعی
+                const scoreMatch = aiText.match(/\[نمره:\s*([۰-۹0-9]+)\]/);
+                let finalScore = 0;
+                
+                if (scoreMatch) {
+                    // تبدیل اعداد فارسی به انگلیسی
+                    const persianNumbers = [/۰/g, /۱/g, /۲/g, /۳/g, /۴/g, /۵/g, /۶/g, /۷/g, /۸/g, /۹/g];
+                    let scoreStr = scoreMatch[1];
+                    for (let i = 0; i < 10; i++) {
+                        scoreStr = scoreStr.replace(persianNumbers[i], i);
+                    }
+                    finalScore = parseInt(scoreStr);
+                    
+                    // حذف تگ نمره از متن نمایشی
+                    aiText = aiText.replace(/\[نمره:.*?\]/g, ''); 
+                }
+
+                // نمایش نتایج به دانش‌آموز
+                document.getElementById('loadingText').style.display = 'none';
+                document.getElementById('resultBox').style.display = 'block';
+                document.getElementById('aiFeedback').innerText = aiText;
+                
+                if (scoreMatch) {
+                    document.getElementById('scoreDisplay').style.display = 'block';
+                    document.getElementById('scoreDisplay').innerText = `نمره شما: ${finalScore} از ۲۰`;
+                }
+
+                // 👇 ذخیره نمره در دیتابیس با استفاده از تابع telegram.js
+                if (typeof submitScoreToTelegram === "function") {
+                    submitScoreToTelegram(finalScore, 0, "tashrihi");
+                } else {
+                    console.error("تابع ذخیره نمره پیدا نشد. فایل telegram.js را بررسی کنید.");
+                }
+
+            } catch (error) {
+                document.getElementById('loadingText').style.display = 'none';
+                alert('خطا در ارتباط با سرور.');
+                document.getElementById('submitBtn').disabled = false;
+            }
+        }
+    </script>
 </body>
 </html>
