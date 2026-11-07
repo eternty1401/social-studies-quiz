@@ -44,6 +44,8 @@
         
         .btn-export-small { background: #3b82f6; color: white; border: none; padding: 5px 10px; border-radius: 6px; font-size: 0.8rem; cursor: pointer; display: flex; align-items: center; gap: 5px; font-family: inherit; font-weight: bold; transition: 0.3s; }
         .btn-export-small:hover { background: #2563eb; }
+        .btn-export-attendance { background: #f59e0b; color: white; border: none; padding: 5px 10px; border-radius: 6px; font-size: 0.8rem; cursor: pointer; display: flex; align-items: center; gap: 5px; font-family: inherit; font-weight: bold; transition: 0.3s; }
+        .btn-export-attendance:hover { background: #d97706; }
         .toggle-icon { font-size: 1rem; color: #64748b; }
         
         .student-list { display: none; padding: 15px; background: white; }
@@ -190,7 +192,7 @@
         let allData = { students: [], grades: [] };
         let currentStudentForGrade = { name: "", school: "" };
         let currentTab = 'class';
-        let todayAttendance = []; // برای ذخیره آبجکت حاضری‌ها
+        let todayAttendance = []; 
 
         if(localStorage.getItem('teacher_logged_in') === 'true') {
             document.getElementById('loginBox').style.display = 'none';
@@ -446,12 +448,11 @@
             } catch(e) { alert('خطای شبکه'); }
         }
 
-        // ------------------ بخش حضور و غیاب (اصلاح شده) ------------------
+        // ------------------ بخش حضور و غیاب ------------------
         async function renderAttendance() {
             const box = document.getElementById('attendanceBox');
             box.innerHTML = '<p style="text-align:center; color:white;">در حال دریافت لیست حاضران...</p>';
 
-            // دریافت لیست حاضری‌های امروز
             try {
                 const res = await fetch('https://api.motadars.ir/get_attendance.php', {
                     method: 'POST',
@@ -460,7 +461,7 @@
                 });
                 const data = await res.json();
                 if (data.status === 'success') {
-                    todayAttendance = data.data; // حالا آبجکت کامل (با ساعت) ذخیره میشه
+                    todayAttendance = data.data; 
                 }
             } catch (e) {
                 console.error("خطا در دریافت حاضری‌ها");
@@ -477,11 +478,13 @@
                     const studentsInGrade = school.grades[gradeNum];
                     if (studentsInGrade.length === 0) continue;
 
+                    // 👇 دکمه خروجی اکسل اختصاصی برای حضور و غیاب اینجا اضافه شد
                     schoolHtml += `
                         <div class="grade-section">
                             <div class="grade-header" onclick="toggleGrade(this)">
                                 <span class="grade-title-text">پایه ${gradeNum} (${studentsInGrade.length} نفر)</span>
                                 <div class="grade-actions">
+                                    <button class="btn-export-attendance" onclick="exportAttendanceToCSV('${school.name}', '${gradeNum}', event)">📥 خروجی اکسل</button>
                                     <button class="btn-mark-all" onclick="markGradeAllPresent('${school.name}', '${gradeNum}', event)">✅ همه حاضر</button>
                                     <span class="toggle-icon">▼</span>
                                 </div>
@@ -490,11 +493,9 @@
                     `;
 
                     studentsInGrade.forEach(studentName => {
-                        // پیدا کردن رکورد این دانش‌آموز در لیست حاضری‌ها
                         const record = todayAttendance.find(item => item.student_name === studentName);
                         const isPresent = record && record.status === 'present';
                         
-                        // ساخت متن نمایشی با ساعت
                         const timeStr = (record && record.attendance_time) ? ` - ساعت ${record.attendance_time}` : '';
                         const statusText = isPresent ? `✅ حاضر ${timeStr}` : '❌ غایب';
                         const statusClass = isPresent ? 'status-present' : 'status-absent';
@@ -537,7 +538,7 @@
                 });
                 const data = await res.json();
                 if (data.status === 'success') {
-                    renderAttendance(); // رفرش لیست
+                    renderAttendance(); 
                 } else {
                     alert("خطا: " + data.message);
                 }
@@ -569,7 +570,42 @@
                 });
             }
             alert(`حاضری همه دانش‌آموزان پایه ${gradeNum} ثبت شد.`);
-            renderAttendance();
+            renderAttendance(); 
+        }
+
+        // 👇 تابع جدید برای خروجی اکسل حضور و غیاب هر پایه
+        function exportAttendanceToCSV(schoolName, gradeNum, event) {
+            event.stopPropagation(); // جلوگیری از بسته شدن لیست
+            
+            let csvContent = "\uFEFF"; // برای نمایش درست فارسی در اکسل
+            csvContent += "ردیف,مدرسه,پایه,نام دانش‌آموز,وضعیت,ساعت ثبت,تاریخ\n";
+
+            let schoolKey = null;
+            for(let k in schoolData) { if(schoolData[k].name === schoolName) { schoolKey = k; break; } }
+            if(!schoolKey) return alert('مدرسه پیدا نشد');
+
+            const studentsInGrade = schoolData[schoolKey].grades[gradeNum] || [];
+            const todayDate = new Date().toLocaleDateString('fa-IR');
+            let rowNumber = 1;
+
+            studentsInGrade.forEach(studentName => {
+                // پیدا کردن وضعیت دانش‌آموز در لیست حاضری‌های امروز
+                const record = todayAttendance.find(item => item.student_name === studentName);
+                
+                let status = "غایب";
+                let timeStr = "-";
+                
+                if (record && record.status === 'present') {
+                    status = "حاضر";
+                    timeStr = record.attendance_time || "-";
+                }
+
+                csvContent += `"${rowNumber}","${schoolName}","${gradeNum}","${studentName}","${status}","${timeStr}","${todayDate}"\n`;
+                rowNumber++;
+            });
+
+            // استفاده از تابع دانلود که قبلاً ساختیم
+            downloadCSV(csvContent, `حضور_غیاب_پایه_${gradeNum}_${schoolName}`);
         }
 
         // ------------------ ثبت نمره دستی و اکسل ------------------
