@@ -160,8 +160,6 @@ async function sendChatMessage() {
   messages.innerHTML += `<div class="ai-msg bot" id="${loadingId}">در حال فکر کردن... ⏳</div>`;
   messages.scrollTop = messages.scrollHeight;
 
-  const GROQ_API_KEY = "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";
-  
   // خواندن لحن انتخاب شده
   const selectedTone = document.getElementById('ai-tone-select').value;
   let systemPrompt = "";
@@ -186,10 +184,11 @@ async function sendChatMessage() {
       ]
     };
 
-    const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+    // 👈 آدرس تغییر کرد به فایل واسط (Proxy) در هاست
+    const response = await fetch("https://api.motadars.ir/groq_proxy.php", {
       method: "POST",
-      headers: { "Authorization": `Bearer ${GROQ_API_KEY}` },
-      body: new Blob([JSON.stringify(payload)], { type: 'application/json' })
+      headers: { "Content-Type": "application/json" }, // 👈 هدر Authorization حذف شد
+      body: JSON.stringify(payload)
     });
 
     const data = await response.json();
@@ -201,7 +200,7 @@ async function sendChatMessage() {
     messages.scrollTop = messages.scrollHeight;
   } catch (error) {
     document.getElementById(loadingId).remove();
-    messages.innerHTML += `<div class="ai-msg bot" style="color:red;">❌ خطا در ارتباط. لطفاً از فیلترشکن استفاده کنید.</div>`;
+    messages.innerHTML += `<div class="ai-msg bot" style="color:red;">❌ خطا در ارتباط با سرور.</div>`;
   }
 }
 
@@ -221,8 +220,6 @@ async function summarizeText() {
   messages.innerHTML += `<div class="ai-msg bot" id="${loadingId}">در حال مطالعه و خلاصه کردن... ⏳</div>`;
   messages.scrollTop = messages.scrollHeight;
 
-  const GROQ_API_KEY = "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";
-
   try {
     const payload = {
       model: "openai/gpt-oss-120b",
@@ -232,10 +229,11 @@ async function summarizeText() {
       ]
     };
 
-    const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+    // 👈 آدرس تغییر کرد به فایل واسط (Proxy) در هاست
+    const response = await fetch("https://api.motadars.ir/groq_proxy.php", {
       method: "POST",
-      headers: { "Authorization": `Bearer ${GROQ_API_KEY}` },
-      body: new Blob([JSON.stringify(payload)], { type: 'application/json' })
+      headers: { "Content-Type": "application/json" }, // 👈 هدر Authorization حذف شد
+      body: JSON.stringify(payload)
     });
 
     const data = await response.json();
@@ -247,6 +245,6 @@ async function summarizeText() {
     messages.scrollTop = messages.scrollHeight;
   } catch (error) {
     document.getElementById(loadingId).remove();
-    messages.innerHTML += `<div class="ai-msg bot" style="color:red;">❌ خطا در خلاصه کردن. لطفاً فیلترشکن را روشن کنید.</div>`;
+    messages.innerHTML += `<div class="ai-msg bot" style="color:red;">❌ خطا در خلاصه کردن درس.</div>`;
   }
 }
