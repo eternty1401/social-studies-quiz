@@ -11,159 +11,36 @@
   
   .container { width:100%; max-width:800px; background:#fff; border-radius:20px; padding:35px 28px; box-shadow:0 8px 30px rgba(0,0,0,0.08); border-top:6px solid #558b2f; margin-bottom:20px; }
   
-  /* صفحه شروع */
   #start-section { text-align: center; }
   #start-section h1 { color: #33691e; font-size: 1.5rem; margin-bottom: 10px; font-weight: 900; }
   #start-section .subtitle { color: #7f8c8d; font-size: 0.95rem; margin-bottom: 25px; }
-  
   .info-list { background:#e8f5e9; border-radius:14px; padding:18px 22px; margin-bottom:25px; list-style:none; text-align:right; }
   .info-list li { display:flex; align-items:center; gap:10px; font-size:0.95rem; padding:7px 0; font-weight:500; color:#33691e; }
   .info-list li .ico { font-size:1.2rem; }
-  
   .name-input { width:100%; padding:14px 18px; border:2px solid #c5e1a5; border-radius:12px; font-size:1rem; font-family:inherit; margin-bottom:18px; outline:none; transition:0.25s; text-align:center; }
   .name-input:focus { border-color:#558b2f; box-shadow:0 0 0 4px rgba(85,139,47,0.12); }
-  
   .start-btn { width:100%; padding:15px; background:linear-gradient(135deg,#558b2f,#33691e); color:#fff; border:none; border-radius:12px; font-size:1.05rem; font-weight:900; font-family:inherit; cursor:pointer; transition:0.3s; box-shadow:0 6px 18px rgba(85,139,47,0.3); }
   .start-btn:hover { transform:translateY(-2px); box-shadow:0 10px 25px rgba(85,139,47,0.4); }
 
-  /* هدر و تایمر آزمون */
   .header-top { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px dashed #dcedc8; padding-bottom: 15px; margin-bottom: 25px; }
   .header-title h1 { color: #33691e; font-size: 1.3rem; }
   .header-title p { color: #7f8c8d; font-size: 0.85rem; margin-top: 5px; }
-  .timer-box {
-    background: #e8f5e9; color: #33691e; padding: 8px 18px; border-radius: 50px;
-    font-weight: 900; font-size: 1.1rem; display: flex; align-items: center; gap: 8px; direction: ltr;
-    transition: 0.3s;
-  }
+  .timer-box { background: #e8f5e9; color: #33691e; padding: 8px 18px; border-radius: 50px; font-weight: 900; font-size: 1.1rem; display: flex; align-items: center; gap: 8px; direction: ltr; transition: 0.3s; }
   .timer-box.warning { background: #fdedec; color: #e74c3c; animation: pulseTimer 0.8s infinite; }
   @keyframes pulseTimer { 0%,100% { transform:scale(1); } 50% { transform:scale(1.08); } }
 
-  /* سوالات تشریحی */
-  .question-box {
-    background: #fafbfc; border: 1px solid #dcedc8; border-radius: 12px;
-    padding: 20px; margin-bottom: 20px;
-  }
+  .question-box { background: #fafbfc; border: 1px solid #dcedc8; border-radius: 12px; padding: 20px; margin-bottom: 20px; }
   .q-title { font-weight: 800; font-size: 1.05rem; margin-bottom: 15px; line-height: 1.8; color: #2c3e50; }
-  .essay-textarea {
-    width: 100%; min-height: 120px; padding: 15px; border: 2px solid #e2e8f0;
-    border-radius: 10px; font-family: inherit; font-size: 0.95rem; resize: vertical;
-    background: #fff; outline: none; transition: 0.3s; line-height: 1.9;
-  }
+  .essay-textarea { width: 100%; min-height: 120px; padding: 15px; border: 2px solid #e2e8f0; border-radius: 10px; font-family: inherit; font-size: 0.95rem; resize: vertical; background: #fff; outline: none; transition: 0.3s; line-height: 1.9; }
   .essay-textarea:focus { border-color: #558b2f; box-shadow: 0 0 8px rgba(85,139,47,0.1); }
   
-  .submit-btn {
-    display: block; width: 100%; padding: 15px; margin-top: 30px;
-    background: linear-gradient(135deg,#558b2f,#33691e); color: #fff; border: none; border-radius: 12px;
-    font-size: 1.1rem; font-weight: 900; font-family: inherit; cursor: pointer;
-    transition: 0.3s; box-shadow: 0 6px 18px rgba(85,139,47,0.3);
-  }
+  .submit-btn { display: block; width: 100%; padding: 15px; margin-top: 30px; background: linear-gradient(135deg,#558b2f,#33691e); color: #fff; border: none; border-radius: 12px; font-size: 1.1rem; font-weight: 900; font-family: inherit; cursor: pointer; transition: 0.3s; box-shadow: 0 6px 18px rgba(85,139,47,0.3); }
   .submit-btn:hover { transform:translateY(-2px); }
   .submit-btn:disabled { background: #bdc3c7; cursor: not-allowed; box-shadow: none; transform:none; }
 
-  /* کارنامه و لودینگ */
-  .result-container { display: none; text-align: center; }
-  .student-name-display {
-    font-size: 1.1rem; font-weight: 900; color: #2c3e50; margin-bottom: 20px;
-    background: #e8f5e9; padding: 10px 20px; border-radius: 10px; display: inline-block;
-  }
-
-  .ai-loading { text-align: center; padding: 40px 20px; }
-  .spinner {
-    width: 55px; height: 55px; margin: 0 auto 20px;
-    border: 5px solid #e8f5e9; border-top-color: #558b2f;
-    border-radius: 50%; animation: spin 1s linear infinite;
-  }
-  @keyframes spin { to { transform: rotate(360deg); } }
-  .ai-loading p { color: #33691e; font-weight: 900; font-size: 1.1rem; }
-  .ai-loading .sub { font-size: 0.85rem; color: #95a5a6; margin-top: 10px; font-weight: 400; }
-
-  /* کارت نمره */
-  .score-card {
-    background: linear-gradient(135deg, #558b2f, #33691e);
-    color: #fff; padding: 30px 25px; border-radius: 18px;
-    margin-bottom: 25px; text-align: center;
-    box-shadow: 0 10px 30px rgba(85,139,47,0.35);
-  }
-  .score-card .score-value { font-size: 3.2rem; font-weight: 900; line-height: 1; }
-  .score-card .score-value small { font-size: 1.2rem; opacity: 0.85; }
-  .score-card .score-label { font-size: 0.9rem; opacity: 0.9; margin-top: 8px; }
-  .score-card .score-message {
-    font-size: 1rem; margin-top: 18px; font-weight: 700;
-    background: rgba(255,255,255,0.15); padding: 12px; border-radius: 10px;
-  }
-
-  /* بازبینی پاسخ‌ها */
-  .answers-review-box {
-    text-align: right; background: #f8f9fa; border: 1px dashed #bdc3c7;
-    padding: 20px; border-radius: 12px; margin-bottom: 25px;
-  }
-  .answers-review-box h3 { color: #33691e; margin-bottom: 15px; font-size: 1.1rem; }
-  .review-item { margin-bottom: 18px; padding-bottom: 18px; border-bottom: 1px solid #ecf0f1; }
-  .review-item:last-child { border-bottom: none; }
-  .review-q {
-    font-weight: 800; color: #2c3e50; margin-bottom: 8px;
-    display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; line-height:1.8;
-  }
-  .review-q span { flex: 1; }
-  .q-score-badge {
-    background: #f39c12; color: #fff; padding: 3px 12px;
-    border-radius: 20px; font-size: 0.8rem; font-weight: 900; white-space: nowrap;
-  }
-  .q-score-badge.full { background: #2ecc71; }
-  .q-score-badge.zero { background: #e74c3c; }
-  .review-a {
-    color: #2c3e50; background: #e8f8f5; padding: 12px;
-    border-radius: 8px; line-height: 1.8; white-space: pre-wrap;
-    font-size: 0.92rem; border: 1px solid #d1f2eb;
-  }
-  .review-a.empty { color: #e74c3c; background: #fdedec; font-style: italic; border-color: #fadbd8; }
-  .ai-feedback {
-    background: #fff8e1; border-right: 4px solid #f39c12;
-    padding: 12px; border-radius: 8px; margin-top: 10px;
-    font-size: 0.88rem; line-height: 1.7; color: #5d4e1f;
-  }
-  .ai-feedback strong { color: #e67e22; }
-
-  /* دکمه‌ها */
-  .action-btns { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
-  .review-btn {
-    background: #fff; color: #33691e; text-decoration: none; border: 2px solid #558b2f;
-    padding: 12px 25px; border-radius: 30px; font-weight: 900; cursor: pointer;
-    font-size: 1rem; transition: 0.3s; font-family: inherit; box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-  }
-  .review-btn:hover { background: #e8f5e9; transform:translateY(-2px); }
-  .copy-btn { background: #558b2f; color: #fff; border: none; box-shadow: 0 4px 15px rgba(85,139,47,0.3); }
-  .copy-btn:hover { background: #33691e; }
-
-  /* تلاش مجدد */
-  .retry-section {
-    background: #fdedec; border: 2px dashed #e74c3c;
-    padding: 30px 20px; border-radius: 14px; text-align: center;
-    margin: 20px 0;
-  }
-  .retry-section .error-icon { font-size: 2.5rem; margin-bottom: 15px; }
-  .retry-section h3 { color: #e74c3c; margin-bottom: 12px; font-size: 1.15rem; }
-  .retry-section p { color: #7f8c8d; margin-bottom: 20px; font-size: 0.92rem; line-height: 1.7; }
-  .retry-section .preserve-note {
-    background: #fff; border-radius: 8px; padding: 10px 14px;
-    color: #27ae60; font-weight: 700; font-size: 0.88rem;
-    margin-bottom: 20px; display: inline-block;
-  }
-  .try-again-btn {
-    background: #e74c3c; color: #fff; border: none;
-    padding: 14px 35px; border-radius: 30px; font-weight: 900;
-    font-size: 1rem; cursor: pointer; font-family: inherit;
-    box-shadow: 0 4px 15px rgba(231,76,60,0.4);
-    transition: 0.3s;
-  }
-  .try-again-btn:hover { background: #c0392b; transform: translateY(-2px); }
-
-  @media(max-width:600px) {
-    body { padding: 15px 10px; }
-    .container { padding: 20px; border-radius: 15px; }
-    .header-top { flex-direction: column; gap: 10px; text-align: center; }
-    .score-card .score-value { font-size: 2.5rem; }
-  }
+  .result-container { display: none; text-align: center; padding: 40px 20px; }
+  .result-container h2 { color: #10b981; font-size: 1.5rem; margin-bottom: 15px; }
+  .result-container p { color: #475569; font-size: 1.1rem; line-height: 1.8; margin-bottom: 25px; }
 </style>
 </head>
 <body>
@@ -177,8 +54,7 @@
     <ul class="info-list">
       <li><span class="ico">📝</span> ۱۰ سوال تشریحی ساده و مفهومی (از بانک ۳۰ سوالی)</li>
       <li><span class="ico">⏱️</span> ۲۰ دقیقه زمان کلی برای پاسخگویی</li>
-      <li><span class="ico">🤖</span> تصحیح خودکار با هوش مصنوعی و نمره از ۲۰</li>
-      <li><span class="ico">📋</span> دریافت کارنامه با بازخورد معلم</li>
+      <li><span class="ico">👨‍🏫</span> تصحیح توسط دبیر (نمره در پنل شما ثبت می‌شود)</li>
     </ul>
 
     <input type="text" id="student-name" class="name-input" placeholder="نام و نام خانوادگی خود را وارد کنید">
@@ -195,101 +71,60 @@
     </div>
     <form id="quiz-form">
       <div id="questions-container"></div>
-      <button type="submit" class="submit-btn" id="submit-btn">پایان آزمون و تصحیح هوشمند</button>
+      <button type="submit" class="submit-btn" id="submit-btn">ثبت و ارسال پاسخ‌ها برای دبیر</button>
     </form>
   </div>
 
-  <div id="loading-section" style="display: none;">
-    <div class="ai-loading">
-      <div class="spinner"></div>
-      <p>🤖 در حال تصحیح پاسخ‌های شما...</p>
-      <p class="sub">هوش مصنوعی پاسخ‌ها را با کلید مقایسه می‌کند، لطفاً صبر کنید</p>
-    </div>
-  </div>
-
-  <div id="error-section" style="display: none;">
-    <div class="retry-section">
-      <div class="error-icon">⚠️</div>
-      <h3>اتصال به هوش مصنوعی برقرار نشد</h3>
-      <p>لطفاً اتصال اینترنت خود را بررسی کنید و دوباره تلاش کنید.</p>
-      <div class="preserve-note">✅ نگران نباشید، پاسخ‌های شما کاملاً محفوظ هستند</div>
-      <br>
-      <button class="try-again-btn" onclick="retryAI()">🔄 تلاش مجدد</button>
-    </div>
-  </div>
-
   <div id="result-section" class="result-container">
-    <h2 style="color:#33691e; margin-bottom:20px; font-weight:900; text-align:center;">🎓 کارنامه آزمون تشریحی</h2>
-    <div style="text-align:center;">
-      <div class="student-name-display" id="display-student-name">نام دانش‌آموز</div>
-    </div>
-    
-    <div class="score-card" id="score-card">
-      <div class="score-value"><span id="score-value">۰</span><small> / ۲۰</small></div>
-      <div class="score-label">نمره نهایی</div>
-      <div class="score-message" id="score-message">...</div>
-    </div>
-    
-    <div class="answers-review-box" id="copyable-answers"></div>
-    
-    <div class="action-btns">
-      <button class="review-btn copy-btn" onclick="copyAnswers()">📋 کپی کارنامه</button>
-      <a href="haftom.html" class="review-btn">🔙 بازگشت به دروس</a>
-    </div>
+    <h2>✅ پاسخ‌های شما با موفقیت ثبت شد</h2>
+    <p>دبیر شما به زودی پاسخ‌ها را بررسی کرده و نمره شما را در کارنامه ثبت می‌کند.<br>می‌توانید صفحه را ببندید.</p>
+    <a href="haftom.html" class="start-btn" style="display:inline-block; width:auto; padding:12px 30px; text-decoration:none;">🔙 بازگشت به دروس</a>
   </div>
 
 </div>
 
-<!-- بارگذاری اسکریپت ذخیره نمره -->
-<script src="telegram.js"></script>
-
 <script>
-// ==========================================
-// بانک ۳۰ سوال تشریحی (ساده‌سازی شده) درس ۱۰
-// ==========================================
+// بانک ۳۰ سوال تشریحی
 const essayBank = [
-  { q: "ایران در کدام قاره و کدام قسمت آن قرار دارد؟", key: "قاره آسیا - در جنوب غربی آسیا." },
-  { q: "وسعت کشور ایران تقریباً چقدر است؟", key: "حدود ۱,۶۴۸,۱۹۵ کیلومتر مربع." },
-  { q: "بر اساس سرشماری سال ۱۳۹۵، جمعیت ایران چقدر بوده است؟", key: "حدود ۸۰ میلیون نفر." },
-  { q: "کشور ایران برای اداره بهتر به چه بخش‌هایی تقسیم شده است؟", key: "استان، شهرستان، بخش و دهستان." },
-  { q: "شهرها توسط چه کسانی و چگونه اداره می‌شوند؟", key: "توسط شهرداری و شورای شهر. شورای شهر شهردار را انتخاب می‌کند." },
-  { q: "سه مورد از وظایف شهرداری را نام ببرید.", key: "۱. ساخت و تعمیر خیابان‌ها ۲. جمع‌آوری زباله ۳. احداث و نگهداری پارک‌ها." },
-  { q: "شهرداری برای انجام کارهای خود از چه راهی پول درمی‌آورد؟", key: "از طریق دریافت عوارض (مثل عوارض نوسازی) از مردم." },
-  { q: "عوارض نوسازی چیست؟", key: "پولی که شهروندان برای انجام خدمات شهری و آبادانی شهر به شهرداری پرداخت می‌کنند." },
-  { q: "روستاها توسط چه کسانی اداره می‌شوند؟", key: "توسط شورای اسلامی روستا و دهیار." },
-  { q: "وظیفه شورای اسلامی روستا چیست؟", key: "انتخاب دهیار، نظارت بر کارهای روستا و پیگیری مشکلات مردم." },
-  { q: "اشکال ناهمواری در ایران را نام ببرید.", key: "کوه‌ها، فلات‌ها (سرزمین‌های بلند)، دشت‌ها و جلگه‌ها (زمین‌های پست) و کوهپایه‌ها." },
-  { q: "کوه‌های مهم ایران در کدام بخش‌ها قرار دارند؟", key: "رشته‌کوه البرز در شمال و رشته‌کوه زاگرس در غرب ایران." },
-  { q: "دشت‌ها و جلگه‌ها چه ویژگی دارند و برای چه کاری مناسب‌اند؟", key: "زمین‌های پست، مسطح و حاصلخیز هستند و برای کشاورزی و زندگی مناسب‌اند." },
-  { q: "کوهپایه یعنی چه؟", key: "به دامنه‌های کوه‌ها کوهپایه می‌گویند که برای باغداری و دامداری استفاده می‌شود." },
-  { q: "چرا کشورهای استعمارگر به ایران طمع دارند؟", key: "به دلیل منابع غنی نفت و گاز، موقعیت جغرافیایی و استراتژیک و بازار بزرگ." },
-  { q: "چرا حفظ استقلال کشور ایران مهم است؟", key: "برای حفظ امنیت، هویت ملی و پیشرفت و آبادانی کشور." },
-  { q: "مردم چه نقشی در اداره شهر و روستا دارند؟", key: "با انتخاب اعضای شورا، پرداخت عوارض و رعایت قوانین در اداره شهر و روستا مشارکت می‌کنند." },
-  { q: "چه شباهت و تفاوتی بین اداره شهر و روستا وجود دارد؟", key: "شباهت: هر دو شورا دارند. تفاوت: شهر شهرداری دارد و روستا دهیار." },
-  { q: "چرا در کوهپایه‌ها مراتع و چراگاه‌های خوبی وجود دارد؟", key: "چون در ارتفاعات بارش بیشتر است و گیاهان و علفزارها بهتر رشد می‌کنند." },
-  { q: "چه عواملی باعث شده ایران از نظر تمدنی و فرهنگی در جهان شناخته شود؟", key: "تاریخ کهن، دانشمندان بزرگ، آثار تاریخی و ادبیات غنی." },
-  { q: "اگر بخواهید به یک گردشگر خارجی درباره ایران توضیح دهید، چه می‌گویید؟", key: "کشور ما تاریخ کهن، جاذبه‌های طبیعی زیبا و مردم مهمان‌نواز دارد." },
-  { q: "همسایه‌های شرقی و غربی ایران چه کشورهایی هستند؟", key: "همسایه شرقی: افغانستان و پاکستان. همسایه غربی: عراق و ترکیه." },
-  { q: "مرزهای سیاسی ایران چگونه مشخص می‌شوند؟", key: "با مرزهای بین‌المللی خشکی و آبی که توسط قراردادها مشخص شده‌اند." },
-  { q: "شهردار چگونه انتخاب می‌شود؟", key: "شهردار توسط اعضای شورای اسلامی شهر انتخاب می‌شود." },
-  { q: "دهیار چگونه انتخاب می‌شود؟", key: "دهیار توسط اعضای شورای اسلامی روستا انتخاب می‌شود." },
-  { q: "چگونه می‌توانیم در شهر خود به بهبود محیط زندگی کمک کنیم؟", key: "با ریختن زباله در سطل، پرداخت به موقع عوارض و شرکت در طرح‌های شهری." },
-  { q: "ناهمواری‌های ایران چه تأثیری بر آب و هوا دارند؟", key: "کوه‌ها باعث بارش بیشتر در برخی مناطق و تنوع آب و هوایی در ایران شده‌اند." },
-  { q: "چرا خلیج فارس برای ایران اهمیت دارد؟", key: "به دلیل داشتن منابع نفتی، مسیرهای کشتیرانی و صادرات و واردات." },
-  { q: "نقش شوراها در توسعه گردشگری شهرها چیست؟", key: "ساخت زیرساخت‌ها، تبلیغ جاذبه‌های گردشگری و حفظ آثار تاریخی." },
-  { q: "برای حفظ محیط زیست شهر خود چه کارهایی می‌توانیم انجام دهیم؟", key: "تفکیک زباله، کاشتن درخت، و جلوگیری از آلوده کردن هوا و آب." }
+  { q: "ایران در کدام قاره و کدام قسمت آن قرار دارد؟" },
+  { q: "وسعت کشور ایران تقریباً چقدر است؟" },
+  { q: "بر اساس سرشماری سال ۱۳۹۵، جمعیت ایران چقدر بوده است؟" },
+  { q: "کشور ایران برای اداره بهتر به چه بخش‌هایی تقسیم شده است؟" },
+  { q: "شهرها توسط چه کسانی و چگونه اداره می‌شوند؟" },
+  { q: "سه مورد از وظایف شهرداری را نام ببرید." },
+  { q: "شهرداری برای انجام کارهای خود از چه راهی پول درمی‌آورد؟" },
+  { q: "عوارض نوسازی چیست؟" },
+  { q: "روستاها توسط چه کسانی اداره می‌شوند؟" },
+  { q: "وظیفه شورای اسلامی روستا چیست؟" },
+  { q: "اشکال ناهمواری در ایران را نام ببرید." },
+  { q: "کوه‌های مهم ایران در کدام بخش‌ها قرار دارند؟" },
+  { q: "دشت‌ها و جلگه‌ها چه ویژگی دارند و برای چه کاری مناسب‌اند؟" },
+  { q: "کوهپایه یعنی چه؟" },
+  { q: "چرا کشورهای استعمارگر به ایران طمع دارند؟" },
+  { q: "چرا حفظ استقلال کشور ایران مهم است؟" },
+  { q: "مردم چه نقشی در اداره شهر و روستا دارند؟" },
+  { q: "چه شباهت و تفاوتی بین اداره شهر و روستا وجود دارد؟" },
+  { q: "چرا در کوهپایه‌ها مراتع و چراگاه‌های خوبی وجود دارد؟" },
+  { q: "چه عواملی باعث شده ایران از نظر تمدنی و فرهنگی در جهان شناخته شود؟" },
+  { q: "اگر بخواهید به یک گردشگر خارجی درباره ایران توضیح دهید، چه می‌گویید؟" },
+  { q: "همسایه‌های شرقی و غربی ایران چه کشورهایی هستند؟" },
+  { q: "مرزهای سیاسی ایران چگونه مشخص می‌شوند؟" },
+  { q: "شهردار چگونه انتخاب می‌شود؟" },
+  { q: "دهیار چگونه انتخاب می‌شود؟" },
+  { q: "چگونه می‌توانیم در شهر خود به بهبود محیط زندگی کمک کنیم؟" },
+  { q: "ناهمواری‌های ایران چه تأثیری بر آب و هوا دارند؟" },
+  { q: "چرا خلیج فارس برای ایران اهمیت دارد؟" },
+  { q: "نقش شوراها در توسعه گردشگری شهرها چیست؟" },
+  { q: "برای حفظ محیط زیست شهر خود چه کارهایی می‌توانیم انجام دهیم؟" }
 ];
 
 const numQuestionsToShow = 10;
-const totalTime = 1200; // ۲۰ دقیقه
-const AI_WORKER_URL = "https://ai.motadars.ir";
-
+const totalTime = 1200; 
 let selectedQuestions = [];
 let studentAnswers = {};
 let timerInterval;
 let timeLeft = totalTime;
 let studentName = "";
-let aiResult = null;
 
 function shuffle(array) {
   let currentIndex = array.length, randomIndex;
@@ -301,26 +136,6 @@ function shuffle(array) {
   return array;
 }
 
-function showSection(name) {
-  const sections = { start:'start-section', quiz:'quiz-section', loading:'loading-section', error:'error-section', result:'result-section' };
-  Object.entries(sections).forEach(([key, id]) => {
-    const el = document.getElementById(id);
-    if (el) el.style.display = (key === name) ? 'block' : 'none';
-  });
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-function toPersianNumber(num) {
-  const persianDigits = ['۰','۱','۲','۳','۴','۵','۶','۷','۸','۹'];
-  return String(num).replace(/\d/g, d => persianDigits[d]).replace('.', '٫');
-}
-
-function escapeHtml(text) {
-  const div = document.createElement('div');
-  div.textContent = String(text);
-  return div.innerHTML;
-}
-
 function startQuiz() {
   studentName = document.getElementById('student-name').value.trim();
   if (studentName === "") {
@@ -328,7 +143,8 @@ function startQuiz() {
     document.getElementById('student-name').focus();
     return;
   }
-  showSection('quiz');
+  document.getElementById('start-section').style.display = 'none';
+  document.getElementById('quiz-section').style.display = 'block';
   initQuiz();
 }
 
@@ -369,168 +185,51 @@ document.getElementById('quiz-form').addEventListener('submit', function(e) {
   e.preventDefault();
   clearInterval(timerInterval);
   
-  studentAnswers = {};
-  selectedQuestions.forEach((_, i) => {
+  studentAnswers = selectedQuestions.map((item, i) => {
     const ta = document.querySelector(`textarea[name="a${i}"]`);
-    studentAnswers[i] = ta ? ta.value.trim() : "";
+    return {
+        question: item.q,
+        answer: ta ? ta.value.trim() : ""
+    };
   });
   
-  showSection('loading');
-  gradeWithAI();
+  saveAnswersToServer();
 });
 
-async function gradeWithAI() {
+async function saveAnswersToServer() {
+  const btn = document.getElementById('submit-btn');
+  btn.disabled = true;
+  btn.innerText = 'در حال ارسال... ⏳';
+
+  const schoolName = localStorage.getItem('school_name') || "نامشخص";
+  const examName = document.title;
+
   try {
-    const result = await callAI();
-    aiResult = result;
-    renderResult();
-    showSection('result');
+    const res = await fetch('https://api.motadars.ir/save_essay_submission.php', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        student_name: studentName,
+        school_name: schoolName,
+        exam_name: examName,
+        answers_data: studentAnswers
+      })
+    });
+    const data = await res.json();
     
-    // ارسال نمره به دیتابیس از طریق فایل telegram.js
-    sendToDatabase();
-    
-  } catch (err) {
-    console.error("خطای تصحیح:", err);
-    showSection('error');
+    if(data.status === 'success') {
+        document.getElementById('quiz-section').style.display = 'none';
+        document.getElementById('result-section').style.display = 'block';
+    } else {
+        alert('❌ خطا: ' + data.message);
+        btn.disabled = false;
+        btn.innerText = 'ثبت و ارسال پاسخ‌ها برای دبیر';
+    }
+  } catch(e) {
+    alert('❌ خطا در ارتباط با سرور.');
+    btn.disabled = false;
+    btn.innerText = 'ثبت و ارسال پاسخ‌ها برای دبیر';
   }
-}
-
-// 👇 تابع اصلاح شده برای ارسال به دیتابیس
-function sendToDatabase() {
-  if (typeof submitScoreToTelegram !== 'function') {
-    console.warn("تابع submitScoreToTelegram پیدا نشد. telegram.js بارگذاری نشده؟");
-    return;
-  }
-  
-  try {
-    const score = Math.max(0, Math.min(20, aiResult.total_score || 0));
-    // ارسال به تابع ذخیره در دیتابیس (بدون تکرار اشتباه)
-    submitScoreToTelegram(score, 0, "tashrihi");
-    
-    console.log("✅ نمره به دیتابیس ارسال شد:", { score });
-  } catch (err) {
-    console.error("❌ خطا در ارسال به دیتابیس:", err);
-  }
-}
-
-function retryAI() {
-  showSection('loading');
-  gradeWithAI();
-}
-
-async function callAI() {
-  const questionsForPrompt = selectedQuestions.map((item, i) => ({
-    index: i,
-    question: item.q,
-    answer_key: item.key,
-    student_answer: studentAnswers[i] || ""
-  }));
-
-  const systemPrompt = `شما یک معلم مهربان و باتجربه مطالعات اجتماعی پایه هفتم هستید که آزمون تشریحی دانش‌آموزان را تصحیح می‌کنید.
-
-قوانین مهم تصحیح:
-۱. بسیار سهل‌گیر و مهربان باشید. هدف اصلی تشویق و دلگرمی دانش‌آموز است.
-۲. هر سوال ۲ نمره دارد (کل آزمون ۲۰ نمره).
-۳. اگر دانش‌آموز حتی بخشی از مفهوم اصلی را فهمیده باشد، نمره کامل یا نزدیک به کامل (۱٫۵ تا ۲) بدهید.
-۴. اگر پاسخ کاملاً خالی است، صفر بدهید.
-۵. اگر پاسخ کاملاً بی‌ربط است، صفر بدهید.
-۶. برای پاسخ ناقص ولی مرتبط، نمره بین ۱ تا ۱٫۵ بدهید.
-۷. بازخورد هر سوال کوتاه، محبت‌آمیز و سازنده باشد (حداکثر دو جمله).
-۸. overall_message یک پیام دلگرم‌کننده کلی درباره عملکرد دانش‌آموز باشد.
-
-خروجی را فقط به صورت یک JSON معتبر و بدون هیچ متن اضافه برگردانید:
-{
-  "total_score": <عدد بین 0 تا 20>,
-  "overall_message": "<پیام دلگرم‌کننده>",
-  "questions": [
-    {"index": 0, "score": <0 تا 2>, "feedback": "<بازخورد>"},
-    ...برای هر ۱۰ سوال...
-  ]
-}`;
-
-  const userPrompt = `نام دانش‌آموز: ${studentName}\n\nاطلاعات سوالات، پاسخ‌های دانش‌آموز و کلید پاسخ:\n${JSON.stringify(questionsForPrompt, null, 2)}`;
-
-  const payload = {
-    messages: [
-      { role: "system", content: systemPrompt },
-      { role: "user", content: userPrompt }
-    ],
-    temperature: 0.3,
-    response_format: { type: "json_object" }
-  };
-
-  // 👇 اتصال به ورکر کلادفلر خودمان
-  const response = await fetch(AI_WORKER_URL, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload)
-  });
-
-  if (!response.ok) throw new Error("AI API error: " + response.status);
-
-  const data = await response.json();
-  let content = data.choices[0].message.content;
-  content = content.replace(/```json\s*/g, '').replace(/```\s*/g, '').trim();
-
-  let parsed;
-  try {
-    parsed = JSON.parse(content);
-  } catch (e) {
-    const match = content.match(/\{[\s\S]*\}/);
-    if (match) parsed = JSON.parse(match[0]);
-    else throw new Error("پاسخ JSON نامعتبر است");
-  }
-  return parsed;
-}
-
-function renderResult() {
-  document.getElementById('display-student-name').innerText = `دانش‌آموز: ${studentName}`;
-  const score = Math.max(0, Math.min(20, aiResult.total_score || 0));
-  document.getElementById('score-value').innerText = toPersianNumber(score);
-  document.getElementById('score-message').innerText = aiResult.overall_message || "آفرین بر تلاش شما!";
-  
-  const reviewContainer = document.getElementById('copyable-answers');
-  reviewContainer.innerHTML = `<h3>📝 پاسخ‌ها و بازخورد معلم:</h3>`;
-  const qResults = Array.isArray(aiResult.questions) ? aiResult.questions : [];
-  
-  selectedQuestions.forEach((item, index) => {
-    const answerText = studentAnswers[index] || "";
-    const answerHTML = answerText === "" 
-      ? `<div class="review-a empty">[بدون پاسخ]</div>` 
-      : `<div class="review-a">${escapeHtml(answerText)}</div>`;
-    const qResult = qResults.find(r => r.index === index) || { score: 0, feedback: "پاسخی ثبت نشده است." };
-    const qScore = Math.max(0, Math.min(2, qResult.score || 0));
-    const badgeClass = qScore >= 2 ? 'full' : (qScore === 0 ? 'zero' : '');
-    
-    reviewContainer.innerHTML += `
-      <div class="review-item">
-        <div class="review-q">
-          <span>سوال ${index + 1}: ${item.q}</span>
-          <span class="q-score-badge ${badgeClass}">${toPersianNumber(qScore)} از ۲</span>
-        </div>
-        ${answerHTML}
-        <div class="ai-feedback">💬 <strong>بازخورد معلم:</strong> ${escapeHtml(qResult.feedback || "")}</div>
-      </div>
-    `;
-  });
-}
-
-function copyAnswers() {
-  const score = aiResult ? aiResult.total_score : 0;
-  const message = aiResult ? aiResult.overall_message : "";
-  const textToCopy = `📋 کارنامه آزمون تشریحی درس ۱۰ (ایران، خانه ما)\n` +
-    `👤 دانش‌آموز: ${studentName}\n` +
-    `📚 پایه: هفتم | مطالعات اجتماعی\n` +
-    `📊 نمره: ${toPersianNumber(score)} از ۲۰\n` +
-    `💬 ${message}\n\n` +
-    `─────────────────────\n\n` +
-    document.getElementById('copyable-answers').innerText;
-  
-  navigator.clipboard.writeText(textToCopy).then(() => {
-    alert("✅ کارنامه با موفقیت کپی شد.");
-  }).catch(() => {
-    alert("❌ خطا در کپی. لطفاً متن را به صورت دستی انتخاب و کپی کنید.");
-  });
 }
 </script>
 </body>
