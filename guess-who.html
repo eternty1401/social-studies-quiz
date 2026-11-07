@@ -86,19 +86,18 @@
   </div>
 
   <script>
-    const GROQ_API_KEY = "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";
     let secretCharacter = "";
     let chatHistory = [];
     
     // لیست شخصیت‌ها برای انتخاب مخفیانه
-    // لیست شخصیت‌ها برای انتخاب مخفیانه
-const characters = [
-  "کوروش کبیر", "داریوش بزرگ", "شاپور اول", "بهرام گور", "آریوبرزن", 
-  "یعقوب لیث صفاری", "شاه اسماعیل صفوی", "نادرشاه افشار", "کریم خان زند", 
-  "آقا محمد خان قاجار", "امیرکبیر", "ستارخان", "رضاشاه پهلوی", "محمدرضاشاه پهلوی",
-  "ابن سینا", "عمر خیام", "فردوسی", "حافظ", "مولانا", "سعدی", "نظامی گنجوی", "پروین اعتصامی",
-  "آتوسا", "آرتمیس", "پوراندخت", "ماندانا", "همای چهرآزاد", "ملکه سورا", "رودابه", "بانو گُشسپ"
-];
+    const characters = [
+      "کوروش کبیر", "داریوش بزرگ", "شاپور اول", "بهرام گور", "آریوبرزن", 
+      "یعقوب لیث صفاری", "شاه اسماعیل صفوی", "نادرشاه افشار", "کریم خان زند", 
+      "آقا محمد خان قاجار", "امیرکبیر", "ستارخان", "رضاشاه پهلوی", "محمدرضاشاه پهلوی",
+      "ابن سینا", "عمر خیام", "فردوسی", "حافظ", "مولانا", "سعدی", "نظامی گنجوی", "پروین اعتصامی",
+      "آتوسا", "آرتمیس", "پوراندخت", "ماندانا", "همای چهرآزاد", "ملکه سورا", "رودابه", "بانو گُشسپ"
+    ];
+
     function startGame() {
       // انتخاب یک شخصیت تصادفی
       secretCharacter = characters[Math.floor(Math.random() * characters.length)];
@@ -154,13 +153,13 @@ const characters = [
         به هیچ وجه اسم خودتان را نگویید و توضیح اضافه ندهید.
         سوال کاربر: ${question}`;
 
-        const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+        // 👈 آدرس ورکر کلادفلر، حذف هدر Authorization و حذف فیلد model
+        const response = await fetch("https://ai.motadars.ir", {
           method: "POST",
-          headers: { "Authorization": `Bearer ${GROQ_API_KEY}` },
-          body: new Blob([JSON.stringify({
-            model: "openai/gpt-oss-120b",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
             messages: [{ role: "user", content: prompt }]
-          })], { type: 'application/json' })
+          })
         });
 
         const data = await response.json();
@@ -178,7 +177,7 @@ const characters = [
 
       } catch (error) {
         document.getElementById(loadingId).remove();
-        addMessage("❌ خطا در ارتباط. لطفاً فیلترشکن خود را روشن کنید.", "a");
+        addMessage("❌ خطا در ارتباط با سرور.", "a");
       }
     }
 
