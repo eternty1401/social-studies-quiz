@@ -197,7 +197,7 @@
             }
         }
 
-        // 👇 تابع ثبت حاضری (اصلاح شده با تطبیق هوشمند اسم مدرسه)
+        // 👇 تابع ثبت حاضری (با تطبیق هوشمند اسم مدرسه و نمایش ساعت)
         async function checkIn() {
             let studentGrade = "نامشخص";
             let actualSchoolName = schoolName; 
@@ -259,8 +259,12 @@
                     })
                 });
                 const data = await res.json();
+                
                 if (data.status === 'success') {
-                    alert("✅ حاضری شما برای امروز با موفقیت ثبت شد.");
+                    // 👇 نمایش ساعت در پیام موفقیت
+                    const now = new Date();
+                    const timeString = now.toLocaleTimeString('fa-IR', { hour: '2-digit', minute: '2-digit' });
+                    alert(`✅ حاضری شما در ساعت ${timeString} با موفقیت ثبت شد.`);
                 } else {
                     alert("❌ خطا: " + data.message);
                 }
