@@ -8,209 +8,326 @@
 <style>
     * { margin:0; padding:0; box-sizing:border-box; font-family:'Vazirmatn',sans-serif; }
     body { min-height: 100vh; background: #f1f5f9; padding: 20px; color: #333; display: flex; justify-content: center; align-items: flex-start; }
-    .container { max-width: 750px; width: 100%; background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); margin-top: 20px; }
-    .header { text-align: center; border-bottom: 2px dashed #cbd5e1; padding-bottom: 20px; margin-bottom: 25px; }
-    .header h1 { color: #1e3c72; font-size: 1.4rem; margin-bottom: 10px; }
-    .header p { color: #64748b; font-size: 0.9rem; }
-    .question-box { background: #f8fafc; border: 1px solid #e2e8f0; padding: 20px; border-radius: 12px; margin-bottom: 20px; }
-    .q-title { font-weight: 700; font-size: 1.05rem; margin-bottom: 15px; color: #334155; line-height: 1.8; }
+    
+    .container { max-width: 700px; width: 100%; background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); margin-top: 20px; }
+    
+    /* هدر تایمر و پیشرفت */
+    .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px dashed #cbd5e1; padding-bottom: 15px; margin-bottom: 25px; }
+    .timer-box { background: #e0f2fe; color: #0284c7; padding: 8px 15px; border-radius: 50px; font-weight: 900; font-size: 1.1rem; direction: ltr; display: flex; align-items: center; gap: 5px; }
+    .timer-box.danger { background: #fee2e2; color: #ef4444; animation: pulse 1s infinite; }
+    @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+    
+    .progress-container { width: 100%; height: 8px; background: #e2e8f0; border-radius: 10px; margin-bottom: 20px; overflow: hidden; }
+    .progress-bar { height: 100%; background: #3b82f6; width: 0%; transition: width 0.3s; }
+
+    .question-box { background: #f8fafc; border: 1px solid #e2e8f0; padding: 25px; border-radius: 15px; margin-bottom: 20px; min-height: 250px; display: flex; flex-direction: column; justify-content: center; }
+    .q-title { font-weight: 700; font-size: 1.15rem; margin-bottom: 20px; color: #334155; line-height: 1.8; }
     .q-type-badge { display: inline-block; padding: 3px 10px; border-radius: 5px; font-size: 0.75rem; font-weight: bold; margin-right: 10px; color: white; }
     .bg-testi { background: #3b82f6; }
     .bg-truefalse { background: #8b5cf6; }
     .bg-jakhali { background: #f59e0b; }
     .bg-essay { background: #ef4444; }
+    
     .option-label { display: block; padding: 12px 15px; background: white; border: 2px solid #e2e8f0; border-radius: 10px; margin-bottom: 10px; cursor: pointer; transition: 0.2s; font-weight: 500; }
     .option-label:hover { background: #f1f5f9; }
     .option-label input { margin-left: 10px; transform: scale(1.2); }
-    .fill-blank-input { width: 100%; padding: 12px; border: 2px solid #cbd5e1; border-radius: 8px; font-family: inherit; font-size: 1rem; outline: none; transition: 0.3s; }
-    .essay-textarea { width: 100%; min-height: 100px; padding: 15px; border: 2px solid #cbd5e1; border-radius: 8px; font-family: inherit; font-size: 1rem; resize: vertical; outline: none; }
-    .submit-btn { width: 100%; padding: 15px; background: #10b981; color: white; border: none; border-radius: 12px; font-size: 1.1rem; font-weight: 900; cursor: pointer; transition: 0.3s; margin-top: 20px; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3); }
-    .submit-btn:hover { background: #059669; }
-    .submit-btn:disabled { background: #94a3b8; cursor: not-allowed; }
-    .loading { text-align: center; padding: 50px; font-weight: bold; color: #1e3c72; font-size: 1.2rem; }
+    
+    .fill-blank-input { width: 100%; padding: 15px; border: 2px solid #cbd5e1; border-radius: 8px; font-family: inherit; font-size: 1rem; outline: none; }
+    .essay-textarea { width: 100%; min-height: 150px; padding: 15px; border: 2px solid #cbd5e1; border-radius: 8px; font-family: inherit; font-size: 1rem; resize: vertical; outline: none; line-height: 1.8; }
+
+    /* دکمه‌های ناوبری */
+    .nav-btns { display: flex; gap: 10px; margin-top: 20px; }
+    .nav-btn { flex: 1; padding: 15px; border: none; border-radius: 12px; font-size: 1rem; font-weight: 900; cursor: pointer; transition: 0.3s; font-family: inherit; }
+    .btn-prev { background: #cbd5e1; color: #475569; }
+    .btn-next { background: #3b82f6; color: white; }
+    .btn-submit { background: #10b981; color: white; }
+    .btn-next:hover { background: #2563eb; }
+    .btn-submit:hover { background: #059669; }
+    .nav-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    /* صفحه شروع و مودال */
+    .start-box { text-align: center; padding: 40px 20px; }
+    .start-box h2 { color: #1e3c72; margin-bottom: 20px; }
+    .start-box input, .start-box select { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 8px; font-family: inherit; font-size: 1rem; outline: none; }
+    .start-btn { background: #10b981; color: white; border: none; padding: 15px 40px; border-radius: 50px; font-size: 1.1rem; font-weight: 900; cursor: pointer; font-family: inherit; }
+    
+    .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); display: none; justify-content: center; align-items: center; z-index: 1000; padding: 20px; }
+    .modal-content { background: white; padding: 40px 30px; border-radius: 20px; text-align: center; max-width: 400px; width: 100%; }
 </style>
 </head>
 <body>
 
 <div class="container">
-    <div class="header">
-        <h1 id="exam-title">در حال بارگذاری آزمون...</h1>
-        <p id="exam-subtitle">لطفاً صبر کنید</p>
+    <!-- صفحه شروع (اگر دانش‌آموز لاگین نباشد) -->
+    <div id="start-section" class="start-box" style="display: none;">
+        <h2>ورود به آزمون</h2>
+        <p style="color:#64748b; margin-bottom:20px;">لطفاً مشخصات خود را وارد کنید تا نمره‌تان ثبت شود.</p>
+        <input type="text" id="temp-name" placeholder="نام و نام خانوادگی">
+        <select id="temp-school">
+            <option value="مدرسه حسن بن علی نوشهر کلنگی">مدرسه حسن بن علی نوشهر کلنگی</option>
+            <option value="مدرسه حضرت مهدی سرزه">مدرسه حضرت مهدی سرزه</option>
+        </select>
+        <button class="start-btn" onclick="startExamFlow()">شروع آزمون</button>
     </div>
-    <div id="loading" class="loading">در حال دریافت بانک سوالات... ⏳</div>
-    <form id="exam-form" style="display: none;">
-        <div id="questions-container"></div>
-        <button type="submit" class="submit-btn" id="submit-btn">ثبت نهایی آزمون</button>
-    </form>
+
+    <!-- بخش آزمون -->
+    <div id="exam-section" style="display: none;">
+        <div class="header">
+            <h2 id="exam-title" style="color: #1e3c72; font-size: 1.1rem;">در حال بارگذاری...</h2>
+            <div class="timer-box" id="timer-box">⏱ 45:00</div>
+        </div>
+        
+        <div class="progress-container"><div class="progress-bar" id="progress-bar"></div></div>
+        
+        <div class="question-box" id="question-box">
+            <!-- سوال فعلی اینجا رندر می‌شود -->
+        </div>
+
+        <div class="nav-btns">
+            <button class="nav-btn btn-prev" id="btn-prev" onclick="prevQuestion()">سوال قبلی</button>
+            <button class="nav-btn btn-next" id="btn-next" onclick="nextQuestion()">سوال بعدی</button>
+            <button class="nav-btn btn-submit" id="btn-submit" onclick="submitExam(false)" style="display: none;">ثبت نهایی</button>
+        </div>
+    </div>
+
+    <div id="loading" style="text-align:center; padding: 50px; font-weight:bold; color:#1e3c72; display: none;">در حال دریافت اطلاعات...</div>
+</div>
+
+<!-- مودال هشدار تقلب -->
+<div class="modal-overlay" id="cheat-warning">
+    <div class="modal-content">
+        <h2 style="color: #ef4444; margin-bottom: 15px;">⚠️ هشدار تقلب!</h2>
+        <p style="color: #475569; margin-bottom: 20px;">شما از صفحه آزمون خارج شدید. در صورت تکرار، آزمون شما به عنوان تقلب ثبت خواهد شد.</p>
+        <button class="start-btn" style="background: #ef4444;" onclick="document.getElementById('cheat-warning').style.display='none'">متوجه شدم</button>
+    </div>
 </div>
 
 <script src="telegram.js"></script>
 
 <script>
     let currentQuestions = [];
+    let studentAnswers = {}; 
+    let currentQIndex = 0;
+    let timerInterval;
+    let timeLeft = 45 * 60; // ۴۵ دقیقه
+    let cheatCount = 0;
     let studentName = localStorage.getItem('student_name');
     let schoolName = localStorage.getItem('school_name');
-    let fromLesson = 1;
-    let toLesson = 24;
+    let fromLesson = 5;
+    let toLesson = 8;
 
     window.onload = () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const grade = urlParams.get('grade') || '7';
+        fromLesson = parseInt(urlParams.get('from')) || 5;
+        toLesson = parseInt(urlParams.get('to')) || 8;
+
+        // بررسی وضعیت لاگین
         if (!studentName || !schoolName) {
-            alert("ابتدا وارد سایت شوید.");
-            window.location.href = 'login.html';
-            return;
+            document.getElementById('start-section').style.display = 'block';
+        } else {
+            document.getElementById('loading').style.display = 'block';
+            loadQuestions(grade);
         }
 
-        const urlParams = new URLSearchParams(window.location.search);
-        
-        // خواندن پایه (پیش‌فرض هفتم)
-        const grade = urlParams.get('grade') || '7'; 
-        fromLesson = parseInt(urlParams.get('from')) || 1;
-        toLesson = parseInt(urlParams.get('to')) || 24;
-        const requestedType = urlParams.get('type');
+        // 👇 سیستم ضد تقلب (تشخیص خروج از صفحه)
+        document.addEventListener("visibilitychange", function() {
+            if (document.hidden && document.getElementById('exam-section').style.display === 'block') {
+                cheatCount++;
+                if (cheatCount >= 2) {
+                    alert("شما بیش از حد از صفحه خارج شدید. آزمون به عنوان تقلب ثبت می‌شود.");
+                    submitExam(true); // ثبت به عنوان تقلب
+                } else {
+                    document.getElementById('cheat-warning').style.display = 'flex';
+                }
+            }
+        });
+    };
 
-        // 👇 بارگذاری پویای فایل سوالات بر اساس پایه
+    function startExamFlow() {
+        const nameInput = document.getElementById('temp-name').value.trim();
+        const schoolInput = document.getElementById('temp-school').value;
+        if (!nameInput) return alert('لطفاً نام خود را وارد کنید.');
+        
+        studentName = nameInput;
+        schoolName = schoolInput;
+        
+        document.getElementById('start-section').style.display = 'none';
+        document.getElementById('loading').style.display = 'block';
+        
+        const urlParams = new URLSearchParams(window.location.search);
+        loadQuestions(urlParams.get('grade') || '7');
+    }
+
+    function loadQuestions(grade) {
         const script = document.createElement('script');
         script.src = `questions-grade${grade}.js`;
-        
         script.onload = () => {
-            // وقتی فایل لود شد، متغیر مربوطه را پیدا می‌کنیم
             let bank = [];
             if (grade === '7') bank = grade7Questions;
             else if (grade === '8') bank = grade8Questions;
             else if (grade === '9') bank = grade9Questions;
-            else {
-                document.getElementById('loading').innerText = "پایه تحصیلی نامعتبر است.";
-                return;
-            }
 
-            // فیلتر سوالات
             let filtered = bank.filter(q => q.lesson >= fromLesson && q.lesson <= toLesson);
-            if (requestedType && requestedType !== 'all') {
-                filtered = filtered.filter(q => q.type === requestedType);
-            }
-
-            if (filtered.length === 0) {
+            // انتخاب حداکثر ۱۵ سوال برای آزمون
+            currentQuestions = filtered.sort(() => Math.random() - 0.5).slice(0, 15);
+            
+            if (currentQuestions.length === 0) {
                 document.getElementById('loading').innerText = "سوالی برای این بازه یافت نشد.";
                 return;
             }
 
-            // درهم ریختن و انتخاب حداکثر ۲۰ سوال
-            filtered = filtered.sort(() => Math.random() - 0.5).slice(0, 20);
-            currentQuestions = filtered;
-
-            document.getElementById('exam-title').innerText = `آزمون پایه ${grade} (دروس ${fromLesson} تا ${toLesson})`;
-            document.getElementById('exam-subtitle').innerText = `تعداد سوالات: ${currentQuestions.length} | دانش‌آموز: ${studentName}`;
-
-            renderQuestions();
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('exam-section').style.display = 'block';
+            document.getElementById('exam-title').innerText = `آزمون دروس ${fromLesson} تا ${toLesson}`;
+            
+            startTimer();
+            renderQuestion();
         };
-
         script.onerror = () => {
-            document.getElementById('loading').innerText = `خطا: فایل سوالات پایه ${grade} پیدا نشد.`;
+            document.getElementById('loading').innerText = "فایل سوالات پیدا نشد.";
         };
-
         document.head.appendChild(script);
-    };
-
-    function renderQuestions() {
-        document.getElementById('loading').style.display = 'none';
-        document.getElementById('exam-form').style.display = 'block';
-        const container = document.getElementById('questions-container');
-        container.innerHTML = '';
-
-        currentQuestions.forEach((q, index) => {
-            let qBox = document.createElement('div');
-            qBox.className = 'question-box';
-
-            let typeBadge = '';
-            if(q.type === 'testi') typeBadge = '<span class="q-type-badge bg-testi">تستی</span>';
-            if(q.type === 'truefalse') typeBadge = '<span class="q-type-badge bg-truefalse">درست/غلط</span>';
-            if(q.type === 'jakhali') typeBadge = '<span class="q-type-badge bg-jakhali">جاخالی</span>';
-            if(q.type === 'essay') typeBadge = '<span class="q-type-badge bg-essay">تشریحی</span>';
-
-            let contentHtml = `<div class="q-title">${typeBadge} ${index + 1}. ${q.q}</div>`;
-
-            if (q.type === 'testi' || q.type === 'truefalse') {
-                q.options.forEach((opt, i) => {
-                    contentHtml += `<label class="option-label"><input type="radio" name="q${index}" value="${i}" required> ${opt}</label>`;
-                });
-            } else if (q.type === 'jakhali') {
-                contentHtml += `<input type="text" class="fill-blank-input" name="q${index}" placeholder="پاسخ خود را بنویسید..." required>`;
-            } else if (q.type === 'essay') {
-                contentHtml += `<textarea class="essay-textarea" name="q${index}" placeholder="پاسخ خود را کامل بنویسید..." required></textarea>`;
-            }
-
-            qBox.innerHTML = contentHtml;
-            container.appendChild(qBox);
-        });
     }
 
-    document.getElementById('exam-form').addEventListener('submit', function(e) {
-        e.preventDefault();
-        const btn = document.getElementById('submit-btn');
-        btn.disabled = true;
-        btn.innerText = 'در حال پردازش... ⏳';
-
-        let objectiveQuestions = [];
-        let subjectiveQuestions = [];
-
-        currentQuestions.forEach((q, index) => {
-            if (q.type === 'essay') {
-                subjectiveQuestions.push({ q: q.q, a: document.querySelector(`textarea[name="q${index}"]`).value.trim() });
-            } else if (q.type === 'jakhali') {
-                objectiveQuestions.push({ q: q.q, studentAnswer: document.querySelector(`input[name="q${index}"]`).value.trim(), correctAnswer: q.answer });
-            } else {
-                const selected = document.querySelector(`input[name="q${index}"]:checked`);
-                objectiveQuestions.push({ q: q.q, studentAnswer: selected ? parseInt(selected.value) : -1, correctAnswer: q.answer });
+    function startTimer() {
+        const timerBox = document.getElementById('timer-box');
+        timerInterval = setInterval(() => {
+            timeLeft--;
+            const m = Math.floor(timeLeft / 60);
+            const s = timeLeft % 60;
+            timerBox.innerText = `⏱ ${m < 10 ? '0'+m : m}:${s < 10 ? '0'+s : s}`;
+            if (timeLeft <= 300) timerBox.classList.add('danger'); // ۵ دقیقه آخر
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                alert("زمان آزمون به پایان رسید.");
+                submitExam(false);
             }
-        });
+        }, 1000);
+    }
 
-        let correctCount = 0;
-        objectiveQuestions.forEach(oq => {
-            if (oq.studentAnswer === oq.correctAnswer) correctCount++;
-            else if (Array.isArray(oq.correctAnswer) && typeof oq.studentAnswer === 'string') {
-                if (oq.correctAnswer.every(ans => oq.studentAnswer.includes(ans))) correctCount++;
-            }
-        });
+    function renderQuestion() {
+        const q = currentQuestions[currentQIndex];
+        const box = document.getElementById('question-box');
+        
+        // آپدیت نوار پیشرفت
+        const progress = ((currentQIndex) / currentQuestions.length) * 100;
+        document.getElementById('progress-bar').style.width = `${progress}%`;
 
-        let totalObjectiveScore = Math.round((correctCount / (objectiveQuestions.length || 1)) * 20);
-        let savePromises = [];
+        let typeBadge = '';
+        if(q.type === 'testi') typeBadge = '<span class="q-type-badge bg-testi">تستی</span>';
+        if(q.type === 'truefalse') typeBadge = '<span class="q-type-badge bg-truefalse">درست/غلط</span>';
+        if(q.type === 'jakhali') typeBadge = '<span class="q-type-badge bg-jakhali">جاخالی</span>';
+        if(q.type === 'essay') typeBadge = '<span class="q-type-badge bg-essay">تشریحی</span>';
 
-        if (objectiveQuestions.length > 0 && typeof submitScoreToTelegram === 'function') {
-            const originalTitle = document.title;
-            document.title = `آزمون تستی/جاخالی دروس ${fromLesson} تا ${toLesson}`;
-            savePromises.push(submitScoreToTelegram(totalObjectiveScore, correctCount, "testi"));
-            setTimeout(() => { document.title = originalTitle; }, 1000);
-        }
+        let contentHtml = `<div class="q-title">${typeBadge} سوال ${currentQIndex + 1} از ${currentQuestions.length}:<br><br> ${q.q}</div>`;
+        const savedAnswer = studentAnswers[currentQIndex];
 
-        if (subjectiveQuestions.length > 0) {
-            let answersData = subjectiveQuestions.map((sq, idx) => ({ question: `${idx + 1}. ${sq.q}`, answer: sq.a }));
-            savePromises.push(
-                fetch('https://api.motadars.ir/save_essay_submission.php', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({
-                        student_name: studentName,
-                        school_name: schoolName,
-                        exam_name: `آزمون تشریحی دروس ${fromLesson} تا ${toLesson}`,
-                        answers_data: answersData
-                    })
-                }).then(res => res.json())
-            );
-        }
-
-        Promise.all(savePromises)
-            .then(() => {
-                let resultMsg = "✅ آزمون شما با موفقیت ثبت شد.\n\n";
-                if (objectiveQuestions.length > 0) resultMsg += `📊 نمره تستی/جاخالی: ${totalObjectiveScore} از ۲۰\n(صحیح: ${correctCount} از ${objectiveQuestions.length})\n\n`;
-                if (subjectiveQuestions.length > 0) resultMsg += `📝 ${subjectiveQuestions.length} سوال تشریحی برای دبیر ارسال شد.`;
-                alert(resultMsg);
-                window.location.href = 'index.html';
-            })
-            .catch(err => {
-                alert('خطا در ثبت اطلاعات.');
-                btn.disabled = false;
+        if (q.type === 'testi' || q.type === 'truefalse') {
+            q.options.forEach((opt, i) => {
+                const checked = (savedAnswer === i) ? 'checked' : '';
+                contentHtml += `<label class="option-label"><input type="radio" name="q_option" value="${i}" ${checked} onchange="saveAnswer(${i})"> ${opt}</label>`;
             });
-    });
+        } else if (q.type === 'jakhali') {
+            contentHtml += `<input type="text" class="fill-blank-input" id="q_input" value="${savedAnswer || ''}" placeholder="پاسخ خود را بنویسید..." oninput="saveAnswer(this.value)">`;
+        } else if (q.type === 'essay') {
+            contentHtml += `<textarea class="essay-textarea" id="q_input" placeholder="پاسخ خود را کامل بنویسید..." oninput="saveAnswer(this.value)">${savedAnswer || ''}</textarea>`;
+        }
+
+        box.innerHTML = contentHtml;
+
+        // تنظیم دکمه‌ها
+        document.getElementById('btn-prev').disabled = (currentQIndex === 0);
+        
+        if (currentQIndex === currentQuestions.length - 1) {
+            document.getElementById('btn-next').style.display = 'none';
+            document.getElementById('btn-submit').style.display = 'block';
+        } else {
+            document.getElementById('btn-next').style.display = 'block';
+            document.getElementById('btn-submit').style.display = 'none';
+        }
+    }
+
+    function saveAnswer(value) {
+        studentAnswers[currentQIndex] = value;
+    }
+
+    function nextQuestion() {
+        if (currentQIndex < currentQuestions.length - 1) {
+            currentQIndex++;
+            renderQuestion();
+        }
+    }
+
+    function prevQuestion() {
+        if (currentQIndex > 0) {
+            currentQIndex--;
+            renderQuestion();
+        }
+    }
+
+    function submitExam(isCheating) {
+        if (!isCheating && !confirm("آیا از ثبت نهایی آزمون مطمئن هستید؟")) return;
+        
+        clearInterval(timerInterval);
+        const btn = document.getElementById('btn-submit');
+        btn.disabled = true;
+        btn.innerText = 'در حال ارسال... ⏳';
+
+        // آماده‌سازی پاسخ‌ها برای ارسال
+        let answersData = currentQuestions.map((q, index) => {
+            let ans = studentAnswers[index] !== undefined ? studentAnswers[index] : "";
+            // اگر تستی بود، متن گزینه رو پیدا کن
+            if ((q.type === 'testi' || q.type === 'truefalse') && ans !== "") {
+                ans = q.options[ans]; 
+            }
+            
+            return {
+                question: `${index + 1}. ${q.q}`,
+                answer: ans || "[بدون پاسخ]",
+                correct: q.type === 'essay' || q.type === 'jakhali' ? "تصحیح دستی" : q.options[q.answer] // برای اینکه معلم راحت‌تر تصحیح کنه
+            };
+        });
+
+        // اگر تقلب کرده بود، علامت‌گذاری می‌کنیم
+        if (isCheating) {
+            answersData.push({ question: "⚠️ هشدار سیستم", answer: "دانش‌آموز از صفحه خارج شده است (احتمال تقلب)", correct: "-" });
+        }
+
+        fetch('https://api.motadars.ir/save_essay_submission.php', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                student_name: studentName,
+                school_name: schoolName,
+                exam_name: `آزمون جامع دروس ${fromLesson} تا ${toLesson}`,
+                answers_data: answersData
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if(data.status === 'success') {
+                document.body.innerHTML = `
+                    <div style="display:flex; justify-content:center; align-items:center; height:100vh; text-align:center; background:#f1f5f9;">
+                        <div style="background:white; padding:40px; border-radius:20px; box-shadow:0 10px 30px rgba(0,0,0,0.1);">
+                            <h2 style="color:#10b981; margin-bottom:15px;">✅ برگه شما با موفقیت ثبت شد</h2>
+                            <p style="color:#475569; margin-bottom:20px;">پاسخ‌های شما برای تصحیح به دبیر ارسال شد.</p>
+                            <a href="index.html" style="background:#1e3c72; color:white; padding:10px 20px; text-decoration:none; border-radius:8px;">بازگشت</a>
+                        </div>
+                    </div>
+                `;
+            } else {
+                alert('خطا: ' + data.message);
+                btn.disabled = false;
+                btn.innerText = 'ثبت نهایی';
+            }
+        })
+        .catch(() => {
+            alert('خطا در ارتباط با سرور.');
+            btn.disabled = false;
+            btn.innerText = 'ثبت نهایی';
+        });
+    }
 </script>
 </body>
 </html>
