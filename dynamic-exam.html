@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>آزمون آنلاین | مطالعات اجتماعی</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+    * { margin:0; padding:0; box-sizing:border-box; font-family:'Vazirmatn',sans-serif; }
+    body { min-height: 100vh; background: #f1f5f9; padding: 20px; color: #333; display: flex; justify-content: center; align-items: flex-start; }
+    .container { max-width: 750px; width: 100%; background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); margin-top: 20px; }
+    .header { text-align: center; border-bottom: 2px dashed #cbd5e1; padding-bottom: 20px; margin-bottom: 25px; }
+    .header h1 { color: #1e3c72; font-size: 1.4rem; margin-bottom: 10px; }
+    .header p { color: #64748b; font-size: 0.9rem; }
+    .question-box { background: #f8fafc; border: 1px solid #e2e8f0; padding: 20px; border-radius: 12px; margin-bottom: 20px; }
+    .q-title { font-weight: 700; font-size: 1.05rem; margin-bottom: 15px; color: #334155; line-height: 1.8; }
+    .q-type-badge { display: inline-block; padding: 3px 10px; border-radius: 5px; font-size: 0.75rem; font-weight: bold; margin-right: 10px; color: white; }
+    .bg-testi { background: #3b82f6; }
+    .bg-truefalse { background: #8b5cf6; }
+    .bg-jakhali { background: #f59e0b; }
+    .bg-essay { background: #ef4444; }
+    .option-label { display: block; padding: 12px 15px; background: white; border: 2px solid #e2e8f0; border-radius: 10px; margin-bottom: 10px; cursor: pointer; transition: 0.2s; font-weight: 500; }
+    .option-label:hover { background: #f1f5f9; }
+    .option-label input { margin-left: 10px; transform: scale(1.2); }
+    .fill-blank-input { width: 100%; padding: 12px; border: 2px solid #cbd5e1; border-radius: 8px; font-family: inherit; font-size: 1rem; outline: none; transition: 0.3s; }
+    .essay-textarea { width: 100%; min-height: 100px; padding: 15px; border: 2px solid #cbd5e1; border-radius: 8px; font-family: inherit; font-size: 1rem; resize: vertical; outline: none; }
+    .submit-btn { width: 100%; padding: 15px; background: #10b981; color: white; border: none; border-radius: 12px; font-size: 1.1rem; font-weight: 900; cursor: pointer; transition: 0.3s; margin-top: 20px; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3); }
+    .submit-btn:hover { background: #059669; }
+    .submit-btn:disabled { background: #94a3b8; cursor: not-allowed; }
+    .loading { text-align: center; padding: 50px; font-weight: bold; color: #1e3c72; font-size: 1.2rem; }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1 id="exam-title">در حال بارگذاری آزمون...</h1>
+        <p id="exam-subtitle">لطفاً صبر کنید</p>
+    </div>
+    <div id="loading" class="loading">در حال دریافت بانک سوالات... ⏳</div>
+    <form id="exam-form" style="display: none;">
+        <div id="questions-container"></div>
+        <button type="submit" class="submit-btn" id="submit-btn">ثبت نهایی آزمون</button>
+    </form>
+</div>
+
+<script src="telegram.js"></script>
+
+<script>
+    let currentQuestions = [];
+    let studentName = localStorage.getItem('student_name');
+    let schoolName = localStorage.getItem('school_name');
+    let fromLesson = 1;
+    let toLesson = 24;
+
+    window.onload = () => {
+        if (!studentName || !schoolName) {
+            alert("ابتدا وارد سایت شوید.");
+            window.location.href = 'login.html';
+            return;
+        }
+
+        const urlParams = new URLSearchParams(window.location.search);
+        
+        // خواندن پایه (پیش‌فرض هفتم)
+        const grade = urlParams.get('grade') || '7'; 
+        fromLesson = parseInt(urlParams.get('from')) || 1;
+        toLesson = parseInt(urlParams.get('to')) || 24;
+        const requestedType = urlParams.get('type');
+
+        // 👇 بارگذاری پویای فایل سوالات بر اساس پایه
+        const script = document.createElement('script');
+        script.src = `questions-grade${grade}.js`;
+        
+        script.onload = () => {
+            // وقتی فایل لود شد، متغیر مربوطه را پیدا می‌کنیم
+            let bank = [];
+            if (grade === '7') bank = grade7Questions;
+            else if (grade === '8') bank = grade8Questions;
+            else if (grade === '9') bank = grade9Questions;
+            else {
+                document.getElementById('loading').innerText = "پایه تحصیلی نامعتبر است.";
+                return;
+            }
+
+            // فیلتر سوالات
+            let filtered = bank.filter(q => q.lesson >= fromLesson && q.lesson <= toLesson);
+            if (requestedType && requestedType !== 'all') {
+                filtered = filtered.filter(q => q.type === requestedType);
+            }
+
+            if (filtered.length === 0) {
+                document.getElementById('loading').innerText = "سوالی برای این بازه یافت نشد.";
+                return;
+            }
+
+            // درهم ریختن و انتخاب حداکثر ۲۰ سوال
+            filtered = filtered.sort(() => Math.random() - 0.5).slice(0, 20);
+            currentQuestions = filtered;
+
+            document.getElementById('exam-title').innerText = `آزمون پایه ${grade} (دروس ${fromLesson} تا ${toLesson})`;
+            document.getElementById('exam-subtitle').innerText = `تعداد سوالات: ${currentQuestions.length} | دانش‌آموز: ${studentName}`;
+
+            renderQuestions();
+        };
+
+        script.onerror = () => {
+            document.getElementById('loading').innerText = `خطا: فایل سوالات پایه ${grade} پیدا نشد.`;
+        };
+
+        document.head.appendChild(script);
+    };
+
+    function renderQuestions() {
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('exam-form').style.display = 'block';
+        const container = document.getElementById('questions-container');
+        container.innerHTML = '';
+
+        currentQuestions.forEach((q, index) => {
+            let qBox = document.createElement('div');
+            qBox.className = 'question-box';
+
+            let typeBadge = '';
+            if(q.type === 'testi') typeBadge = '<span class="q-type-badge bg-testi">تستی</span>';
+            if(q.type === 'truefalse') typeBadge = '<span class="q-type-badge bg-truefalse">درست/غلط</span>';
+            if(q.type === 'jakhali') typeBadge = '<span class="q-type-badge bg-jakhali">جاخالی</span>';
+            if(q.type === 'essay') typeBadge = '<span class="q-type-badge bg-essay">تشریحی</span>';
+
+            let contentHtml = `<div class="q-title">${typeBadge} ${index + 1}. ${q.q}</div>`;
+
+            if (q.type === 'testi' || q.type === 'truefalse') {
+                q.options.forEach((opt, i) => {
+                    contentHtml += `<label class="option-label"><input type="radio" name="q${index}" value="${i}" required> ${opt}</label>`;
+                });
+            } else if (q.type === 'jakhali') {
+                contentHtml += `<input type="text" class="fill-blank-input" name="q${index}" placeholder="پاسخ خود را بنویسید..." required>`;
+            } else if (q.type === 'essay') {
+                contentHtml += `<textarea class="essay-textarea" name="q${index}" placeholder="پاسخ خود را کامل بنویسید..." required></textarea>`;
+            }
+
+            qBox.innerHTML = contentHtml;
+            container.appendChild(qBox);
+        });
+    }
+
+    document.getElementById('exam-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const btn = document.getElementById('submit-btn');
+        btn.disabled = true;
+        btn.innerText = 'در حال پردازش... ⏳';
+
+        let objectiveQuestions = [];
+        let subjectiveQuestions = [];
+
+        currentQuestions.forEach((q, index) => {
+            if (q.type === 'essay') {
+                subjectiveQuestions.push({ q: q.q, a: document.querySelector(`textarea[name="q${index}"]`).value.trim() });
+            } else if (q.type === 'jakhali') {
+                objectiveQuestions.push({ q: q.q, studentAnswer: document.querySelector(`input[name="q${index}"]`).value.trim(), correctAnswer: q.answer });
+            } else {
+                const selected = document.querySelector(`input[name="q${index}"]:checked`);
+                objectiveQuestions.push({ q: q.q, studentAnswer: selected ? parseInt(selected.value) : -1, correctAnswer: q.answer });
+            }
+        });
+
+        let correctCount = 0;
+        objectiveQuestions.forEach(oq => {
+            if (oq.studentAnswer === oq.correctAnswer) correctCount++;
+            else if (Array.isArray(oq.correctAnswer) && typeof oq.studentAnswer === 'string') {
+                if (oq.correctAnswer.every(ans => oq.studentAnswer.includes(ans))) correctCount++;
+            }
+        });
+
+        let totalObjectiveScore = Math.round((correctCount / (objectiveQuestions.length || 1)) * 20);
+        let savePromises = [];
+
+        if (objectiveQuestions.length > 0 && typeof submitScoreToTelegram === 'function') {
+            const originalTitle = document.title;
+            document.title = `آزمون تستی/جاخالی دروس ${fromLesson} تا ${toLesson}`;
+            savePromises.push(submitScoreToTelegram(totalObjectiveScore, correctCount, "testi"));
+            setTimeout(() => { document.title = originalTitle; }, 1000);
+        }
+
+        if (subjectiveQuestions.length > 0) {
+            let answersData = subjectiveQuestions.map((sq, idx) => ({ question: `${idx + 1}. ${sq.q}`, answer: sq.a }));
+            savePromises.push(
+                fetch('https://api.motadars.ir/save_essay_submission.php', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        student_name: studentName,
+                        school_name: schoolName,
+                        exam_name: `آزمون تشریحی دروس ${fromLesson} تا ${toLesson}`,
+                        answers_data: answersData
+                    })
+                }).then(res => res.json())
+            );
+        }
+
+        Promise.all(savePromises)
+            .then(() => {
+                let resultMsg = "✅ آزمون شما با موفقیت ثبت شد.\n\n";
+                if (objectiveQuestions.length > 0) resultMsg += `📊 نمره تستی/جاخالی: ${totalObjectiveScore} از ۲۰\n(صحیح: ${correctCount} از ${objectiveQuestions.length})\n\n`;
+                if (subjectiveQuestions.length > 0) resultMsg += `📝 ${subjectiveQuestions.length} سوال تشریحی برای دبیر ارسال شد.`;
+                alert(resultMsg);
+                window.location.href = 'index.html';
+            })
+            .catch(err => {
+                alert('خطا در ثبت اطلاعات.');
+                btn.disabled = false;
+            });
+    });
+</script>
+</body>
+</html>
