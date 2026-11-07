@@ -49,6 +49,7 @@
                     // ذخیره اطلاعات در حافظه مرورگر
                     localStorage.setItem('student_name', data.user.full_name);
                     localStorage.setItem('school_name', data.user.school_name);
+                    localStorage.setItem('student_username', data.user.username); // 👈 این خط برای تغییر رمز اضافه شد
                     
                     msg.style.color = 'green'; msg.innerText = '✅ ورود موفق! در حال انتقال...';
                     setTimeout(() => window.location.href = 'index.html', 1500);
