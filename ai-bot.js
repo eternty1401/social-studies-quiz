@@ -184,10 +184,10 @@ async function sendChatMessage() {
       ]
     };
 
-    // 👈 آدرس تغییر کرد به فایل واسط (Proxy) در هاست
-    const response = await fetch("https://api.motadars.ir/groq_proxy.php", {
+    // 👈 آدرس تغییر کرد به ورکر کلادفلر
+    const response = await fetch("https://motadars-ai.nematian773.workers.dev", {
       method: "POST",
-      headers: { "Content-Type": "application/json" }, // 👈 هدر Authorization حذف شد
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload)
     });
 
@@ -229,10 +229,10 @@ async function summarizeText() {
       ]
     };
 
-    // 👈 آدرس تغییر کرد به فایل واسط (Proxy) در هاست
-    const response = await fetch("https://api.motadars.ir/groq_proxy.php", {
+    // 👈 آدرس تغییر کرد به ورکر کلادفلر
+    const response = await fetch("https://motadars-ai.nematian773.workers.dev", {
       method: "POST",
-      headers: { "Content-Type": "application/json" }, // 👈 هدر Authorization حذف شد
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload)
     });
 
