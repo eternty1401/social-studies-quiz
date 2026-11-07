@@ -12,7 +12,15 @@
         .container { max-width: 800px; margin: 0 auto; }
         
         /* کارت پروفایل */
-        .profile-card { background: rgba(255,255,255,0.95); border-radius: 20px; padding: 30px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.2); margin-bottom: 20px; position: relative; }
+        .profile-card { 
+            background: rgba(255,255,255,0.95); 
+            border-radius: 20px; 
+            padding: 80px 20px 30px 20px; /* 👈 تغییر: پدینگ بالا زیاد شد تا دکمه‌ها روی اسم نیفتند */
+            text-align: center; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2); 
+            margin-bottom: 20px; 
+            position: relative; 
+        }
         .profile-card h2 { font-size: 1.6rem; color: #764ba2; margin-bottom: 10px; }
         .profile-card p { color: #666; margin-bottom: 15px; font-size: 1.1rem; }
         
@@ -21,8 +29,14 @@
         .stat-box h3 { font-size: 1.8rem; color: #28a745; }
         .stat-box span { font-size: 0.9rem; color: #666; }
         
-        .header-buttons { position: absolute; top: 20px; left: 20px; display: flex; gap: 10px; }
-        .btn-action { padding: 8px 15px; border-radius: 8px; text-decoration: none; font-size: 14px; border: none; cursor: pointer; font-family: inherit; font-weight: bold; transition: 0.3s; color: white; }
+        .header-buttons { 
+            position: absolute; 
+            top: 20px; 
+            right: 20px; /* 👈 تغییر: دکمه‌ها به سمت راست (شروع در RTL) منتقل شدند */
+            display: flex; 
+            gap: 10px; 
+        }
+        .btn-action { padding: 8px 15px; border-radius: 8px; text-decoration: none; font-size: 14px; border: none; cursor: pointer; font-family: inherit; font-weight: bold; transition: 0.3s; color: white; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
         .btn-logout { background: #dc3545; }
         .btn-logout:hover { background: #c82333; }
         .btn-password { background: #f59e0b; }
@@ -52,6 +66,12 @@
         .modal-actions { display: flex; gap: 10px; margin-top: 20px; }
         .btn-save { flex: 1; background: #10b981; color: white; border: none; padding: 12px; border-radius: 8px; font-family: inherit; font-size: 1rem; font-weight: bold; cursor: pointer; }
         .btn-cancel { flex: 1; background: #e2e8f0; color: #475569; border: none; padding: 12px; border-radius: 8px; font-family: inherit; font-size: 1rem; font-weight: bold; cursor: pointer; }
+
+        /* ریسپانسیو برای موبایل */
+        @media(max-width: 600px) {
+            .header-buttons { width: 100%; right: 0; padding: 0 20px; justify-content: space-between; }
+            .profile-card { padding-top: 70px; }
+        }
     </style>
 </head>
 <body>
@@ -233,7 +253,7 @@
         function logout() {
             localStorage.removeItem('student_name');
             localStorage.removeItem('school_name');
-            localStorage.removeItem('student_username'); // پاک کردن نام کاربری
+            localStorage.removeItem('student_username');
             window.location.href = 'index.html';
         }
     </script>
