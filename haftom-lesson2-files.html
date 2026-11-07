@@ -3,194 +3,135 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>فایل‌های قابل دانلود - درس ۲ (پایه هفتم)</title>
+    <title>آزمون تشریحی درس ۲: من مسئول هستم</title>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
-        /* تنظیمات کلی صفحه و فونت */
-        body {
-            font-family: 'Vazirmatn', Tahoma, Arial, sans-serif;
-            background-color: #f7f9f9;
-            background-image: radial-gradient(#d1d5db 1px, transparent 1px);
-            background-size: 20px 20px;
-            margin: 0;
-            padding: 20px;
-            color: #333;
-        }
-
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        /* بخش گالری عکس‌ها */
-        .image-gallery {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-            margin-bottom: 30px;
-            background-color: #eaf4f4;
-            padding: 15px;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-        }
-
-        .image-gallery img {
-            width: 30%;
-            max-width: 150px;
-            height: 100px;
-            object-fit: cover;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-
-        /* استایل عنوان فایل‌ها */
-        .section-title {
-            display: flex;
-            align-items: center;
-            color: #1e7a8a;
-            font-size: 1.2rem;
-            font-weight: bold;
-            margin-bottom: 20px;
-        }
+        * { box-sizing: border-box; }
+        body { font-family: 'Vazirmatn', Tahoma, sans-serif; background: #f4f7f6; padding: 20px; direction: rtl; color: #333; }
+        .container { max-width: 650px; margin: 0 auto; background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        h2 { color: #1e3c72; text-align: center; margin-bottom: 25px; font-weight: 900; }
         
-        .section-title::before {
-            content: '';
-            display: inline-block;
-            width: 4px;
-            height: 24px;
-            background-color: #39a7b6;
-            margin-left: 10px;
-            border-radius: 2px;
-        }
-
-        /* استایل کارت‌های دانلود */
-        .download-card {
-            background-color: #ffffff;
-            border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.04);
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-        }
-
-        .card-info h3 {
-            margin: 0 0 10px 0;
-            font-size: 1.1rem;
-            color: #222;
-        }
-
-        .card-meta {
-            display: flex;
-            gap: 15px;
-            font-size: 0.85rem;
-            color: #666;
-            align-items: center;
-        }
-
-        /* آیکون‌های انتهای کارت */
-        .icon-box {
-            width: 60px;
-            height: 60px;
-            border-radius: 12px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 30px;
-        }
-        .icon-pink { background-color: #fce4e8; }
-        .icon-blue { background-color: #e0f0fc; }
-
-        /* دکمه‌ها */
-        .btn {
-            display: block;
-            width: 100%;
-            padding: 12px;
-            text-align: center;
-            border-radius: 25px;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 1rem;
-            border: none;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .btn-primary {
-            background-color: #258e9d;
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background-color: #1a6c78;
-        }
-
-        .btn-secondary {
-            background-color: #f0f2f5;
-            color: #888;
-            cursor: not-allowed;
-        }
+        .question-box { background: #e0f2fe; padding: 20px; border-radius: 15px; margin-bottom: 25px; border-right: 6px solid #0284c7; }
+        .question-box p { margin: 0; font-weight: 700; color: #0f172a; line-height: 1.8; font-size: 1.1rem; }
+        
+        textarea { width: 100%; height: 180px; padding: 15px; border: 2px solid #cbd5e1; border-radius: 12px; font-family: inherit; font-size: 1rem; resize: vertical; outline: none; transition: 0.3s; }
+        textarea:focus { border-color: #0284c7; }
+        
+        .btn { width: 100%; padding: 15px; background: #0284c7; color: white; border: none; border-radius: 12px; font-size: 1.1rem; font-weight: bold; cursor: pointer; margin-top: 20px; transition: 0.3s; font-family: inherit; }
+        .btn:hover { background: #0369a1; }
+        .btn:disabled { background: #94a3b8; cursor: not-allowed; }
+        
+        .result-box { display: none; margin-top: 25px; padding: 25px; border-radius: 15px; background: #f0fdf4; border: 2px solid #22c55e; line-height: 1.9; color: #166534; }
+        .result-box h3 { color: #15803d; margin-top: 0; font-weight: 900; }
+        
+        .loading { display: none; text-align: center; color: #0284c7; font-weight: bold; margin-top: 20px; font-size: 1.1rem; }
+        
+        .score-highlight { font-size: 1.3rem; font-weight: 900; color: #15803d; background: #dcfce7; padding: 10px; border-radius: 10px; text-align: center; margin-bottom: 15px; display: none; }
     </style>
 </head>
 <body>
 
-<div class="container">
-
-    <!-- ۱. بخش سه عکس (گالری) -->
-    <div class="image-gallery">
-        <!-- اسم عکس‌های درس ۲ پایه هفتم رو اینجا بذار -->
-        <img src="image-d7-2-1.jpg" alt="عکس درس ۲" onerror="this.src='https://placehold.co/150x100/eaf4f4/666?text=عکس+۱'">
-        <img src="image-d7-2-2.jpg" alt="عکس درس ۲" onerror="this.src='https://placehold.co/150x100/eaf4f4/666?text=عکس+۲'">
-        <img src="image-d7-2-3.jpg" alt="عکس درس ۲" onerror="this.src='https://placehold.co/150x100/eaf4f4/666?text=عکس+۳'">
-    </div>
-
-    <!-- ۲. عنوان بخش -->
-    <div class="section-title">
-        فایل‌های قابل دانلود 📁
-    </div>
-
-    <!-- ۳. کارت اول: سوالات متن درس دوم -->
-    <div class="download-card">
-        <div class="card-header">
-            <div class="card-info">
-                <h3>سوالات متن درس دوم</h3>
-                <div class="card-meta">
-                    <span>📝 فرمت: PDF</span>
-                    <span>🔗 منبع: همیار</span>
-                </div>
-            </div>
-            <div class="icon-box icon-pink">
-                📄
-            </div>
+    <div class="container">
+        <h2>📝 آزمون تشریحی درس ۲</h2>
+        
+        <!-- سوال از قبل آماده است و آنی نمایش داده می‌شود -->
+        <div class="question-box">
+            <p id="questionText">بر اساس متن درس، ما در برابر چه کسانی مسئول هستیم؟ (سه مورد را نام ببرید و برای یکی توضیح دهید.)</p>
         </div>
-        <!-- لینک دانلود درس ۲ پایه هفتم -->
-        <a href="https://dl.hamyar.me/7/soal/mot/f2f/soalmatn-mot7-d2%28hamyar.in%29.pdf" target="_blank" class="btn btn-primary">📥 مشاهده و دانلود</a>
-    </div>
 
-    <!-- ۴. کارت دوم: تمرین درس ۲ (فقط یک تمرین) -->
-    <div class="download-card">
-        <div class="card-header">
-            <div class="card-info">
-                <h3>تمرین درس ۲</h3>
-                <div class="card-meta">
-                    <span>📝 فرمت: PDF</span>
-                    <span>📦 حجم: —</span>
-                </div>
-            </div>
-            <div class="icon-box icon-blue">
-                📝
-            </div>
+        <textarea id="studentAnswer" placeholder="پاسخ خود را بر اساس کتاب درسی اینجا بنویسید..."></textarea>
+        
+        <button class="btn" id="submitBtn" onclick="submitAnswer()">ارسال پاسخ برای تصحیح هوشمند</button>
+        
+        <div class="loading" id="loadingText">هوش مصنوعی در حال تصحیح پاسخ شماست... ⏳</div>
+
+        <div class="result-box" id="resultBox">
+            <div class="score-highlight" id="scoreDisplay"></div>
+            <h3>📊 نظر معلم هوشمند:</h3>
+            <div id="aiFeedback"></div>
         </div>
-        <button class="btn btn-secondary" disabled>به‌زودی</button>
     </div>
 
-</div>
+    <script src="telegram.js"></script> <!-- برای ذخیره نمره -->
 
+    <script>
+        async function submitAnswer() {
+            const answer = document.getElementById('studentAnswer').value.trim();
+            const question = document.getElementById('questionText').innerText;
+            
+            if (!answer) return alert('لطفاً پاسخ خود را بنویسید.');
+
+            document.getElementById('submitBtn').disabled = true;
+            document.getElementById('loadingText').style.display = 'block';
+            document.getElementById('resultBox').style.display = 'none';
+
+            // 👇 پرامپت بسیار سبک برای تصحیح سریع (بدون فرستادن کل متن کتاب)
+            const systemPrompt = `
+                شما یک معلم مطالعات اجتماعی پایه هفتم هستید.
+                سوال از دانش‌آموز این بوده: "${question}"
+                
+                نکات کلیدی که دانش‌آموز باید در پاسخ خود بیاورد (طبق کتاب):
+                ۱. مسئول بودن در برابر خداوند (شکرگزاری از نعمت‌ها).
+                ۲. مسئول بودن در برابر خود (مراقبت از بدن و استعدادها).
+                ۳. مسئول بودن در برابر دیگران (خانواده، معلم، همکلاسی، جامعه).
+                ۴. مسئول بودن در برابر محیط زیست و طبیعت.
+
+                پاسخ دانش‌آموز را با ارفاق تصحیح کن. اگر مفهوم کلی را رسانده باشد نمره کامل بده.
+                در ابتدا یک بازخورد تشویقی کوتاه (حداکثر ۲ خط) بنویس.
+                سپس در خط آخر دقیقاً به این شکل نمره را بنویس: [نمره: (عدد از ۲۰)]
+            `;
+
+            try {
+                const response = await fetch("https://ai.motadars.ir", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ 
+                        messages: [
+                            { role: "system", content: systemPrompt },
+                            { role: "user", content: "پاسخ دانش‌آموز: " + answer }
+                        ] 
+                    })
+                });
+                const data = await response.json();
+                
+                let aiText = data.choices[0].message.content;
+                
+                // استخراج نمره
+                const scoreMatch = aiText.match(/\[نمره:\s*([۰-۹0-9]+)\]/);
+                let finalScore = 0;
+                
+                if (scoreMatch) {
+                    // تبدیل اعداد فارسی به انگلیسی
+                    const persianNumbers = [/۰/g, /۱/g, /۲/g, /۳/g, /۴/g, /۵/g, /۶/g, /۷/g, /۸/g, /۹/g];
+                    let scoreStr = scoreMatch[1];
+                    for (let i = 0; i < 10; i++) {
+                        scoreStr = scoreStr.replace(persianNumbers[i], i);
+                    }
+                    finalScore = parseInt(scoreStr);
+                    aiText = aiText.replace(/\[نمره:.*?\]/g, ''); // حذف تگ از متن
+                }
+
+                // نمایش نتایج
+                document.getElementById('loadingText').style.display = 'none';
+                document.getElementById('resultBox').style.display = 'block';
+                document.getElementById('aiFeedback').innerText = aiText;
+                
+                if (scoreMatch) {
+                    document.getElementById('scoreDisplay').style.display = 'block';
+                    document.getElementById('scoreDisplay').innerText = `نمره شما: ${finalScore} از ۲۰`;
+                }
+
+                // ذخیره در دیتابیس
+                if (typeof submitScoreToTelegram === "function") {
+                    submitScoreToTelegram(finalScore, 0, "tashrihi");
+                }
+
+            } catch (error) {
+                document.getElementById('loadingText').style.display = 'none';
+                alert('خطا در ارتباط با سرور. لطفاً دوباره تلاش کنید.');
+                document.getElementById('submitBtn').disabled = false;
+            }
+        }
+    </script>
 </body>
 </html>
