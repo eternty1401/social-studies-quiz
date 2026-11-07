@@ -33,7 +33,6 @@
         
         .grade-section { margin-bottom: 20px; border: 1px solid #e2e8f0; border-radius: 10px; overflow: hidden; }
         
-        /* تغییرات هدر پایه برای جا دادن دکمه اکسل */
         .grade-header { background: #f8fafc; padding: 12px 15px; font-weight: bold; color: #3b82f6; cursor: pointer; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
         .grade-header:hover { background: #f1f5f9; }
         .grade-title-text { flex: 1; }
@@ -50,11 +49,40 @@
         .student-row { display: flex; flex-direction: column; padding: 15px 10px; border-bottom: 1px solid #f1f5f9; }
         .student-row:last-child { border-bottom: none; }
         
-        .student-info { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 10px; }
-        .student-name-display { font-weight: 700; color: #334155; font-size: 1.1rem; }
+        /* 👇 اصلاح استایل‌ها برای هم‌ترازی دکمه‌ها */
+        .student-info { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 10px; 
+            width: 100%; 
+        }
+        .student-name-display { 
+            font-weight: 700; 
+            color: #334155; 
+            font-size: 1.1rem; 
+            white-space: nowrap; /* جلوگیری از شکستن اسم به خط بعد */
+            overflow: hidden;
+            text-overflow: ellipsis; /* اگر اسم خیلی طولانی بود سه نقطه بذار */
+        }
         
-        .btn-manual-grade { background: #10b981; color: white; border: none; padding: 6px 12px; border-radius: 8px; font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; gap: 5px; font-family: inherit; transition: 0.3s; }
+        .btn-manual-grade { 
+            flex-shrink: 0; /* جلوگیری از کوچک شدن دکمه */
+            background: #10b981; 
+            color: white; 
+            border: none; 
+            padding: 6px 12px; 
+            border-radius: 8px; 
+            font-size: 0.85rem; 
+            cursor: pointer; 
+            display: flex; 
+            align-items: center; 
+            gap: 5px; 
+            font-family: inherit; 
+            transition: 0.3s; 
+        }
         .btn-manual-grade:hover { background: #059669; transform: scale(1.05); }
+        /* 👆 پایان اصلاح استایل‌ها */
         
         .grades-container { display: flex; flex-direction: column; gap: 10px; }
         .grade-item { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 10px 15px; display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; }
@@ -65,7 +93,7 @@
         
         .search-box { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #ccc; margin-bottom: 20px; font-family: inherit; font-size: 1rem; outline: none; }
 
-        /* Modal (پنجره ثبت نمره دستی) */
+        /* Modal */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); display: none; justify-content: center; align-items: center; z-index: 1000; padding: 20px; }
         .modal-content { background: white; padding: 25px; border-radius: 15px; width: 100%; max-width: 400px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
         .modal-content h3 { margin-bottom: 15px; color: #1e293b; text-align: center; }
@@ -80,7 +108,6 @@
 <body>
 
     <div class="container">
-        <!-- صفحه ورود -->
         <div class="login-box" id="loginBox">
             <h2>👨‍🏫 ورود به پنل معلم</h2>
             <p style="margin-bottom:20px; color:#666; font-size:14px;">لطفاً رمز عبور مدیریت را وارد کنید</p>
@@ -88,7 +115,6 @@
             <button onclick="loginTeacher()">ورود</button>
         </div>
 
-        <!-- داشبورد -->
         <div id="dashboard">
             <div class="header">
                 <h2>پنل مدیریت دبیر</h2>
@@ -99,13 +125,10 @@
             </div>
 
             <input type="text" id="searchInput" class="search-box" placeholder="🔍 جستجوی نام دانش‌آموز..." oninput="filterStudents()">
-
-            <!-- باکس محتوا -->
             <div id="contentBox"></div>
         </div>
     </div>
 
-    <!-- Modal ثبت نمره دستی -->
     <div class="modal-overlay" id="manualGradeModal">
         <div class="modal-content">
             <h3 id="modalStudentName">ثبت نمره برای: ...</h3>
@@ -131,7 +154,6 @@
         </div>
     </div>
 
-    <!-- فایل داده‌های دانش‌آموزان -->
     <script src="students-data.js"></script>
 
     <script>
@@ -201,7 +223,6 @@
                     const studentsInGrade = school.grades[gradeNum];
                     if (studentsInGrade.length === 0) continue;
 
-                    // 👇 اضافه شدن دکمه خروجی اکسل اختصاصی برای هر پایه
                     schoolHtml += `
                         <div class="grade-section">
                             <div class="grade-header" onclick="toggleGrade(this)">
@@ -344,14 +365,12 @@
             }
         }
 
-        // 📥 تابع خروجی اختصاصی برای هر پایه
         function exportGradeToCSV(schoolName, gradeNum, event) {
-            event.stopPropagation(); // جلوگیری از بسته/باز شدن لیست هنگام کلیک روی دکمه اکسل
+            event.stopPropagation(); 
             
             let csvContent = "\uFEFF"; 
             csvContent += "ردیف,مدرسه,پایه,نام دانش‌آموز,نام آزمون,نوع آزمون,نمره,تاریخ و ساعت\n";
 
-            // پیدا کردن کلید مدرسه
             let schoolKey = null;
             for(let k in schoolData) {
                 if(schoolData[k].name === schoolName) { schoolKey = k; break; }
@@ -361,7 +380,6 @@
 
             const studentsInGrade = schoolData[schoolKey].grades[gradeNum] || [];
             let rowNumber = 1;
-            let hasData = false;
 
             studentsInGrade.forEach(studentName => {
                 const studentGrades = allData.grades.filter(g => g.student_name.trim() === studentName.trim());
@@ -370,7 +388,6 @@
                     csvContent += `"${rowNumber}","${schoolName}","${gradeNum}","${studentName}","ندارد","ندارد","ندارد","ندارد"\n`;
                     rowNumber++;
                 } else {
-                    hasData = true;
                     studentGrades.forEach(g => {
                         let typeLabel = (g.exam_type === 'tashrihi') ? 'تشریحی' : 'تستی';
                         let safeExamName = (g.exam_name || '').replace(/,/g, ' ');
@@ -384,7 +401,6 @@
             downloadCSV(csvContent, `نمرات_پایه_${gradeNum}_${schoolName}`);
         }
 
-        // 📥 تابع خروجی کل (دکمه بالای صفحه)
         function exportAllToCSV() {
             if (typeof schoolData === 'undefined') return alert('اطلاعاتی برای خروجی وجود ندارد.');
 
@@ -420,7 +436,6 @@
             downloadCSV(csvContent, `کل_نمرات_دانش‌آموزان`);
         }
 
-        // تابع کمکی برای دانلود فایل
         function downloadCSV(csvContent, filenamePrefix) {
             const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
             const link = document.createElement("a");
