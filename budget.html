@@ -143,7 +143,6 @@
 
   <script>
     const INCOME = 20000000;
-    const GROQ_API_KEY = "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";
 
     // تابع فرمت اعداد
     function formatMoney(num) {
@@ -220,17 +219,18 @@
 
       try {
         const payload = {
-          model: "openai/gpt-oss-120b",
+          // فیلد model حذف شد
           messages: [
             { role: "system", content: "شما یک معلم اقتصاد و مهارت‌های زندگی هستید که به زبان فارسی ساده و صمیمی صحبت می‌کنید." },
             { role: "user", content: prompt }
           ]
         };
 
-        const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+        // آدرس ورکر کلادفلر و حذف هدر Authorization
+        const response = await fetch("https://ai.motadars.ir", {
           method: "POST",
-          headers: { "Authorization": `Bearer ${GROQ_API_KEY}` },
-          body: new Blob([JSON.stringify(payload)], { type: 'application/json' })
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
         });
 
         const data = await response.json();
@@ -246,7 +246,7 @@
         loading.style.display = 'none';
         analyzeBtn.disabled = false;
         aiResult.style.display = 'block';
-        aiText.innerText = "❌ خطا در ارتباط با هوش مصنوعی. لطفاً از فیلترشکن استفاده کنید و دوباره تلاش کنید.";
+        aiText.innerText = "❌ خطا در ارتباط با هوش مصنوعی. لطفاً دوباره تلاش کنید.";
         console.error(error);
       }
     }
