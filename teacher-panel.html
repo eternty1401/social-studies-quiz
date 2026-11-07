@@ -23,23 +23,43 @@
         .header h2 { color: #2c3e50; }
         .logout-btn { background: #dc3545; color: white; padding: 8px 15px; border-radius: 8px; text-decoration: none; border: none; cursor: pointer; }
         
-        /* فیلترها */
-        .filters { background: white; padding: 15px; border-radius: 15px; margin-bottom: 20px; display: flex; gap: 10px; flex-wrap: wrap; }
-        .filters select { padding: 10px; border-radius: 8px; border: 1px solid #ccc; font-family: inherit; flex: 1; }
+        /* بخش‌بندی مدارس و پایه‌ها */
+        .school-section { background: white; border-radius: 15px; padding: 20px; margin-bottom: 25px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        .school-title { font-size: 1.3rem; color: #1e293b; border-bottom: 2px solid #3498db; padding-bottom: 10px; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
         
-        /* تب‌ها */
-        .tabs { display: flex; gap: 10px; margin-bottom: 20px; }
-        .tab-btn { flex: 1; padding: 15px; background: rgba(255,255,255,0.7); border: none; border-radius: 10px; cursor: pointer; font-weight: bold; font-size: 16px; transition: 0.3s; }
-        .tab-btn.active { background: white; color: #3498db; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .grade-section { margin-bottom: 20px; border: 1px solid #e2e8f0; border-radius: 10px; overflow: hidden; }
+        .grade-header { background: #f8fafc; padding: 12px 15px; font-weight: bold; color: #3b82f6; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+        .grade-header:hover { background: #f1f5f9; }
+        .student-list { display: none; padding: 15px; background: white; }
+        .student-list.active { display: block; }
         
-        /* لیست‌ها */
-        .content-box { background: white; border-radius: 15px; padding: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        .item-row { display: flex; justify-content: space-between; align-items: center; padding: 15px; border-bottom: 1px solid #eee; }
-        .item-row:last-child { border-bottom: none; }
-        .item-info h4 { margin-bottom: 5px; color: #333; }
-        .item-info span { font-size: 13px; color: #888; }
-        .score-badge { background: #e3f2fd; color: #007bff; padding: 5px 15px; border-radius: 8px; font-weight: bold; font-size: 18px; }
-        .school-badge { background: #f8f9fa; color: #555; padding: 3px 8px; border-radius: 5px; font-size: 12px; }
+        .student-row { display: flex; flex-direction: column; padding: 15px 10px; border-bottom: 1px solid #f1f5f9; }
+        .student-row:last-child { border-bottom: none; }
+        
+        .student-info { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .student-name-display { font-weight: 700; color: #334155; font-size: 1.1rem; }
+        
+        .btn-manual-grade { background: #10b981; color: white; border: none; padding: 6px 12px; border-radius: 8px; font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; gap: 5px; font-family: inherit; transition: 0.3s; }
+        .btn-manual-grade:hover { background: #059669; transform: scale(1.05); }
+        
+        .grades-container { display: flex; flex-wrap: wrap; gap: 10px; }
+        .grade-item { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 8px 12px; display: flex; align-items: center; gap: 10px; font-size: 0.85rem; }
+        .grade-item .exam-title { color: #64748b; }
+        .grade-item .score-badge { background: #dbeafe; color: #1d4ed8; font-weight: bold; padding: 3px 10px; border-radius: 6px; font-size: 1rem; }
+        .no-grade { color: #ef4444; font-size: 0.85rem; background: #fee2e2; padding: 5px 10px; border-radius: 5px; display: inline-block; }
+        
+        .search-box { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #ccc; margin-bottom: 20px; font-family: inherit; font-size: 1rem; outline: none; }
+
+        /* Modal (پنجره ثبت نمره دستی) */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); display: none; justify-content: center; align-items: center; z-index: 1000; padding: 20px; }
+        .modal-content { background: white; padding: 25px; border-radius: 15px; width: 100%; max-width: 400px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+        .modal-content h3 { margin-bottom: 15px; color: #1e293b; text-align: center; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; font-size: 0.9rem; color: #64748b; font-weight: bold; }
+        .form-group input, .form-group select { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; font-family: inherit; font-size: 1rem; outline: none; }
+        .modal-actions { display: flex; gap: 10px; margin-top: 20px; }
+        .btn-save { flex: 1; background: #10b981; color: white; border: none; padding: 12px; border-radius: 8px; font-family: inherit; font-size: 1rem; font-weight: bold; cursor: pointer; }
+        .btn-cancel { flex: 1; background: #e2e8f0; color: #475569; border: none; padding: 12px; border-radius: 8px; font-family: inherit; font-size: 1rem; font-weight: bold; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -60,32 +80,45 @@
                 <button class="logout-btn" onclick="logout()">خروج</button>
             </div>
 
-            <!-- فیلتر مدرسه -->
-            <div class="filters">
-                <select id="schoolFilter" onchange="renderData()">
-                    <option value="all">همه مدارس</option>
-                    <option value="مدرسه حسن بن علی نوشهر کلنگی">مدرسه حسن بن علی نوشهر کلنگی</option>
-                    <option value="مدرسه حضرت مهدی سرزه">مدرسه حضرت مهدی سرزه</option>
-                    <option value="متفرقه">متفرقه</option>
-                </select>
-            </div>
-
-            <!-- تب‌ها -->
-            <div class="tabs">
-                <button class="tab-btn active" onclick="switchTab('grades')">📊 لیست نمرات</button>
-                <button class="tab-btn" onclick="switchTab('students')">🎓 لیست دانش‌آموزان</button>
-            </div>
+            <input type="text" id="searchInput" class="search-box" placeholder="🔍 جستجوی نام دانش‌آموز..." oninput="filterStudents()">
 
             <!-- باکس محتوا -->
-            <div class="content-box" id="contentBox">
-                <!-- اطلاعات به صورت خودکار اینجا قرار می‌گیرد -->
+            <div id="contentBox"></div>
+        </div>
+    </div>
+
+    <!-- Modal ثبت نمره دستی -->
+    <div class="modal-overlay" id="manualGradeModal">
+        <div class="modal-content">
+            <h3 id="modalStudentName">ثبت نمره برای: ...</h3>
+            <div class="form-group">
+                <label>نام آزمون / عنوان درس</label>
+                <input type="text" id="manualExamName" placeholder="مثلاً: آزمون تستی درس ۵">
+            </div>
+            <div class="form-group">
+                <label>نمره (از ۲۰)</label>
+                <input type="number" id="manualScore" min="0" max="20" step="0.25" placeholder="مثلاً: 18.5">
+            </div>
+            <div class="form-group">
+                <label>نوع آزمون</label>
+                <select id="manualExamType">
+                    <option value="testi">تستی</option>
+                    <option value="tashrihi">تشریحی</option>
+                </select>
+            </div>
+            <div class="modal-actions">
+                <button class="btn-save" id="saveManualBtn" onclick="submitManualGrade()">💾 ذخیره نمره</button>
+                <button class="btn-cancel" onclick="closeModal()">انصراف</button>
             </div>
         </div>
     </div>
 
+    <!-- فایل داده‌های دانش‌آموزان -->
+    <script src="students-data.js"></script>
+
     <script>
         let allData = { students: [], grades: [] };
-        let currentTab = 'grades'; // یا 'students'
+        let currentStudentForGrade = { name: "", school: "" };
 
         // چک کردن اینکه آیا معلم قبلاً وارد شده
         if(localStorage.getItem('teacher_logged_in') === 'true') {
@@ -97,7 +130,16 @@
         async function loginTeacher() {
             const pass = document.getElementById('teacherPass').value;
             if(!pass) return alert('رمز را وارد کنید');
+            fetchData(pass);
+        }
 
+        async function fetchData(manualPass = null) {
+            let pass = manualPass;
+            if(!pass) {
+                pass = prompt("برای امنیت، لطفاً رمز عبور را دوباره وارد کنید:");
+                if(!pass) { logout(); return; }
+            }
+            
             try {
                 const res = await fetch('https://api.motadars.ir/get_teacher_data.php', {
                     method: 'POST',
@@ -114,75 +156,165 @@
                     renderData();
                 } else {
                     alert('❌ ' + data.message);
+                    if(!manualPass) logout();
                 }
             } catch (e) {
                 alert('خطا در ارتباط با سرور');
             }
         }
 
-        async function fetchData() {
-            const pass = prompt("برای امنیت، لطفاً رمز عبور را دوباره وارد کنید:");
-            if(!pass) { logout(); return; }
-            
-            try {
-                const res = await fetch('https://api.motadars.ir/get_teacher_data.php', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ password: pass })
-                });
-                const data = await res.json();
-                if(data.status === 'success') {
-                    allData = data;
-                    renderData();
-                } else {
-                    alert('رمز اشتباه است.'); logout();
-                }
-            } catch (e) { alert('خطای شبکه'); }
-        }
-
-        function switchTab(tab) {
-            currentTab = tab;
-            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
-            renderData();
-        }
-
         function renderData() {
             const box = document.getElementById('contentBox');
-            const filter = document.getElementById('schoolFilter').value;
             box.innerHTML = '';
 
-            if(currentTab === 'grades') {
-                const filteredGrades = allData.grades.filter(g => filter === 'all' || g.school_name === filter);
-                if(filteredGrades.length === 0) { box.innerHTML = '<p style="text-align:center; padding:20px;">نمره‌ای یافت نشد.</p>'; return; }
-                
-                filteredGrades.forEach(g => {
-                    let typeLabel = g.exam_type === 'tashrihi' ? 'تشریحی' : 'تستی';
-                    box.innerHTML += `
-                        <div class="item-row">
-                            <div class="item-info">
-                                <h4>${g.student_name} <span class="school-badge">${g.school_name || 'متفرقه'}</span></h4>
-                                <span>${g.exam_name} | ${typeLabel} | ${g.exam_date}</span>
-                            </div>
-                            <div class="score-badge">${g.score}</div>
-                        </div>
-                    `;
-                });
-            } else {
-                const filteredStudents = allData.students.filter(s => filter === 'all' || s.school_name === filter);
-                if(filteredStudents.length === 0) { box.innerHTML = '<p style="text-align:center; padding:20px;">دانش‌آموزی یافت نشد.</p>'; return; }
+            if (typeof schoolData === 'undefined') {
+                box.innerHTML = '<p style="text-align:center; color:red; background:white; padding:20px; border-radius:10px;">خطا: فایل students-data.js پیدا نشد!</p>';
+                return;
+            }
 
-                filteredStudents.forEach(s => {
-                    box.innerHTML += `
-                        <div class="item-row">
-                            <div class="item-info">
-                                <h4>${s.full_name}</h4>
-                                <span>نام کاربری: ${s.username}</span>
+            for (const schoolKey in schoolData) {
+                const school = schoolData[schoolKey];
+                
+                let schoolHtml = `
+                    <div class="school-section">
+                        <h2 class="school-title">🏫 ${school.name}</h2>
+                `;
+
+                for (const gradeNum in school.grades) {
+                    const studentsInGrade = school.grades[gradeNum];
+                    if (studentsInGrade.length === 0) continue;
+
+                    schoolHtml += `
+                        <div class="grade-section">
+                            <div class="grade-header" onclick="toggleGrade(this)">
+                                <span>پایه ${gradeNum} (${studentsInGrade.length} دانش‌آموز)</span>
+                                <span>▼</span>
                             </div>
-                            <div class="school-badge">${s.school_name}</div>
-                        </div>
+                            <div class="student-list">
                     `;
+
+                    studentsInGrade.forEach(studentName => {
+                        const studentGrades = allData.grades.filter(g => g.student_name.trim() === studentName.trim());
+
+                        let gradesHtml = '';
+                        if (studentGrades.length === 0) {
+                            gradesHtml = `<span class="no-grade">هنوز امتحان نداده</span>`;
+                        } else {
+                            gradesHtml = `<div class="grades-container">`;
+                            studentGrades.forEach(g => {
+                                let typeLabel = (g.exam_type === 'tashrihi') ? 'تشریحی' : 'تستی';
+                                gradesHtml += `
+                                    <div class="grade-item">
+                                        <span class="exam-title">${g.exam_name} (${typeLabel})</span>
+                                        <span class="score-badge">${g.score}</span>
+                                    </div>
+                                `;
+                            });
+                            gradesHtml += `</div>`;
+                        }
+
+                        schoolHtml += `
+                            <div class="student-row" data-name="${studentName}">
+                                <div class="student-info">
+                                    <div class="student-name-display">👤 ${studentName}</div>
+                                    <button class="btn-manual-grade" onclick="openModal('${studentName}', '${school.name}')">➕ ثبت نمره دستی</button>
+                                </div>
+                                ${gradesHtml}
+                            </div>
+                        `;
+                    });
+
+                    schoolHtml += `</div></div>`;
+                }
+                schoolHtml += `</div>`;
+                box.innerHTML += schoolHtml;
+            }
+        }
+
+        function toggleGrade(headerElement) {
+            const list = headerElement.nextElementSibling;
+            const icon = headerElement.querySelector('span:last-child');
+            if (list.classList.contains('active')) {
+                list.classList.remove('active');
+                icon.innerText = '▼';
+            } else {
+                list.classList.add('active');
+                icon.innerText = '▲';
+            }
+        }
+
+        function filterStudents() {
+            const query = document.getElementById('searchInput').value.trim().toLowerCase();
+            const rows = document.querySelectorAll('.student-row');
+
+            rows.forEach(row => {
+                const name = row.getAttribute('data-name').toLowerCase();
+                if (name.includes(query)) {
+                    row.style.display = 'flex';
+                    const parentList = row.closest('.student-list');
+                    if(parentList && !parentList.classList.contains('active')) {
+                        toggleGrade(parentList.previousElementSibling);
+                    }
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+
+        // توابع مربوط به Modal ثبت نمره
+        function openModal(studentName, schoolName) {
+            currentStudentForGrade = { name: studentName, school: schoolName };
+            document.getElementById('modalStudentName').innerText = `ثبت نمره برای: ${studentName}`;
+            document.getElementById('manualExamName').value = '';
+            document.getElementById('manualScore').value = '';
+            document.getElementById('manualExamType').value = 'testi';
+            document.getElementById('manualGradeModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('manualGradeModal').style.display = 'none';
+        }
+
+        async function submitManualGrade() {
+            const examName = document.getElementById('manualExamName').value.trim();
+            const score = document.getElementById('manualScore').value;
+            const examType = document.getElementById('manualExamType').value;
+            const btn = document.getElementById('saveManualBtn');
+
+            if(!examName || score === '') return alert('لطفاً نام آزمون و نمره را وارد کنید.');
+
+            btn.disabled = true;
+            btn.innerText = 'در حال ذخیره... ⏳';
+
+            const payload = {
+                student_name: currentStudentForGrade.name,
+                school_name: currentStudentForGrade.school,
+                exam_name: examName,
+                score: parseFloat(score),
+                exam_type: examType,
+                exam_date: new Date().toLocaleDateString('fa-IR')
+            };
+
+            try {
+                const res = await fetch('https://api.motadars.ir/save_manual_grade.php', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(payload)
                 });
+                const data = await res.json();
+                
+                if(data.status === 'success') {
+                    alert('✅ نمره با موفقیت ثبت شد.');
+                    closeModal();
+                    fetchData(); // دریافت مجدد اطلاعات برای آپدیت لیست
+                } else {
+                    alert('❌ خطا: ' + data.message);
+                }
+            } catch (e) {
+                alert('❌ خطا در ارتباط با سرور.');
+            } finally {
+                btn.disabled = false;
+                btn.innerText = '💾 ذخیره نمره';
             }
         }
 
