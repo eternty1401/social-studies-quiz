@@ -1,5 +1,5 @@
 // عدد نسخه رو دوباره یکی زیاد کن (مثلاً v15)
-const CACHE_NAME = 'social-studies-v93';
+const CACHE_NAME = 'social-studies-v94';
 
 // لیست فایل‌هایی که برای حالت آفلاین ذخیره میشن
 const urlsToCache = [
