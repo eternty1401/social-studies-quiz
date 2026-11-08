@@ -5,13 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>پنل معلم | مطالعات اجتماعی</title>
     <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;700;900&display=swap" rel="stylesheet">
-    <!-- 👇 اضافه شدن کتابخانه Chart.js برای رسم نمودار -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- 👇 اضافه شدن کتابخانه html2pdf برای ساخت فایل PDF -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     
     <style>
-        /* 👇 تعریف فونت برای PDF (در صورت داشتن فونت B Nazanin، لینک آن را جایگزین کنید) -->
+        /* فونت برای PDF */
         @font-face {
             font-family: 'B Nazanin';
             src: url('https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/fonts/webfonts/Vazirmatn-Regular.woff2') format('woff2');
@@ -49,12 +47,11 @@
         .tab-btn { flex: 1; min-width: 100px; padding: 15px; background: rgba(255,255,255,0.7); border: none; border-radius: 10px; cursor: pointer; font-weight: bold; font-size: 0.95rem; transition: 0.3s; color: #475569; font-family: inherit; }
         .tab-btn.active { background: white; color: #3498db; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
 
-        /* ------------------ استایل‌های داشبورد ------------------ */
+        /* داشبورد */
         .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 25px; }
         .stat-card { background: white; padding: 20px; border-radius: 15px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.05); border-bottom: 5px solid #3498db; }
         .stat-card h3 { font-size: 2rem; color: #1e293b; margin-bottom: 5px; font-weight: 900; }
         .stat-card p { font-size: 0.9rem; color: #64748b; font-weight: bold; }
-        
         .stat-card.warning { border-bottom-color: #f59e0b; }
         .stat-card.warning h3 { color: #b45309; }
         .stat-card.success { border-bottom-color: #10b981; }
@@ -66,35 +63,23 @@
         .chart-card { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
         .chart-card h3 { text-align: center; color: #475569; font-size: 1.1rem; margin-bottom: 15px; }
         .chart-container { position: relative; height: 250px; width: 100%; }
-        /* -------------------------------------------------------- */
 
         .school-section { background: white; border-radius: 15px; padding: 20px; margin-bottom: 25px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
         .school-title { font-size: 1.3rem; color: #1e293b; border-bottom: 2px solid #3498db; padding-bottom: 10px; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
-        
         .grade-section { margin-bottom: 20px; border: 1px solid #e2e8f0; border-radius: 10px; overflow: hidden; }
         .grade-header { background: #f8fafc; padding: 12px 15px; font-weight: bold; color: #3b82f6; cursor: pointer; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
         .grade-header:hover { background: #f1f5f9; }
         .grade-title-text { flex: 1; }
         .grade-actions { display: flex; align-items: center; gap: 10px; }
-        
         .btn-export-small { background: #3b82f6; color: white; border: none; padding: 5px 10px; border-radius: 6px; font-size: 0.8rem; cursor: pointer; display: flex; align-items: center; gap: 5px; font-family: inherit; font-weight: bold; transition: 0.3s; }
-        .btn-export-small:hover { background: #2563eb; }
         .btn-export-attendance { background: #f59e0b; color: white; border: none; padding: 5px 10px; border-radius: 6px; font-size: 0.8rem; cursor: pointer; display: flex; align-items: center; gap: 5px; font-family: inherit; font-weight: bold; transition: 0.3s; }
-        .btn-export-attendance:hover { background: #d97706; }
         .toggle-icon { font-size: 1rem; color: #64748b; }
-        
         .student-list { display: none; padding: 15px; background: white; }
         .student-list.active { display: block; }
-        
         .student-row { display: flex; flex-direction: column; padding: 15px 10px; border-bottom: 1px solid #f1f5f9; }
-        .student-row:last-child { border-bottom: none; }
-        
         .student-info { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; width: 100%; }
         .student-name-display { font-weight: 700; color: #334155; font-size: 1.1rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        
         .btn-manual-grade { flex-shrink: 0; background: #10b981; color: white; border: none; padding: 6px 12px; border-radius: 8px; font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; gap: 5px; font-family: inherit; transition: 0.3s; }
-        .btn-manual-grade:hover { background: #059669; transform: scale(1.05); }
-        
         .grades-container { display: flex; flex-direction: column; gap: 10px; }
         .grade-item { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 10px 15px; display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; }
         .grade-item .exam-title { color: #334155; font-weight: bold; }
@@ -118,7 +103,6 @@
         .status-absent { background: #fee2e2; color: #991b1b; }
         .btn-mark-all { background: #8b5cf6; color: white; border: none; padding: 5px 10px; border-radius: 6px; font-size: 0.8rem; cursor: pointer; font-family: inherit; font-weight: bold; }
 
-        /* استایل‌های تب تصحیح تشریحی */
         .submission-card { background: white; padding: 20px; border-radius: 15px; margin-bottom: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border-right: 5px solid #8b5cf6; }
         .sub-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e2e8f0; padding-bottom: 10px; margin-bottom: 15px; }
         .sub-header h3 { color: #1e293b; font-size: 1.1rem; }
@@ -127,20 +111,16 @@
         .q-text { font-weight: bold; color: #334155; font-size: 0.95rem; margin-bottom: 8px; }
         .a-text { color: #475569; font-size: 0.9rem; line-height: 1.6; margin-bottom: 5px; }
         .key-text { color: #10b981; font-size: 0.85rem; font-weight: bold; display: block; margin-bottom: 10px; }
-        
         .score-buttons-container { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; background: white; padding: 8px; border-radius: 8px; border: 1px solid #cbd5e1; }
         .score-label { font-size: 0.85rem; color: #64748b; font-weight: bold; display: flex; align-items: center; margin-left: 5px; }
         .btn-score { padding: 6px 15px; border: 1px solid #94a3b8; background: white; border-radius: 6px; cursor: pointer; font-family: inherit; font-size: 0.9rem; font-weight: bold; color: #475569; transition: 0.2s; }
         .btn-score:hover { background: #e2e8f0; }
         .btn-score.active { background: #10b981; color: white; border-color: #10b981; box-shadow: 0 2px 5px rgba(16,185,129,0.4); }
-
         .grading-box { background: #f0fdf4; padding: 15px; border-radius: 10px; border: 2px dashed #22c55e; margin-top: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
         .total-score-display { font-size: 1.2rem; font-weight: 900; color: #166534; }
         .total-score-display span { font-size: 1.5rem; color: #ef4444; }
         .btn-submit-grade { background: #22c55e; color: white; border: none; padding: 12px 25px; border-radius: 8px; font-family: inherit; font-size: 1rem; font-weight: bold; cursor: pointer; transition: 0.3s; }
-        .btn-submit-grade:hover { background: #16a34a; transform: scale(1.02); }
 
-        /* استایل‌های تب مدیریت آزمون‌ها */
         .exam-link-form { background: white; padding: 25px; border-radius: 15px; margin-bottom: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
         .exam-link-form h3 { color: #1e3c72; margin-bottom: 15px; }
         .exam-link-form select, .exam-link-form input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 8px; font-family: inherit; font-size: 1rem; outline: none; }
@@ -150,7 +130,6 @@
         .link-result-box input { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; text-align: center; direction: ltr; font-family: monospace; margin-bottom: 10px; background: white; }
         .btn-copy-link { padding: 10px 20px; background: #22c55e; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-family: inherit; }
 
-        /* Modal */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); display: none; justify-content: center; align-items: center; z-index: 1000; padding: 20px; }
         .modal-content { background: white; padding: 25px; border-radius: 15px; width: 100%; max-width: 400px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
         .modal-content h3 { margin-bottom: 15px; color: #1e293b; text-align: center; }
@@ -161,32 +140,36 @@
         .btn-save { flex: 1; background: #10b981; color: white; border: none; padding: 12px; border-radius: 8px; font-family: inherit; font-size: 1rem; font-weight: bold; cursor: pointer; }
         .btn-cancel { flex: 1; background: #e2e8f0; color: #475569; border: none; padding: 12px; border-radius: 8px; font-family: inherit; font-size: 1rem; font-weight: bold; cursor: pointer; }
 
-        /* 👇 استایل‌های اختصاصی برگه آزمون PDF (جدید) */
-        .exam-pdf-page { font-family: 'B Nazanin', 'Vazirmatn', sans-serif; color: black; }
+        /* 👇 استایل‌های اختصاصی و بسیار دقیق برای برگه آزمون PDF */
+        .exam-pdf-page { font-family: 'B Nazanin', 'Vazirmatn', sans-serif; direction: rtl; color: black; font-size: 14px; }
         .exam-header-table { width: 100%; border-collapse: collapse; margin-bottom: 15px; text-align: center; }
-        .exam-header-table th, .exam-header-table td { border: 2px solid black; padding: 5px; font-size: 14px; }
+        .exam-header-table td { border: 2px solid black; padding: 6px; }
         .exam-header-title { font-size: 18px; font-weight: bold; padding: 10px !important; }
         
-        .exam-motto { text-align: center; font-weight: bold; font-size: 16px; margin: 15px 0; }
+        .exam-motto { text-align: center; font-weight: bold; font-size: 15px; margin: 15px 0; }
         
-        .exam-main-table { width: 100%; border-collapse: collapse; text-align: right; }
+        .exam-main-table { width: 100%; border-collapse: collapse; text-align: right; table-layout: fixed; }
         .exam-main-table th { border: 1px solid black; padding: 8px; text-align: center; background: #f0f0f0; }
         .exam-main-table td { border: 1px solid black; padding: 10px; vertical-align: top; font-size: 15px; }
         
-        .col-row { width: 5%; text-align: center; }
-        .col-score { width: 10%; text-align: center; font-weight: bold; }
-        .col-question { width: 85%; }
+        .col-row { width: 8%; text-align: center; }
+        .col-score { width: 12%; text-align: center; font-weight: bold; }
+        .col-question { width: 80%; }
 
-        .opt-box { display: inline-block; border: 1px solid black; width: 14px; height: 14px; margin-left: 5px; vertical-align: middle; }
-        .options-grid { display: flex; justify-content: space-between; margin-top: 10px; flex-wrap: wrap; gap: 10px; }
-        .option-item { width: 45%; display: flex; align-items: center; }
+        .group-header td { background: #f9f9f9; font-weight: bold; padding: 8px !important; border-bottom: 2px solid black !important; }
         
-        .tf-box { margin-right: 15px; display: inline-flex; align-items: center; gap: 5px; }
-        .blank-line { display: inline-block; border-bottom: 1px dotted black; width: 120px; }
-        .tashrihi-space { height: 80px; }
+        .opt-box { display: inline-block; border: 1px solid black; width: 14px; height: 14px; margin-left: 5px; vertical-align: middle; }
+        .options-grid { display: flex; flex-wrap: wrap; margin-top: 10px; gap: 10px; }
+        .option-item { width: 48%; display: flex; align-items: center; }
+        
+        .tf-box { margin-right: 15px; display: inline-flex; align-items: center; gap: 5px; float: left; margin-top: 5px; }
+        .tashrihi-space { height: 70px; }
 
-        .answer-key-table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 14px; }
+        .answer-key-table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 14px; table-layout: fixed; }
         .answer-key-table th, .answer-key-table td { border: 1px solid black; padding: 8px; text-align: center; }
+        
+        /* جلوگیری از بریده شدن سوالات در خروجی PDF */
+        tr { page-break-inside: avoid; }
     </style>
 </head>
 <body>
@@ -208,7 +191,6 @@
                 </div>
             </div>
 
-            <!-- تب‌ها -->
             <div class="tabs">
                 <button class="tab-btn active" id="tab-dashboard" onclick="switchTab('dashboard')">📊 داشبورد</button>
                 <button class="tab-btn" id="tab-class" onclick="switchTab('class')">📚 نمرات</button>
@@ -218,34 +200,25 @@
                 <button class="tab-btn" id="tab-accounts" onclick="switchTab('accounts')">👥 اکانت‌ها</button>
             </div>
 
-            <!-- بخش داشبورد -->
             <div id="dashboardSection">
-                <div class="stats-grid" id="statsGrid">
-                    <!-- کارت‌های آمار توسط جاوااسکریپت پر می‌شوند -->
-                </div>
+                <div class="stats-grid" id="statsGrid"></div>
                 <div class="charts-grid">
                     <div class="chart-card">
                         <h3>میانگین نمرات هر مدرسه</h3>
-                        <div class="chart-container">
-                            <canvas id="schoolAvgChart"></canvas>
-                        </div>
+                        <div class="chart-container"><canvas id="schoolAvgChart"></canvas></div>
                     </div>
                     <div class="chart-card">
                         <h3>نسبت انواع آزمون‌ها</h3>
-                        <div class="chart-container">
-                            <canvas id="examTypeChart"></canvas>
-                        </div>
+                        <div class="chart-container"><canvas id="examTypeChart"></canvas></div>
                     </div>
                 </div>
             </div>
 
-            <!-- بخش کلاس -->
             <div id="classSection" style="display: none;">
                 <input type="text" id="searchInput" class="search-box" placeholder="🔍 جستجوی نام دانش‌آموز..." oninput="filterStudents()">
                 <div id="contentBox"></div>
             </div>
 
-            <!-- بخش حضور و غیاب -->
             <div id="attendanceSection" style="display: none;">
                 <div style="background: white; padding: 15px; border-radius: 10px; margin-bottom: 20px; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
                     <h3 style="color: #1e293b; margin-bottom: 10px;">تاریخ امروز: <span id="todayDateDisplay" style="color: #3498db;"></span></h3>
@@ -253,13 +226,11 @@
                 <div id="attendanceBox"></div>
             </div>
 
-            <!-- بخش تصحیح تشریحی -->
             <div id="essaySection" style="display: none;">
                 <h3 style="color: white; margin-bottom: 15px; text-align: center;">پاسخ‌های در انتظار تصحیح</h3>
                 <div id="essayBox"></div>
             </div>
 
-            <!-- بخش مدیریت آزمون‌ها -->
             <div id="examLinksSection" style="display: none;">
                 <div class="exam-link-form">
                     <h3>🔗 ساخت لینک آزمون برای دانش‌آموزان</h3>
@@ -272,7 +243,6 @@
                     <input type="number" id="link-to" placeholder="تا درس شماره..." min="1" max="24">
                     <button class="btn-generate" onclick="generateExamLink()">تولید لینک آزمون</button>
                     
-                    <!-- 👇 دکمه دانلود PDF (جدید) -->
                     <button class="btn-generate" style="background: #8b5cf6; margin-top: 15px;" onclick="openPdfModal()">📄 دانلود فایل PDF آزمون</button>
                 </div>
                 
@@ -283,7 +253,6 @@
                 </div>
             </div>
 
-            <!-- بخش مدیریت اکانت‌ها -->
             <div id="accountsSection" style="display: none;">
                 <input type="text" id="searchAccountInput" class="search-box" placeholder="🔍 جستجوی نام یا نام کاربری..." oninput="renderAccounts()">
                 <div id="accountsBox"></div>
@@ -332,13 +301,17 @@
         </div>
     </div>
 
-    <!-- 👇 Modal تنظیمات آزمون PDF (جدید) -->
+    <!-- Modal تنظیمات آزمون PDF -->
     <div class="modal-overlay" id="pdfModal">
         <div class="modal-content">
             <h3>📄 تنظیمات فایل PDF</h3>
             <div class="form-group">
                 <label>نام مدرسه</label>
-                <input type="text" id="pdf-school" placeholder="مثلاً: شهید بهشتی">
+                <input list="schools-list" id="pdf-school" placeholder="یک مدرسه انتخاب کنید یا تایپ کنید...">
+                <datalist id="schools-list">
+                    <option value="حسن بن علی نوشهرکلنگی">
+                    <option value="حضرت مهدی سرزه">
+                </datalist>
             </div>
             <div class="form-group">
                 <label>پایه تحصیلی</label>
@@ -365,7 +338,7 @@
             <div class="form-group">
                 <label>نوع سوالات</label>
                 <select id="pdf-type">
-                    <option value="mixed">ترکیبی (تستی، صحیح/غلط، جای خالی، تشریحی)</option>
+                    <option value="mixed">ترکیبی (طبق استاندارد)</option>
                     <option value="testi">فقط تستی</option>
                 </select>
             </div>
@@ -376,14 +349,12 @@
         </div>
     </div>
 
-    <!-- 👇 کانتینر مخفی برای رندر PDF (جدید) -->
+    <!-- کانتینر مخفی برای رندر PDF -->
     <div id="pdf-container" style="display: none; width: 800px; background: white; padding: 20px; direction: rtl;"></div>
 
-    <!-- 👇 فایل‌های سوالات (مطمئن شوید نام فایل‌ها درست است) -->
     <script src="questions-grade7.js"></script>
     <script src="questions-grade8.js"></script>
     <script src="questions-grade9.js"></script>
-
     <script src="students-data.js"></script>
 
     <script>
@@ -392,8 +363,6 @@
         let currentTab = 'dashboard'; 
         let todayAttendance = [];
         let manualScores = {};
-        
-        // متغیرهای نمودار
         let schoolChartInstance = null;
         let typeChartInstance = null;
 
@@ -540,7 +509,6 @@
                 for (const schoolKey in schoolData) {
                     const schoolName = schoolData[schoolKey].name;
                     schoolLabels.push(schoolName);
-
                     const schoolGrades = allData.grades.filter(g => g.school_name === schoolName && g.score > 0);
                     let sum = 0;
                     schoolGrades.forEach(g => sum += parseFloat(g.score));
@@ -555,19 +523,9 @@
                 type: 'bar',
                 data: {
                     labels: schoolLabels,
-                    datasets: [{
-                        label: 'میانگین نمره (از ۲۰)',
-                        data: schoolAverages,
-                        backgroundColor: ['#3b82f6', '#8b5cf6', '#10b981'],
-                        borderRadius: 8
-                    }]
+                    datasets: [{ label: 'میانگین نمره (از ۲۰)', data: schoolAverages, backgroundColor: ['#3b82f6', '#8b5cf6', '#10b981'], borderRadius: 8 }]
                 },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: { y: { beginAtZero: true, max: 20 } },
-                    plugins: { legend: { display: false } }
-                }
+                options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, max: 20 } }, plugins: { legend: { display: false } } }
             });
 
             const testiCount = allData.grades.filter(g => g.exam_type === 'testi' || !g.exam_type).length;
@@ -579,17 +537,9 @@
                 type: 'doughnut',
                 data: {
                     labels: ['آزمون‌های تستی', 'آزمون‌های تشریحی'],
-                    datasets: [{
-                        data: [testiCount, tashrihiCount],
-                        backgroundColor: ['#3b82f6', '#f59e0b'],
-                        borderWidth: 0
-                    }]
+                    datasets: [{ data: [testiCount, tashrihiCount], backgroundColor: ['#3b82f6', '#f59e0b'], borderWidth: 0 }]
                 },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { position: 'bottom' } }
-                }
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
             });
         }
 
@@ -703,9 +653,7 @@
                 return;
             }
 
-            const filtered = allData.students.filter(s => 
-                s.full_name.toLowerCase().includes(query) || s.username.toLowerCase().includes(query)
-            );
+            const filtered = allData.students.filter(s => s.full_name.toLowerCase().includes(query) || s.username.toLowerCase().includes(query));
 
             if (filtered.length === 0) {
                 box.innerHTML = '<p style="text-align:center; color:white;">دانش‌آموزی یافت نشد.</p>';
@@ -833,11 +781,9 @@
                     studentsInGrade.forEach(studentName => {
                         const record = todayAttendance.find(item => item.student_name === studentName);
                         const isPresent = record && record.status === 'present';
-                        
                         const timeStr = (record && record.attendance_time) ? ` - ساعت ${record.attendance_time}` : '';
                         const statusText = isPresent ? `✅ حاضر ${timeStr}` : '❌ غایب';
                         const statusClass = isPresent ? 'status-present' : 'status-absent';
-                        
                         const btnColor = isPresent ? '#ef4444' : '#10b981';
                         const btnText = isPresent ? 'ثبت غیبت' : 'ثبت حضور';
                         const bgStyle = isPresent ? 'background:#f0fdf4;' : 'background:#fef2f2;';
@@ -867,12 +813,7 @@
                 const res = await fetch('https://api.motadars.ir/save_attendance.php', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({
-                        student_name: studentName,
-                        school_name: schoolName,
-                        grade: gradeNum,
-                        status: newStatus
-                    })
+                    body: JSON.stringify({ student_name: studentName, school_name: schoolName, grade: gradeNum, status: newStatus })
                 });
                 const data = await res.json();
                 if (data.status === 'success') {
@@ -899,12 +840,7 @@
                 await fetch('https://api.motadars.ir/save_attendance.php', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({
-                        student_name: studentsInGrade[i],
-                        school_name: schoolName,
-                        grade: gradeNum,
-                        status: 'present'
-                    })
+                    body: JSON.stringify({ student_name: studentsInGrade[i], school_name: schoolName, grade: gradeNum, status: 'present' })
                 });
             }
             alert(`حاضری همه دانش‌آموزان پایه ${gradeNum} ثبت شد.`);
@@ -1022,25 +958,17 @@
 
         async function submitEssayGrade(id, studentName, schoolName, examName, totalQuestionsCount) {
             const totalScore = document.getElementById(`total-score-${id}`).innerText;
-            
             const gradedQuestionsCount = Object.keys(manualScores[id]).length;
             if (gradedQuestionsCount < totalQuestionsCount) {
                 if(!confirm(`شما به ${totalQuestionsCount - gradedQuestionsCount} سوال نمره نداده‌اید (نمره صفر در نظر گرفته می‌شود). آیا مطمئنید؟`)) return;
             }
-
             if(totalScore === '0' && !confirm('نمره کل صفر است. آیا مطمئنید؟')) return;
 
             try {
                 const res = await fetch('https://api.motadars.ir/grade_essay_submission.php', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({
-                        id: id,
-                        student_name: studentName,
-                        school_name: schoolName,
-                        exam_name: examName,
-                        score: parseFloat(totalScore)
-                    })
+                    body: JSON.stringify({ id: id, student_name: studentName, school_name: schoolName, exam_name: examName, score: parseFloat(totalScore) })
                 });
                 const data = await res.json();
                 
@@ -1211,7 +1139,7 @@
             document.body.removeChild(link);
         }
 
-        // ------------------ بخش تولید PDF آزمون (جدید) ------------------
+        // ------------------ بخش تولید PDF آزمون (کد جدید و اصلاح شده) ------------------
         function openPdfModal() {
             document.getElementById('pdfModal').style.display = 'flex';
         }
@@ -1224,65 +1152,72 @@
             const toLesson = parseInt(document.getElementById('pdf-to').value) || 24;
             const examType = document.getElementById('pdf-type').value;
 
-            // ۱. انتخاب بانک سوالات بر اساس پایه
+            // انتخاب بانک سوالات
             let questionBank = [];
             if (grade === '7' && typeof grade7Questions !== 'undefined') questionBank = grade7Questions;
             else if (grade === '8' && typeof grade8Questions !== 'undefined') questionBank = grade8Questions;
             else if (grade === '9' && typeof grade9Questions !== 'undefined') questionBank = grade9Questions;
             
             if (questionBank.length === 0) {
-                alert('بانک سوالات برای این پایه یافت نشد یا فایل آن لود نشده است.');
+                alert('بانک سوالات برای این پایه یافت نشد.');
                 return;
             }
 
-            // ۲. فیلتر کردن سوالات بر اساس بازه درس
+            // فیلتر بر اساس درس
             let filteredQuestions = questionBank.filter(q => q.lesson >= fromLesson && q.lesson <= toLesson);
             
-            if (examType === 'testi') {
-                filteredQuestions = filteredQuestions.filter(q => q.type === 'testi');
-            }
-
             if (filteredQuestions.length === 0) {
                 alert('سوالی در این بازه درسی یافت نشد.');
                 return;
             }
 
-            // ۳. الگوریتم تصادفی کردن و انتخاب سوال تا رسیدن به نمره ۲۰
-            filteredQuestions.sort(() => Math.random() - 0.5); 
-            
+            // شافل کردن کل سوالات
+            filteredQuestions.sort(() => Math.random() - 0.5);
+
+            // دسته بندی سوالات
+            let truefalseQ = filteredQuestions.filter(q => q.type === 'truefalse');
+            let testiQ = filteredQuestions.filter(q => q.type === 'testi');
+            let jakhaliQ = filteredQuestions.filter(q => q.type === 'jakhali');
+            let essayQ = filteredQuestions.filter(q => q.type === 'essay');
+
             let selectedQuestions = [];
-            let currentScore = 0; 
-            let answerKeyHTML = ''; 
-            
-            function getScore(type) {
-                if (type === 'testi') return 1;
-                if (type === 'truefalse') return 1;
-                if (type === 'jakhali') return 1.5;
-                if (type === 'essay') return 2;
-                return 1;
-            }
 
-            for (let q of filteredQuestions) {
-                let qScore = getScore(q.type);
-                if ((currentScore + qScore) <= 20) {
-                    selectedQuestions.push(q);
-                    currentScore += qScore;
+            if (examType === 'testi') {
+                // اگر فقط تستی خواست
+                selectedQuestions = testiQ.slice(0, 20).map(q => ({ ...q, score: 1 }));
+                if (selectedQuestions.length < 20) {
+                    alert(`تعداد سوالات تستی کافی نیست (${selectedQuestions.length} از ۲۰). لطفاً بازه درس را بیشتر کنید.`);
+                    return;
                 }
-                if (currentScore === 20) break; 
+            } else {
+                // ترکیبی استاندارد برای ۲۰ نمره
+                // 4 درست/نادرست (4 نمره)
+                // 4 تستی (4 نمره)
+                // 4 جاخالی (6 نمره)
+                // 3 تشریحی (6 نمره)
+                
+                if (truefalseQ.length < 4 || testiQ.length < 4 || jakhaliQ.length < 4 || essayQ.length < 3) {
+                    alert('سوالات کافی برای تولید آزمون ترکیبی ۲۰ نمره‌ای (نیاز به حداقل ۴ درست/غلط، ۴ تستی، ۴ جاخالی و ۳ تشریحی) وجود ندارد. لطفاً بازه درس را بیشتر کنید.');
+                    return;
+                }
+
+                let tf = truefalseQ.slice(0, 4).map(q => ({ ...q, score: 1 }));
+                let ts = testiQ.slice(0, 4).map(q => ({ ...q, score: 1 }));
+                let jk = jakhaliQ.slice(0, 4).map(q => ({ ...q, score: 1.5 }));
+                let es = essayQ.slice(0, 3).map(q => ({ ...q, score: 2 }));
+
+                selectedQuestions = [...tf, ...ts, ...jk, ...es];
             }
 
-            if (currentScore < 20) {
-                alert(`با سوالات موجود در این بازه، مجموع نمرات به ۲۰ نرسید (حداکثر ${currentScore}). لطفاً بازه درس را بیشتر کنید.`);
-                return;
-            }
+            // حالا که سوالات مرتب شده‌اند، شروع به ساخت HTML جدول می‌کنیم
+            let answerKeyHTML = '';
+            let rowCounter = 1;
 
-            // ۴. ساخت هدر برگه امتحان
+            // ساخت هدر
             let pdfHTML = `
                 <div class="exam-pdf-page">
                     <table class="exam-header-table">
-                        <tr>
-                            <td colspan="3" class="exam-header-title">به نام خدای رنگین کمان</td>
-                        </tr>
+                        <tr><td colspan="3" class="exam-header-title">به نام خدای رنگین کمان</td></tr>
                         <tr>
                             <td style="width: 33%;">اداره آموزش و پرورش ${school}</td>
                             <td style="width: 34%;">نام درس: مطالعات اجتماعی</td>
@@ -1294,7 +1229,7 @@
                             <td>تاریخ امتحان: ....... / ....... / ۱۴۰...</td>
                         </tr>
                         <tr>
-                            <td colspan="2">نام و نام خانوادگی دانش‌آموز: ......................................................</td>
+                            <td colspan="2" style="text-align: right;">نام و نام خانوادگی دانش‌آموز: ......................................................</td>
                             <td><b>طراح سوال: ابراهیم اسحقی</b></td>
                         </tr>
                     </table>
@@ -1312,12 +1247,11 @@
                         <tbody>
             `;
 
-            // ۵. ساخت ردیف‌های سوالات و پاسخنامه
-            selectedQuestions.forEach((q, index) => {
+            // تابع کمکی برای ساخت ردیف سوال
+            function buildRow(q, index) {
                 let qContent = '';
                 let answerText = '';
-                let qScore = getScore(q.type);
-
+                
                 if (q.type === 'testi') {
                     qContent += `<div>${q.q}</div><div class="options-grid">`;
                     q.options.forEach((opt, i) => {
@@ -1325,13 +1259,12 @@
                         qContent += `<div class="option-item"><span class="opt-box"></span> ${letter}) ${opt}</div>`;
                     });
                     qContent += `</div>`;
-                    
                     let correctIndex = Array.isArray(q.answer) ? q.answer[0] : q.answer;
                     answerText = q.options[correctIndex] || 'نامشخص';
 
                 } else if (q.type === 'truefalse') {
                     qContent += `<div>${q.q}</div>
-                                 <div style="margin-top: 10px; text-align: left;">
+                                 <div style="text-align: left; margin-top: 8px;">
                                     <span class="tf-box">صحیح <span class="opt-box"></span></span>
                                     <span class="tf-box">غلط <span class="opt-box"></span></span>
                                  </div>`;
@@ -1346,20 +1279,55 @@
                     answerText = q.key || 'بدون کلید';
                 }
 
-                pdfHTML += `
+                let html = `
                     <tr>
-                        <td class="col-row">${index + 1}</td>
+                        <td class="col-row">${index}</td>
                         <td class="col-question">${qContent}</td>
-                        <td class="col-score">${qScore}</td>
+                        <td class="col-score">${q.score}</td>
                     </tr>
                 `;
+                
+                // ساخت پاسخنامه
+                answerKeyHTML += `<tr><td>${index}</td><td>${answerText}</td></tr>`;
+                
+                return html;
+            }
 
-                answerKeyHTML += `<tr><td>${index + 1}</td><td>${answerText}</td></tr>`;
-            });
+            // ۱. اضافه کردن درست/نادرست
+            if (selectedQuestions.some(q => q.type === 'truefalse')) {
+                pdfHTML += `<tr class="group-header"><td colspan="3">الف) درست یا نادرست بودن عبارات زیر را مشخص کنید.</td></tr>`;
+                selectedQuestions.filter(q => q.type === 'truefalse').forEach(q => {
+                    pdfHTML += buildRow(q, rowCounter++);
+                });
+            }
+
+            // ۲. اضافه کردن تستی
+            if (selectedQuestions.some(q => q.type === 'testi')) {
+                pdfHTML += `<tr class="group-header"><td colspan="3">ب) گزینه صحیح را انتخاب کنید.</td></tr>`;
+                selectedQuestions.filter(q => q.type === 'testi').forEach(q => {
+                    pdfHTML += buildRow(q, rowCounter++);
+                });
+            }
+
+            // ۳. اضافه کردن جاخالی (برای جایگزینی با کوتاه پاسخ)
+            if (selectedQuestions.some(q => q.type === 'jakhali')) {
+                pdfHTML += `<tr class="group-header"><td colspan="3">ج) جاهای خالی را با کلمات مناسب پر کنید.</td></tr>`;
+                selectedQuestions.filter(q => q.type === 'jakhali').forEach(q => {
+                    pdfHTML += buildRow(q, rowCounter++);
+                });
+            }
+
+            // ۴. اضافه کردن تشریحی
+            if (selectedQuestions.some(q => q.type === 'essay')) {
+                pdfHTML += `<tr class="group-header"><td colspan="3">د) به سوالات زیر پاسخ کامل دهید.</td></tr>`;
+                selectedQuestions.filter(q => q.type === 'essay').forEach(q => {
+                    pdfHTML += buildRow(q, rowCounter++);
+                });
+            }
 
             pdfHTML += `</tbody></table>`;
 
-            // ۶. ساخت صفحه دوم (پاسخنامه)
+            // ساخت صفحه دوم (پاسخنامه)
             pdfHTML += `
                 <div style="page-break-before: always; padding-top: 30px;">
                     <h2 style="text-align: center; margin-bottom: 20px;">پاسخنامه و کلید سوالات</h2>
@@ -1371,15 +1339,13 @@
                             ${answerKeyHTML}
                         </tbody>
                     </table>
-                    <div style="margin-top: 50px; text-align: center; color: #666;">
-                        طراح سوال: ابراهیم اسحقی
-                    </div>
+                    <div style="margin-top: 50px; text-align: center; color: #666;">طراح سوال: ابراهیم اسحقی</div>
                 </div>
             `;
 
             pdfHTML += `</div>`; 
 
-            // ۷. قرار دادن در کانتینر مخفی و رندر PDF
+            // رندر PDF
             const container = document.getElementById('pdf-container');
             container.innerHTML = pdfHTML;
             container.style.display = 'block';
