@@ -127,35 +127,39 @@
         .btn-save { flex: 1; background: #10b981; color: white; border: none; padding: 12px; border-radius: 8px; font-family: inherit; font-size: 1rem; font-weight: bold; cursor: pointer; }
         .btn-cancel { flex: 1; background: #e2e8f0; color: #475569; border: none; padding: 12px; border-radius: 8px; font-family: inherit; font-size: 1rem; font-weight: bold; cursor: pointer; }
 
-        /* 👇 استایل‌های اختصاصی برگه آزمون برای نمایش در مرورگر */
-        .exam-pdf-page { font-family: 'Vazirmatn', 'B Nazanin', sans-serif; direction: rtl; color: black; font-size: 15px; background: white; padding: 20px; }
-        .exam-header-table { width: 100%; border-collapse: collapse; margin-bottom: 15px; text-align: center; }
-        .exam-header-table td { border: 2px solid black; padding: 8px; }
-        .exam-header-title { font-size: 18px; font-weight: bold; padding: 10px !important; }
+        /* 👇 استایل‌های فوق فشرده برای برگه آزمون */
+        .exam-pdf-page { font-family: 'Vazirmatn', 'B Nazanin', sans-serif; direction: rtl; color: black; font-size: 13px; background: white; padding: 10px; line-height: 1.3; }
         
-        .exam-motto { text-align: center; font-weight: bold; font-size: 16px; margin: 15px 0; }
+        .exam-header-table { width: 100%; border-collapse: collapse; margin-bottom: 8px; text-align: center; }
+        .exam-header-table td { border: 2px solid black; padding: 4px; }
+        .exam-header-title { font-size: 16px; font-weight: bold; padding: 6px !important; }
+        
+        .exam-motto { text-align: center; font-weight: bold; font-size: 13px; margin: 8px 0; }
         
         /* جدول اصلی سوالات */
         .exam-main-table { width: 100%; border-collapse: collapse; text-align: right; table-layout: fixed; }
-        .exam-main-table th { border: 1px solid black; padding: 8px; text-align: center; background: #f0f0f0; }
-        .exam-main-table td { border: 1px solid black; padding: 10px; vertical-align: top; font-size: 15px; }
+        .exam-main-table th { border: 1.5px solid black; padding: 4px; text-align: center; background: #f0f0f0; }
+        .exam-main-table td { border: 1px solid black; padding: 4px 6px; vertical-align: top; font-size: 13px; }
         
         .col-row { width: 8%; text-align: center; font-weight: bold; }
-        .col-score { width: 12%; text-align: center; font-weight: bold; }
-        .col-question { width: 80%; }
+        .col-score { width: 10%; text-align: center; font-weight: bold; }
+        .col-question { width: 82%; }
 
         /* سربرگ گروه سوالات */
-        .group-header td { background: #f9f9f9; font-weight: bold; padding: 8px !important; text-align: right; }
+        .group-header td { background: #f9f9f9; font-weight: bold; padding: 4px 8px !important; text-align: right; border-bottom: 1.5px solid black; }
         
-        .opt-box { display: inline-block; border: 1px solid black; width: 16px; height: 16px; margin-left: 5px; vertical-align: middle; }
-        .options-grid { display: flex; flex-wrap: wrap; margin-top: 10px; gap: 10px; }
-        .option-item { width: 48%; display: flex; align-items: center; }
+        .opt-box { display: inline-block; border: 1px solid black; width: 12px; height: 12px; margin-left: 4px; vertical-align: middle; }
         
-        .tf-box { margin-right: 15px; display: inline-flex; align-items: center; gap: 5px; float: left; margin-top: 5px; }
-        .tashrihi-space { height: 80px; }
+        /* چیدمان درون‌خطی گزینه‌ها برای صرفه‌جویی در فضا */
+        .options-inline { display: flex; flex-wrap: wrap; gap: 5px 15px; margin-top: 4px; }
+        .option-item { display: flex; align-items: center; }
+        
+        .tf-inline { display: flex; justify-content: flex-end; gap: 15px; margin-top: 2px; float: left; }
+        
+        .tashrihi-space { height: 45px; } /* فضای خالی کوتاه‌تر برای تشریحی */
 
-        .answer-key-table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 15px; table-layout: fixed; }
-        .answer-key-table th, .answer-key-table td { border: 1px solid black; padding: 8px; text-align: center; }
+        .answer-key-table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 13px; table-layout: fixed; }
+        .answer-key-table th, .answer-key-table td { border: 1px solid black; padding: 4px; text-align: center; }
 
         /* 🌟 تنظیمات جادویی برای چاپ (پرینت به PDF) */
         @media print {
@@ -164,7 +168,7 @@
             #pdf-container { position: absolute; left: 0; top: 0; width: 100%; display: block !important; padding: 0; }
             tr { page-break-inside: avoid; }
             .page-break { page-break-before: always; }
-            @page { margin: 10mm; }
+            @page { margin: 5mm; } /* حاشیه کمتر برای جا شدن در یک صفحه */
         }
     </style>
 </head>
@@ -1134,7 +1138,7 @@
             document.body.removeChild(link);
         }
 
-        // ------------------ بخش تولید برگه آزمون (اصلاح شده نهایی) ------------------
+        // ------------------ بخش تولید برگه آزمون (کد اصلاح شده نهایی) ------------------
         function openPdfModal() {
             document.getElementById('pdfModal').style.display = 'flex';
         }
@@ -1184,11 +1188,11 @@
                 }
             }
 
-            // ترتیب و چیدمان سوالات بر اساس خواسته شما (بارم 0.5 برای تستی، جاخالی و درست/غلط و 2 برای تشریحی)
+            // ترتیب و چیدمان سوالات
             addQ('truefalse', 4);
             addQ('testi', 4);
             addQ('jakhali', 4);
-            addQ('essay', 10); // اضافه کردن تشریحی بیشتر برای پر کردن ۲۰ نمره
+            addQ('essay', 10); 
 
             if (currentScore < 20) {
                 let remainingPool = filteredQuestions.filter(q => !selectedQuestions.includes(q));
@@ -1253,7 +1257,8 @@
                 let answerText = '';
                 
                 if (q.type === 'testi') {
-                    qContent += `<div>${q.q}</div><div class="options-grid">`;
+                    // گزینه‌ها به صورت درون‌خطی و فشرده
+                    qContent += `<div>${q.q}</div><div class="options-inline">`;
                     q.options.forEach((opt, i) => {
                         const letter = ['الف', 'ب', 'ج', 'د'][i] || '';
                         qContent += `<div class="option-item"><span class="opt-box"></span> ${letter}) ${opt}</div>`;
@@ -1263,10 +1268,11 @@
                     answerText = q.options[correctIndex] || 'نامشخص';
 
                 } else if (q.type === 'truefalse') {
-                    qContent += `<div>${q.q}</div>
-                                 <div style="text-align: left; margin-top: 8px;">
-                                    <span class="tf-box">صحیح <span class="opt-box"></span></span>
-                                    <span class="tf-box">غلط <span class="opt-box"></span></span>
+                    // صحیح/غلط در انتهای خط
+                    qContent += `<div>${q.q} 
+                                 <span class="tf-inline">
+                                    <span class="opt-box"></span> صحیح &nbsp;&nbsp; <span class="opt-box"></span> غلط
+                                 </span>
                                  </div>`;
                     answerText = (q.answer === 0 || (Array.isArray(q.answer) && q.answer[0] === 0)) ? "صحیح" : "غلط";
 
@@ -1324,7 +1330,7 @@
                 let esList = selectedQuestions.filter(q => q.type === 'essay');
                 counter = 0;
                 esList.forEach(q => {
-                    pdfHTML += buildRow(q, (counter++ + 1), q.score); // برای تشریحی از عدد استفاده می‌کنیم
+                    pdfHTML += buildRow(q, (counter++ + 1), q.score); 
                 });
             }
 
@@ -1332,8 +1338,8 @@
 
             // صفحه دوم (پاسخنامه)
             pdfHTML += `
-                <div class="page-break" style="padding-top: 30px;">
-                    <h2 style="text-align: center; margin-bottom: 20px;">پاسخنامه و کلید سوالات</h2>
+                <div class="page-break" style="padding-top: 10px;">
+                    <h2 style="text-align: center; margin-bottom: 10px; font-size: 16px;">پاسخنامه و کلید سوالات</h2>
                     <table class="answer-key-table">
                         <thead>
                             <tr><th style="width: 20%;">شماره سوال</th><th>پاسخ صحیح / کلید</th></tr>
@@ -1342,7 +1348,7 @@
                             ${answerKeyHTML}
                         </tbody>
                     </table>
-                    <div style="margin-top: 50px; text-align: center; color: #666;">طراح سوال: ابراهیم اسحقی</div>
+                    <div style="margin-top: 20px; text-align: center; color: #666;">طراح سوال: ابراهیم اسحقی</div>
                 </div>
             `;
 
