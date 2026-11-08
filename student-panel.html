@@ -236,7 +236,7 @@
 
     <div class="container" id="panel-content" style="display: none;">
         
-        <!-- 👇 کادر اطلاعیه معلم (جدید) -->
+        <!-- کادر اطلاعیه معلم -->
         <div class="announcement-box" id="teacher-announcement">
             <h4>📢 اطلاعیه معلم:</h4>
             <p id="announcement-text"></p>
@@ -266,7 +266,7 @@
                     <h3 id="total-exams">0</h3>
                     <span>آزمون داده شده</span>
                 </div>
-                <!-- 👇 باکس امتیاز (جدید) -->
+                <!-- باکس امتیاز -->
                 <div class="stat-box points-box">
                     <span class="emoji">🎯</span>
                     <h3 id="student-points">0</h3>
@@ -323,15 +323,14 @@
                 document.getElementById('student-school-display').innerText = schoolName;
                 document.getElementById('student-avatar').innerText = studentName.charAt(0);
                 
-                // فراخوانی توابع جدید
                 fetchGrades();
                 updateCheckinButton(); 
-                processDailyPoints(); // دادن امتیاز روزانه
+                processDailyPoints(); // دادن امتیاز روزانه و دریافت آن
                 loadAnnouncement(); // لود اطلاعیه‌ها
             }
         };
 
-        // 👇 تابع پیدا کردن پایه دانش‌آموز (از کد قبلی شما استخراج شد تا در همه‌جا استفاده شود)
+        // تابع پیدا کردن پایه دانش‌آموز
         function getStudentGrade() {
             let studentGrade = "نامشخص";
             if (typeof schoolData !== 'undefined') {
@@ -352,7 +351,7 @@
                     }
                     if (found) break;
                 }
-                if (!found) { // چک کردن همه مدارس در صورت پیدا نشدن در مدرسه اصلی
+                if (!found) { 
                     for (const sKey in schoolData) {
                         const school = schoolData[sKey];
                         for (const gNum in school.grades) {
@@ -369,7 +368,7 @@
             return studentGrade;
         }
 
-        // 👇 توابع جدید برای اطلاعیه‌ها و امتیاز
+        // توابع اطلاعیه‌ها و امتیاز
         async function loadAnnouncement() {
             const grade = getStudentGrade();
             try {
@@ -389,9 +388,9 @@
 
         async function processDailyPoints() {
             const today = new Date().toLocaleDateString('fa-IR');
-            const lastPointDate = localStorage.getItem('last_point_date');
+            const storageKey = 'last_point_date_' + studentUsername; 
+            const lastPointDate = localStorage.getItem(storageKey);
 
-            // اگر امروز امتیاز نگرفته باشد، ۵ امتیاز می‌گیرد
             if (lastPointDate !== today) {
                 try {
                     const res = await fetch('https://api.motadars.ir/add_points.php', {
@@ -403,26 +402,32 @@
                     
                     if(data.status === 'success') {
                         document.getElementById('student-points').innerText = data.new_points;
-                        localStorage.setItem('last_point_date', today);
-                        // alert("🎉 ۵ امتیاز بابت ورود امروز به سایت دریافت کردید!");
+                        localStorage.setItem(storageKey, today);
                     }
-                } catch(e) { console.log("خطا در ثبت امتیاز"); }
+                } catch(e) { 
+                    console.log("خطا در ثبت امتیاز");
+                    fetchCurrentPoints(); 
+                }
             } else {
-                // اگر امروز قبلا امتیاز گرفته، فقط امتیاز فعلی را نشان بده
                 fetchCurrentPoints();
             }
         }
 
         async function fetchCurrentPoints() {
             try {
-                // اینجا میتوانید یک فایل api ساده بسازید که فقط امتیاز را برگرداند، 
-                // یا فعلا برای جلوگیری از کد اضافه، از خروجی get_leaderboard استفاده کنید که بعدا کامل میکنیم.
-                // برای الان یک مقدار موقت میگذاریم تا خطا ندهد.
-                document.getElementById('student-points').innerText = "..."; 
-            } catch(e) {}
+                const res = await fetch('https://api.motadars.ir/get_student_points.php', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ username: studentUsername })
+                });
+                const data = await res.json();
+                if(data.status === 'success') {
+                    document.getElementById('student-points').innerText = data.points || 0;
+                }
+            } catch(e) { console.log("خطا در دریافت امتیاز"); }
         }
 
-        // 👇 تابعی برای آپدیت ظاهر دکمه حاضری
+        // آپدیت ظاهر دکمه حاضری
         function updateCheckinButton() {
             const btn = document.getElementById('btn-checkin');
             const today = new Date().toLocaleDateString('fa-IR'); 
@@ -531,7 +536,7 @@
             }
         }
 
-        // 👇 تابع ثبت حاضری
+        // تابع ثبت حاضری
         async function checkIn() {
             const today = new Date().toLocaleDateString('fa-IR');
             const btn = document.getElementById('btn-checkin');
@@ -541,7 +546,6 @@
                 return;
             }
 
-            // استفاده از تابع کمکی برای پیدا کردن پایه
             const studentGrade = getStudentGrade();
             const actualSchoolName = (schoolName.includes("حسن")) ? "حسن بن علی (نوشهرکلنگی)" : "حضرت مهدی (سرزه)";
 
