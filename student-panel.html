@@ -43,10 +43,32 @@
             align-items: center;
             gap: 8px;
         }
-        .btn-action:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.2); }
+        .btn-action:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.2); }
         .btn-logout { background: rgba(220, 53, 69, 0.9); }
         .btn-password { background: rgba(245, 158, 11, 0.9); }
-        .btn-checkin { background: rgba(139, 92, 246, 0.9); }
+        
+        /* 👇 استایل جدید دکمه حاضری (جلب توجه) 👇 */
+        .btn-checkin { 
+            background: linear-gradient(135deg, #10b981, #059669); 
+            font-size: 1rem;
+            padding: 12px 22px;
+            animation: pulse-glow 2s infinite;
+        }
+        
+        @keyframes pulse-glow {
+            0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+            70% { box-shadow: 0 0 0 12px rgba(16, 185, 129, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+        }
+
+        /* استایل بعد از اینکه حاضری ثبت شد */
+        .btn-checkin.checked-in {
+            background: #9ca3af;
+            animation: none;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+        /* 👆 پایان استایل جدید 👆 */
 
         /* کارت پروفایل */
         .profile-card { 
@@ -107,7 +129,6 @@
         .motivation-box .mot-icon { font-size: 2.5rem; }
         .motivation-box .mot-text { text-align: right; flex: 1; font-weight: 700; color: #1e3a8a; line-height: 1.6; font-size: 1rem; }
         
-        /* حالت‌های مختلف پیام انگیزشی */
         .motivation-box.excellent { border-right-color: #f59e0b; background: linear-gradient(135deg, #fffbeb, #fef3c7); }
         .motivation-box.excellent .mot-text { color: #b45309; }
         
@@ -143,7 +164,6 @@
         }
         .grade-card:hover { transform: translateX(-5px); box-shadow: 0 8px 25px rgba(0,0,0,0.1); }
         
-        /* رنگ‌بندی نمرات */
         .grade-card.score-high { border-right-color: #10b981; }
         .grade-card.score-mid { border-right-color: #f59e0b; }
         .grade-card.score-low { border-right-color: #ef4444; }
@@ -196,7 +216,7 @@
         
         <!-- دکمه‌های عملیات -->
         <div class="top-actions">
-            <button class="btn-action btn-checkin" onclick="checkIn()">📍 ثبت حاضری امروز</button>
+            <button class="btn-action btn-checkin" id="btn-checkin" onclick="checkIn()">📍 ثبت حاضری امروز</button>
             <button class="btn-action btn-password" onclick="openPasswordModal()">🔑 تغییر رمز</button>
             <button class="btn-action btn-logout" onclick="logout()">🚪 خروج</button>
         </div>
@@ -221,7 +241,7 @@
             </div>
         </div>
 
-        <!-- پیام انگیزشی (به صورت هوشمند تغییر می‌کند) -->
+        <!-- پیام انگیزشی -->
         <div class="motivation-box" id="motivation-box">
             <div class="mot-icon" id="mot-icon">✨</div>
             <div class="mot-text" id="mot-text">در حال بررسی وضعیت درسی شما...</div>
@@ -260,13 +280,34 @@
         const schoolName = localStorage.getItem('school_name');
         const studentUsername = localStorage.getItem('student_username');
 
-        if (!studentName || !studentUsername) {
-            window.location.href = 'login.html';
-        } else {
-            document.getElementById('student-name-display').innerText = studentName;
-            document.getElementById('student-school-display').innerText = schoolName;
-            document.getElementById('student-avatar').innerText = studentName.charAt(0); // حرف اول اسم را در آواتار می‌گذارد
-            fetchGrades();
+        // 👇 بررسی وضعیت حاضری در هنگام بارگذاری صفحه
+        window.onload = () => {
+            if (!studentName || !studentUsername) {
+                window.location.href = 'login.html';
+            } else {
+                document.getElementById('student-name-display').innerText = studentName;
+                document.getElementById('student-school-display').innerText = schoolName;
+                document.getElementById('student-avatar').innerText = studentName.charAt(0);
+                fetchGrades();
+                updateCheckinButton(); // چک کردن اینکه امروز حاضری زده یا نه
+            }
+        };
+
+        // 👇 تابعی برای آپدیت ظاهر دکمه حاضری
+        function updateCheckinButton() {
+            const btn = document.getElementById('btn-checkin');
+            const today = new Date().toLocaleDateString('fa-IR'); // گرفتن تاریخ امروز
+            
+            // اگر تاریخ ذخیره شده با تاریخ امروز یکی بود، یعنی امروز حاضری زده
+            if (localStorage.getItem('last_checkin_date') === today) {
+                btn.classList.add('checked-in');
+                btn.innerHTML = '✅ حاضری امروز ثبت شد';
+                btn.disabled = true;
+            } else {
+                btn.classList.remove('checked-in');
+                btn.innerHTML = '📍 ثبت حاضری امروز';
+                btn.disabled = false;
+            }
         }
 
         async function fetchGrades() {
@@ -297,7 +338,6 @@
             const motIcon = document.getElementById('mot-icon');
             const motText = document.getElementById('mot-text');
             
-            // وضعیت اولیه (اگر هیچ نمره‌ای ثبت نشده باشد)
             if (grades.length === 0) {
                 container.innerHTML = '<div class="empty-state">هنوز در هیچ آزمونی شرکت نکرده‌اید! اولین قدم را بردارید. 🚀</div>';
                 motBox.className = 'motivation-box needs-work';
@@ -310,12 +350,8 @@
             let validExamsCount = 0;
 
             grades.forEach(g => {
-                if (g.score > 0) { 
-                    totalScore += parseInt(g.score); 
-                    validExamsCount++; 
-                }
+                if (g.score > 0) { totalScore += parseInt(g.score); validExamsCount++; }
 
-                // تعیین رنگ نمره
                 let scoreClass = "score-low";
                 if (g.score >= 17) scoreClass = "score-high";
                 else if (g.score >= 10) scoreClass = "score-mid";
@@ -348,7 +384,6 @@
                 document.getElementById('average-score').innerText = "0";
             }
 
-            // سیستم پیام انگیزشی هوشمند
             if (average >= 18) {
                 motBox.className = 'motivation-box excellent';
                 motIcon.innerText = '🌟';
@@ -368,8 +403,18 @@
             }
         }
 
-        // تابع ثبت حاضری (بدون تغییر)
+        // 👇 تابع جدید برای ثبت حاضری (با محدودیت روزانه)
         async function checkIn() {
+            const today = new Date().toLocaleDateString('fa-IR');
+            const btn = document.getElementById('btn-checkin');
+
+            // چک کردن اینکه آیا قبلا امروز ثبت کرده یا نه
+            if (localStorage.getItem('last_checkin_date') === today) {
+                alert('⚠️ شما امروز حاضری خود را ثبت کرده‌اید. هر روز فقط یک بار می‌توانید حاضری بزنید.');
+                return;
+            }
+
+            // پیدا کردن پایه تحصیلی
             let studentGrade = "نامشخص";
             let actualSchoolName = schoolName; 
             
@@ -414,6 +459,10 @@
                 return;
             }
 
+            // تغییر ظاهر دکمه در حین ارسال
+            btn.disabled = true;
+            btn.innerHTML = 'در حال ثبت... ⏳';
+
             try {
                 const res = await fetch('https://api.motadars.ir/save_attendance.php', {
                     method: 'POST',
@@ -429,16 +478,26 @@
                 if (data.status === 'success') {
                     const now = new Date();
                     const timeString = now.toLocaleTimeString('fa-IR', { hour: '2-digit', minute: '2-digit' });
+                    
+                    // ذخیره تاریخ امروز در حافظه مرورگر برای جلوگیری از ثبت دوباره
+                    localStorage.setItem('last_checkin_date', today);
+                    
+                    // تغییر ظاهر دکمه به حالت "ثبت شده"
+                    updateCheckinButton();
+                    
                     alert(`✅ حاضری شما در ساعت ${timeString} با موفقیت ثبت شد.`);
                 } else {
                     alert("❌ خطا: " + data.message);
+                    btn.disabled = false;
+                    btn.innerHTML = '📍 ثبت حاضری امروز';
                 }
             } catch (e) {
                 alert("❌ خطا در ارتباط با سرور.");
+                btn.disabled = false;
+                btn.innerHTML = '📍 ثبت حاضری امروز';
             }
         }
 
-        // توابع تغییر رمز (بدون تغییر)
         function openPasswordModal() {
             document.getElementById('oldPassword').value = '';
             document.getElementById('newPassword').value = '';
@@ -486,6 +545,7 @@
             localStorage.removeItem('student_name');
             localStorage.removeItem('school_name');
             localStorage.removeItem('student_username');
+            // توجه: last_checkin_date رو پاک نمی‌کنیم تا اگر دوباره لاگین کرد، حاضریش نپره
             window.location.href = 'index.html';
         }
     </script>
