@@ -110,12 +110,31 @@
 
         .exam-link-form { background: white; padding: 25px; border-radius: 15px; margin-bottom: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
         .exam-link-form h3 { color: #1e3c72; margin-bottom: 15px; }
-        .exam-link-form select, .exam-link-form input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 8px; font-family: inherit; font-size: 1rem; outline: none; }
+        .exam-link-form select, .exam-link-form input, .exam-link-form textarea { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 8px; font-family: inherit; font-size: 1rem; outline: none; }
         .btn-generate { width: 100%; padding: 12px; background: #3b82f6; color: white; border: none; border-radius: 8px; font-family: inherit; font-weight: bold; font-size: 1rem; cursor: pointer; }
         .link-result-box { display: none; background: #f0fdf4; padding: 20px; border-radius: 15px; border: 2px dashed #22c55e; text-align: center; }
         .link-result-box p { margin-bottom: 10px; font-weight: bold; color: #166534; }
         .link-result-box input { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; text-align: center; direction: ltr; font-family: monospace; margin-bottom: 10px; background: white; }
         .btn-copy-link { padding: 10px 20px; background: #22c55e; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-family: inherit; }
+
+        /* استایل‌های جدید اطلاع‌رسانی و رتبه‌بندی */
+        .announcement-card { background: #fefce8; border: 1px solid #fde047; border-radius: 10px; padding: 15px; margin-bottom: 15px; }
+        .announcement-card h4 { color: #854d0e; margin-bottom: 10px; font-size: 1.1rem; }
+        .announcement-card p { color: #713f12; font-size: 0.95rem; line-height: 1.6; }
+        .announcement-card .meta { font-size: 0.8rem; color: #a16207; margin-top: 10px; border-top: 1px dashed #fde047; padding-top: 8px; }
+        
+        .leaderboard-row { display: flex; justify-content: space-between; align-items: center; padding: 15px; border-bottom: 1px solid #e2e8f0; background: white; border-radius: 10px; margin-bottom: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
+        .leaderboard-row.top-1 { background: #fef3c7; border: 1px solid #f59e0b; }
+        .leaderboard-row.top-2 { background: #f1f5f9; border: 1px solid #94a3b8; }
+        .leaderboard-row.top-3 { background: #ffedd5; border: 1px solid #d97706; }
+        .rank-badge { font-size: 1.2rem; font-weight: 900; width: 40px; text-align: center; color: #64748b; }
+        .top-1 .rank-badge { color: #d97706; }
+        .top-2 .rank-badge { color: #475569; }
+        .top-3 .rank-badge { color: #b45309; }
+        .student-details { flex: 1; padding-right: 15px; }
+        .student-details h4 { color: #1e293b; margin-bottom: 4px; }
+        .student-details span { font-size: 0.8rem; color: #64748b; }
+        .points-badge { background: #dbeafe; color: #1d4ed8; font-weight: bold; padding: 8px 15px; border-radius: 20px; font-size: 1rem; }
 
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); display: none; justify-content: center; align-items: center; z-index: 1000; padding: 20px; }
         .modal-content { background: white; padding: 25px; border-radius: 15px; width: 100%; max-width: 400px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
@@ -127,51 +146,37 @@
         .btn-save { flex: 1; background: #10b981; color: white; border: none; padding: 12px; border-radius: 8px; font-family: inherit; font-size: 1rem; font-weight: bold; cursor: pointer; }
         .btn-cancel { flex: 1; background: #e2e8f0; color: #475569; border: none; padding: 12px; border-radius: 8px; font-family: inherit; font-size: 1rem; font-weight: bold; cursor: pointer; }
 
-        /* 👇 استایل‌های تنظیم شده برای پر شدن دقیق ۲ صفحه */
+        /* استایل‌های تنظیم شده برای پر شدن دقیق ۲ صفحه PDF */
         .exam-pdf-page { font-family: 'Vazirmatn', 'B Nazanin', sans-serif; direction: rtl; color: black; font-size: 14px; background: white; padding: 5px; line-height: 1.5; }
-        
         .exam-header-table { width: 100%; border-collapse: collapse; margin-bottom: 10px; text-align: center; }
         .exam-header-table td { border: 1.5px solid black; padding: 4px; }
         .exam-header-title { font-size: 18px; font-weight: bold; padding: 6px !important; }
-        
         .exam-motto { text-align: center; font-weight: bold; font-size: 14px; margin: 10px 0; }
-        
-        /* جدول اصلی سوالات */
         .exam-main-table { width: 100%; border-collapse: collapse; text-align: right; table-layout: fixed; }
         .exam-main-table th { border: 1.5px solid black; padding: 4px; text-align: center; background: #f0f0f0; }
         .exam-main-table td { border: 1.5px solid black; padding: 6px 10px; vertical-align: top; font-size: 14px; }
-        
         .col-row { width: 8%; text-align: center; font-weight: bold; }
         .col-score { width: 10%; text-align: center; font-weight: bold; }
         .col-question { width: 82%; }
-
-        /* استایل سوالات داخل سلول */
         .q-group-title { font-weight: bold; margin-bottom: 8px; padding-bottom: 3px; border-bottom: 1px dashed #999; font-size: 15px; }
         .sub-q { margin-bottom: 8px; display: flex; align-items: flex-start; }
         .sub-q-label { font-weight: bold; margin-left: 8px; min-width: 25px; }
         .sub-q-content { flex: 1; }
-        
         .opt-box { display: inline-block; border: 1px solid black; width: 14px; height: 14px; margin-left: 5px; vertical-align: middle; }
-        
         .options-inline { display: flex; flex-wrap: wrap; gap: 5px 20px; margin-top: 6px; }
         .option-item { display: flex; align-items: center; }
-        
         .tf-inline { display: flex; justify-content: flex-end; gap: 20px; margin-right: auto; }
-        
-        /* ارتفاع فضاهای خالی تشریحی (کاهش چشمگیر برای جا شدن در صفحه ۲) */
         .tashrihi-space { height: 45px; border-bottom: 1px dashed #ccc; margin-top: 5px; margin-bottom: 5px; }
-
         .answer-key-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 14px; table-layout: fixed; }
         .answer-key-table th, .answer-key-table td { border: 1px solid black; padding: 6px; text-align: center; }
 
-        /* 🌟 تنظیمات جادویی برای چاپ (پرینت به PDF) */
         @media print {
             body * { visibility: hidden; }
             #pdf-container, #pdf-container * { visibility: visible; }
             #pdf-container { position: absolute; left: 0; top: 0; width: 100%; display: block !important; padding: 0; }
             tr { page-break-inside: avoid; }
             .page-break { page-break-before: always; }
-            @page { margin: 5mm; } /* حاشیه بسیار کم برای استفاده حداکثری از فضا */
+            @page { margin: 5mm; }
         }
     </style>
 </head>
@@ -194,15 +199,19 @@
                 </div>
             </div>
 
+            <!-- تب‌ها (تغییرات جدید اضافه شد) -->
             <div class="tabs">
                 <button class="tab-btn active" id="tab-dashboard" onclick="switchTab('dashboard')">📊 داشبورد</button>
                 <button class="tab-btn" id="tab-class" onclick="switchTab('class')">📚 نمرات</button>
                 <button class="tab-btn" id="tab-attendance" onclick="switchTab('attendance')">📋 حضور و غیاب</button>
                 <button class="tab-btn" id="tab-essay" onclick="switchTab('essay')">📝 تصحیح تشریحی</button>
                 <button class="tab-btn" id="tab-exam-links" onclick="switchTab('exam-links')">📝 مدیریت آزمون‌ها</button>
+                <button class="tab-btn" id="tab-announcements" onclick="switchTab('announcements')">📢 اطلاع‌رسانی</button>
+                <button class="tab-btn" id="tab-leaderboard" onclick="switchTab('leaderboard')">🏆 رتبه‌بندی</button>
                 <button class="tab-btn" id="tab-accounts" onclick="switchTab('accounts')">👥 اکانت‌ها</button>
             </div>
 
+            <!-- بخش داشبورد -->
             <div id="dashboardSection">
                 <div class="stats-grid" id="statsGrid"></div>
                 <div class="charts-grid">
@@ -217,11 +226,13 @@
                 </div>
             </div>
 
+            <!-- بخش کلاس -->
             <div id="classSection" style="display: none;">
                 <input type="text" id="searchInput" class="search-box" placeholder="🔍 جستجوی نام دانش‌آموز..." oninput="filterStudents()">
                 <div id="contentBox"></div>
             </div>
 
+            <!-- بخش حضور و غیاب -->
             <div id="attendanceSection" style="display: none;">
                 <div style="background: white; padding: 15px; border-radius: 10px; margin-bottom: 20px; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
                     <h3 style="color: #1e293b; margin-bottom: 10px;">تاریخ امروز: <span id="todayDateDisplay" style="color: #3498db;"></span></h3>
@@ -229,11 +240,13 @@
                 <div id="attendanceBox"></div>
             </div>
 
+            <!-- بخش تصحیح تشریحی -->
             <div id="essaySection" style="display: none;">
                 <h3 style="color: white; margin-bottom: 15px; text-align: center;">پاسخ‌های در انتظار تصحیح</h3>
                 <div id="essayBox"></div>
             </div>
 
+            <!-- بخش مدیریت آزمون‌ها -->
             <div id="examLinksSection" style="display: none;">
                 <div class="exam-link-form">
                     <h3>🔗 ساخت لینک آزمون برای دانش‌آموزان</h3>
@@ -256,6 +269,36 @@
                 </div>
             </div>
 
+            <!-- بخش اطلاع‌رسانی (جدید) -->
+            <div id="announcementsSection" style="display: none;">
+                <div class="exam-link-form">
+                    <h3>📢 ارسال پیام / اطلاعیه به دانش‌آموزان</h3>
+                    <p style="color: #64748b; font-size: 0.9rem; margin-bottom: 15px;">این پیام در بالای پنل دانش‌آموزان نمایش داده می‌شود.</p>
+                    <textarea id="announcement-text" rows="4" placeholder="متن اطلاعیه یا دانستنی روز را اینجا بنویسید..."></textarea>
+                    <select id="announcement-grade">
+                        <option value="all">ارسال به همه پایه‌ها</option>
+                        <option value="7">فقط پایه هفتم</option>
+                        <option value="8">فقط پایه هشتم</option>
+                        <option value="9">فقط پایه نهم</option>
+                    </select>
+                    <button class="btn-generate" onclick="sendAnnouncement()">🚀 ارسال اطلاعیه</button>
+                </div>
+                
+                <h3 style="color: white; margin-bottom: 15px;">آخرین اطلاعیه‌های ارسال شده</h3>
+                <div id="recent-announcements"></div>
+            </div>
+
+            <!-- بخش رتبه‌بندی (جدید) -->
+            <div id="leaderboardSection" style="display: none;">
+                <input type="text" id="searchLeaderboard" class="search-box" placeholder="🔍 جستجوی نام دانش‌آموز..." oninput="filterLeaderboard()">
+                <div class="school-section">
+                    <h2 class="school-title">🏆 جدول رتبه‌بندی دانش‌آموزان</h2>
+                    <p style="color: #64748b; font-size: 0.9rem; margin-bottom: 15px;">امتیازها بر اساس ورود روزانه، نمرات و فعالیت‌ها محاسبه می‌شوند.</p>
+                    <div id="leaderboardBox"></div>
+                </div>
+            </div>
+
+            <!-- بخش مدیریت اکانت‌ها -->
             <div id="accountsSection" style="display: none;">
                 <input type="text" id="searchAccountInput" class="search-box" placeholder="🔍 جستجوی نام یا نام کاربری..." oninput="renderAccounts()">
                 <div id="accountsBox"></div>
@@ -367,6 +410,7 @@
         let manualScores = {};
         let schoolChartInstance = null;
         let typeChartInstance = null;
+        let leaderboardData = []; // ذخیره اطلاعات رتبه‌بندی
 
         if(localStorage.getItem('teacher_logged_in') === 'true') {
             document.getElementById('loginBox').style.display = 'none';
@@ -422,6 +466,8 @@
             document.getElementById('attendanceSection').style.display = 'none';
             document.getElementById('essaySection').style.display = 'none';
             document.getElementById('examLinksSection').style.display = 'none';
+            document.getElementById('announcementsSection').style.display = 'none'; // جدید
+            document.getElementById('leaderboardSection').style.display = 'none'; // جدید
 
             if(tabName === 'dashboard') {
                 document.getElementById('tab-dashboard').classList.add('active');
@@ -446,7 +492,130 @@
             } else if(tabName === 'exam-links') {
                 document.getElementById('tab-exam-links').classList.add('active');
                 document.getElementById('examLinksSection').style.display = 'block';
+            } else if(tabName === 'announcements') {
+                document.getElementById('tab-announcements').classList.add('active');
+                document.getElementById('announcementsSection').style.display = 'block';
+                loadAnnouncements();
+            } else if(tabName === 'leaderboard') {
+                document.getElementById('tab-leaderboard').classList.add('active');
+                document.getElementById('leaderboardSection').style.display = 'block';
+                loadLeaderboard();
             }
+        }
+
+        // ------------------ بخش اطلاع‌رسانی (جدید) ------------------
+        async function sendAnnouncement() {
+            const text = document.getElementById('announcement-text').value.trim();
+            const grade = document.getElementById('announcement-grade').value;
+            if(!text) return alert('لطفاً متن اطلاعیه را وارد کنید.');
+
+            const btn = event.target;
+            btn.disabled = true;
+            btn.innerText = 'در حال ارسال...';
+
+            try {
+                const res = await fetch('https://api.motadars.ir/save_announcement.php', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ message: text, target_grade: grade })
+                });
+                const data = await res.json();
+                
+                if(data.status === 'success') {
+                    alert('✅ اطلاعیه با موفقیت برای دانش‌آموزان ارسال شد.');
+                    document.getElementById('announcement-text').value = '';
+                    loadAnnouncements();
+                } else {
+                    alert('❌ خطا: ' + data.message);
+                }
+            } catch(e) {
+                alert('❌ خطا در ارتباط با سرور.');
+            } finally {
+                btn.disabled = false;
+                btn.innerText = '🚀 ارسال اطلاعیه';
+            }
+        }
+
+        async function loadAnnouncements() {
+            const box = document.getElementById('recent-announcements');
+            box.innerHTML = '<p style="color: white; text-align: center;">در حال دریافت...</p>';
+
+            try {
+                const res = await fetch('https://api.motadars.ir/get_announcements.php');
+                const data = await res.json();
+                
+                if(data.status === 'success') {
+                    if(data.data.length === 0) {
+                        box.innerHTML = '<p style="color: white; text-align: center;">هیچ اطلاعیه‌ای ارسال نشده است.</p>';
+                        return;
+                    }
+                    box.innerHTML = '';
+                    data.data.forEach(ann => {
+                        let gradeLabel = ann.target_grade === 'all' ? 'همه پایه‌ها' : `پایه ${ann.target_grade}`;
+                        box.innerHTML += `
+                            <div class="announcement-card">
+                                <p>${ann.message}</p>
+                                <div class="meta">ارسال به: ${gradeLabel} | تاریخ: ${ann.created_at}</div>
+                            </div>
+                        `;
+                    });
+                }
+            } catch (e) {
+                box.innerHTML = '<p style="color: white; text-align: center;">خطا در دریافت اطلاعات.</p>';
+            }
+        }
+
+        // ------------------ بخش جدول رتبه‌بندی (جدید) ------------------
+        async function loadLeaderboard() {
+            const box = document.getElementById('leaderboardBox');
+            box.innerHTML = '<p style="text-align: center; color: #64748b;">در حال دریافت اطلاعات...</p>';
+
+            try {
+                const res = await fetch('https://api.motadars.ir/get_leaderboard.php');
+                const data = await res.json();
+                
+                if(data.status === 'success') {
+                    leaderboardData = data.data;
+                    renderLeaderboard(leaderboardData);
+                }
+            } catch (e) {
+                box.innerHTML = '<p style="text-align: center; color: red;">خطا در دریافت اطلاعات.</p>';
+            }
+        }
+
+        function renderLeaderboard(data) {
+            const box = document.getElementById('leaderboardBox');
+            if(data.length === 0) {
+                box.innerHTML = '<p style="text-align: center; color: #64748b;">اطلاعاتی برای نمایش وجود ندارد.</p>';
+                return;
+            }
+
+            box.innerHTML = '';
+            data.forEach((student, index) => {
+                let rank = index + 1;
+                let rankClass = rank <= 3 ? `top-${rank}` : '';
+                let rankEmoji = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : rank;
+
+                box.innerHTML += `
+                    <div class="leaderboard-row ${rankClass}" data-name="${student.full_name}">
+                        <div class="rank-badge">${rankEmoji}</div>
+                        <div class="student-details">
+                            <h4>${student.full_name}</h4>
+                            <span>${student.school_name} - پایه ${student.grade}</span>
+                        </div>
+                        <div class="points-badge">${student.points} امتیاز</div>
+                    </div>
+                `;
+            });
+        }
+
+        function filterLeaderboard() {
+            const query = document.getElementById('searchLeaderboard').value.trim().toLowerCase();
+            const rows = document.querySelectorAll('.leaderboard-row');
+            rows.forEach(row => {
+                const name = row.getAttribute('data-name').toLowerCase();
+                row.style.display = name.includes(query) ? 'flex' : 'none';
+            });
         }
 
         // ------------------ بخش داشبورد آماری ------------------
@@ -1141,7 +1310,7 @@
             document.body.removeChild(link);
         }
 
-        // ------------------ بخش تولید برگه آزمون (تنظیم دقیق برای ۲ صفحه) ------------------
+        // ------------------ بخش تولید برگه آزمون ------------------
         function openPdfModal() {
             document.getElementById('pdfModal').style.display = 'flex';
         }
@@ -1191,12 +1360,9 @@
                 }
             }
 
-            // ۳ بخش اول: هر کدام ۴ سوال ۰.۵ نمره‌ای (مجموعا ۶ نمره)
             addQ('truefalse', 4);
             addQ('testi', 4);
             addQ('jakhali', 4);
-            
-            // بخش تشریحی: بقیه نمره تا ۲۰ (هر سوال ۲ نمره) -> 7 سوال
             addQ('essay', 10); 
 
             if (currentScore < 20) {
@@ -1259,7 +1425,6 @@
             const letters = ['الف', 'ب', 'ج', 'د', 'هـ', 'و', 'ز', 'ح', 'ط', 'ی', 'ک', 'ل', 'م', 'ن'];
             let groupNum = 1;
 
-            // ۱. بخش درست / نادرست
             if (truefalseQ.length > 0) {
                 pdfHTML += `<tr>
                     <td class="col-row">${groupNum++}</td>
@@ -1285,7 +1450,6 @@
                 pdfHTML += `</td><td class="col-score">${truefalseQ.length * 0.5}</td></tr>`;
             }
 
-            // ۲. بخش تستی
             if (testiQ.length > 0) {
                 pdfHTML += `<tr>
                     <td class="col-row">${groupNum++}</td>
@@ -1311,7 +1475,6 @@
                 pdfHTML += `</td><td class="col-score">${testiQ.length * 0.5}</td></tr>`;
             }
 
-            // ۳. بخش جاخالی
             if (jakhaliQ.length > 0) {
                 pdfHTML += `<tr>
                     <td class="col-row">${groupNum++}</td>
@@ -1331,7 +1494,6 @@
                 pdfHTML += `</td><td class="col-score">${jakhaliQ.length * 0.5}</td></tr>`;
             }
 
-            // ۴. بخش تشریحی
             if (essayQ.length > 0) {
                 pdfHTML += `<tr>
                     <td class="col-row">${groupNum++}</td>
@@ -1356,7 +1518,6 @@
 
             pdfHTML += `</tbody></table>`;
 
-            // صفحه سوم (پاسخنامه)
             pdfHTML += `
                 <div class="page-break" style="padding-top: 20px;">
                     <h2 style="text-align: center; margin-bottom: 15px; font-size: 18px;">پاسخنامه و کلید سوالات</h2>
