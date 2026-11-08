@@ -19,6 +19,26 @@
         
         .container { max-width: 700px; width: 100%; margin-top: 10px; }
         
+        /* کادر اطلاعیه معلم */
+        .announcement-box {
+            background: #fefce8; 
+            border: 1px solid #fde047; 
+            border-radius: 16px; 
+            padding: 15px 20px; 
+            margin-bottom: 20px; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            display: none; /* به صورت پیش‌فرض مخفی است */
+            border-right: 6px solid #eab308;
+            animation: slideDown 0.5s ease-out;
+        }
+        .announcement-box h4 { color: #854d0e; margin-bottom: 8px; font-size: 1.1rem; }
+        .announcement-box p { color: #713f12; font-size: 0.95rem; line-height: 1.6; }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         /* دکمه‌های بالای صفحه */
         .top-actions {
             display: flex;
@@ -47,7 +67,6 @@
         .btn-logout { background: rgba(220, 53, 69, 0.9); }
         .btn-password { background: rgba(245, 158, 11, 0.9); }
         
-        /* 👇 استایل جدید دکمه حاضری (جلب توجه) 👇 */
         .btn-checkin { 
             background: linear-gradient(135deg, #10b981, #059669); 
             font-size: 1rem;
@@ -61,14 +80,12 @@
             100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
         }
 
-        /* استایل بعد از اینکه حاضری ثبت شد */
         .btn-checkin.checked-in {
             background: #9ca3af;
             animation: none;
             cursor: not-allowed;
             box-shadow: none;
         }
-        /* 👆 پایان استایل جدید 👆 */
 
         /* کارت پروفایل */
         .profile-card { 
@@ -99,19 +116,24 @@
         .profile-card h2 { font-size: 1.5rem; color: #4c1d95; margin-bottom: 5px; font-weight: 900; }
         .profile-card p { color: #6b7280; font-size: 0.95rem; margin-bottom: 25px; }
         
-        .stats { display: flex; justify-content: center; gap: 15px; }
+        /* بخش آمار */
+        .stats { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
         .stat-box { 
             background: white; 
-            padding: 15px 20px; 
+            padding: 15px 10px; 
             border-radius: 16px; 
             border: 1px solid #e5e7eb; 
             flex: 1;
-            max-width: 140px;
+            min-width: 100px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.03);
         }
-        .stat-box h3 { font-size: 2rem; color: #10b981; font-weight: 900; margin-bottom: 5px; }
-        .stat-box span { font-size: 0.8rem; color: #6b7280; font-weight: 700; }
+        .stat-box h3 { font-size: 1.8rem; color: #10b981; font-weight: 900; margin-bottom: 5px; }
+        .stat-box span { font-size: 0.75rem; color: #6b7280; font-weight: 700; }
         .stat-box .emoji { font-size: 1.5rem; display: block; margin-bottom: 5px; }
+        
+        /* باکس امتیاز مخصوص */
+        .stat-box.points-box { border-color: #fde047; background: #fefce8; }
+        .stat-box.points-box h3 { color: #ca8a04; }
 
         /* بخش پیام انگیزشی */
         .motivation-box {
@@ -214,6 +236,12 @@
 
     <div class="container" id="panel-content" style="display: none;">
         
+        <!-- 👇 کادر اطلاعیه معلم (جدید) -->
+        <div class="announcement-box" id="teacher-announcement">
+            <h4>📢 اطلاعیه معلم:</h4>
+            <p id="announcement-text"></p>
+        </div>
+
         <!-- دکمه‌های عملیات -->
         <div class="top-actions">
             <button class="btn-action btn-checkin" id="btn-checkin" onclick="checkIn()">📍 ثبت حاضری امروز</button>
@@ -237,6 +265,12 @@
                     <span class="emoji">📝</span>
                     <h3 id="total-exams">0</h3>
                     <span>آزمون داده شده</span>
+                </div>
+                <!-- 👇 باکس امتیاز (جدید) -->
+                <div class="stat-box points-box">
+                    <span class="emoji">🎯</span>
+                    <h3 id="student-points">0</h3>
+                    <span>امتیاز شما</span>
                 </div>
             </div>
         </div>
@@ -280,7 +314,7 @@
         const schoolName = localStorage.getItem('school_name');
         const studentUsername = localStorage.getItem('student_username');
 
-        // 👇 بررسی وضعیت حاضری در هنگام بارگذاری صفحه
+        // در هنگام بارگذاری صفحه
         window.onload = () => {
             if (!studentName || !studentUsername) {
                 window.location.href = 'login.html';
@@ -288,17 +322,111 @@
                 document.getElementById('student-name-display').innerText = studentName;
                 document.getElementById('student-school-display').innerText = schoolName;
                 document.getElementById('student-avatar').innerText = studentName.charAt(0);
+                
+                // فراخوانی توابع جدید
                 fetchGrades();
-                updateCheckinButton(); // چک کردن اینکه امروز حاضری زده یا نه
+                updateCheckinButton(); 
+                processDailyPoints(); // دادن امتیاز روزانه
+                loadAnnouncement(); // لود اطلاعیه‌ها
             }
         };
+
+        // 👇 تابع پیدا کردن پایه دانش‌آموز (از کد قبلی شما استخراج شد تا در همه‌جا استفاده شود)
+        function getStudentGrade() {
+            let studentGrade = "نامشخص";
+            if (typeof schoolData !== 'undefined') {
+                let found = false;
+                for (const sKey in schoolData) {
+                    const school = schoolData[sKey];
+                    const isHasan = schoolName.includes("حسن بن علی") && sKey === "hasan_bin_ali";
+                    const isMahdi = schoolName.includes("حضرت مهدی") && sKey === "hazrat_mahdi";
+                    
+                    if (isHasan || isMahdi || school.name === schoolName) {
+                        for (const gNum in school.grades) {
+                            if (school.grades[gNum].includes(studentName)) {
+                                studentGrade = gNum;
+                                found = true;
+                                break;
+                            }
+                        }
+                    }
+                    if (found) break;
+                }
+                if (!found) { // چک کردن همه مدارس در صورت پیدا نشدن در مدرسه اصلی
+                    for (const sKey in schoolData) {
+                        const school = schoolData[sKey];
+                        for (const gNum in school.grades) {
+                            if (school.grades[gNum].includes(studentName)) {
+                                studentGrade = gNum;
+                                found = true;
+                                break;
+                            }
+                        }
+                        if (found) break;
+                    }
+                }
+            }
+            return studentGrade;
+        }
+
+        // 👇 توابع جدید برای اطلاعیه‌ها و امتیاز
+        async function loadAnnouncement() {
+            const grade = getStudentGrade();
+            try {
+                const res = await fetch('https://api.motadars.ir/get_student_announcements.php', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ grade: grade })
+                });
+                const data = await res.json();
+                
+                if(data.status === 'success' && data.data.length > 0) {
+                    document.getElementById('announcement-text').innerText = data.data[0].message;
+                    document.getElementById('teacher-announcement').style.display = 'block';
+                }
+            } catch(e) { console.log("خطا در لود اطلاعیه"); }
+        }
+
+        async function processDailyPoints() {
+            const today = new Date().toLocaleDateString('fa-IR');
+            const lastPointDate = localStorage.getItem('last_point_date');
+
+            // اگر امروز امتیاز نگرفته باشد، ۵ امتیاز می‌گیرد
+            if (lastPointDate !== today) {
+                try {
+                    const res = await fetch('https://api.motadars.ir/add_points.php', {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify({ username: studentUsername })
+                    });
+                    const data = await res.json();
+                    
+                    if(data.status === 'success') {
+                        document.getElementById('student-points').innerText = data.new_points;
+                        localStorage.setItem('last_point_date', today);
+                        // alert("🎉 ۵ امتیاز بابت ورود امروز به سایت دریافت کردید!");
+                    }
+                } catch(e) { console.log("خطا در ثبت امتیاز"); }
+            } else {
+                // اگر امروز قبلا امتیاز گرفته، فقط امتیاز فعلی را نشان بده
+                fetchCurrentPoints();
+            }
+        }
+
+        async function fetchCurrentPoints() {
+            try {
+                // اینجا میتوانید یک فایل api ساده بسازید که فقط امتیاز را برگرداند، 
+                // یا فعلا برای جلوگیری از کد اضافه، از خروجی get_leaderboard استفاده کنید که بعدا کامل میکنیم.
+                // برای الان یک مقدار موقت میگذاریم تا خطا ندهد.
+                document.getElementById('student-points').innerText = "..."; 
+            } catch(e) {}
+        }
 
         // 👇 تابعی برای آپدیت ظاهر دکمه حاضری
         function updateCheckinButton() {
             const btn = document.getElementById('btn-checkin');
-            const today = new Date().toLocaleDateString('fa-IR'); // گرفتن تاریخ امروز
+            const today = new Date().toLocaleDateString('fa-IR'); 
             
-            // اگر تاریخ ذخیره شده با تاریخ امروز یکی بود، یعنی امروز حاضری زده
             if (localStorage.getItem('last_checkin_date') === today) {
                 btn.classList.add('checked-in');
                 btn.innerHTML = '✅ حاضری امروز ثبت شد';
@@ -403,63 +531,25 @@
             }
         }
 
-        // 👇 تابع جدید برای ثبت حاضری (با محدودیت روزانه)
+        // 👇 تابع ثبت حاضری
         async function checkIn() {
             const today = new Date().toLocaleDateString('fa-IR');
             const btn = document.getElementById('btn-checkin');
 
-            // چک کردن اینکه آیا قبلا امروز ثبت کرده یا نه
             if (localStorage.getItem('last_checkin_date') === today) {
                 alert('⚠️ شما امروز حاضری خود را ثبت کرده‌اید. هر روز فقط یک بار می‌توانید حاضری بزنید.');
                 return;
             }
 
-            // پیدا کردن پایه تحصیلی
-            let studentGrade = "نامشخص";
-            let actualSchoolName = schoolName; 
-            
-            if (typeof schoolData !== 'undefined') {
-                let found = false;
-                for (const sKey in schoolData) {
-                    const school = schoolData[sKey];
-                    const isHasan = schoolName.includes("حسن بن علی") && sKey === "hasan_bin_ali";
-                    const isMahdi = schoolName.includes("حضرت مهدی") && sKey === "hazrat_mahdi";
-                    
-                    if (isHasan || isMahdi || school.name === schoolName) {
-                        for (const gNum in school.grades) {
-                            if (school.grades[gNum].includes(studentName)) {
-                                studentGrade = gNum;
-                                actualSchoolName = school.name; 
-                                found = true;
-                                break;
-                            }
-                        }
-                    }
-                    if (found) break;
-                }
-
-                if (!found) {
-                    for (const sKey in schoolData) {
-                        const school = schoolData[sKey];
-                        for (const gNum in school.grades) {
-                            if (school.grades[gNum].includes(studentName)) {
-                                studentGrade = gNum;
-                                actualSchoolName = school.name;
-                                found = true;
-                                break;
-                            }
-                        }
-                        if (found) break;
-                    }
-                }
-            }
+            // استفاده از تابع کمکی برای پیدا کردن پایه
+            const studentGrade = getStudentGrade();
+            const actualSchoolName = (schoolName.includes("حسن")) ? "حسن بن علی (نوشهرکلنگی)" : "حضرت مهدی (سرزه)";
 
             if (studentGrade === "نامشخص") {
                 alert("خطا: نام شما در لیست کلاس پیدا نشد. لطفاً با معلم خود تماس بگیرید.");
                 return;
             }
 
-            // تغییر ظاهر دکمه در حین ارسال
             btn.disabled = true;
             btn.innerHTML = 'در حال ثبت... ⏳';
 
@@ -479,10 +569,7 @@
                     const now = new Date();
                     const timeString = now.toLocaleTimeString('fa-IR', { hour: '2-digit', minute: '2-digit' });
                     
-                    // ذخیره تاریخ امروز در حافظه مرورگر برای جلوگیری از ثبت دوباره
                     localStorage.setItem('last_checkin_date', today);
-                    
-                    // تغییر ظاهر دکمه به حالت "ثبت شده"
                     updateCheckinButton();
                     
                     alert(`✅ حاضری شما در ساعت ${timeString} با موفقیت ثبت شد.`);
@@ -545,7 +632,6 @@
             localStorage.removeItem('student_name');
             localStorage.removeItem('school_name');
             localStorage.removeItem('student_username');
-            // توجه: last_checkin_date رو پاک نمی‌کنیم تا اگر دوباره لاگین کرد، حاضریش نپره
             window.location.href = 'index.html';
         }
     </script>
