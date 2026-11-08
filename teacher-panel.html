@@ -8,21 +8,26 @@
     <style>
         * { margin:0; padding:0; box-sizing:border-box; font-family:'Vazirmatn',sans-serif; }
         body { min-height: 100vh; background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%); padding: 20px; color: #333; }
+        
         .container { max-width: 900px; margin: 0 auto; }
         
+        /* فرم ورود */
         .login-box { background: white; padding: 40px; border-radius: 20px; max-width: 400px; margin: 100px auto; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
         .login-box h2 { color: #2c3e50; margin-bottom: 20px; }
         .login-box input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 8px; font-family: inherit; font-size: 16px; }
         .login-box button { width: 100%; padding: 12px; background: #3498db; color: white; border: none; border-radius: 8px; font-size: 16px; cursor: pointer; }
         
+        /* داشبورد */
         #dashboard { display: none; }
         .header { display: flex; justify-content: space-between; align-items: center; background: white; padding: 20px; border-radius: 15px; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); flex-wrap: wrap; gap: 10px; }
         .header h2 { color: #2c3e50; }
         .header-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+        
         .btn-export { background: #10b981; color: white; padding: 8px 15px; border-radius: 8px; border: none; cursor: pointer; font-family: inherit; font-weight: bold; display: flex; align-items: center; gap: 5px; transition: 0.3s; }
         .btn-export:hover { background: #059669; }
         .logout-btn { background: #dc3545; color: white; padding: 8px 15px; border-radius: 8px; text-decoration: none; border: none; cursor: pointer; font-family: inherit; }
         
+        /* تب‌ها */
         .tabs { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
         .tab-btn { flex: 1; min-width: 100px; padding: 15px; background: rgba(255,255,255,0.7); border: none; border-radius: 10px; cursor: pointer; font-weight: bold; font-size: 0.95rem; transition: 0.3s; color: #475569; font-family: inherit; }
         .tab-btn.active { background: white; color: #3498db; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
@@ -82,12 +87,33 @@
         .sub-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e2e8f0; padding-bottom: 10px; margin-bottom: 15px; }
         .sub-header h3 { color: #1e293b; font-size: 1.1rem; }
         .sub-header span { background: #f1f5f9; padding: 3px 10px; border-radius: 5px; font-size: 0.8rem; color: #475569; }
-        .q-item { background: #f8fafc; padding: 10px; border-radius: 8px; margin-bottom: 10px; border: 1px solid #e2e8f0; }
-        .q-text { font-weight: bold; color: #334155; font-size: 0.9rem; margin-bottom: 5px; }
-        .a-text { color: #475569; font-size: 0.9rem; line-height: 1.6; }
-        .grading-box { background: #f0fdf4; padding: 15px; border-radius: 10px; border: 1px dashed #22c55e; margin-top: 15px; display: flex; align-items: center; gap: 15px; }
-        .grading-box input { width: 80px; padding: 8px; border: 1px solid #ccc; border-radius: 5px; text-align: center; font-family: inherit; font-size: 1.1rem; font-weight: bold; }
-        .btn-submit-grade { background: #22c55e; color: white; border: none; padding: 8px 20px; border-radius: 5px; font-family: inherit; font-weight: bold; cursor: pointer; }
+        .q-item { background: #f8fafc; padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #e2e8f0; }
+        .q-text { font-weight: bold; color: #334155; font-size: 0.95rem; margin-bottom: 8px; }
+        .a-text { color: #475569; font-size: 0.9rem; line-height: 1.6; margin-bottom: 5px; }
+        .key-text { color: #10b981; font-size: 0.85rem; font-weight: bold; display: block; margin-bottom: 10px; }
+        
+        /* دکمه‌های نمره‌دهی جدید */
+        .score-buttons-container { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; background: white; padding: 8px; border-radius: 8px; border: 1px solid #cbd5e1; }
+        .score-label { font-size: 0.85rem; color: #64748b; font-weight: bold; display: flex; align-items: center; margin-left: 5px; }
+        .btn-score { padding: 6px 15px; border: 1px solid #94a3b8; background: white; border-radius: 6px; cursor: pointer; font-family: inherit; font-size: 0.9rem; font-weight: bold; color: #475569; transition: 0.2s; }
+        .btn-score:hover { background: #e2e8f0; }
+        .btn-score.active { background: #10b981; color: white; border-color: #10b981; box-shadow: 0 2px 5px rgba(16,185,129,0.4); }
+
+        .grading-box { background: #f0fdf4; padding: 15px; border-radius: 10px; border: 2px dashed #22c55e; margin-top: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
+        .total-score-display { font-size: 1.2rem; font-weight: 900; color: #166534; }
+        .total-score-display span { font-size: 1.5rem; color: #ef4444; }
+        .btn-submit-grade { background: #22c55e; color: white; border: none; padding: 12px 25px; border-radius: 8px; font-family: inherit; font-size: 1rem; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .btn-submit-grade:hover { background: #16a34a; transform: scale(1.02); }
+
+        /* استایل‌های تب مدیریت آزمون‌ها */
+        .exam-link-form { background: white; padding: 25px; border-radius: 15px; margin-bottom: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .exam-link-form h3 { color: #1e3c72; margin-bottom: 15px; }
+        .exam-link-form select, .exam-link-form input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 8px; font-family: inherit; font-size: 1rem; outline: none; }
+        .btn-generate { width: 100%; padding: 12px; background: #3b82f6; color: white; border: none; border-radius: 8px; font-family: inherit; font-weight: bold; font-size: 1rem; cursor: pointer; }
+        .link-result-box { display: none; background: #f0fdf4; padding: 20px; border-radius: 15px; border: 2px dashed #22c55e; text-align: center; }
+        .link-result-box p { margin-bottom: 10px; font-weight: bold; color: #166534; }
+        .link-result-box input { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; text-align: center; direction: ltr; font-family: monospace; margin-bottom: 10px; background: white; }
+        .btn-copy-link { padding: 10px 20px; background: #22c55e; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-family: inherit; }
 
         /* Modal */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); display: none; justify-content: center; align-items: center; z-index: 1000; padding: 20px; }
@@ -125,6 +151,7 @@
                 <button class="tab-btn active" id="tab-class" onclick="switchTab('class')">📚 نمرات</button>
                 <button class="tab-btn" id="tab-attendance" onclick="switchTab('attendance')">📋 حضور و غیاب</button>
                 <button class="tab-btn" id="tab-essay" onclick="switchTab('essay')">📝 تصحیح تشریحی</button>
+                <button class="tab-btn" id="tab-exam-links" onclick="switchTab('exam-links')">📝 مدیریت آزمون‌ها</button>
                 <button class="tab-btn" id="tab-accounts" onclick="switchTab('accounts')">👥 اکانت‌ها</button>
             </div>
 
@@ -146,6 +173,27 @@
             <div id="essaySection" style="display: none;">
                 <h3 style="color: white; margin-bottom: 15px; text-align: center;">پاسخ‌های در انتظار تصحیح</h3>
                 <div id="essayBox"></div>
+            </div>
+
+            <!-- بخش مدیریت آزمون‌ها -->
+            <div id="examLinksSection" style="display: none;">
+                <div class="exam-link-form">
+                    <h3>🔗 ساخت لینک آزمون برای دانش‌آموزان</h3>
+                    <select id="link-grade">
+                        <option value="7">پایه هفتم</option>
+                        <option value="8">پایه هشتم</option>
+                        <option value="9">پایه نهم</option>
+                    </select>
+                    <input type="number" id="link-from" placeholder="از درس شماره..." min="1" max="24">
+                    <input type="number" id="link-to" placeholder="تا درس شماره..." min="1" max="24">
+                    <button class="btn-generate" onclick="generateExamLink()">تولید لینک آزمون</button>
+                </div>
+                
+                <div id="generated-link-box" class="link-result-box">
+                    <p>لینک آزمون آماده شد. کپی کنید و در گروه کلاس بفرستید:</p>
+                    <input type="text" id="final-exam-link" readonly>
+                    <button class="btn-copy-link" onclick="copyExamLink()">📋 کپی لینک</button>
+                </div>
             </div>
 
             <!-- بخش مدیریت اکانت‌ها -->
@@ -204,6 +252,9 @@
         let currentStudentForGrade = { name: "", school: "" };
         let currentTab = 'class';
         let todayAttendance = [];
+        
+        // 👇 متغیر جدید برای ذخیره نمرات دکمه‌ای
+        let manualScores = {}; // { subId: { qIndex: score } }
 
         if(localStorage.getItem('teacher_logged_in') === 'true') {
             document.getElementById('loginBox').style.display = 'none';
@@ -255,6 +306,7 @@
             document.getElementById('accountsSection').style.display = 'none';
             document.getElementById('attendanceSection').style.display = 'none';
             document.getElementById('essaySection').style.display = 'none';
+            document.getElementById('examLinksSection').style.display = 'none';
 
             if(tabName === 'class') {
                 document.getElementById('tab-class').classList.add('active');
@@ -272,89 +324,9 @@
                 document.getElementById('tab-essay').classList.add('active');
                 document.getElementById('essaySection').style.display = 'block';
                 renderEssays();
-            }
-        }
-
-        // ------------------ بخش تصحیح تشریحی ------------------
-        async function renderEssays() {
-            const box = document.getElementById('essayBox');
-            box.innerHTML = '<p style="text-align:center; color:white;">در حال دریافت پاسخ‌ها...</p>';
-
-            try {
-                const res = await fetch('https://api.motadars.ir/get_essay_submissions.php');
-                const result = await res.json();
-                
-                if(result.status === 'success') {
-                    if(result.data.length === 0) {
-                        box.innerHTML = '<p style="text-align:center; color:white;">هیچ پاسخ جدیدی برای تصحیح وجود ندارد.</p>';
-                        return;
-                    }
-                    
-                    box.innerHTML = '';
-                    result.data.forEach(sub => {
-                        const answers = JSON.parse(sub.answers_data);
-                        let questionsHtml = '';
-                        
-                        answers.forEach((item, index) => {
-                            questionsHtml += `
-                                <div class="q-item">
-                                    <div class="q-text">سوال ${index + 1}: ${item.question}</div>
-                                    <div class="a-text">پاسخ دانش‌آموز: ${item.answer || '<span style="color:red;">[بدون پاسخ]</span>'}</div>
-                                </div>
-                            `;
-                        });
-
-                        box.innerHTML += `
-                            <div class="submission-card" id="sub-${sub.id}">
-                                <div class="sub-header">
-                                    <h3>👤 ${sub.student_name}</h3>
-                                    <span>${sub.exam_name}</span>
-                                </div>
-                                <div style="margin-bottom: 15px; font-size: 0.85rem; color: #64748b;">مدرسه: ${sub.school_name} | تاریخ ارسال: ${sub.submitted_at}</div>
-                                ${questionsHtml}
-                                
-                                <div class="grading-box">
-                                    <label style="font-weight: bold; color: #166534;">نمره (از ۲۰):</label>
-                                    <input type="number" id="score-${sub.id}" min="0" max="20" step="0.25">
-                                    <button class="btn-submit-grade" onclick="submitEssayGrade(${sub.id}, '${sub.student_name}', '${sub.school_name}', '${sub.exam_name}')">ثبت نمره نهایی</button>
-                                </div>
-                            </div>
-                        `;
-                    });
-                }
-            } catch (e) {
-                box.innerHTML = '<p style="text-align:center; color:white;">خطا در دریافت اطلاعات.</p>';
-            }
-        }
-
-        async function submitEssayGrade(id, studentName, schoolName, examName) {
-            const scoreInput = document.getElementById(`score-${id}`).value;
-            if(scoreInput === '') return alert('لطفاً نمره را وارد کنید.');
-            if(scoreInput < 0 || scoreInput > 20) return alert('نمره باید بین ۰ تا ۲۰ باشد.');
-
-            try {
-                const res = await fetch('https://api.motadars.ir/grade_essay_submission.php', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({
-                        id: id,
-                        student_name: studentName,
-                        school_name: schoolName,
-                        exam_name: examName,
-                        score: parseFloat(scoreInput)
-                    })
-                });
-                const data = await res.json();
-                
-                if(data.status === 'success') {
-                    alert('✅ نمره با موفقیت ثبت شد و به کارنامه دانش‌آموز اضافه گردید.');
-                    document.getElementById(`sub-${id}`).remove(); // حذف کارت از صفحه
-                    fetchData(); // آپدیت نمرات
-                } else {
-                    alert('❌ خطا: ' + data.message);
-                }
-            } catch(e) {
-                alert('❌ خطا در ارتباط با سرور.');
+            } else if(tabName === 'exam-links') {
+                document.getElementById('tab-exam-links').classList.add('active');
+                document.getElementById('examLinksSection').style.display = 'block';
             }
         }
 
@@ -696,6 +668,158 @@
                 rowNumber++;
             });
             downloadCSV(csvContent, `حضور_غیاب_پایه_${gradeNum}_${schoolName}`);
+        }
+
+        // ------------------ بخش تصحیح تشریحی (تغییر یافته) ------------------
+        async function renderEssays() {
+            const box = document.getElementById('essayBox');
+            box.innerHTML = '<p style="text-align:center; color:white;">در حال دریافت پاسخ‌ها...</p>';
+            manualScores = {}; // ریست کردن نمرات قبلی
+
+            try {
+                const res = await fetch('https://api.motadars.ir/get_essay_submissions.php');
+                const result = await res.json();
+                
+                if(result.status === 'success') {
+                    if(result.data.length === 0) {
+                        box.innerHTML = '<p style="text-align:center; color:white;">هیچ پاسخ جدیدی برای تصحیح وجود ندارد.</p>';
+                        return;
+                    }
+                    
+                    box.innerHTML = '';
+                    result.data.forEach(sub => {
+                        const answers = JSON.parse(sub.answers_data);
+                        let questionsHtml = '';
+                        manualScores[sub.id] = {}; // مقداردهی اولیه برای این برگه
+                        
+                        answers.forEach((item, index) => {
+                            // 👇 ساخت دکمه‌های نمره برای هر سوال
+                            let buttonsHtml = `
+                                <div class="score-buttons-container" id="score-btns-${sub.id}-${index}">
+                                    <span class="score-label">نمره سوال:</span>
+                                    <button type="button" class="btn-score" onclick="setScore(${sub.id}, ${index}, 0, this)">۰</button>
+                                    <button type="button" class="btn-score" onclick="setScore(${sub.id}, ${index}, 0.5, this)">۰.۵</button>
+                                    <button type="button" class="btn-score" onclick="setScore(${sub.id}, ${index}, 1, this)">۱</button>
+                                    <button type="button" class="btn-score" onclick="setScore(${sub.id}, ${index}, 1.5, this)">۱.۵</button>
+                                    <button type="button" class="btn-score" onclick="setScore(${sub.id}, ${index}, 2, this)">۲</button>
+                                </div>
+                            `;
+
+                            questionsHtml += `
+                                <div class="q-item">
+                                    <div class="q-text">سوال ${index + 1}: ${item.question}</div>
+                                    <div class="a-text">پاسخ دانش‌آموز: ${item.answer || '<span style="color:red;">[بدون پاسخ]</span>'}</div>
+                                    <span class="key-text">کلید: ${item.correct}</span>
+                                    ${buttonsHtml}
+                                </div>
+                            `;
+                        });
+
+                        box.innerHTML += `
+                            <div class="submission-card" id="sub-${sub.id}">
+                                <div class="sub-header">
+                                    <h3>👤 ${sub.student_name}</h3>
+                                    <span>${sub.exam_name}</span>
+                                </div>
+                                <div style="margin-bottom: 15px; font-size: 0.85rem; color: #64748b;">مدرسه: ${sub.school_name} | تاریخ ارسال: ${sub.submitted_at}</div>
+                                ${questionsHtml}
+                                
+                                <div class="grading-box">
+                                    <div class="total-score-display">
+                                        نمره نهایی: <span id="total-score-${sub.id}">0</span> / 20
+                                    </div>
+                                    <button class="btn-submit-grade" onclick="submitEssayGrade(${sub.id}, '${sub.student_name}', '${sub.school_name}', '${sub.exam_name}', ${answers.length})">ثبت نمره نهایی</button>
+                                </div>
+                            </div>
+                        `;
+                    });
+                }
+            } catch (e) {
+                box.innerHTML = '<p style="text-align:center; color:white;">خطا در دریافت اطلاعات.</p>';
+            }
+        }
+
+        // 👇 تابع جدید برای ثبت نمره هر سوال با دکمه
+        function setScore(subId, qIndex, score, btnElement) {
+            // ذخیره نمره در حافظه
+            manualScores[subId][qIndex] = score;
+
+            // تغییر ظاهر دکمه‌ها (فقط یکی فعال باشد)
+            const container = document.getElementById(`score-btns-${subId}-${qIndex}`);
+            const buttons = container.querySelectorAll('.btn-score');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            btnElement.classList.add('active');
+
+            // محاسبه جمع کل
+            let total = 0;
+            for (let key in manualScores[subId]) {
+                total += manualScores[subId][key];
+            }
+
+            // نمایش جمع کل
+            document.getElementById(`total-score-${subId}`).innerText = total;
+        }
+
+        async function submitEssayGrade(id, studentName, schoolName, examName, totalQuestionsCount) {
+            const totalScore = document.getElementById(`total-score-${id}`).innerText;
+            
+            // بررسی اینکه آیا به همه سوالات نمره داده شده است
+            const gradedQuestionsCount = Object.keys(manualScores[id]).length;
+            if (gradedQuestionsCount < totalQuestionsCount) {
+                if(!confirm(`شما به ${totalQuestionsCount - gradedQuestionsCount} سوال نمره نداده‌اید (نمره صفر در نظر گرفته می‌شود). آیا مطمئنید؟`)) return;
+            }
+
+            if(totalScore === '0' && !confirm('نمره کل صفر است. آیا مطمئنید؟')) return;
+
+            try {
+                const res = await fetch('https://api.motadars.ir/grade_essay_submission.php', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        id: id,
+                        student_name: studentName,
+                        school_name: schoolName,
+                        exam_name: examName,
+                        score: parseFloat(totalScore) // ارسال جمع کل به عنوان نمره نهایی
+                    })
+                });
+                const data = await res.json();
+                
+                if(data.status === 'success') {
+                    alert('✅ نمره با موفقیت ثبت شد و به کارنامه دانش‌آموز اضافه گردید.');
+                    document.getElementById(`sub-${id}`).remove(); 
+                    fetchData(); 
+                } else {
+                    alert('❌ خطا: ' + data.message);
+                }
+            } catch(e) {
+                alert('❌ خطا در ارتباط با سرور.');
+            }
+        }
+
+        // ------------------ بخش مدیریت آزمون‌ها ------------------
+        function generateExamLink() {
+            const grade = document.getElementById('link-grade').value;
+            const from = document.getElementById('link-from').value;
+            const to = document.getElementById('link-to').value;
+
+            if (!from || !to) return alert('لطفاً بازه درس‌ها را وارد کنید.');
+
+            const link = `https://motadars.ir/dynamic-exam.html?grade=${grade}&from=${from}&to=${to}`;
+            
+            document.getElementById('final-exam-link').value = link;
+            document.getElementById('generated-link-box').style.display = 'block';
+        }
+
+        function copyExamLink() {
+            const copyText = document.getElementById('final-exam-link');
+            copyText.select();
+            copyText.setSelectionRange(0, 99999);
+            navigator.clipboard.writeText(copyText.value).then(() => {
+                alert('✅ لینک کپی شد. می‌توانید برای دانش‌آموزان بفرستید.');
+            }).catch(() => {
+                alert('خطا در کپی لینک.');
+            });
         }
 
         // ------------------ ثبت نمره دستی و اکسل ------------------
