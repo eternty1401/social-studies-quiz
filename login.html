@@ -3,39 +3,259 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ورود دانش‌آموز</title>
+    <title>ورود به سایت | مطالعات اجتماعی</title>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;700;900&display=swap" rel="stylesheet">
     <style>
-        body { font-family: Tahoma, sans-serif; background: #667eea; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .form-box { background: white; padding: 30px; border-radius: 15px; width: 90%; max-width: 400px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
-        h2 { text-align: center; color: #333; margin-bottom: 20px; }
-        input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; font-family: inherit; }
-        button { width: 100%; padding: 12px; background: #007bff; color: white; border: none; border-radius: 8px; font-size: 16px; cursor: pointer; }
-        button:hover { background: #0056b3; }
-        .msg { text-align: center; margin-top: 10px; font-size: 14px; }
+        * { margin:0; padding:0; box-sizing:border-box; font-family:'Vazirmatn',sans-serif; }
+        
+        body { 
+            min-height: 100vh; 
+            /* گرادیانت زیبا و متحرک */
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            background-size: 200% 200%;
+            animation: gradientShift 10s ease infinite;
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            padding: 20px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* حباب‌های تزئینی پس‌زمینه */
+        .bubble {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            animation: floatBubble 15s infinite ease-in-out;
+            pointer-events: none;
+        }
+        .bubble:nth-child(1) { width: 100px; height: 100px; top: 10%; left: 10%; animation-delay: 0s; }
+        .bubble:nth-child(2) { width: 150px; height: 150px; bottom: 20%; right: 10%; animation-delay: 3s; }
+        .bubble:nth-child(3) { width: 80px; height: 80px; bottom: 40%; left: 20%; animation-delay: 5s; }
+
+        @keyframes floatBubble {
+            0%, 100% { transform: translateY(0) scale(1); opacity: 0.4; }
+            50% { transform: translateY(-30px) scale(1.1); opacity: 0.7; }
+        }
+
+        /* کارت اصلی (شیشه‌ای) */
+        .login-card { 
+            background: rgba(255, 255, 255, 0.95); 
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 40px 30px; 
+            border-radius: 24px; 
+            width: 100%; 
+            max-width: 420px; 
+            box-shadow: 0 20px 50px rgba(0,0,0,0.2); 
+            border: 1px solid rgba(255,255,255,0.6);
+            position: relative;
+            z-index: 10;
+            animation: slideUp 0.6s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* هدر کارت */
+        .login-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .login-icon {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            display: inline-block;
+            animation: bounce 2s infinite;
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        .login-header h2 { color: #4c1d95; font-size: 1.6rem; font-weight: 900; }
+        .login-header p { color: #6b7280; font-size: 0.9rem; margin-top: 5px; }
+
+        /* فرم و ورودی‌ها */
+        .input-group {
+            position: relative;
+            margin-bottom: 20px;
+        }
+        .input-group .icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.2rem;
+            color: #9ca3af;
+            transition: 0.3s;
+        }
+        .input-group input { 
+            width: 100%; 
+            padding: 15px 45px 15px 15px; /* فضای خالی برای آیکون */
+            border: 2px solid #e5e7eb; 
+            border-radius: 14px; 
+            font-family: inherit; 
+            font-size: 1rem; 
+            background: #f9fafb;
+            outline: none;
+            transition: 0.3s;
+            color: #1f2937;
+        }
+        .input-group input:focus { 
+            border-color: #8b5cf6; 
+            background: #fff;
+            box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.1);
+        }
+        .input-group input:focus + .icon {
+            color: #8b5cf6;
+        }
+
+        /* دکمه ورود */
+        .login-btn { 
+            width: 100%; 
+            padding: 15px; 
+            background: linear-gradient(135deg, #8b5cf6, #6d28d9); 
+            color: white; 
+            border: none; 
+            border-radius: 14px; 
+            font-size: 1.1rem; 
+            font-weight: 900; 
+            font-family: inherit; 
+            cursor: pointer; 
+            transition: 0.3s;
+            box-shadow: 0 5px 15px rgba(109, 40, 217, 0.3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+        .login-btn:hover { 
+            transform: translateY(-2px); 
+            box-shadow: 0 8px 25px rgba(109, 40, 217, 0.4);
+            background: linear-gradient(135deg, #7c3aed, #5b21b6);
+        }
+        .login-btn:disabled {
+            background: #9ca3af;
+            box-shadow: none;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* پیام خطا و موفقیت */
+        .msg-box {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            min-height: 20px;
+            padding: 10px;
+            border-radius: 8px;
+            display: none;
+        }
+        .msg-error { color: #b91c1c; background: #fee2e2; border: 1px solid #fca5a5; }
+        .msg-success { color: #047857; background: #d1fae5; border: 1px solid #6ee7b7; }
+        .msg-info { color: #1d4ed8; background: #dbeafe; border: 1px solid #93c5fd; }
+
+        /* لینک ثبت‌نام */
+        .register-link {
+            text-align: center;
+            margin-top: 25px;
+            font-size: 0.9rem;
+            color: #6b7280;
+        }
+        .register-link a {
+            color: #8b5cf6;
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        .register-link a:hover { color: #6d28d9; text-decoration: underline; }
+
+        /* لودر چرخان */
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            display: none;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
-    <div class="form-box">
-        <h2>ورود به سایت</h2>
-        <input type="text" id="username" placeholder="نام کاربری" required>
-        <input type="password" id="password" placeholder="رمز عبور" required>
-        
-        <button onclick="login()">ورود</button>
-        <div id="message" class="msg"></div>
-        <p style="text-align:center; margin-top:15px; font-size:14px;">حساب نداری؟ <a href="register.html">ثبت‌نام کن</a></p>
+
+    <!-- حباب‌های تزئینی -->
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+
+    <div class="login-card">
+        <div class="login-header">
+            <span class="login-icon">🎓</span>
+            <h2>خوش آمدید</h2>
+            <p>برای ادامه، وارد حساب کاربری خود شوید</p>
+        </div>
+
+        <form id="loginForm" onsubmit="event.preventDefault(); login();">
+            <div class="input-group">
+                <input type="text" id="username" placeholder="نام کاربری" required autocomplete="username">
+                <span class="icon">👤</span>
+            </div>
+            
+            <div class="input-group">
+                <input type="password" id="password" placeholder="رمز عبور" required autocomplete="current-password">
+                <span class="icon">🔒</span>
+            </div>
+            
+            <button type="submit" class="login-btn" id="submitBtn">
+                <span id="btnText">ورود به سایت</span>
+                <div class="spinner" id="btnSpinner"></div>
+            </button>
+            
+            <div id="message" class="msg-box"></div>
+        </form>
+
+        <p class="register-link">حساب کاربری ندارید؟ <a href="register.html">همین حالا ثبت‌نام کنید</a></p>
     </div>
 
     <script>
         async function login() {
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
+            const usernameInput = document.getElementById('username');
+            const passwordInput = document.getElementById('password');
             const msg = document.getElementById('message');
+            const btn = document.getElementById('submitBtn');
+            const btnText = document.getElementById('btnText');
+            const spinner = document.getElementById('btnSpinner');
+
+            const username = usernameInput.value.trim();
+            const password = passwordInput.value;
+
+            // مخفی کردن پیام قبلی
+            msg.style.display = 'none';
+            msg.className = 'msg-box';
 
             if(!username || !password) {
-                msg.style.color = 'red'; msg.innerText = 'لطفاً نام کاربری و رمز را وارد کنید.'; return;
+                msg.style.display = 'block';
+                msg.classList.add('msg-error');
+                msg.innerText = 'لطفاً نام کاربری و رمز عبور را وارد کنید.';
+                return;
             }
 
-            msg.style.color = 'blue'; msg.innerText = 'در حال ورود...';
+            // تغییر حالت دکمه به لودینگ
+            btn.disabled = true;
+            btnText.innerText = 'در حال ورود...';
+            spinner.style.display = 'block';
 
             try {
                 const res = await fetch('https://api.motadars.ir/login_student.php', {
@@ -49,15 +269,32 @@
                     // ذخیره اطلاعات در حافظه مرورگر
                     localStorage.setItem('student_name', data.user.full_name);
                     localStorage.setItem('school_name', data.user.school_name);
-                    localStorage.setItem('student_username', data.user.username); // 👈 این خط برای تغییر رمز اضافه شد
+                    localStorage.setItem('student_username', data.user.username);
                     
-                    msg.style.color = 'green'; msg.innerText = '✅ ورود موفق! در حال انتقال...';
-                    setTimeout(() => window.location.href = 'index.html', 1500);
+                    msg.style.display = 'block';
+                    msg.classList.add('msg-success');
+                    msg.innerText = '✅ ورود موفقیت‌آمیز بود! در حال انتقال...';
+                    
+                    setTimeout(() => window.location.href = 'index.html', 1200);
                 } else {
-                    msg.style.color = 'red'; msg.innerText = '❌ ' + data.message;
+                    msg.style.display = 'block';
+                    msg.classList.add('msg-error');
+                    msg.innerText = '❌ ' + data.message;
+                    
+                    // برگرداندن دکمه به حالت اول
+                    btn.disabled = false;
+                    btnText.innerText = 'ورود به سایت';
+                    spinner.style.display = 'none';
                 }
             } catch (e) {
-                msg.style.color = 'red'; msg.innerText = 'خطا در ارتباط با سرور.';
+                msg.style.display = 'block';
+                msg.classList.add('msg-error');
+                msg.innerText = '❌ خطا در ارتباط با سرور. لطفاً اینترنت خود را بررسی کنید.';
+                
+                // برگرداندن دکمه به حالت اول
+                btn.disabled = false;
+                btnText.innerText = 'ورود به سایت';
+                spinner.style.display = 'none';
             }
         }
     </script>
