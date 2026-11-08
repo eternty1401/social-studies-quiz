@@ -11,7 +11,7 @@
     .container { max-width: 700px; width: 100%; background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); margin-top: 20px; }
     .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px dashed #cbd5e1; padding-bottom: 15px; margin-bottom: 25px; }
     
-    /* تایمر جدید */
+    /* تایمر */
     .timer-box { background: #e0f2fe; color: #0284c7; padding: 8px 15px; border-radius: 50px; font-weight: 900; font-size: 1.1rem; direction: ltr; display: flex; align-items: center; gap: 5px; transition: 0.3s; }
     .timer-box.danger { background: #fee2e2; color: #ef4444; animation: pulse 1s infinite; }
     @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.05); } }
@@ -40,6 +40,8 @@
     .start-box h2 { color: #1e3c72; margin-bottom: 20px; }
     .start-box input, .start-box select { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 8px; font-family: inherit; font-size: 1rem; outline: none; }
     .start-btn { background: #10b981; color: white; border: none; padding: 15px 40px; border-radius: 50px; font-size: 1.1rem; font-weight: 900; cursor: pointer; font-family: inherit; }
+    
+    /* مودال هشدار تقلب */
     .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); display: none; justify-content: center; align-items: center; z-index: 1000; padding: 20px; }
     .modal-content { background: white; padding: 40px 30px; border-radius: 20px; text-align: center; max-width: 400px; width: 100%; }
 </style>
@@ -47,6 +49,7 @@
 <body>
 
 <div class="container">
+    <!-- صفحه شروع (برای دانش‌آموزان لاگین نکرده) -->
     <div id="start-section" class="start-box" style="display: none;">
         <h2>ورود به آزمون</h2>
         <p style="color:#64748b; margin-bottom:20px;">لطفاً مشخصات خود را وارد کنید تا نمره‌تان ثبت شود.</p>
@@ -58,6 +61,7 @@
         <button class="start-btn" onclick="startExamFlow()">شروع آزمون</button>
     </div>
 
+    <!-- بخش آزمون -->
     <div id="exam-section" style="display: none;">
         <div class="header">
             <h2 id="exam-title" style="color: #1e3c72; font-size: 1.1rem;">در حال بارگذاری...</h2>
@@ -78,6 +82,7 @@
     <div id="loading" style="text-align:center; padding: 50px; font-weight:bold; color:#1e3c72; display: none;">در حال دریافت اطلاعات...</div>
 </div>
 
+<!-- مودال هشدار تقلب -->
 <div class="modal-overlay" id="cheat-warning">
     <div class="modal-content">
         <h2 style="color: #ef4444; margin-bottom: 15px;">⚠️ هشدار تقلب!</h2>
@@ -97,14 +102,14 @@
     let cheatCount = 0;
     let studentName = localStorage.getItem('student_name');
     let schoolName = localStorage.getItem('school_name');
-    let fromLesson = 5;
-    let toLesson = 8;
+    let fromLesson = 1;
+    let toLesson = 24;
 
     window.onload = () => {
         const urlParams = new URLSearchParams(window.location.search);
         const grade = urlParams.get('grade') || '7';
-        fromLesson = parseInt(urlParams.get('from')) || 5;
-        toLesson = parseInt(urlParams.get('to')) || 8;
+        fromLesson = parseInt(urlParams.get('from')) || 1;
+        toLesson = parseInt(urlParams.get('to')) || 24;
 
         if (!studentName || !schoolName) {
             document.getElementById('start-section').style.display = 'block';
@@ -152,10 +157,10 @@
             else if (grade === '9') bank = grade9Questions;
 
             let filtered = bank.filter(q => q.lesson >= fromLesson && q.lesson <= toLesson);
-            currentQuestions = filtered.sort(() => Math.random() - 0.5).slice(0, 15);
+            currentQuestions = filtered.sort(() => Math.random() - 0.5).slice(0, 20);
             
             if (currentQuestions.length === 0) {
-                document.getElementById('loading').innerText = "سوالی یافت نشد.";
+                document.getElementById('loading').innerText = "سوالی برای این بازه یافت نشد.";
                 return;
             }
 
@@ -171,7 +176,7 @@
         document.head.appendChild(script);
     }
 
-    // 👇 تایمر تک‌سوالی (تستی/جاخالی ۳۰ ثانیه، تشریحی ۱۲۰ ثانیه)
+    // تایمر تک‌سوالی (تستی/جاخالی ۳۰ ثانیه، تشریحی ۱۲۰ ثانیه)
     function startQuestionTimer() {
         clearInterval(qTimerInterval);
         const q = currentQuestions[currentQIndex];
@@ -189,7 +194,6 @@
 
             if (timeLeft <= 0) {
                 clearInterval(qTimerInterval);
-                // رفتن خودکار به سوال بعدی
                 if (currentQIndex < currentQuestions.length - 1) {
                     currentQIndex++;
                     renderQuestion();
@@ -211,7 +215,6 @@
         const q = currentQuestions[currentQIndex];
         const box = document.getElementById('question-box');
         
-        // شروع تایمر برای این سوال
         startQuestionTimer();
 
         const progress = ((currentQIndex) / currentQuestions.length) * 100;
@@ -262,12 +265,24 @@
 
         let answersData = currentQuestions.map((q, index) => {
             let ans = studentAnswers[index] !== undefined ? studentAnswers[index] : "";
-            if ((q.type === 'testi' || q.type === 'truefalse') && ans !== "") ans = q.options[ans]; 
+            
+            // استخراج متن پاسخ تستی برای نمایش به معلم
+            if ((q.type === 'testi' || q.type === 'truefalse') && ans !== "") {
+                ans = q.options[ans]; 
+            }
+            
+            // استخراج کلید پاسخ برای نمایش به معلم
+            let correctKey = "";
+            if (q.type === 'essay' || q.type === 'jakhali') {
+                correctKey = q.key || "تصحیح دستی";
+            } else {
+                correctKey = q.options[q.answer];
+            }
             
             return {
                 question: `${index + 1}. ${q.q}`,
                 answer: ans || "[بدون پاسخ]",
-                correct: q.type === 'essay' || q.type === 'jakhali' ? "تصحیح دستی" : q.options[q.answer]
+                correct: correctKey
             };
         });
 
