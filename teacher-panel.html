@@ -5,11 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>پنل معلم | مطالعات اجتماعی</title>
     <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <!-- 👇 اضافه شدن کتابخانه Chart.js برای رسم نمودار -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
     <style>
         * { margin:0; padding:0; box-sizing:border-box; font-family:'Vazirmatn',sans-serif; }
         body { min-height: 100vh; background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%); padding: 20px; color: #333; }
         
-        .container { max-width: 900px; margin: 0 auto; }
+        .container { max-width: 1000px; margin: 0 auto; }
         
         /* فرم ورود */
         .login-box { background: white; padding: 40px; border-radius: 20px; max-width: 400px; margin: 100px auto; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
@@ -31,6 +34,25 @@
         .tabs { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
         .tab-btn { flex: 1; min-width: 100px; padding: 15px; background: rgba(255,255,255,0.7); border: none; border-radius: 10px; cursor: pointer; font-weight: bold; font-size: 0.95rem; transition: 0.3s; color: #475569; font-family: inherit; }
         .tab-btn.active { background: white; color: #3498db; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+
+        /* ------------------ استایل‌های داشبورد ------------------ */
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 25px; }
+        .stat-card { background: white; padding: 20px; border-radius: 15px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.05); border-bottom: 5px solid #3498db; }
+        .stat-card h3 { font-size: 2rem; color: #1e293b; margin-bottom: 5px; font-weight: 900; }
+        .stat-card p { font-size: 0.9rem; color: #64748b; font-weight: bold; }
+        
+        .stat-card.warning { border-bottom-color: #f59e0b; }
+        .stat-card.warning h3 { color: #b45309; }
+        .stat-card.success { border-bottom-color: #10b981; }
+        .stat-card.success h3 { color: #047857; }
+        .stat-card.danger { border-bottom-color: #ef4444; }
+        .stat-card.danger h3 { color: #b91c1c; }
+
+        .charts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-bottom: 25px; }
+        .chart-card { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        .chart-card h3 { text-align: center; color: #475569; font-size: 1.1rem; margin-bottom: 15px; }
+        .chart-container { position: relative; height: 250px; width: 100%; }
+        /* -------------------------------------------------------- */
 
         .school-section { background: white; border-radius: 15px; padding: 20px; margin-bottom: 25px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
         .school-title { font-size: 1.3rem; color: #1e293b; border-bottom: 2px solid #3498db; padding-bottom: 10px; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
@@ -92,7 +114,6 @@
         .a-text { color: #475569; font-size: 0.9rem; line-height: 1.6; margin-bottom: 5px; }
         .key-text { color: #10b981; font-size: 0.85rem; font-weight: bold; display: block; margin-bottom: 10px; }
         
-        /* دکمه‌های نمره‌دهی جدید */
         .score-buttons-container { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; background: white; padding: 8px; border-radius: 8px; border: 1px solid #cbd5e1; }
         .score-label { font-size: 0.85rem; color: #64748b; font-weight: bold; display: flex; align-items: center; margin-left: 5px; }
         .btn-score { padding: 6px 15px; border: 1px solid #94a3b8; background: white; border-radius: 6px; cursor: pointer; font-family: inherit; font-size: 0.9rem; font-weight: bold; color: #475569; transition: 0.2s; }
@@ -148,15 +169,38 @@
 
             <!-- تب‌ها -->
             <div class="tabs">
-                <button class="tab-btn active" id="tab-class" onclick="switchTab('class')">📚 نمرات</button>
+                <!-- 👇 تب جدید داشبورد به عنوان تب اول اضافه شد -->
+                <button class="tab-btn active" id="tab-dashboard" onclick="switchTab('dashboard')">📊 داشبورد</button>
+                <button class="tab-btn" id="tab-class" onclick="switchTab('class')">📚 نمرات</button>
                 <button class="tab-btn" id="tab-attendance" onclick="switchTab('attendance')">📋 حضور و غیاب</button>
                 <button class="tab-btn" id="tab-essay" onclick="switchTab('essay')">📝 تصحیح تشریحی</button>
                 <button class="tab-btn" id="tab-exam-links" onclick="switchTab('exam-links')">📝 مدیریت آزمون‌ها</button>
                 <button class="tab-btn" id="tab-accounts" onclick="switchTab('accounts')">👥 اکانت‌ها</button>
             </div>
 
+            <!-- 👇 بخش داشبورد جدید -->
+            <div id="dashboardSection">
+                <div class="stats-grid" id="statsGrid">
+                    <!-- کارت‌های آمار توسط جاوااسکریپت پر می‌شوند -->
+                </div>
+                <div class="charts-grid">
+                    <div class="chart-card">
+                        <h3>میانگین نمرات هر مدرسه</h3>
+                        <div class="chart-container">
+                            <canvas id="schoolAvgChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-card">
+                        <h3>نسبت انواع آزمون‌ها</h3>
+                        <div class="chart-container">
+                            <canvas id="examTypeChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- بخش کلاس -->
-            <div id="classSection">
+            <div id="classSection" style="display: none;">
                 <input type="text" id="searchInput" class="search-box" placeholder="🔍 جستجوی نام دانش‌آموز..." oninput="filterStudents()">
                 <div id="contentBox"></div>
             </div>
@@ -250,11 +294,13 @@
     <script>
         let allData = { students: [], grades: [] };
         let currentStudentForGrade = { name: "", school: "" };
-        let currentTab = 'class';
+        let currentTab = 'dashboard'; // تب پیش‌فرض حالا داشبورد است
         let todayAttendance = [];
+        let manualScores = {};
         
-        // 👇 متغیر جدید برای ذخیره نمرات دکمه‌ای
-        let manualScores = {}; // { subId: { qIndex: score } }
+        // متغیرهای نمودار
+        let schoolChartInstance = null;
+        let typeChartInstance = null;
 
         if(localStorage.getItem('teacher_logged_in') === 'true') {
             document.getElementById('loginBox').style.display = 'none';
@@ -288,8 +334,11 @@
                     document.getElementById('loginBox').style.display = 'none';
                     document.getElementById('dashboard').style.display = 'block';
                     allData = data;
+                    
+                    // رندر کردن همه بخش‌ها
                     renderData();
                     renderAccounts();
+                    loadDashboardData(); // لود کردن آمار داشبورد
                 } else {
                     alert('❌ ' + data.message);
                     if(!manualPass) logout();
@@ -302,13 +351,18 @@
         function switchTab(tabName) {
             currentTab = tabName;
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById('dashboardSection').style.display = 'none';
             document.getElementById('classSection').style.display = 'none';
             document.getElementById('accountsSection').style.display = 'none';
             document.getElementById('attendanceSection').style.display = 'none';
             document.getElementById('essaySection').style.display = 'none';
             document.getElementById('examLinksSection').style.display = 'none';
 
-            if(tabName === 'class') {
+            if(tabName === 'dashboard') {
+                document.getElementById('tab-dashboard').classList.add('active');
+                document.getElementById('dashboardSection').style.display = 'block';
+                loadDashboardData(); // آپدیت آمار هنگام ورود به تب
+            } else if(tabName === 'class') {
                 document.getElementById('tab-class').classList.add('active');
                 document.getElementById('classSection').style.display = 'block';
             } else if(tabName === 'accounts') {
@@ -329,6 +383,138 @@
                 document.getElementById('examLinksSection').style.display = 'block';
             }
         }
+
+        // ------------------ بخش داشبورد آماری ------------------
+        async function loadDashboardData() {
+            // ۱. محاسبه کل دانش‌آموزان از فایل students-data.js
+            let totalStudents = 0;
+            if (typeof schoolData !== 'undefined') {
+                for (const schoolKey in schoolData) {
+                    for (const gradeNum in schoolData[schoolKey].grades) {
+                        totalStudents += schoolData[schoolKey].grades[gradeNum].length;
+                    }
+                }
+            }
+
+            // ۲. تعداد کل نمرات ثبت شده
+            const totalGrades = allData.grades.length;
+
+            // ۳. دریافت آمار حاضری و برگه‌های تصحیح نشده
+            let presentToday = 0;
+            let pendingEssays = 0;
+
+            try {
+                // گرفتن حاضری
+                const attRes = await fetch('https://api.motadars.ir/get_attendance.php', {
+                    method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({})
+                });
+                const attData = await attRes.json();
+                if (attData.status === 'success') {
+                    presentToday = attData.data.filter(a => a.status === 'present').length;
+                }
+
+                // گرفتن برگه‌های تصحیح نشده
+                const essayRes = await fetch('https://api.motadars.ir/get_essay_submissions.php');
+                const essayData = await essayRes.json();
+                if (essayData.status === 'success') {
+                    pendingEssays = essayData.data.length;
+                }
+            } catch (e) { console.error("خطا در آمار:", e); }
+
+            // ۴. رندر کردن کارت‌های آمار
+            const statsGrid = document.getElementById('statsGrid');
+            statsGrid.innerHTML = `
+                <div class="stat-card">
+                    <h3>${toPersianNumber(totalStudents)}</h3>
+                    <p>کل دانش‌آموزان</p>
+                </div>
+                <div class="stat-card success">
+                    <h3>${toPersianNumber(presentToday)}</h3>
+                    <p>حاضران امروز</p>
+                </div>
+                <div class="stat-card warning">
+                    <h3>${toPersianNumber(pendingEssays)}</h3>
+                    <p>برگه‌های تصحیح نشده</p>
+                </div>
+                <div class="stat-card danger">
+                    <h3>${toPersianNumber(totalGrades)}</h3>
+                    <p>کل نمرات ثبت شده</p>
+                </div>
+            `;
+
+            // ۵. رسم نمودارها
+            renderCharts();
+        }
+
+        function renderCharts() {
+            // --- نمودار ۱: میانگین نمرات هر مدرسه ---
+            const schoolLabels = [];
+            const schoolAverages = [];
+
+            if (typeof schoolData !== 'undefined') {
+                for (const schoolKey in schoolData) {
+                    const schoolName = schoolData[schoolKey].name;
+                    schoolLabels.push(schoolName);
+
+                    // فیلتر کردن نمرات این مدرسه
+                    const schoolGrades = allData.grades.filter(g => g.school_name === schoolName && g.score > 0);
+                    let sum = 0;
+                    schoolGrades.forEach(g => sum += parseFloat(g.score));
+                    const avg = schoolGrades.length > 0 ? (sum / schoolGrades.length).toFixed(1) : 0;
+                    schoolAverages.push(avg);
+                }
+            }
+
+            const ctxSchool = document.getElementById('schoolAvgChart').getContext('2d');
+            if(schoolChartInstance) schoolChartInstance.destroy(); // پاک کردن نمودار قبلی
+            schoolChartInstance = new Chart(ctxSchool, {
+                type: 'bar',
+                data: {
+                    labels: schoolLabels,
+                    datasets: [{
+                        label: 'میانگین نمره (از ۲۰)',
+                        data: schoolAverages,
+                        backgroundColor: ['#3b82f6', '#8b5cf6', '#10b981'],
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: { y: { beginAtZero: true, max: 20 } },
+                    plugins: { legend: { display: false } }
+                }
+            });
+
+            // --- نمودار ۲: نسبت آزمون‌های تستی به تشریحی ---
+            const testiCount = allData.grades.filter(g => g.exam_type === 'testi' || !g.exam_type).length;
+            const tashrihiCount = allData.grades.filter(g => g.exam_type === 'tashrihi').length;
+
+            const ctxType = document.getElementById('examTypeChart').getContext('2d');
+            if(typeChartInstance) typeChartInstance.destroy();
+            typeChartInstance = new Chart(ctxType, {
+                type: 'doughnut',
+                data: {
+                    labels: ['آزمون‌های تستی', 'آزمون‌های تشریحی'],
+                    datasets: [{
+                        data: [testiCount, tashrihiCount],
+                        backgroundColor: ['#3b82f6', '#f59e0b'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { position: 'bottom' } }
+                }
+            });
+        }
+
+        function toPersianNumber(num) {
+            const persianDigits = ['۰','۱','۲','۳','۴','۵','۶','۷','۸','۹'];
+            return String(num).replace(/\d/g, d => persianDigits[d]);
+        }
+        // --------------------------------------------------------
 
         // ------------------ بخش نمرات ------------------
         function renderData() {
@@ -670,7 +856,7 @@
             downloadCSV(csvContent, `حضور_غیاب_پایه_${gradeNum}_${schoolName}`);
         }
 
-        // ------------------ بخش تصحیح تشریحی (تغییر یافته) ------------------
+        // ------------------ بخش تصحیح تشریحی ------------------
         async function renderEssays() {
             const box = document.getElementById('essayBox');
             box.innerHTML = '<p style="text-align:center; color:white;">در حال دریافت پاسخ‌ها...</p>';
@@ -690,10 +876,9 @@
                     result.data.forEach(sub => {
                         const answers = JSON.parse(sub.answers_data);
                         let questionsHtml = '';
-                        manualScores[sub.id] = {}; // مقداردهی اولیه برای این برگه
+                        manualScores[sub.id] = {};
                         
                         answers.forEach((item, index) => {
-                            // 👇 ساخت دکمه‌های نمره برای هر سوال
                             let buttonsHtml = `
                                 <div class="score-buttons-container" id="score-btns-${sub.id}-${index}">
                                     <span class="score-label">نمره سوال:</span>
@@ -739,31 +924,23 @@
             }
         }
 
-        // 👇 تابع جدید برای ثبت نمره هر سوال با دکمه
         function setScore(subId, qIndex, score, btnElement) {
-            // ذخیره نمره در حافظه
             manualScores[subId][qIndex] = score;
-
-            // تغییر ظاهر دکمه‌ها (فقط یکی فعال باشد)
             const container = document.getElementById(`score-btns-${subId}-${qIndex}`);
             const buttons = container.querySelectorAll('.btn-score');
             buttons.forEach(btn => btn.classList.remove('active'));
             btnElement.classList.add('active');
 
-            // محاسبه جمع کل
             let total = 0;
             for (let key in manualScores[subId]) {
                 total += manualScores[subId][key];
             }
-
-            // نمایش جمع کل
             document.getElementById(`total-score-${subId}`).innerText = total;
         }
 
         async function submitEssayGrade(id, studentName, schoolName, examName, totalQuestionsCount) {
             const totalScore = document.getElementById(`total-score-${id}`).innerText;
             
-            // بررسی اینکه آیا به همه سوالات نمره داده شده است
             const gradedQuestionsCount = Object.keys(manualScores[id]).length;
             if (gradedQuestionsCount < totalQuestionsCount) {
                 if(!confirm(`شما به ${totalQuestionsCount - gradedQuestionsCount} سوال نمره نداده‌اید (نمره صفر در نظر گرفته می‌شود). آیا مطمئنید؟`)) return;
@@ -780,7 +957,7 @@
                         student_name: studentName,
                         school_name: schoolName,
                         exam_name: examName,
-                        score: parseFloat(totalScore) // ارسال جمع کل به عنوان نمره نهایی
+                        score: parseFloat(totalScore)
                     })
                 });
                 const data = await res.json();
