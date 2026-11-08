@@ -312,7 +312,7 @@
     <script>
         const studentName = localStorage.getItem('student_name');
         const schoolName = localStorage.getItem('school_name');
-        const studentUsername = localStorage.getItem('student_username');
+        const studentUsername = localStorage.getItem('student_username'); // برای تغییر رمز استفاده می‌شود
 
         // در هنگام بارگذاری صفحه
         window.onload = () => {
@@ -325,7 +325,7 @@
                 
                 fetchGrades();
                 updateCheckinButton(); 
-                processDailyPoints(); // دادن امتیاز روزانه و دریافت آن
+                processDailyPoints(); // سیستم امتیازدهی
                 loadAnnouncement(); // لود اطلاعیه‌ها
             }
         };
@@ -386,9 +386,10 @@
             } catch(e) { console.log("خطا در لود اطلاعیه"); }
         }
 
+        // سیستم امتیازدهی (حالا با نام دانش‌آموز)
         async function processDailyPoints() {
             const today = new Date().toLocaleDateString('fa-IR');
-            const storageKey = 'last_point_date_' + studentUsername; 
+            const storageKey = 'last_point_date_' + studentName; 
             const lastPointDate = localStorage.getItem(storageKey);
 
             if (lastPointDate !== today) {
@@ -396,16 +397,19 @@
                     const res = await fetch('https://api.motadars.ir/add_points.php', {
                         method: 'POST',
                         headers: {'Content-Type': 'application/json'},
-                        body: JSON.stringify({ username: studentUsername })
+                        body: JSON.stringify({ student_name: studentName })
                     });
                     const data = await res.json();
                     
                     if(data.status === 'success') {
                         document.getElementById('student-points').innerText = data.new_points;
                         localStorage.setItem(storageKey, today);
+                    } else {
+                        console.log("خطا از سرور:", data.message);
+                        fetchCurrentPoints();
                     }
                 } catch(e) { 
-                    console.log("خطا در ثبت امتیاز");
+                    console.log("خطای شبکه در ثبت امتیاز");
                     fetchCurrentPoints(); 
                 }
             } else {
@@ -418,7 +422,7 @@
                 const res = await fetch('https://api.motadars.ir/get_student_points.php', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ username: studentUsername })
+                    body: JSON.stringify({ student_name: studentName })
                 });
                 const data = await res.json();
                 if(data.status === 'success') {
@@ -614,6 +618,7 @@
                 const res = await fetch('https://api.motadars.ir/change_password.php', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
+                    // اینجا از نام کاربری استفاده می‌شود (چون سیستم تغییر رمز شما احتمالا بر اساس یوزرنیم است)
                     body: JSON.stringify({ username: studentUsername, old_password: oldPass, new_password: newPass })
                 });
                 const data = await res.json();
