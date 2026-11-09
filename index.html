@@ -10,6 +10,9 @@
 <title>مطالعات اجتماعی | خانه</title>
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700;900&display=swap" rel="stylesheet">
 <style>
+  /* ========================================= */
+  /* ===== استایل‌های اصلی سایت شما (دست نخورده) ===== */
+  /* ========================================= */
   * { margin:0; padding:0; box-sizing:border-box; font-family:'Vazirmatn',sans-serif; }
   
   body {
@@ -30,7 +33,6 @@
     100% { background-position: 0% 50%; }
   }
 
-  /* ===== استایل‌های حالت تاریک ===== */
   body.dark-mode { background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%); }
   body.dark-mode .grade-card, body.dark-mode .teacher-badge, body.dark-mode .about-section { background: rgba(0, 0, 0, 0.4); border-color: rgba(255, 255, 255, 0.1); }
   body.dark-mode .grade-card:hover { background: rgba(0, 0, 0, 0.6); }
@@ -38,11 +40,9 @@
   body.dark-mode .feature-chip { background: rgba(0, 0, 0, 0.3); border-color: rgba(255, 255, 255, 0.1); }
   body.dark-mode .bubble { background: rgba(255, 255, 255, 0.05); }
 
-  /* دکمه تغییر تم */
   .theme-toggle { position: fixed; top: 20px; left: 20px; width: 45px; height: 45px; border-radius: 50%; background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.3); font-size: 1.5rem; cursor: pointer; display: flex; justify-content: center; align-items: center; z-index: 100; transition: 0.3s; color: #fff; }
   .theme-toggle:hover { transform: scale(1.1); background: rgba(255,255,255,0.3); }
 
-  /* حباب‌های تزئینی پس‌زمینه */
   .bubble { position: fixed; border-radius: 50%; background: rgba(255,255,255,0.1); animation: floatBubble 20s infinite ease-in-out; pointer-events: none; z-index: 0; }
   .bubble:nth-child(1) { width: 80px; height: 80px; top: 10%; left: 10%; animation-delay: 0s; }
   .bubble:nth-child(2) { width: 120px; height: 120px; top: 60%; left: 80%; animation-delay: 3s; }
@@ -51,7 +51,6 @@
   .bubble:nth-child(5) { width: 50px; height: 50px; top: 50%; left: 40%; animation-delay: 12s; }
   @keyframes floatBubble { 0%, 100% { transform: translateY(0) scale(1); opacity: 0.3; } 50% { transform: translateY(-30px) scale(1.1); opacity: 0.6; } }
 
-  /* ===== هدر ===== */
   .header { text-align: center; margin-bottom: 40px; z-index: 1; position: relative; }
   .header h1 { font-size: 2.6rem; font-weight: 900; margin-bottom: 15px; text-shadow: 0 4px 20px rgba(0,0,0,0.3); animation: fadeInDown 1s ease; background: linear-gradient(90deg, #fff, #ffd6ff, #fff); background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; animation: shineText 3s linear infinite, fadeInDown 1s ease; }
   @keyframes shineText { to { background-position: 200% center; } }
@@ -59,16 +58,13 @@
   @keyframes fadeInDown { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
   @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
 
-  /* ===== نشان دبیر ===== */
   .teacher-badge { display: inline-flex; align-items: center; gap: 10px; background: rgba(255,255,255,0.2); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.3); padding: 12px 28px; border-radius: 50px; font-weight: 700; font-size: 1rem; box-shadow: 0 8px 32px rgba(0,0,0,0.15); animation: fadeInUp 1s ease 0.5s backwards; transition: 0.3s; }
   .teacher-badge:hover { background: rgba(255,255,255,0.3); transform: translateY(-3px); box-shadow: 0 12px 40px rgba(0,0,0,0.25); }
   .teacher-badge .emoji { font-size: 1.4rem; }
 
-  /* ===== کانتینر اصلی ===== */
   .main-container { width: 100%; max-width: 1000px; z-index: 1; position: relative; }
   .section-title { text-align: center; font-size: 1.4rem; font-weight: 900; margin-bottom: 25px; text-shadow: 0 2px 10px rgba(0,0,0,0.2); animation: fadeInUp 1s ease 0.7s backwards; }
 
-  /* ===== کارت‌های پایه ===== */
   .grades-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 25px; margin-bottom: 40px; }
   .grade-card { background: rgba(255,255,255,0.15); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.3); border-radius: 24px; padding: 40px 25px; text-decoration: none; color: #fff; text-align: center; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 8px 32px rgba(0,0,0,0.15); position: relative; overflow: hidden; animation: fadeInUp 1s ease backwards; }
   .grade-card:nth-child(1) { animation-delay: 0.8s; } .grade-card:nth-child(2) { animation-delay: 1s; } .grade-card:nth-child(3) { animation-delay: 1.2s; }
@@ -80,7 +76,6 @@
   .grade-btn { display: inline-block; background: rgba(255,255,255,0.95); color: #764ba2; padding: 10px 30px; border-radius: 30px; font-weight: 900; font-size: 0.95rem; transition: 0.3s; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
   .grade-card:hover .grade-btn { background: #fff; transform: scale(1.05); box-shadow: 0 6px 20px rgba(0,0,0,0.2); }
 
-  /* ===== بنرها ===== */
   .museum-banner, .history-banner, .life-banner { display: block; text-decoration: none; color: #fff; backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.4); border-radius: 24px; padding: 28px 25px; margin-bottom: 30px; box-shadow: 0 8px 32px rgba(0,0,0,0.15); position: relative; overflow: hidden; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); animation: fadeInUp 1s ease 1.3s backwards; }
   .museum-banner { background: linear-gradient(135deg, rgba(245,158,11,0.35) 0%, rgba(236,72,153,0.35) 50%, rgba(6,182,212,0.35) 100%); }
   .history-banner { background: linear-gradient(135deg, rgba(139, 92, 246, 0.4) 0%, rgba(59, 130, 246, 0.4) 50%, rgba(16, 185, 129, 0.4) 100%); animation-delay: 1.4s; }
@@ -95,7 +90,6 @@
   .banner-btn { background: rgba(255,255,255,0.95); color: #764ba2; padding: 11px 22px; border-radius: 30px; font-weight: 900; font-size: 0.85rem; white-space: nowrap; transition: 0.3s; box-shadow: 0 4px 15px rgba(0,0,0,0.15); }
   .banner:hover .banner-btn { transform: scale(1.05); background: #fff; }
 
-  /* ===== بخش درباره ===== */
   .about-section { background: rgba(255,255,255,0.15); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.3); border-radius: 24px; padding: 35px 30px; text-align: center; box-shadow: 0 8px 32px rgba(0,0,0,0.15); animation: fadeInUp 1s ease 1.5s backwards; margin-bottom: 30px; }
   .about-section h2 { font-size: 1.3rem; margin-bottom: 15px; font-weight: 900; }
   .about-section p { font-size: 1rem; color: rgba(255,255,255,0.9); line-height: 1.9; max-width: 700px; margin: 0 auto; }
@@ -103,12 +97,10 @@
   .feature-chip { background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); padding: 8px 18px; border-radius: 30px; font-size: 0.85rem; font-weight: 700; display: flex; align-items: center; gap: 6px; transition: 0.3s; }
   .feature-chip:hover { background: rgba(255,255,255,0.3); transform: translateY(-2px); }
 
-  /* ===== فوتر ===== */
   .footer { text-align: center; color: rgba(255,255,255,0.8); font-size: 0.9rem; margin-top: 20px; z-index: 1; position: relative; }
   .footer .heart { color: #ff6b9d; animation: pulse 1.5s infinite; display: inline-block; }
   @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.2); } }
 
-  /* ===== منوی همبرگری ===== */
   .menu-btn { position: fixed; top: 20px; right: 20px; width: 45px; height: 45px; background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.3); border-radius: 50%; z-index: 1000; display: flex; flex-direction: column; justify-content: center; align-items: center; cursor: pointer; transition: 0.3s; gap: 5px; }
   .menu-btn:hover { transform: scale(1.1); background: rgba(255,255,255,0.3); }
   .menu-btn span { display: block; width: 22px; height: 2px; background: #fff; transition: 0.3s; border-radius: 2px;}
@@ -123,7 +115,6 @@
   .overlay-bg { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); z-index: 1001; opacity: 0; visibility: hidden; transition: 0.3s; }
   .overlay-bg.show { opacity: 1; visibility: visible; }
 
-  /* ===== بنر نصب PWA ===== */
   #pwa-install-banner { position: fixed; bottom: -200px; left: 0; width: 100%; background: rgba(30, 30, 50, 0.95); backdrop-filter: blur(15px); color: #fff; padding: 15px 20px; z-index: 10000; box-shadow: 0 -5px 20px rgba(0,0,0,0.3); border-top: 1px solid rgba(255,255,255,0.1); transition: bottom 0.5s ease; }
   #pwa-install-banner.show { bottom: 0; }
   .pwa-content { display: flex; align-items: center; gap: 15px; max-width: 1000px; margin: 0 auto; }
@@ -137,6 +128,28 @@
   .pwa-btn-secondary { background: transparent; color: #94a3b8; border: 1px solid #475569; padding: 10px 20px; border-radius: 10px; font-weight: bold; font-family: inherit; cursor: pointer; font-size: 0.9rem; }
   .pwa-btn-secondary:hover { background: rgba(255,255,255,0.1); }
   #ios-instructions { margin-top: 15px; font-size: 0.85rem; color: #fbbf24; text-align: center; line-height: 1.6; display: none; }
+
+  @media(max-width:600px) {
+    body { padding: 25px 15px; }
+    .header h1 { font-size: 1.9rem; }
+    .header .subtitle { font-size: 0.95rem; }
+    .teacher-badge { padding: 10px 22px; font-size: 0.9rem; }
+    .section-title { font-size: 1.2rem; }
+    .grade-card { padding: 30px 20px; }
+    .grade-icon { font-size: 3rem; }
+    .grade-num { font-size: 1.5rem; }
+    .about-section { padding: 25px 20px; }
+    .about-section h2 { font-size: 1.1rem; }
+    .about-section p { font-size: 0.9rem; }
+    .theme-toggle { top: 15px; left: 15px; width: 40px; height: 40px; font-size: 1.2rem; }
+    .menu-btn { top: 15px; right: 15px; width: 40px; height: 40px; }
+    .banner-content { flex-direction: column; text-align: center; gap: 12px; }
+    .banner-text { text-align: center; }
+    .banner-icon { font-size: 3rem; }
+    .banner-btn { margin-top: 5px; }
+    .pwa-content { flex-direction: column; text-align: center; gap: 10px; }
+    .pwa-actions { width: 100%; justify-content: center; margin-top: 10px; }
+  }
 
   /* ==================================================== */
   /* ===== استایل‌های بخش ورود و ثبت‌نام (Auth Overlay) ===== */
@@ -193,35 +206,12 @@
 
   .spinner { width: 20px; height: 20px; border: 3px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin 0.8s linear infinite; display: none; }
   @keyframes spin { to { transform: rotate(360deg); } }
-
-  @media(max-width:600px) {
-    body { padding: 25px 15px; }
-    .header h1 { font-size: 1.9rem; }
-    .header .subtitle { font-size: 0.95rem; }
-    .teacher-badge { padding: 10px 22px; font-size: 0.9rem; }
-    .section-title { font-size: 1.2rem; }
-    .grade-card { padding: 30px 20px; }
-    .grade-icon { font-size: 3rem; }
-    .grade-num { font-size: 1.5rem; }
-    .about-section { padding: 25px 20px; }
-    .about-section h2 { font-size: 1.1rem; }
-    .about-section p { font-size: 0.9rem; }
-    .theme-toggle { top: 15px; left: 15px; width: 40px; height: 40px; font-size: 1.2rem; }
-    .menu-btn { top: 15px; right: 15px; width: 40px; height: 40px; }
-    .banner-content { flex-direction: column; text-align: center; gap: 12px; }
-    .banner-text { text-align: center; }
-    .banner-icon { font-size: 3rem; }
-    .banner-btn { margin-top: 5px; }
-    .pwa-content { flex-direction: column; text-align: center; gap: 10px; }
-    .pwa-actions { width: 100%; justify-content: center; margin-top: 10px; }
-    .auth-card { padding: 25px 20px; }
-  }
 </style>
 </head>
 <body>
 
   <!-- ============================================== -->
-  <!-- بخش ورود و ثبت‌نام (در ابتدا نمایش داده می‌شود) -->
+  <!-- بخش ورود و ثبت‌نام (ابتدا نمایش داده می‌شود) -->
   <!-- ============================================== -->
   <div id="auth-overlay">
     <div class="auth-card">
@@ -241,7 +231,7 @@
       <!-- بخش ورود -->
       <div id="login-section" class="auth-section active">
         <div class="auth-group">
-          <input type="tel" id="login-username" placeholder="شماره موبایل (مثلاً 09123456789)" maxlength="11">
+          <input type="tel" id="login-username" placeholder="شماره موبایل (مثلاً 09123456789)" maxlength="11" inputmode="numeric">
           <span class="icon">📱</span>
         </div>
         <div class="auth-group">
@@ -324,7 +314,7 @@
       <a href="student-panel.html" id="menu-auth-link">🎓 پنل دانش‌آموز</a>
       <a href="teacher-panel.html">👨‍🏫 پنل معلم</a>
       <a href="#">📞 تماس با ما</a>
-      <a href="#" id="menu-logout-link" style="color: #ff6b6b;" onclick="logoutStudent(event)">🚪 خروج از حساب</a>
+      <a href="#" id="menu-logout-link" style="color: #ff6b6b; display: none;" onclick="logoutStudent(event)">🚪 خروج از حساب</a>
     </div>
     
     <!-- لایه تاریک پشت منو -->
@@ -514,7 +504,7 @@
 
         const btn = document.getElementById('reg-submit-btn');
 
-        // دکمه فقط زمانی فعال می‌شود که همه چیز پر شده باشد (مدرسه و پایه اجباری هستند)
+        // دکمه فقط زمانی فعال می‌شود که همه چیز پر شده باشد
         if (name && school && grade && username && password.length >= 6) {
             btn.disabled = false;
         } else {
@@ -628,7 +618,7 @@
     }
 
     // ==========================================
-    // ۲. کدهای مربوط به صفحه اصلی سایت
+    // ۲. کدهای صفحه اصلی (دقیقاً مثل فایل اصلی خودتان)
     // ==========================================
 
     const themeBtn = document.getElementById('themeBtn');
@@ -643,10 +633,10 @@
       document.body.classList.toggle('dark-mode');
       if (document.body.classList.contains('dark-mode')) {
         localStorage.setItem('theme', 'dark');
-        themeBtn.textContent = '☀️';
+        if(themeBtn) themeBtn.textContent = '☀️';
       } else {
         localStorage.setItem('theme', 'light');
-        themeBtn.textContent = '🌙';
+        if(themeBtn) themeBtn.textContent = '🌙';
       }
     }
 
@@ -673,7 +663,7 @@
     }
 
     // ==========================================
-    // ۳. منطق نصب PWA (اصلاح شده و تضمینی)
+    // ۳. منطق نصب PWA
     // ==========================================
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => { navigator.serviceWorker.register('./service-worker.js'); });
@@ -689,25 +679,17 @@
     const hasDismissed = localStorage.getItem('pwa_dismissed') === 'true';
 
     if (!isStandalone && !hasDismissed) {
-      // تشخیص iOS (آیفون و آیپد)
       const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-      
       if (isIOS) {
-        // برای iOS مرورگر اجازه پاپ‌آپ نصب رو نمیده، پس مستقیم راهنما رو نشون میدیم
         setTimeout(() => {
           iosInstructions.style.display = 'block';
-          if(pwaInstallBtn) pwaInstallBtn.style.display = 'none'; // دکمه نصب رو مخفی میکنیم
+          if(pwaInstallBtn) pwaInstallBtn.style.display = 'none';
           pwaBanner.classList.add('show');
         }, 3000);
       } else {
-        // برای اندروید و کامپیوتر
         window.addEventListener('beforeinstallprompt', (e) => {
-          // جلوگیری از نمایش خودکار مینی‌اینفو
           e.preventDefault();
-          // ذخیره رویداد برای استفاده در دکمه
           deferredPrompt = e;
-          
-          // نمایش بنر بعد از ۳ ثانیه
           setTimeout(() => {
             pwaBanner.classList.add('show');
           }, 3000);
@@ -719,10 +701,7 @@
         pwaInstallBtn.addEventListener('click', async () => {
           if (deferredPrompt) {
             deferredPrompt.prompt();
-            const { outcome } = await deferredPrompt.userChoice;
-            if (outcome === 'accepted') {
-              console.log('کاربر اپلیکیشن را نصب کرد.');
-            }
+            await deferredPrompt.userChoice;
             deferredPrompt = null;
           }
           pwaBanner.classList.remove('show');
@@ -732,7 +711,7 @@
     if(pwaCloseBtn) {
         pwaCloseBtn.addEventListener('click', () => {
           pwaBanner.classList.remove('show');
-          localStorage.setItem('pwa_dismissed', 'true'); // دیگه نشون نده
+          localStorage.setItem('pwa_dismissed', 'true'); 
         });
     }
   </script>
