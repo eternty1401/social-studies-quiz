@@ -66,6 +66,7 @@
         .btn-action:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.2); }
         .btn-logout { background: rgba(220, 53, 69, 0.9); }
         .btn-password { background: rgba(245, 158, 11, 0.9); }
+        .btn-leaderboard { background: rgba(139, 92, 246, 0.9); } /* دکمه جدید رتبه‌بندی */
         
         .btn-checkin { 
             background: linear-gradient(135deg, #10b981, #059669); 
@@ -220,7 +221,7 @@
         }
         .loading { text-align: center; color: white; font-size: 1.2rem; margin-top: 50px; font-weight: bold; }
 
-        /* Modal تغییر رمز */
+        /* Modal عمومی */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); display: none; justify-content: center; align-items: center; z-index: 1000; padding: 20px; }
         .modal-content { background: white; padding: 25px; border-radius: 20px; width: 100%; max-width: 400px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
         .modal-content h3 { margin-bottom: 20px; color: #1e293b; text-align: center; font-weight: 900; }
@@ -230,6 +231,27 @@
         .modal-actions { display: flex; gap: 10px; margin-top: 25px; }
         .btn-save { flex: 1; background: #10b981; color: white; border: none; padding: 12px; border-radius: 10px; font-family: inherit; font-size: 1rem; font-weight: bold; cursor: pointer; }
         .btn-cancel { flex: 1; background: #e2e8f0; color: #475569; border: none; padding: 12px; border-radius: 10px; font-family: inherit; font-size: 1rem; font-weight: bold; cursor: pointer; }
+
+        /* استایل‌های جدول رتبه‌بندی */
+        .leaderboard-modal-content { max-width: 500px; max-height: 85vh; display: flex; flex-direction: column; }
+        .leaderboard-list { overflow-y: auto; padding-left: 5px; }
+        .lb-row { display: flex; justify-content: space-between; align-items: center; padding: 12px; border-bottom: 1px solid #e2e8f0; background: #f8fafc; border-radius: 10px; margin-bottom: 8px; }
+        .lb-row.top-1 { background: #fef3c7; border: 1px solid #f59e0b; }
+        .lb-row.top-2 { background: #f1f5f9; border: 1px solid #94a3b8; }
+        .lb-row.top-3 { background: #ffedd5; border: 1px solid #d97706; }
+        
+        /* هایلایت کردن نام خود دانش‌آموز */
+        .lb-row.my-row { border: 2px solid #10b981; background: #ecfdf5; box-shadow: 0 0 10px rgba(16,185,129,0.3); }
+        
+        .lb-rank { font-size: 1.1rem; font-weight: 900; width: 35px; text-align: center; color: #64748b; }
+        .top-1 .lb-rank { color: #d97706; font-size: 1.3rem; }
+        .top-2 .lb-rank { color: #475569; font-size: 1.3rem; }
+        .top-3 .lb-rank { color: #b45309; font-size: 1.3rem; }
+        
+        .lb-info { flex: 1; padding-right: 10px; }
+        .lb-info h4 { color: #1e293b; font-size: 0.95rem; margin-bottom: 2px; }
+        .lb-info span { font-size: 0.75rem; color: #64748b; }
+        .lb-points { background: #dbeafe; color: #1d4ed8; font-weight: bold; padding: 5px 10px; border-radius: 15px; font-size: 0.85rem; }
     </style>
 </head>
 <body>
@@ -245,6 +267,9 @@
         <!-- دکمه‌های عملیات -->
         <div class="top-actions">
             <button class="btn-action btn-checkin" id="btn-checkin" onclick="checkIn()">📍 ثبت حاضری امروز</button>
+            <!-- دکمه جدید رتبه‌بندی -->
+            <button class="btn-action btn-leaderboard" onclick="openLeaderboardModal()">🏆 رتبه‌بندی</button>
+            
             <button class="btn-action btn-password" onclick="openPasswordModal()">🔑 تغییر رمز</button>
             <button class="btn-action btn-logout" onclick="logout()">🚪 خروج</button>
         </div>
@@ -303,6 +328,22 @@
             <div class="modal-actions">
                 <button class="btn-save" id="savePassBtn" onclick="submitPasswordChange()">💾 ذخیره</button>
                 <button class="btn-cancel" onclick="closePasswordModal()">انصراف</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal جدول رتبه‌بندی (جدید) -->
+    <div class="modal-overlay" id="leaderboardModal">
+        <div class="modal-content leaderboard-modal-content">
+            <h3>🏆 جدول رتبه‌بندی</h3>
+            <p style="text-align: center; color: #64748b; font-size: 0.85rem; margin-bottom: 15px;">با فعالیت بیشتر در سایت، امتیاز جمع کن و بالا برو!</p>
+            
+            <div class="leaderboard-list" id="leaderboardList">
+                <p style="text-align: center; color: #64748b;">در حال دریافت اطلاعات...</p>
+            </div>
+            
+            <div class="modal-actions">
+                <button class="btn-cancel" onclick="closeLeaderboardModal()" style="width: 100%;">بستن</button>
             </div>
         </div>
     </div>
@@ -368,7 +409,7 @@
             return studentGrade;
         }
 
-        // 👇 سیستم لود اطلاعیه‌ها با نمایش خطا 👇
+        // 👇 سیستم لود اطلاعیه‌ها 👇
         async function loadAnnouncement() {
             const grade = getStudentGrade();
             try {
@@ -377,30 +418,21 @@
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({ grade: grade })
                 });
-                
-                const textResponse = await res.text(); 
-                const data = JSON.parse(textResponse);
+                const data = await res.json();
                 
                 if(data.status === 'success' && data.data.length > 0) {
                     document.getElementById('announcement-text').innerText = data.data[0].message;
                     document.getElementById('teacher-announcement').style.display = 'block';
-                } else if (data.status === 'error') {
-                    // alert("خطای دریافت اطلاعیه: " + data.message); // برای دیباگ
-                    console.log("خطای دریافت اطلاعیه: " + data.message);
                 }
-            } catch(e) { 
-                // alert("خطای شبکه در لود اطلاعیه."); // برای دیباگ
-                console.log("خطای لود اطلاعیه: ", e);
-            }
+            } catch(e) { console.log("خطای لود اطلاعیه"); }
         }
 
-        // 👇 سیستم امتیازدهی روزانه (اصلاح شده و بدون باگ) 👇
+        // 👇 سیستم امتیازدهی روزانه 👇
         async function processDailyPoints() {
             const today = new Date().toLocaleDateString('fa-IR');
             const storageKey = 'last_point_date_' + studentName; 
             const lastPointDate = localStorage.getItem(storageKey);
 
-            // اگر امروز امتیاز نگرفته باشد
             if (lastPointDate !== today) {
                 try {
                     const res = await fetch('https://api.motadars.ir/add_points.php', {
@@ -408,12 +440,11 @@
                         headers: {'Content-Type': 'application/json'},
                         body: JSON.stringify({ student_name: studentName, points: 5 })
                     });
-                    
                     const data = await res.json();
                     
                     if(data.status === 'success') {
                         document.getElementById('student-points').innerText = data.new_points;
-                        localStorage.setItem(storageKey, today); // ثبت تاریخ امروز در حافظه
+                        localStorage.setItem(storageKey, today); 
                     } else {
                         fetchCurrentPoints();
                     }
@@ -422,7 +453,6 @@
                     fetchCurrentPoints(); 
                 }
             } else {
-                // اگر امروز قبلا امتیاز گرفته، فقط امتیاز فعلی را نشان بده
                 fetchCurrentPoints();
             }
         }
@@ -440,6 +470,80 @@
                 }
             } catch(e) { console.log("خطا در دریافت امتیاز"); }
         }
+
+        // 👇 توابع مربوط به جدول رتبه‌بندی (جدید) 👇
+        function openLeaderboardModal() {
+            document.getElementById('leaderboardModal').style.display = 'flex';
+            fetchLeaderboard();
+        }
+
+        function closeLeaderboardModal() {
+            document.getElementById('leaderboardModal').style.display = 'none';
+        }
+
+        async function fetchLeaderboard() {
+            const list = document.getElementById('leaderboardList');
+            list.innerHTML = '<p style="text-align: center; color: #64748b;">در حال دریافت اطلاعات...</p>';
+
+            try {
+                const res = await fetch('https://api.motadars.ir/get_leaderboard.php');
+                const data = await res.json();
+                
+                if(data.status === 'success') {
+                    renderLeaderboard(data.data);
+                } else {
+                    list.innerHTML = `<p style="text-align: center; color: red;">خطای سرور: ${data.message}</p>`;
+                }
+            } catch (e) {
+                list.innerHTML = `<p style="text-align: center; color: red;">خطای شبکه در دریافت رتبه‌بندی.</p>`;
+            }
+        }
+
+        function renderLeaderboard(data) {
+            const list = document.getElementById('leaderboardList');
+            if(data.length === 0) {
+                list.innerHTML = '<p style="text-align: center; color: #64748b;">هنوز امتیازی ثبت نشده است.</p>';
+                return;
+            }
+
+            list.innerHTML = '';
+            // نمایش ۲۰ نفر اول برای اینکه لیست خیلی طولانی نشود
+            data.slice(0, 20).forEach((student, index) => {
+                let rank = index + 1;
+                let rankClass = rank <= 3 ? `top-${rank}` : '';
+                let rankEmoji = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : rank;
+
+                // بررسی اینکه آیا این ردیف مربوط به خود دانش‌آموز است یا نه
+                let isMyRow = (student.full_name === studentName);
+                let myRowClass = isMyRow ? 'my-row' : '';
+
+                // پیدا کردن پایه دانش‌آموز از فایل students-data.js
+                let gradeStr = "";
+                if (typeof schoolData !== 'undefined') {
+                    for (const sKey in schoolData) {
+                        for (const gNum in schoolData[sKey].grades) {
+                            if (schoolData[sKey].grades[gNum].includes(student.full_name)) {
+                                gradeStr = ` - پایه ${gNum}`;
+                                break;
+                            }
+                        }
+                        if (gradeStr) break;
+                    }
+                }
+
+                list.innerHTML += `
+                    <div class="lb-row ${rankClass} ${myRowClass}">
+                        <div class="lb-rank">${rankEmoji}</div>
+                        <div class="lb-info">
+                            <h4>${student.full_name} ${isMyRow ? '(شما)' : ''}</h4>
+                            <span>${student.school_name}${gradeStr}</span>
+                        </div>
+                        <div class="lb-points">${student.points} امتیاز</div>
+                    </div>
+                `;
+            });
+        }
+        // 👆 پایان توابع جدول رتبه‌بندی 👆
 
         // آپدیت ظاهر دکمه حاضری
         function updateCheckinButton() {
