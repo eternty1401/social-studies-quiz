@@ -39,6 +39,35 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
+        /* 👇 استایل کادر آزمون فعال (جدید) 👇 */
+        .active-exam-box {
+            display: none;
+            background: linear-gradient(135deg, #10b981, #059669);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(16, 185, 129, 0.4);
+            border-right: 6px solid #047857;
+            animation: pulse-glow 2s infinite;
+        }
+        .active-exam-box h3 { color: white; font-size: 1.2rem; margin-bottom: 10px; }
+        .active-exam-box p { color: #ecfdf5; font-size: 1rem; margin-bottom: 15px; }
+        .active-exam-box a {
+            display: inline-block;
+            background: white;
+            color: #047857;
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-weight: 900;
+            text-decoration: none;
+            font-size: 1.1rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: 0.3s;
+        }
+        .active-exam-box a:hover { transform: scale(1.05); background: #f0fdf4; }
+        /* 👆 پایان استایل کادر آزمون 👆 */
+
         /* دکمه‌های بالای صفحه */
         .top-actions {
             display: flex;
@@ -66,7 +95,7 @@
         .btn-action:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.2); }
         .btn-logout { background: rgba(220, 53, 69, 0.9); }
         .btn-password { background: rgba(245, 158, 11, 0.9); }
-        .btn-leaderboard { background: rgba(139, 92, 246, 0.9); } /* دکمه جدید رتبه‌بندی */
+        .btn-leaderboard { background: rgba(139, 92, 246, 0.9); }
         
         .btn-checkin { 
             background: linear-gradient(135deg, #10b981, #059669); 
@@ -221,7 +250,7 @@
         }
         .loading { text-align: center; color: white; font-size: 1.2rem; margin-top: 50px; font-weight: bold; }
 
-        /* Modal عمومی */
+        /* Modal */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); display: none; justify-content: center; align-items: center; z-index: 1000; padding: 20px; }
         .modal-content { background: white; padding: 25px; border-radius: 20px; width: 100%; max-width: 400px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
         .modal-content h3 { margin-bottom: 20px; color: #1e293b; text-align: center; font-weight: 900; }
@@ -239,15 +268,11 @@
         .lb-row.top-1 { background: #fef3c7; border: 1px solid #f59e0b; }
         .lb-row.top-2 { background: #f1f5f9; border: 1px solid #94a3b8; }
         .lb-row.top-3 { background: #ffedd5; border: 1px solid #d97706; }
-        
-        /* هایلایت کردن نام خود دانش‌آموز */
         .lb-row.my-row { border: 2px solid #10b981; background: #ecfdf5; box-shadow: 0 0 10px rgba(16,185,129,0.3); }
-        
         .lb-rank { font-size: 1.1rem; font-weight: 900; width: 35px; text-align: center; color: #64748b; }
         .top-1 .lb-rank { color: #d97706; font-size: 1.3rem; }
         .top-2 .lb-rank { color: #475569; font-size: 1.3rem; }
         .top-3 .lb-rank { color: #b45309; font-size: 1.3rem; }
-        
         .lb-info { flex: 1; padding-right: 10px; }
         .lb-info h4 { color: #1e293b; font-size: 0.95rem; margin-bottom: 2px; }
         .lb-info span { font-size: 0.75rem; color: #64748b; }
@@ -258,6 +283,13 @@
 
     <div class="container" id="panel-content" style="display: none;">
         
+        <!-- کادر آزمون فعال (جدید) -->
+        <div class="active-exam-box" id="active-exam-box">
+            <h3>📝 آزمون فعال برای شما!</h3>
+            <p id="active-exam-title">در حال بارگذاری...</p>
+            <a id="active-exam-link" href="#" target="_blank">ورود به آزمون 🚀</a>
+        </div>
+
         <!-- کادر اطلاعیه معلم -->
         <div class="announcement-box" id="teacher-announcement">
             <h4>📢 اطلاعیه معلم:</h4>
@@ -267,9 +299,7 @@
         <!-- دکمه‌های عملیات -->
         <div class="top-actions">
             <button class="btn-action btn-checkin" id="btn-checkin" onclick="checkIn()">📍 ثبت حاضری امروز</button>
-            <!-- دکمه جدید رتبه‌بندی -->
             <button class="btn-action btn-leaderboard" onclick="openLeaderboardModal()">🏆 رتبه‌بندی</button>
-            
             <button class="btn-action btn-password" onclick="openPasswordModal()">🔑 تغییر رمز</button>
             <button class="btn-action btn-logout" onclick="logout()">🚪 خروج</button>
         </div>
@@ -332,7 +362,7 @@
         </div>
     </div>
 
-    <!-- Modal جدول رتبه‌بندی (جدید) -->
+    <!-- Modal جدول رتبه‌بندی -->
     <div class="modal-overlay" id="leaderboardModal">
         <div class="modal-content leaderboard-modal-content">
             <h3>🏆 جدول رتبه‌بندی</h3>
@@ -358,7 +388,7 @@
         // در هنگام بارگذاری صفحه
         window.onload = () => {
             if (!studentName || !studentUsername) {
-                window.location.href = 'login.html';
+                window.location.href = 'index.html';
             } else {
                 document.getElementById('student-name-display').innerText = studentName;
                 document.getElementById('student-school-display').innerText = schoolName;
@@ -366,8 +396,9 @@
                 
                 fetchGrades();
                 updateCheckinButton(); 
-                processDailyPoints(); // سیستم امتیازدهی
-                loadAnnouncement(); // سیستم اطلاع‌رسانی
+                processDailyPoints(); 
+                loadAnnouncement(); 
+                loadActiveExam(); // فراخوانی تابع نمایش آزمون فعال
             }
         };
 
@@ -409,7 +440,34 @@
             return studentGrade;
         }
 
-        // 👇 سیستم لود اطلاعیه‌ها 👇
+        // 👇 تابع جدید برای دریافت لینک آزمون فعال 👇
+        async function loadActiveExam() {
+            const grade = getStudentGrade();
+            if (grade === "نامشخص") return;
+
+            try {
+                const res = await fetch('https://api.motadars.ir/get_active_exam_link.php', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ grade: grade })
+                });
+                const data = await res.json();
+                
+                if (data.status === 'success' && data.data) {
+                    const examBox = document.getElementById('active-exam-box');
+                    document.getElementById('active-exam-title').innerText = data.data.exam_title;
+                    document.getElementById('active-exam-link').href = data.data.exam_link;
+                    examBox.style.display = 'block';
+                } else {
+                    document.getElementById('active-exam-box').style.display = 'none';
+                }
+            } catch (e) {
+                console.log("خطا در دریافت لینک آزمون");
+            }
+        }
+        // 👆 پایان تابع آزمون 👆
+
+        // سیستم لود اطلاعیه‌ها
         async function loadAnnouncement() {
             const grade = getStudentGrade();
             try {
@@ -427,7 +485,7 @@
             } catch(e) { console.log("خطای لود اطلاعیه"); }
         }
 
-        // 👇 سیستم امتیازدهی روزانه 👇
+        // سیستم امتیازدهی روزانه
         async function processDailyPoints() {
             const today = new Date().toLocaleDateString('fa-IR');
             const storageKey = 'last_point_date_' + studentName; 
@@ -471,7 +529,7 @@
             } catch(e) { console.log("خطا در دریافت امتیاز"); }
         }
 
-        // 👇 توابع مربوط به جدول رتبه‌بندی (جدید) 👇
+        // توابع مربوط به جدول رتبه‌بندی
         function openLeaderboardModal() {
             document.getElementById('leaderboardModal').style.display = 'flex';
             fetchLeaderboard();
@@ -507,17 +565,14 @@
             }
 
             list.innerHTML = '';
-            // نمایش ۲۰ نفر اول برای اینکه لیست خیلی طولانی نشود
             data.slice(0, 20).forEach((student, index) => {
                 let rank = index + 1;
                 let rankClass = rank <= 3 ? `top-${rank}` : '';
                 let rankEmoji = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : rank;
 
-                // بررسی اینکه آیا این ردیف مربوط به خود دانش‌آموز است یا نه
                 let isMyRow = (student.full_name === studentName);
                 let myRowClass = isMyRow ? 'my-row' : '';
 
-                // پیدا کردن پایه دانش‌آموز از فایل students-data.js
                 let gradeStr = "";
                 if (typeof schoolData !== 'undefined') {
                     for (const sKey in schoolData) {
@@ -543,7 +598,6 @@
                 `;
             });
         }
-        // 👆 پایان توابع جدول رتبه‌بندی 👆
 
         // آپدیت ظاهر دکمه حاضری
         function updateCheckinButton() {
@@ -665,7 +719,7 @@
             }
 
             const studentGrade = getStudentGrade();
-            const actualSchoolName = (schoolName.includes("حسن")) ? "حسن بن علی (نوشهرکلنگی)" : "حضرت مهدی (سرزه)";
+            const actualSchoolName = (schoolName.includes("حسن")) ? "مدرسه حسن بن علی نوشهر کلنگی" : "مدرسه حضرت مهدی سرزه";
 
             if (studentGrade === "نامشخص") {
                 alert("خطا: نام شما در لیست کلاس پیدا نشد. لطفاً با معلم خود تماس بگیرید.");
