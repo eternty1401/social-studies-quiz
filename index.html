@@ -11,7 +11,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700;900&display=swap" rel="stylesheet">
 <style>
   /* ========================================= */
-  /* ===== استایل‌های اصلی سایت شما ===== */
+  /* ===== استایل‌های اصلی سایت ===== */
   /* ========================================= */
   * { margin:0; padding:0; box-sizing:border-box; font-family:'Vazirmatn',sans-serif; }
   
@@ -101,7 +101,6 @@
   .footer .heart { color: #ff6b9d; animation: pulse 1.5s infinite; display: inline-block; }
   @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.2); } }
 
-  /* ===== منوی همبرگری ===== */
   .menu-btn { position: fixed; top: 20px; right: 20px; width: 45px; height: 45px; background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.3); border-radius: 50%; z-index: 1000; display: flex; flex-direction: column; justify-content: center; align-items: center; cursor: pointer; transition: 0.3s; gap: 5px; }
   .menu-btn:hover { transform: scale(1.1); background: rgba(255,255,255,0.3); }
   .menu-btn span { display: block; width: 22px; height: 2px; background: #fff; transition: 0.3s; border-radius: 2px;}
@@ -112,7 +111,7 @@
   
   .close-btn { position: absolute; top: 15px; left: 20px; font-size: 35px; color: #fff; text-decoration: none; line-height: 1; z-index: 10;}
   
-  /* هدر منو (تغییر یافته) */
+  /* هدر منو (اصلاح شده) */
   .menu-header { display: flex; justify-content: space-between; align-items: center; padding: 25px 20px 15px; border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 10px; }
   .menu-header h2 { font-size: 1.1rem; color: #fff; font-weight: 700; margin: 0; }
   .menu-header .welcome-text { font-size: 0.85rem; color: #fbbf24; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 140px; }
@@ -309,11 +308,11 @@
       <span></span><span></span><span></span>
     </div>
 
-    <!-- منوی کشویی کناری (تغییر یافته) -->
+    <!-- منوی کشویی کناری -->
     <div id="sideMenu" class="side-menu">
       <a href="javascript:void(0)" class="close-btn" onclick="toggleMenu()">&times;</a>
       
-      <!-- هدر منو: منوی اصلی سمت راست، خوش آمدی سمت چپ -->
+      <!-- هدر منو -->
       <div class="menu-header">
         <h2>منوی اصلی</h2>
         <span id="welcome-user-name" class="welcome-text"></span>
@@ -608,7 +607,7 @@
                 
                 setTimeout(() => window.location.reload(), 1000);
             } else {
-                showAuthError(data.message || 'خطا در ثبت‌نام. ممکن است شماره موبایل تکراری باشد.');
+                showAuthError(data.message || 'خطا در ثبت‌نام. لطفاً اطلاعات خود را بررسی کنید.');
                 btn.disabled = false;
                 btnText.innerText = 'ثبت‌نام و ورود';
                 spinner.style.display = 'none';
@@ -649,7 +648,6 @@
       document.getElementById('menuOverlay').classList.toggle('show');
     }
 
-    // تابع آپدیت منو (تغییر یافته)
     function updateMenuUI(name) {
         const welcomeSpan = document.getElementById('welcome-user-name');
         const logoutLink = document.getElementById('menu-logout-link');
