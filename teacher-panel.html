@@ -245,7 +245,7 @@
                 <div id="essayBox"></div>
             </div>
 
-            <!-- مدیریت آزمون‌ها (تغییر یافته) -->
+            <!-- مدیریت آزمون‌ها -->
             <div id="examLinksSection" style="display: none;">
                 <div class="exam-link-form">
                     <h3>🔗 ساخت لینک آزمون برای دانش‌آموزان</h3>
@@ -263,7 +263,7 @@
                     <button class="btn-generate" style="background: #8b5cf6; margin-top: 15px;" onclick="openPdfModal()">📄 دریافت فایل چاپی آزمون (PDF)</button>
                 </div>
                 <div id="generated-link-box" class="link-result-box">
-                    <p>لینک آزمون آماده و در پنل دانش‌آموزان قرار گرفت:</p>
+                    <p>لینک آزمون آماده شد. این لینک هم در پنل دانش‌آموزان قرار گرفت و هم می‌توانید آن را در گروه بفرستید:</p>
                     <input type="text" id="final-exam-link" readonly>
                     <button class="btn-copy-link" onclick="copyExamLink()">📋 کپی لینک</button>
                 </div>
@@ -275,12 +275,21 @@
                     <h3>📢 ارسال پیام / اطلاعیه به دانش‌آموزان</h3>
                     <p style="color: #64748b; font-size: 0.9rem; margin-bottom: 15px;">این پیام در بالای پنل دانش‌آموزان نمایش داده می‌شود.</p>
                     <textarea id="announcement-text" rows="4" placeholder="متن اطلاعیه یا دانستنی روز را اینجا بنویسید..."></textarea>
-                    <select id="announcement-grade">
-                        <option value="all">ارسال به همه پایه‌ها</option>
-                        <option value="7">فقط پایه هفتم</option>
-                        <option value="8">فقط پایه هشتم</option>
-                        <option value="9">فقط پایه نهم</option>
-                    </select>
+                    
+                    <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                        <select id="announcement-school" style="flex: 1;">
+                            <option value="all">همه مدارس</option>
+                            <option value="hasan">مدرسه حسن بن علی</option>
+                            <option value="mahdi">مدرسه حضرت مهدی</option>
+                        </select>
+                        <select id="announcement-grade" style="flex: 1;">
+                            <option value="all">همه پایه‌ها</option>
+                            <option value="7">پایه هفتم</option>
+                            <option value="8">پایه هشتم</option>
+                            <option value="9">پایه نهم</option>
+                        </select>
+                    </div>
+                    
                     <button class="btn-generate" onclick="sendAnnouncement()">🚀 ارسال اطلاعیه</button>
                 </div>
                 <h3 style="color: white; margin-bottom: 15px;">آخرین اطلاعیه‌های ارسال شده</h3>
@@ -515,6 +524,7 @@
         // ------------------ بخش اطلاع‌رسانی ------------------
         async function sendAnnouncement() {
             const text = document.getElementById('announcement-text').value.trim();
+            const school = document.getElementById('announcement-school').value;
             const grade = document.getElementById('announcement-grade').value;
             if(!text) return alert('لطفاً متن اطلاعیه را وارد کنید.');
 
@@ -526,12 +536,12 @@
                 const res = await fetch('https://api.motadars.ir/save_announcement.php', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ message: text, target_grade: grade })
+                    body: JSON.stringify({ message: text, target_grade: grade, target_school: school })
                 });
                 const data = await res.json();
                 
                 if(data.status === 'success') {
-                    alert('✅ اطلاعیه با موفقیت برای دانش‌آموزان ارسال شد.');
+                    alert('✅ اطلاعیه با موفقیت ارسال شد.');
                     document.getElementById('announcement-text').value = '';
                     loadAnnouncements();
                 } else {
@@ -561,10 +571,11 @@
                     box.innerHTML = '';
                     data.data.forEach(ann => {
                         let gradeLabel = ann.target_grade === 'all' ? 'همه پایه‌ها' : `پایه ${ann.target_grade}`;
+                        let schoolLabel = ann.target_school === 'all' ? 'همه مدارس' : (ann.target_school === 'hasan' ? 'حسن بن علی' : 'حضرت مهدی');
                         box.innerHTML += `
                             <div class="announcement-card">
                                 <p>${ann.message}</p>
-                                <div class="meta">ارسال به: ${gradeLabel} | تاریخ: ${ann.created_at}</div>
+                                <div class="meta">ارسال به: ${schoolLabel} - ${gradeLabel} | تاریخ: ${ann.created_at}</div>
                             </div>
                         `;
                     });
@@ -1188,7 +1199,7 @@
             }
         }
 
-        // ------------------ بخش مدیریت آزمون‌ها (تغییر یافته) ------------------
+        // ------------------ بخش مدیریت آزمون‌ها ------------------
         async function generateExamLink() {
             const title = document.getElementById('link-title').value.trim();
             const grade = document.getElementById('link-grade').value;
@@ -1215,7 +1226,7 @@
                 if(data.status === 'success') {
                     document.getElementById('final-exam-link').value = link;
                     document.getElementById('generated-link-box').style.display = 'block';
-                    alert('✅ لینک ساخته شد و در پنل دانش‌آموزان پایه ' + grade + ' نمایش داده می‌شود.');
+                    alert('✅ لینک ساخته شد و در پنل دانش‌آموزان قرار گرفت.');
                 } else {
                     alert('❌ خطا: ' + data.message);
                 }
