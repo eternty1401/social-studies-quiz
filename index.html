@@ -24,596 +24,107 @@
     transition: background 0.5s ease;
   }
 
-  /* ===== استایل‌های حالت تاریک ===== */
-  body.dark-mode {
-    background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
-  }
-  body.dark-mode .grade-card,
-  body.dark-mode .teacher-badge,
-  body.dark-mode .about-section {
-    background: rgba(0, 0, 0, 0.4);
-    border-color: rgba(255, 255, 255, 0.1);
-  }
-  body.dark-mode .grade-card:hover {
-    background: rgba(0, 0, 0, 0.6);
-  }
-  body.dark-mode .grade-btn {
-    background: rgba(255, 255, 255, 0.8);
-    color: #1a1a2e;
-  }
-  body.dark-mode .feature-chip {
-    background: rgba(0, 0, 0, 0.3);
-    border-color: rgba(255, 255, 255, 0.1);
-  }
-  body.dark-mode .bubble {
-    background: rgba(255, 255, 255, 0.05);
-  }
-
-  /* دکمه تغییر تم */
-  .theme-toggle {
-    position: fixed;
-    top: 20px;
-    left: 20px;
-    width: 45px;
-    height: 45px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.2);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255,255,255,0.3);
-    font-size: 1.5rem;
-    cursor: pointer;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 100;
-    transition: 0.3s;
-    color: #fff;
-  }
-  .theme-toggle:hover {
-    transform: scale(1.1);
-    background: rgba(255,255,255,0.3);
-  }
-
   @keyframes gradientShift {
     0% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }
     100% { background-position: 0% 50%; }
   }
 
+  /* ===== استایل‌های حالت تاریک ===== */
+  body.dark-mode { background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%); }
+  body.dark-mode .grade-card, body.dark-mode .teacher-badge, body.dark-mode .about-section { background: rgba(0, 0, 0, 0.4); border-color: rgba(255, 255, 255, 0.1); }
+  body.dark-mode .grade-card:hover { background: rgba(0, 0, 0, 0.6); }
+  body.dark-mode .grade-btn { background: rgba(255, 255, 255, 0.8); color: #1a1a2e; }
+  body.dark-mode .feature-chip { background: rgba(0, 0, 0, 0.3); border-color: rgba(255, 255, 255, 0.1); }
+  body.dark-mode .bubble { background: rgba(255, 255, 255, 0.05); }
+
+  /* دکمه تغییر تم */
+  .theme-toggle { position: fixed; top: 20px; left: 20px; width: 45px; height: 45px; border-radius: 50%; background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.3); font-size: 1.5rem; cursor: pointer; display: flex; justify-content: center; align-items: center; z-index: 100; transition: 0.3s; color: #fff; }
+  .theme-toggle:hover { transform: scale(1.1); background: rgba(255,255,255,0.3); }
+
   /* حباب‌های تزئینی پس‌زمینه */
-  .bubble {
-    position: fixed;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.1);
-    animation: floatBubble 20s infinite ease-in-out;
-    pointer-events: none;
-    z-index: 0;
-  }
+  .bubble { position: fixed; border-radius: 50%; background: rgba(255,255,255,0.1); animation: floatBubble 20s infinite ease-in-out; pointer-events: none; z-index: 0; }
   .bubble:nth-child(1) { width: 80px; height: 80px; top: 10%; left: 10%; animation-delay: 0s; }
   .bubble:nth-child(2) { width: 120px; height: 120px; top: 60%; left: 80%; animation-delay: 3s; }
   .bubble:nth-child(3) { width: 60px; height: 60px; top: 80%; left: 20%; animation-delay: 6s; }
   .bubble:nth-child(4) { width: 100px; height: 100px; top: 30%; left: 70%; animation-delay: 9s; }
   .bubble:nth-child(5) { width: 50px; height: 50px; top: 50%; left: 40%; animation-delay: 12s; }
-
-  @keyframes floatBubble {
-    0%, 100% { transform: translateY(0) scale(1); opacity: 0.3; }
-    50% { transform: translateY(-30px) scale(1.1); opacity: 0.6; }
-  }
+  @keyframes floatBubble { 0%, 100% { transform: translateY(0) scale(1); opacity: 0.3; } 50% { transform: translateY(-30px) scale(1.1); opacity: 0.6; } }
 
   /* ===== هدر ===== */
-  .header {
-    text-align: center;
-    margin-bottom: 40px;
-    z-index: 1;
-    position: relative;
-  }
-
-  .header h1 {
-    font-size: 2.6rem;
-    font-weight: 900;
-    margin-bottom: 15px;
-    text-shadow: 0 4px 20px rgba(0,0,0,0.3);
-    animation: fadeInDown 1s ease;
-    background: linear-gradient(90deg, #fff, #ffd6ff, #fff);
-    background-size: 200% auto;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    animation: shineText 3s linear infinite, fadeInDown 1s ease;
-  }
-
-  @keyframes shineText {
-    to { background-position: 200% center; }
-  }
-
-  .header .subtitle {
-    font-size: 1.1rem;
-    color: rgba(255,255,255,0.9);
-    margin-bottom: 25px;
-    animation: fadeInUp 1s ease 0.3s backwards;
-  }
-
-  @keyframes fadeInDown {
-    from { opacity: 0; transform: translateY(-30px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  @keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(30px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
+  .header { text-align: center; margin-bottom: 40px; z-index: 1; position: relative; }
+  .header h1 { font-size: 2.6rem; font-weight: 900; margin-bottom: 15px; text-shadow: 0 4px 20px rgba(0,0,0,0.3); animation: fadeInDown 1s ease; background: linear-gradient(90deg, #fff, #ffd6ff, #fff); background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; animation: shineText 3s linear infinite, fadeInDown 1s ease; }
+  @keyframes shineText { to { background-position: 200% center; } }
+  .header .subtitle { font-size: 1.1rem; color: rgba(255,255,255,0.9); margin-bottom: 25px; animation: fadeInUp 1s ease 0.3s backwards; }
+  @keyframes fadeInDown { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
 
   /* ===== نشان دبیر ===== */
-  .teacher-badge {
-    display: inline-flex; align-items: center; gap: 10px;
-    background: rgba(255,255,255,0.2);
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
-    border: 1px solid rgba(255,255,255,0.3);
-    padding: 12px 28px;
-    border-radius: 50px;
-    font-weight: 700;
-    font-size: 1rem;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.15);
-    animation: fadeInUp 1s ease 0.5s backwards;
-    transition: 0.3s;
-  }
-  .teacher-badge:hover {
-    background: rgba(255,255,255,0.3);
-    transform: translateY(-3px);
-    box-shadow: 0 12px 40px rgba(0,0,0,0.25);
-  }
+  .teacher-badge { display: inline-flex; align-items: center; gap: 10px; background: rgba(255,255,255,0.2); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.3); padding: 12px 28px; border-radius: 50px; font-weight: 700; font-size: 1rem; box-shadow: 0 8px 32px rgba(0,0,0,0.15); animation: fadeInUp 1s ease 0.5s backwards; transition: 0.3s; }
+  .teacher-badge:hover { background: rgba(255,255,255,0.3); transform: translateY(-3px); box-shadow: 0 12px 40px rgba(0,0,0,0.25); }
   .teacher-badge .emoji { font-size: 1.4rem; }
 
   /* ===== کانتینر اصلی ===== */
-  .main-container {
-    width: 100%;
-    max-width: 1000px;
-    z-index: 1;
-    position: relative;
-  }
-
-  /* ===== عنوان بخش ===== */
-  .section-title {
-    text-align: center;
-    font-size: 1.4rem;
-    font-weight: 900;
-    margin-bottom: 25px;
-    text-shadow: 0 2px 10px rgba(0,0,0,0.2);
-    animation: fadeInUp 1s ease 0.7s backwards;
-  }
+  .main-container { width: 100%; max-width: 1000px; z-index: 1; position: relative; }
+  .section-title { text-align: center; font-size: 1.4rem; font-weight: 900; margin-bottom: 25px; text-shadow: 0 2px 10px rgba(0,0,0,0.2); animation: fadeInUp 1s ease 0.7s backwards; }
 
   /* ===== کارت‌های پایه ===== */
-  .grades-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 25px;
-    margin-bottom: 40px;
-  }
+  .grades-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 25px; margin-bottom: 40px; }
+  .grade-card { background: rgba(255,255,255,0.15); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.3); border-radius: 24px; padding: 40px 25px; text-decoration: none; color: #fff; text-align: center; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 8px 32px rgba(0,0,0,0.15); position: relative; overflow: hidden; animation: fadeInUp 1s ease backwards; }
+  .grade-card:nth-child(1) { animation-delay: 0.8s; } .grade-card:nth-child(2) { animation-delay: 1s; } .grade-card:nth-child(3) { animation-delay: 1.2s; }
+  .grade-card:hover { transform: translateY(-10px) scale(1.03); background: rgba(255,255,255,0.25); box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+  .grade-icon { font-size: 4rem; display: block; margin-bottom: 15px; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.2)); transition: 0.4s; }
+  .grade-card:hover .grade-icon { transform: scale(1.15) rotate(-5deg); }
+  .grade-num { font-size: 1.8rem; font-weight: 900; margin-bottom: 8px; text-shadow: 0 2px 8px rgba(0,0,0,0.2); }
+  .grade-desc { font-size: 0.9rem; color: rgba(255,255,255,0.85); margin-bottom: 20px; line-height: 1.6; }
+  .grade-btn { display: inline-block; background: rgba(255,255,255,0.95); color: #764ba2; padding: 10px 30px; border-radius: 30px; font-weight: 900; font-size: 0.95rem; transition: 0.3s; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+  .grade-card:hover .grade-btn { background: #fff; transform: scale(1.05); box-shadow: 0 6px 20px rgba(0,0,0,0.2); }
 
-  .grade-card {
-    background: rgba(255,255,255,0.15);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255,255,255,0.3);
-    border-radius: 24px;
-    padding: 40px 25px;
-    text-decoration: none;
-    color: #fff;
-    text-align: center;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 8px 32px rgba(0,0,0,0.15);
-    position: relative;
-    overflow: hidden;
-    animation: fadeInUp 1s ease backwards;
-  }
+  /* ===== بنرها ===== */
+  .museum-banner, .history-banner, .life-banner { display: block; text-decoration: none; color: #fff; backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.4); border-radius: 24px; padding: 28px 25px; margin-bottom: 30px; box-shadow: 0 8px 32px rgba(0,0,0,0.15); position: relative; overflow: hidden; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); animation: fadeInUp 1s ease 1.3s backwards; }
+  .museum-banner { background: linear-gradient(135deg, rgba(245,158,11,0.35) 0%, rgba(236,72,153,0.35) 50%, rgba(6,182,212,0.35) 100%); }
+  .history-banner { background: linear-gradient(135deg, rgba(139, 92, 246, 0.4) 0%, rgba(59, 130, 246, 0.4) 50%, rgba(16, 185, 129, 0.4) 100%); animation-delay: 1.4s; }
+  .life-banner { background: linear-gradient(135deg, rgba(139, 92, 246, 0.3) 0%, rgba(56, 189, 248, 0.3) 100%); animation-delay: 1.5s; }
+  .museum-banner:hover, .history-banner:hover, .life-banner:hover { transform: translateY(-6px) scale(1.01); box-shadow: 0 20px 50px rgba(0,0,0,0.25); }
+  .banner-content { display: flex; align-items: center; gap: 20px; position: relative; z-index: 1; }
+  .banner-icon { font-size: 3.5rem; flex-shrink: 0; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.3)); transition: transform 0.5s; }
+  .banner:hover .banner-icon { transform: scale(1.15) rotate(-8deg); }
+  .banner-text { flex: 1; text-align: right; }
+  .banner-text h3 { font-size: 1.25rem; font-weight: 900; margin-bottom: 6px; text-shadow: 0 2px 8px rgba(0,0,0,0.2); }
+  .banner-text p { font-size: 0.88rem; color: rgba(255,255,255,0.92); line-height: 1.7; }
+  .banner-btn { background: rgba(255,255,255,0.95); color: #764ba2; padding: 11px 22px; border-radius: 30px; font-weight: 900; font-size: 0.85rem; white-space: nowrap; transition: 0.3s; box-shadow: 0 4px 15px rgba(0,0,0,0.15); }
+  .banner:hover .banner-btn { transform: scale(1.05); background: #fff; }
 
-  .grade-card:nth-child(1) { animation-delay: 0.8s; }
-  .grade-card:nth-child(2) { animation-delay: 1s; }
-  .grade-card:nth-child(3) { animation-delay: 1.2s; }
-  .grade-card:nth-child(4) { animation-delay: 1.3s; }
-  .grade-card:nth-child(5) { animation-delay: 1.4s; }
-
-  .grade-card::before {
-    content: '';
-    position: absolute;
-    top: -50%; left: -50%;
-    width: 200%; height: 200%;
-    background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 60%);
-    opacity: 0;
-    transition: opacity 0.5s;
-    pointer-events: none;
-  }
-
-  .grade-card:hover {
-    transform: translateY(-10px) scale(1.03);
-    background: rgba(255,255,255,0.25);
-    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-  }
-
-  .grade-card:hover::before { opacity: 1; }
-
-  .grade-icon {
-    font-size: 4rem;
-    display: block;
-    margin-bottom: 15px;
-    filter: drop-shadow(0 4px 10px rgba(0,0,0,0.2));
-    transition: 0.4s;
-  }
-  .grade-card:hover .grade-icon {
-    transform: scale(1.15) rotate(-5deg);
-  }
-
-  .grade-num {
-    font-size: 1.8rem;
-    font-weight: 900;
-    margin-bottom: 8px;
-    text-shadow: 0 2px 8px rgba(0,0,0,0.2);
-  }
-
-  .grade-desc {
-    font-size: 0.9rem;
-    color: rgba(255,255,255,0.85);
-    margin-bottom: 20px;
-    line-height: 1.6;
-  }
-
-  .grade-btn {
-    display: inline-block;
-    background: rgba(255,255,255,0.95);
-    color: #764ba2;
-    padding: 10px 30px;
-    border-radius: 30px;
-    font-weight: 900;
-    font-size: 0.95rem;
-    transition: 0.3s;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-  }
-
-  .grade-card:hover .grade-btn {
-    background: #fff;
-    transform: scale(1.05);
-    box-shadow: 0 6px 20px rgba(0,0,0,0.2);
-  }
-
-  /* دکمه در حال ساخت */
-  .grade-card.coming-soon {
-    opacity: 0.65;
-    cursor: not-allowed;
-    pointer-events: none;
-  }
-  .grade-card.coming-soon .grade-btn {
-    background: rgba(255,255,255,0.5);
-    color: rgba(118,75,162,0.6);
-  }
-
-  /* ===== بنر موزه گردی مجازی ===== */
-  .museum-banner {
-    display: block;
-    text-decoration: none;
-    color: #fff;
-    background: linear-gradient(135deg,
-      rgba(245,158,11,0.35) 0%,
-      rgba(236,72,153,0.35) 50%,
-      rgba(6,182,212,0.35) 100%);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255,255,255,0.4);
-    border-radius: 24px;
-    padding: 28px 25px;
-    margin-bottom: 30px;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.15);
-    position: relative;
-    overflow: hidden;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    animation: fadeInUp 1s ease 1.35s backwards;
-  }
-  .museum-banner::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(circle at 80% 50%, rgba(255,255,255,0.3), transparent 60%);
-    opacity: 0;
-    transition: opacity 0.5s;
-    pointer-events: none;
-  }
-  .museum-banner:hover {
-    transform: translateY(-6px) scale(1.01);
-    box-shadow: 0 20px 50px rgba(236,72,153,0.35);
-  }
-  .museum-banner:hover::before { opacity: 1; }
-  .museum-banner-content {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    position: relative;
-    z-index: 1;
-  }
-  .museum-banner-icon {
-    font-size: 3.5rem;
-    flex-shrink: 0;
-    filter: drop-shadow(0 4px 10px rgba(0,0,0,0.3));
-    transition: transform 0.5s;
-  }
-  .museum-banner:hover .museum-banner-icon {
-    transform: scale(1.15) rotate(-8deg);
-  }
-  .museum-banner-text { flex: 1; text-align: right; }
-  .museum-banner-text h3 {
-    font-size: 1.25rem;
-    font-weight: 900;
-    margin-bottom: 6px;
-    text-shadow: 0 2px 8px rgba(0,0,0,0.2);
-  }
-  .museum-banner-text p {
-    font-size: 0.88rem;
-    color: rgba(255,255,255,0.92);
-    line-height: 1.7;
-  }
-  .museum-banner-btn {
-    background: rgba(255,255,255,0.95);
-    color: #764ba2;
-    padding: 11px 22px;
-    border-radius: 30px;
-    font-weight: 900;
-    font-size: 0.85rem;
-    white-space: nowrap;
-    transition: 0.3s;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
-  }
-  .museum-banner:hover .museum-banner-btn {
-    transform: scale(1.05);
-    background: #fff;
-  }
-  body.dark-mode .museum-banner {
-    background: linear-gradient(135deg,
-      rgba(245,158,11,0.2) 0%,
-      rgba(236,72,153,0.2) 50%,
-      rgba(6,182,212,0.2) 100%);
-    border-color: rgba(255,255,255,0.15);
-  }
-   /* ===== بخش درباره ===== */
-  .about-section {
-    background: rgba(255,255,255,0.15);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255,255,255,0.3);
-    border-radius: 24px;
-    padding: 35px 30px;
-    text-align: center;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.15);
-    animation: fadeInUp 1s ease 1.5s backwards;
-    margin-bottom: 30px;
-  }
-
-  .about-section h2 {
-    font-size: 1.3rem;
-    margin-bottom: 15px;
-    font-weight: 900;
-  }
-
-  .about-section p {
-    font-size: 1rem;
-    color: rgba(255,255,255,0.9);
-    line-height: 1.9;
-    max-width: 700px;
-    margin: 0 auto;
-  }
-
-  .features-row {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 15px;
-    margin-top: 25px;
-  }
-
-  .feature-chip {
-    background: rgba(255,255,255,0.2);
-    border: 1px solid rgba(255,255,255,0.3);
-    padding: 8px 18px;
-    border-radius: 30px;
-    font-size: 0.85rem;
-    font-weight: 700;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    transition: 0.3s;
-  }
-  .feature-chip:hover {
-    background: rgba(255,255,255,0.3);
-    transform: translateY(-2px);
-  }
+  /* ===== بخش درباره ===== */
+  .about-section { background: rgba(255,255,255,0.15); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.3); border-radius: 24px; padding: 35px 30px; text-align: center; box-shadow: 0 8px 32px rgba(0,0,0,0.15); animation: fadeInUp 1s ease 1.5s backwards; margin-bottom: 30px; }
+  .about-section h2 { font-size: 1.3rem; margin-bottom: 15px; font-weight: 900; }
+  .about-section p { font-size: 1rem; color: rgba(255,255,255,0.9); line-height: 1.9; max-width: 700px; margin: 0 auto; }
+  .features-row { display: flex; justify-content: center; flex-wrap: wrap; gap: 15px; margin-top: 25px; }
+  .feature-chip { background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); padding: 8px 18px; border-radius: 30px; font-size: 0.85rem; font-weight: 700; display: flex; align-items: center; gap: 6px; transition: 0.3s; }
+  .feature-chip:hover { background: rgba(255,255,255,0.3); transform: translateY(-2px); }
 
   /* ===== فوتر ===== */
-  .footer {
-    text-align: center;
-    color: rgba(255,255,255,0.8);
-    font-size: 0.9rem;
-    margin-top: 20px;
-    z-index: 1;
-    position: relative;
-  }
+  .footer { text-align: center; color: rgba(255,255,255,0.8); font-size: 0.9rem; margin-top: 20px; z-index: 1; position: relative; }
+  .footer .heart { color: #ff6b9d; animation: pulse 1.5s infinite; display: inline-block; }
+  @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.2); } }
 
-  .footer .heart {
-    color: #ff6b9d;
-    animation: pulse 1.5s infinite;
-    display: inline-block;
-  }
-
-  @keyframes pulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.2); }
-  }
-
- /* ===== بنر گفتگو با تاریخ ===== */
-.history-banner {
-  display: block;
-  text-decoration: none;
-  color: #fff;
-  background: linear-gradient(135deg,
-    rgba(139, 92, 246, 0.4) 0%,
-    rgba(59, 130, 246, 0.4) 50%,
-    rgba(16, 185, 129, 0.4) 100%);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255,255,255,0.4);
-  border-radius: 24px;
-  padding: 28px 25px;
-  margin-bottom: 30px;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.15);
-  position: relative;
-  overflow: hidden;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  animation: fadeInUp 1s ease 1.4s backwards;
-}
-.history-banner::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at 80% 50%, rgba(255,255,255,0.3), transparent 60%);
-  opacity: 0;
-  transition: opacity 0.5s;
-  pointer-events: none;
-}
-.history-banner:hover {
-  transform: translateY(-6px) scale(1.01);
-  box-shadow: 0 20px 50px rgba(139, 92, 246, 0.35);
-}
-.history-banner:hover::before { opacity: 1; }
-.history-banner-content {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  position: relative;
-  z-index: 1;
-}
-.history-banner-icon {
-  font-size: 3.5rem;
-  flex-shrink: 0;
-  filter: drop-shadow(0 4px 10px rgba(0,0,0,0.3));
-  transition: transform 0.5s;
-}
-.history-banner:hover .history-banner-icon {
-  transform: scale(1.15) rotate(8deg);
-}
-.history-banner-text { flex: 1; text-align: right; }
-.history-banner-text h3 {
-  font-size: 1.25rem;
-  font-weight: 900;
-  margin-bottom: 6px;
-  text-shadow: 0 2px 8px rgba(0,0,0,0.2);
-}
-.history-banner-text p {
-  font-size: 0.88rem;
-  color: rgba(255,255,255,0.92);
-  line-height: 1.7;
-}
-.history-banner-btn {
-  background: rgba(255,255,255,0.95);
-  color: #764ba2;
-  padding: 11px 22px;
-  border-radius: 30px;
-  font-weight: 900;
-  font-size: 0.85rem;
-  white-space: nowrap;
-  transition: 0.3s;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.15);
-}
-.history-banner:hover .history-banner-btn {
-  transform: scale(1.05);
-  background: #fff;
-}
-body.dark-mode .history-banner {
-  background: linear-gradient(135deg,
-    rgba(139, 92, 246, 0.2) 0%,
-    rgba(59, 130, 246, 0.2) 50%,
-    rgba(16, 185, 129, 0.2) 100%);
-  border-color: rgba(255,255,255,0.15);
-}
-
- /* بنر مهارت زندگی */
-.life-banner {
-  display: block; text-decoration: none; color: #fff;
-  background: linear-gradient(135deg, rgba(139, 92, 246, 0.3) 0%, rgba(56, 189, 248, 0.3) 100%);
-  backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.4);
-  border-radius: 24px; padding: 28px 25px; margin-bottom: 30px;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.15); position: relative; overflow: hidden;
-  transition: all 0.4s; animation: fadeInUp 1s ease 1.45s backwards;
-}
-.life-banner:hover { transform: translateY(-6px) scale(1.01); box-shadow: 0 20px 50px rgba(139, 92, 246, 0.35); }
-.life-banner-content { display: flex; align-items: center; gap: 20px; position: relative; z-index: 1; }
-.life-banner-icon { font-size: 3.5rem; flex-shrink: 0; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.3)); transition: transform 0.5s; }
-.life-banner:hover .life-banner-icon { transform: scale(1.15) rotate(-8deg); }
-.life-banner-text { flex: 1; text-align: right; }
-.life-banner-text h3 { font-size: 1.25rem; font-weight: 900; margin-bottom: 6px; text-shadow: 0 2px 8px rgba(0,0,0,0.2); }
-.life-banner-text p { font-size: 0.88rem; color: rgba(255,255,255,0.92); line-height: 1.7; }
-.life-banner-btn { background: rgba(255,255,255,0.95); color: #764ba2; padding: 11px 22px; border-radius: 30px; font-weight: 900; font-size: 0.85rem; white-space: nowrap; transition: 0.3s; box-shadow: 0 4px 15px rgba(0,0,0,0.15); }
-.life-banner:hover .life-banner-btn { transform: scale(1.05); background: #fff; }
-
-  /* ===== استایل‌های منوی همبرگری ===== */
-  .menu-btn {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    width: 45px;
-    height: 45px;
-    background: rgba(255,255,255,0.2);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255,255,255,0.3);
-    border-radius: 50%;
-    z-index: 1000;
-    display: flex; flex-direction: column; justify-content: center; align-items: center;
-    cursor: pointer; transition: 0.3s; gap: 5px;
-  }
+  /* ===== منوی همبرگری ===== */
+  .menu-btn { position: fixed; top: 20px; right: 20px; width: 45px; height: 45px; background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.3); border-radius: 50%; z-index: 1000; display: flex; flex-direction: column; justify-content: center; align-items: center; cursor: pointer; transition: 0.3s; gap: 5px; }
   .menu-btn:hover { transform: scale(1.1); background: rgba(255,255,255,0.3); }
   .menu-btn span { display: block; width: 22px; height: 2px; background: #fff; transition: 0.3s; border-radius: 2px;}
-  
-  /* منوی کشویی */
-  .side-menu {
-    position: fixed; top: 0; right: -300px;
-    width: 280px; height: 100vh;
-    background: rgba(30, 30, 50, 0.95);
-    backdrop-filter: blur(20px);
-    z-index: 1002; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    display: flex; flex-direction: column;
-    box-shadow: -5px 0 30px rgba(0,0,0,0.5);
-  }
+  .side-menu { position: fixed; top: 0; right: -300px; width: 280px; height: 100vh; background: rgba(30, 30, 50, 0.95); backdrop-filter: blur(20px); z-index: 1002; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); display: flex; flex-direction: column; box-shadow: -5px 0 30px rgba(0,0,0,0.5); }
   body.dark-mode .side-menu { background: rgba(10, 15, 30, 0.98); }
   .side-menu.open { right: 0; }
-  
   .close-btn { position: absolute; top: 15px; left: 20px; font-size: 35px; color: #fff; text-decoration: none; line-height: 1; }
   .menu-header { text-align: center; padding: 30px 20px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 10px; }
   .menu-header h2 { font-size: 1.2rem; color: #fff; font-weight: 700; }
-  
-  .side-menu a:not(.close-btn) {
-    padding: 16px 25px; color: #fff; text-decoration: none;
-    font-size: 1rem; border-bottom: 1px solid rgba(255,255,255,0.05);
-    transition: 0.2s; display: flex; align-items: center; gap: 12px; font-weight: 500;
-  }
+  .side-menu a:not(.close-btn) { padding: 16px 25px; color: #fff; text-decoration: none; font-size: 1rem; border-bottom: 1px solid rgba(255,255,255,0.05); transition: 0.2s; display: flex; align-items: center; gap: 12px; font-weight: 500; }
   .side-menu a:not(.close-btn):hover { background: rgba(255,255,255,0.1); padding-right: 30px; }
-  
-  /* پس‌زمینه تاریک منو */
-  .overlay {
-    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-    background: rgba(0,0,0,0.6); backdrop-filter: blur(4px);
-    z-index: 1001; opacity: 0; visibility: hidden; transition: 0.3s;
-  }
-  .overlay.show { opacity: 1; visibility: visible; }
+  .overlay-bg { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); z-index: 1001; opacity: 0; visibility: hidden; transition: 0.3s; }
+  .overlay-bg.show { opacity: 1; visibility: visible; }
 
-  /* استایل کارت بزودی */
-  .grade-card.coming-soon .grade-icon { filter: grayscale(100%); opacity: 0.7; }
-  .grade-card.coming-soon .grade-btn { background: rgba(255,255,255,0.3); color: #fff; border: 1px dashed rgba(255,255,255,0.5); }
-
-  /* ===== استایل‌های بنر نصب PWA ===== */
-  #pwa-install-banner {
-    position: fixed; bottom: -150px; left: 0; width: 100%; 
-    background: rgba(30, 30, 50, 0.95); backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px); color: #fff;
-    padding: 15px 20px; z-index: 10000; box-shadow: 0 -5px 20px rgba(0,0,0,0.3);
-    border-top: 1px solid rgba(255,255,255,0.1); transition: bottom 0.5s ease;
-  }
+  /* ===== بنر نصب PWA ===== */
+  #pwa-install-banner { position: fixed; bottom: -200px; left: 0; width: 100%; background: rgba(30, 30, 50, 0.95); backdrop-filter: blur(15px); color: #fff; padding: 15px 20px; z-index: 10000; box-shadow: 0 -5px 20px rgba(0,0,0,0.3); border-top: 1px solid rgba(255,255,255,0.1); transition: bottom 0.5s ease; }
   #pwa-install-banner.show { bottom: 0; }
   .pwa-content { display: flex; align-items: center; gap: 15px; max-width: 1000px; margin: 0 auto; }
   .pwa-icon { font-size: 2.5rem; background: rgba(255,255,255,0.1); padding: 10px; border-radius: 15px; }
@@ -625,9 +136,64 @@ body.dark-mode .history-banner {
   .pwa-btn-primary:hover { background: #fff; }
   .pwa-btn-secondary { background: transparent; color: #94a3b8; border: 1px solid #475569; padding: 10px 20px; border-radius: 10px; font-weight: bold; font-family: inherit; cursor: pointer; font-size: 0.9rem; }
   .pwa-btn-secondary:hover { background: rgba(255,255,255,0.1); }
-  #ios-instructions { margin-top: 15px; font-size: 0.85rem; color: #fbbf24; text-align: center; line-height: 1.6; }
+  #ios-instructions { margin-top: 15px; font-size: 0.85rem; color: #fbbf24; text-align: center; line-height: 1.6; display: none; }
 
-  /* ===== ریسپانسیو ===== */
+  /* ==================================================== */
+  /* ===== استایل‌های بخش ورود و ثبت‌نام (Auth Overlay) ===== */
+  /* ==================================================== */
+  #auth-overlay {
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+    background-size: 200% 200%; animation: gradientShift 10s ease infinite;
+    z-index: 9999; display: flex; justify-content: center; align-items: center; padding: 20px;
+    overflow-y: auto;
+  }
+  
+  .auth-card {
+    background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(20px);
+    padding: 35px 30px; border-radius: 24px; width: 100%; max-width: 450px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.6);
+    margin: auto; position: relative; z-index: 10; animation: slideUp 0.6s ease-out;
+  }
+  @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+  
+  /* هدر کارت */
+  .auth-header { text-align: center; margin-bottom: 25px; }
+  .auth-icon { font-size: 2.8rem; margin-bottom: 10px; display: inline-block; animation: bounce 2s infinite; }
+  @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+  .auth-header h2 { color: #4c1d95; font-size: 1.5rem; font-weight: 900; }
+  .auth-header p { color: #6b7280; font-size: 0.9rem; margin-top: 5px; }
+
+  /* تب‌ها */
+  .auth-tabs { display: flex; gap: 10px; margin-bottom: 20px; }
+  .auth-tab-btn { flex: 1; padding: 12px; border: none; background: #f1f5f9; color: #64748b; font-size: 1rem; font-weight: 700; cursor: pointer; border-radius: 10px; transition: 0.3s; font-family: inherit; }
+  .auth-tab-btn.active { background: #8b5cf6; color: white; box-shadow: 0 4px 10px rgba(139, 92, 246, 0.3); }
+
+  /* فرم */
+  .auth-section { display: none; }
+  .auth-section.active { display: block; animation: fadeIn 0.4s ease; }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+  .auth-group { position: relative; margin-bottom: 15px; }
+  .auth-group .icon { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); font-size: 1.2rem; color: #9ca3af; pointer-events: none; transition: 0.3s; }
+  .auth-group input, .auth-group select { width: 100%; padding: 14px 45px 14px 15px; border: 2px solid #e5e7eb; border-radius: 14px; font-family: inherit; font-size: 1rem; background: #f9fafb; outline: none; transition: 0.3s; color: #1f2937; appearance: none; }
+  .auth-group input:focus, .auth-group select:focus { border-color: #8b5cf6; background: #fff; box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.1); }
+  .auth-group input:focus + .icon { color: #8b5cf6; }
+  .select-arrow { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #9ca3af; font-size: 1rem; pointer-events: none; }
+
+  .auth-submit-btn { width: 100%; padding: 15px; background: linear-gradient(135deg, #10b981, #059669); color: white; border: none; border-radius: 14px; font-size: 1.1rem; font-weight: 900; cursor: pointer; transition: 0.3s; font-family: inherit; box-shadow: 0 5px 15px rgba(5, 150, 105, 0.3); display: flex; justify-content: center; align-items: center; gap: 10px; margin-top: 10px; }
+  .auth-submit-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(5, 150, 105, 0.4); background: linear-gradient(135deg, #059669, #047857); }
+  .auth-submit-btn:disabled { background: #9ca3af; box-shadow: none; cursor: not-allowed; }
+  .login-btn { background: linear-gradient(135deg, #8b5cf6, #6d28d9); box-shadow: 0 5px 15px rgba(109, 40, 217, 0.3); }
+  .login-btn:hover:not(:disabled) { background: linear-gradient(135deg, #7c3aed, #5b21b6); }
+
+  .msg-box { text-align: center; margin-top: 15px; font-size: 0.85rem; font-weight: bold; min-height: 20px; padding: 10px; border-radius: 8px; display: none; }
+  .msg-error { color: #b91c1c; background: #fee2e2; border: 1px solid #fca5a5; }
+  .msg-success { color: #047857; background: #d1fae5; border: 1px solid #6ee7b7; }
+
+  .spinner { width: 20px; height: 20px; border: 3px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin 0.8s linear infinite; display: none; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
   @media(max-width:600px) {
     body { padding: 25px 15px; }
     .header h1 { font-size: 1.9rem; }
@@ -642,172 +208,236 @@ body.dark-mode .history-banner {
     .about-section p { font-size: 0.9rem; }
     .theme-toggle { top: 15px; left: 15px; width: 40px; height: 40px; font-size: 1.2rem; }
     .menu-btn { top: 15px; right: 15px; width: 40px; height: 40px; }
-    .museum-banner { padding: 22px 18px; }
-    .museum-banner-content { flex-direction: column; text-align: center; gap: 12px; }
-    .museum-banner-text { text-align: center; }
-    .museum-banner-icon { font-size: 3rem; }
-    .museum-banner-text h3 { font-size: 1.1rem; }
-    .museum-banner-text p { font-size: 0.82rem; }
-    .museum-banner-btn { padding: 10px 20px; font-size: 0.8rem; }
-    .history-banner { padding: 22px 18px; }
-    .history-banner-content { flex-direction: column; text-align: center; gap: 12px; }
-    .history-banner-text { text-align: center; }
-    .history-banner-icon { font-size: 3rem; }
-    .history-banner-text h3 { font-size: 1.1rem; }
-    .history-banner-text p { font-size: 0.82rem; }
-    .history-banner-btn { padding: 10px 20px; font-size: 0.8rem; display: inline-block; margin-top: 5px; }
-    .life-banner { padding: 22px 18px; }
-    .life-banner-content { flex-direction: column; text-align: center; gap: 12px; }
-    .life-banner-text { text-align: center; }
-    .life-banner-icon { font-size: 3rem; }
-    .life-banner-btn { padding: 10px 20px; font-size: 0.8rem; }
-    
+    .banner-content { flex-direction: column; text-align: center; gap: 12px; }
+    .banner-text { text-align: center; }
+    .banner-icon { font-size: 3rem; }
+    .banner-btn { margin-top: 5px; }
     .pwa-content { flex-direction: column; text-align: center; gap: 10px; }
-    .pwa-text { text-align: center; }
     .pwa-actions { width: 100%; justify-content: center; margin-top: 10px; }
-    .pwa-btn-primary, .pwa-btn-secondary { flex: 1; }
+    .auth-card { padding: 25px 20px; }
   }
 </style>
 </head>
 <body>
 
-  <!-- دکمه حالت تاریک/روشن -->
-  <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">🌙</button>
+  <!-- ============================================== -->
+  <!-- بخش ورود و ثبت‌نام (در ابتدا نمایش داده می‌شود) -->
+  <!-- ============================================== -->
+  <div id="auth-overlay">
+    <div class="auth-card">
+      <div class="auth-header">
+        <span class="auth-icon" id="auth-icon">🎓</span>
+        <h2 id="auth-title">خوش آمدید</h2>
+        <p id="auth-subtitle">برای ادامه، وارد حساب کاربری خود شوید</p>
+      </div>
 
-  <!-- دکمه منوی همبرگری -->
-  <div class="menu-btn" onclick="toggleMenu()">
-    <span></span>
-    <span></span>
-    <span></span>
-  </div>
+      <div class="auth-tabs">
+        <button class="auth-tab-btn active" id="tab-login" onclick="switchAuthTab('login')">ورود</button>
+        <button class="auth-tab-btn" id="tab-register" onclick="switchAuthTab('register')">ثبت‌نام</button>
+      </div>
 
-  <!-- منوی کشویی کناری -->
-  <div id="sideMenu" class="side-menu">
-    <a href="javascript:void(0)" class="close-btn" onclick="toggleMenu()">&times;</a>
-    <div class="menu-header">
-      <h2>منوی اصلی</h2>
+      <div id="auth-error-box" class="msg-box"></div>
+
+      <!-- بخش ورود -->
+      <div id="login-section" class="auth-section active">
+        <div class="auth-group">
+          <input type="tel" id="login-username" placeholder="شماره موبایل (مثلاً 09123456789)" maxlength="11">
+          <span class="icon">📱</span>
+        </div>
+        <div class="auth-group">
+          <input type="password" id="login-password" placeholder="رمز عبور">
+          <span class="icon">🔒</span>
+        </div>
+        <button class="auth-submit-btn login-btn" id="login-btn" onclick="handleLogin(event)">
+          <span id="login-btn-text">ورود به سایت</span>
+          <div class="spinner" id="login-spinner"></div>
+        </button>
+      </div>
+
+      <!-- بخش ثبت‌نام -->
+      <div id="register-section" class="auth-section">
+        <div class="auth-group">
+          <input type="text" id="reg-name" placeholder="نام و نام خانوادگی (مثلاً رضا امیری)" oninput="checkRegValidity()">
+          <span class="icon">👤</span>
+        </div>
+        
+        <div class="auth-group">
+          <select id="reg-school" onchange="checkRegValidity()">
+            <option value="" disabled selected>مدرسه خود را انتخاب کنید</option>
+            <option value="مدرسه حسن بن علی نوشهر کلنگی">مدرسه حسن بن علی نوشهر کلنگی</option>
+            <option value="مدرسه حضرت مهدی سرزه">مدرسه حضرت مهدی سرزه</option>
+            <option value="متفرقه">سایر مدارس (متفرقه)</option>
+          </select>
+          <span class="icon">🏫</span>
+          <span class="select-arrow">▼</span>
+        </div>
+
+        <div class="auth-group">
+          <select id="reg-grade" onchange="checkRegValidity()">
+            <option value="" disabled selected>پایه تحصیلی را انتخاب کنید</option>
+            <option value="7">هفتم</option>
+            <option value="8">هشتم</option>
+            <option value="9">نهم</option>
+          </select>
+          <span class="icon">📚</span>
+          <span class="select-arrow">▼</span>
+        </div>
+
+        <div class="auth-group">
+          <input type="tel" id="reg-username" placeholder="شماره موبایل (مثلاً 09123456789)" maxlength="11" inputmode="numeric" oninput="checkRegValidity()">
+          <span class="icon">📱</span>
+        </div>
+        
+        <div class="auth-group">
+          <input type="password" id="reg-password" placeholder="رمز عبور (حداقل ۶ کاراکتر)" oninput="checkRegValidity()">
+          <span class="icon">🔒</span>
+        </div>
+        
+        <button class="auth-submit-btn" id="reg-submit-btn" onclick="handleRegister(event)" disabled>
+          <span id="reg-btn-text">ثبت‌نام و ورود</span>
+          <div class="spinner" id="reg-spinner"></div>
+        </button>
+      </div>
     </div>
-    <a href="index.html">🏠 صفحه اصلی</a>
-    <a href="login.html" id="menu-auth-link">👤 ورود / ثبت‌نام</a>
-    <a href="student-panel.html">🎓 پنل دانش‌آموز</a>
-    <a href="teacher-panel.html">👨‍🏫 پنل معلم</a>
-    <a href="#">📞 تماس با ما</a>
-    <a href="#" id="menu-logout-link" style="display: none; color: #ff6b6b;" onclick="logoutStudent(event)">🚪 خروج از حساب</a>
-  </div>
-  
-  <!-- لایه تاریک پشت منو -->
-  <div id="menuOverlay" class="overlay" onclick="toggleMenu()"></div>
-
-  <!-- حباب‌های تزئینی -->
-  <div class="bubble"></div>
-  <div class="bubble"></div>
-  <div class="bubble"></div>
-  <div class="bubble"></div>
-  <div class="bubble"></div>
-
-  <!-- هدر -->
-  <div class="header">
-    <h1>📚 مطالعات اجتماعی</h1>
-    <p class="subtitle">بسته کامل آموزشی، آزمون و بازی‌های تعاملی</p>
-    <div class="teacher-badge">
-      <span class="emoji">👨‍🏫</span>
-      <span>دبیر: ابراهیم اسحقی</span>
-    </div>
   </div>
 
-  <div class="main-container">
+  <!-- ============================================== -->
+  <!-- محتوای اصلی سایت (بعد از لاگین نمایش داده می‌شود) -->
+  <!-- ============================================== -->
+  <div id="main-site" style="display: none; width: 100%; flex-direction: column; align-items: center;">
     
-    <h2 class="section-title">🎯 پایه تحصیلی خود را انتخاب کنید</h2>
+    <!-- دکمه حالت تاریک/روشن -->
+    <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">🌙</button>
 
-    <div class="grades-grid">
-      <!-- پایه هفتم -->
-      <a href="haftom.html" class="grade-card">
-        <span class="grade-icon">📗</span>
-        <div class="grade-num">پایه هفتم</div>
-        <div class="grade-desc">۲۴ درس کامل با درسنامه، آزمون، فلش کارت و فایل‌ها</div>
-        <span class="grade-btn">ورود به پایه هفتم ←</span>
-      </a>
-
-      <!-- پایه هشتم -->
-      <a href="hashtom.html" class="grade-card">
-        <span class="grade-icon">📘</span>
-        <div class="grade-num">پایه هشتم</div>
-        <div class="grade-desc">۲۴ درس کامل با درسنامه، آزمون، فلش کارت و فایل‌ها</div>
-        <span class="grade-btn">ورود به پایه هشتم ←</span>
-      </a>
-
-      <!-- پایه نهم -->
-      <a href="nohom.html" class="grade-card">
-        <span class="grade-icon">📙</span>
-        <div class="grade-num">پایه نهم</div>
-        <div class="grade-desc">۲۴ درس کامل با درسنامه، آزمون، فلش کارت و فایل‌ها</div>
-        <span class="grade-btn">ورود به پایه نهم ←</span>
-      </a>
+    <!-- دکمه منوی همبرگری -->
+    <div class="menu-btn" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
     </div>
-        <!-- 🏛️ بخش موزه گردی مجازی -->
-    <a href="museum.html" class="museum-banner">
-      <div class="museum-banner-content">
-        <span class="museum-banner-icon">🏛️</span>
-        <div class="museum-banner-text">
-          <h3>موزه گردی مجازی</h3>
-          <p>از تخت جمشید تا کاخ گلستان -- با یک کلیک به دل تاریخ سفر کن</p>
-        </div>
-        <span class="museum-banner-btn">شروع سفر ۳۶۰° ←</span>
-      </div>
-    </a>
 
-    <!-- ⏳ بخش گفتگو با تاریخ -->
-    <a href="history-chat.html" class="history-banner">
-      <div class="history-banner-content">
-        <span class="history-banner-icon">⏳</span>
-        <div class="history-banner-text">
-          <h3>گفتگو با تاریخ</h3>
-          <p>با کوروش، ابن سینا، امیرکبیر و دیگر شخصیت‌های تاریخی چت کن!</p>
-        </div>
-        <span class="history-banner-btn">شروع گفتگو ←</span>
+    <!-- منوی کشویی کناری -->
+    <div id="sideMenu" class="side-menu">
+      <a href="javascript:void(0)" class="close-btn" onclick="toggleMenu()">&times;</a>
+      <div class="menu-header">
+        <h2>منوی اصلی</h2>
       </div>
-    </a>
+      <a href="index.html">🏠 صفحه اصلی</a>
+      <a href="student-panel.html" id="menu-auth-link">🎓 پنل دانش‌آموز</a>
+      <a href="teacher-panel.html">👨‍🏫 پنل معلم</a>
+      <a href="#">📞 تماس با ما</a>
+      <a href="#" id="menu-logout-link" style="color: #ff6b6b;" onclick="logoutStudent(event)">🚪 خروج از حساب</a>
+    </div>
+    
+    <!-- لایه تاریک پشت منو -->
+    <div id="menuOverlay" class="overlay-bg" onclick="toggleMenu()"></div>
 
-    <!-- 🌟 بخش مهارت زندگی -->
-    <a href="life-skills.html" class="life-banner">
-      <div class="life-banner-content">
-        <span class="life-banner-icon">🌟</span>
-        <div class="life-banner-text">
-          <h3>مهارت زندگی</h3>
-          <p>آزادی، پارلمان، سواد رسانه‌ای و مهارت‌هایی که برای یک زندگی عالی لازم داری!</p>
-        </div>
-        <span class="life-banner-btn">ورود به بخش مهارت‌ها ←</span>
-      </div>
-    </a>
+    <!-- حباب‌های تزئینی -->
+    <div class="bubble"></div><div class="bubble"></div><div class="bubble"></div><div class="bubble"></div><div class="bubble"></div>
 
-    <!-- بخش درباره -->
-    <div class="about-section">
-      <h2>✨ درباره این سایت</h2>
-      <p>
-        این سایت آموزشی به منظور کمک به دانش‌آموزان عزیز در یادگیری بهتر و عمیق‌تر درس مطالعات اجتماعی طراحی شده است. 
-        امیدواریم با استفاده از درسنامه‌ها، آزمون‌ها و فلش کارت‌ها، تجربه‌ای لذت‌بخش از یادگیری داشته باشید.
-      </p>
-      <div class="features-row">
-        <span class="feature-chip">📖 درسنامه</span>
-        <span class="feature-chip">📝 آزمون تستی</span>
-        <span class="feature-chip">✍️ آزمون تشریحی</span>
-        <span class="feature-chip">🎴 فلش کارت</span>
-        <span class="feature-chip">📂 فایل‌ها و عکس‌ها</span>
-        <span class="feature-chip">🎮 بازی آموزشی</span>
-        <span class="feature-chip">🏛️ موزه گردی</span>
-        <span class="feature-chip">⏳ گفتگو با تاریخ</span>
-        <span class="feature-chip">🌟 مهارت زندگی</span>
+    <!-- هدر -->
+    <div class="header">
+      <h1>📚 مطالعات اجتماعی</h1>
+      <p class="subtitle">بسته کامل آموزشی، آزمون و بازی‌های تعاملی</p>
+      <div class="teacher-badge">
+        <span class="emoji">👨‍🏫</span>
+        <span>دبیر: ابراهیم اسحقی</span>
       </div>
     </div>
-  </div>
 
-  <!-- فوتر -->
-  <div class="footer">
-    ساخته شده با <span class="heart">❤️</span> برای دانش‌آموزان عزیز
+    <div class="main-container">
+      
+      <h2 class="section-title">🎯 پایه تحصیلی خود را انتخاب کنید</h2>
+
+      <div class="grades-grid">
+        <!-- پایه هفتم -->
+        <a href="haftom.html" class="grade-card">
+          <span class="grade-icon">📗</span>
+          <div class="grade-num">پایه هفتم</div>
+          <div class="grade-desc">۲۴ درس کامل با درسنامه، آزمون، فلش کارت و فایل‌ها</div>
+          <span class="grade-btn">ورود به پایه هفتم ←</span>
+        </a>
+
+        <!-- پایه هشتم -->
+        <a href="hashtom.html" class="grade-card">
+          <span class="grade-icon">📘</span>
+          <div class="grade-num">پایه هشتم</div>
+          <div class="grade-desc">۲۴ درس کامل با درسنامه، آزمون، فلش کارت و فایل‌ها</div>
+          <span class="grade-btn">ورود به پایه هشتم ←</span>
+        </a>
+
+        <!-- پایه نهم -->
+        <a href="nohom.html" class="grade-card">
+          <span class="grade-icon">📙</span>
+          <div class="grade-num">پایه نهم</div>
+          <div class="grade-desc">۲۴ درس کامل با درسنامه، آزمون، فلش کارت و فایل‌ها</div>
+          <span class="grade-btn">ورود به پایه نهم ←</span>
+        </a>
+      </div>
+          
+      <!-- 🏛️ بخش موزه گردی مجازی -->
+      <a href="museum.html" class="museum-banner">
+        <div class="banner-content">
+          <span class="banner-icon">🏛️</span>
+          <div class="banner-text">
+            <h3>موزه گردی مجازی</h3>
+            <p>از تخت جمشید تا کاخ گلستان -- با یک کلیک به دل تاریخ سفر کن</p>
+          </div>
+          <span class="banner-btn">شروع سفر ۳۶۰° ←</span>
+        </div>
+      </a>
+
+      <!-- ⏳ بخش گفتگو با تاریخ -->
+      <a href="history-chat.html" class="history-banner">
+        <div class="banner-content">
+          <span class="banner-icon">⏳</span>
+          <div class="banner-text">
+            <h3>گفتگو با تاریخ</h3>
+            <p>با کوروش، ابن سینا، امیرکبیر و دیگر شخصیت‌های تاریخی چت کن!</p>
+          </div>
+          <span class="banner-btn">شروع گفتگو ←</span>
+        </div>
+      </a>
+
+      <!-- 🌟 بخش مهارت زندگی -->
+      <a href="life-skills.html" class="life-banner">
+        <div class="banner-content">
+          <span class="banner-icon">🌟</span>
+          <div class="banner-text">
+            <h3>مهارت زندگی</h3>
+            <p>آزادی، پارلمان، سواد رسانه‌ای و مهارت‌هایی که برای یک زندگی عالی لازم داری!</p>
+          </div>
+          <span class="banner-btn">ورود به بخش مهارت‌ها ←</span>
+        </div>
+      </a>
+
+      <!-- بخش درباره -->
+      <div class="about-section">
+        <h2>✨ درباره این سایت</h2>
+        <p>
+          این سایت آموزشی به منظور کمک به دانش‌آموزان عزیز در یادگیری بهتر و عمیق‌تر درس مطالعات اجتماعی طراحی شده است. 
+          امیدواریم با استفاده از درسنامه‌ها، آزمون‌ها و فلش کارت‌ها، تجربه‌ای لذت‌بخش از یادگیری داشته باشید.
+        </p>
+        <div class="features-row">
+          <span class="feature-chip">📖 درسنامه</span>
+          <span class="feature-chip">📝 آزمون تستی</span>
+          <span class="feature-chip">✍️ آزمون تشریحی</span>
+          <span class="feature-chip">🎴 فلش کارت</span>
+          <span class="feature-chip">📂 فایل‌ها و عکس‌ها</span>
+          <span class="feature-chip">🎮 بازی آموزشی</span>
+          <span class="feature-chip">🏛️ موزه گردی</span>
+          <span class="feature-chip">⏳ گفتگو با تاریخ</span>
+          <span class="feature-chip">🌟 مهارت زندگی</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- فوتر -->
+    <div class="footer">
+      ساخته شده با <span class="heart">❤️</span> برای دانش‌آموزان عزیز
+    </div>
   </div>
 
   <!-- بنر نصب PWA -->
-  <div id="pwa-install-banner" style="display: none;">
+  <div id="pwa-install-banner">
     <div class="pwa-content">
       <div class="pwa-icon">📚</div>
       <div class="pwa-text">
@@ -820,20 +450,193 @@ body.dark-mode .history-banner {
       </div>
     </div>
     <!-- راهنمای نصب برای آیفون (سافاری) -->
-    <div id="ios-instructions" style="display: none;">
+    <div id="ios-instructions">
       <p>برای نصب در آیفون، روی دکمه <b>اشتراک‌گذاری (Share)</b> در پایین مرورگر بزنید و سپس <b>Add to Home Screen</b> را انتخاب کنید. 📲</p>
     </div>
   </div>
 
   <script>
-    // اسکریپت حالت تاریک/روشن
+    // ==========================================
+    // ۱. منطق ورود و ثبت‌نام (Auth)
+    // ==========================================
+    
+    window.addEventListener('DOMContentLoaded', () => {
+        const studentName = localStorage.getItem('student_name');
+        if (studentName) {
+            document.getElementById('auth-overlay').style.display = 'none';
+            document.getElementById('main-site').style.display = 'flex';
+            updateMenuUI(studentName);
+        } else {
+            document.getElementById('auth-overlay').style.display = 'flex';
+            document.getElementById('main-site').style.display = 'none';
+        }
+    });
+
+    function switchAuthTab(tab) {
+        document.querySelectorAll('.auth-tab-btn').forEach(btn => btn.classList.remove('active'));
+        document.querySelectorAll('.auth-section').forEach(sec => sec.classList.remove('active'));
+        document.getElementById('auth-error-box').style.display = 'none';
+
+        if (tab === 'login') {
+            document.getElementById('tab-login').classList.add('active');
+            document.getElementById('login-section').classList.add('active');
+            document.getElementById('auth-icon').innerText = '🎓';
+            document.getElementById('auth-title').innerText = 'خوش آمدید';
+            document.getElementById('auth-subtitle').innerText = 'برای ادامه، وارد حساب کاربری خود شوید';
+        } else {
+            document.getElementById('tab-register').classList.add('active');
+            document.getElementById('register-section').classList.add('active');
+            document.getElementById('auth-icon').innerText = '📝';
+            document.getElementById('auth-title').innerText = 'ثبت‌نام دانش‌آموز';
+            document.getElementById('auth-subtitle').innerText = 'برای شروع یادگیری، اطلاعات خود را وارد کنید';
+        }
+    }
+
+    function showAuthError(msg) {
+        const box = document.getElementById('auth-error-box');
+        box.innerText = msg;
+        box.className = 'msg-box msg-error';
+        box.style.display = 'block';
+    }
+
+    // اعتبارسنجی شماره موبایل
+    function isValidPhone(phone) {
+        return /^09\d{9}$/.test(phone);
+    }
+
+    // بررسی اینکه آیا کاربر تمام فیلدهای اجباری ثبت‌نام را پر کرده است یا نه
+    function checkRegValidity() {
+        const name = document.getElementById('reg-name').value.trim();
+        const school = document.getElementById('reg-school').value;
+        const grade = document.getElementById('reg-grade').value;
+        const username = document.getElementById('reg-username').value.trim();
+        const password = document.getElementById('reg-password').value;
+
+        const btn = document.getElementById('reg-submit-btn');
+
+        // دکمه فقط زمانی فعال می‌شود که همه چیز پر شده باشد (مدرسه و پایه اجباری هستند)
+        if (name && school && grade && username && password.length >= 6) {
+            btn.disabled = false;
+        } else {
+            btn.disabled = true;
+        }
+    }
+
+    // تابع ورود
+    async function handleLogin(e) {
+        e.preventDefault();
+        const username = document.getElementById('login-username').value.trim();
+        const password = document.getElementById('login-password').value;
+
+        if (!username || !password) return showAuthError('لطفاً نام کاربری و رمز عبور را وارد کنید.');
+        if (!isValidPhone(username)) return showAuthError('نام کاربری باید یک شماره موبایل معتبر (۱۱ رقمی با ۰۹) باشد.');
+
+        const btn = document.getElementById('login-btn');
+        const btnText = document.getElementById('login-btn-text');
+        const spinner = document.getElementById('login-spinner');
+
+        btn.disabled = true;
+        btnText.innerText = 'در حال بررسی...';
+        spinner.style.display = 'block';
+
+        try {
+            const res = await fetch('https://api.motadars.ir/login_student.php', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ username: username, password: password })
+            });
+            const data = await res.json();
+
+            if (data.status === 'success') {
+                localStorage.setItem('student_name', data.user.full_name);
+                localStorage.setItem('school_name', data.user.school_name);
+                localStorage.setItem('student_username', data.user.username);
+                
+                document.getElementById('auth-error-box').className = 'msg-box msg-success';
+                document.getElementById('auth-error-box').innerText = '✅ ورود موفق! در حال انتقال...';
+                
+                setTimeout(() => window.location.reload(), 1000);
+            } else {
+                showAuthError(data.message || 'نام کاربری یا رمز عبور اشتباه است.');
+                btn.disabled = false;
+                btnText.innerText = 'ورود به سایت';
+                spinner.style.display = 'none';
+            }
+        } catch (err) {
+            showAuthError('خطا در ارتباط با سرور. لطفاً اینترنت خود را بررسی کنید.');
+            btn.disabled = false;
+            btnText.innerText = 'ورود به سایت';
+            spinner.style.display = 'none';
+        }
+    }
+
+    // تابع ثبت‌نام
+    async function handleRegister(e) {
+        e.preventDefault();
+        const name = document.getElementById('reg-name').value.trim();
+        const school = document.getElementById('reg-school').value;
+        const grade = document.getElementById('reg-grade').value;
+        const username = document.getElementById('reg-username').value.trim();
+        const password = document.getElementById('reg-password').value;
+
+        if (!school || !grade) return showAuthError('لطفاً مدرسه و پایه تحصیلی را انتخاب کنید.');
+        if (!isValidPhone(username)) return showAuthError('نام کاربری (شماره موبایل) نامعتبر است. باید ۱۱ رقم بوده و با 09 شروع شود.');
+
+        const btn = document.getElementById('reg-submit-btn');
+        const btnText = document.getElementById('reg-btn-text');
+        const spinner = document.getElementById('reg-spinner');
+
+        btn.disabled = true;
+        btnText.innerText = 'در حال ثبت‌نام...';
+        spinner.style.display = 'block';
+
+        try {
+            const res = await fetch('https://api.motadars.ir/register.php', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ 
+                    full_name: name, 
+                    school_name: school, 
+                    grade: grade, 
+                    username: username, 
+                    password: password 
+                })
+            });
+            const data = await res.json();
+
+            if (data.status === 'success') {
+                localStorage.setItem('student_name', name);
+                localStorage.setItem('school_name', school);
+                localStorage.setItem('student_username', username);
+                
+                document.getElementById('auth-error-box').className = 'msg-box msg-success';
+                document.getElementById('auth-error-box').innerText = '✅ ثبت‌نام موفق! در حال انتقال...';
+                
+                setTimeout(() => window.location.reload(), 1000);
+            } else {
+                showAuthError(data.message || 'خطا در ثبت‌نام. ممکن است شماره موبایل تکراری باشد.');
+                btn.disabled = false;
+                btnText.innerText = 'ثبت‌نام و ورود';
+                spinner.style.display = 'none';
+            }
+        } catch (err) {
+            showAuthError('خطا در ارتباط با سرور. لطفاً اینترنت خود را بررسی کنید.');
+            btn.disabled = false;
+            btnText.innerText = 'ثبت‌نام و ورود';
+            spinner.style.display = 'none';
+        }
+    }
+
+    // ==========================================
+    // ۲. کدهای مربوط به صفحه اصلی سایت
+    // ==========================================
+
     const themeBtn = document.getElementById('themeBtn');
     const currentTheme = localStorage.getItem('theme');
     
-    // بررسی تم ذخیره شده در مرورگر
     if (currentTheme === 'dark') {
       document.body.classList.add('dark-mode');
-      themeBtn.textContent = '☀️';
+      if(themeBtn) themeBtn.textContent = '☀️';
     }
 
     function toggleTheme() {
@@ -847,71 +650,61 @@ body.dark-mode .history-banner {
       }
     }
 
-    // کدهای مربوط به منوی همبرگری
     function toggleMenu() {
       document.getElementById('sideMenu').classList.toggle('open');
       document.getElementById('menuOverlay').classList.toggle('show');
     }
 
-    // کدهای مربوط به Service Worker
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./service-worker.js');
-      });
+    function updateMenuUI(name) {
+        const authLink = document.getElementById('menu-auth-link');
+        const logoutLink = document.getElementById('menu-logout-link');
+        if (authLink) authLink.innerHTML = `👋 خوش آمدی، ${name}`;
+        if (logoutLink) logoutLink.style.display = 'flex';
     }
 
-    // بررسی وضعیت ورود دانش‌آموز برای تغییر منو
-    document.addEventListener("DOMContentLoaded", function() {
-      const studentName = localStorage.getItem('student_name');
-      const authLink = document.getElementById('menu-auth-link');
-      const logoutLink = document.getElementById('menu-logout-link');
-
-      if (studentName) {
-        // دانش‌آموز لاگین است
-        authLink.innerHTML = `👋 خوش آمدی، ${studentName}`;
-        authLink.href = 'student-panel.html';
-        logoutLink.style.display = 'flex';
-      }
-    });
-
-    // تابع خروج از حساب کاربری
     function logoutStudent(event) {
       event.preventDefault(); 
       localStorage.removeItem('student_name');
       localStorage.removeItem('school_name');
+      localStorage.removeItem('student_username');
       toggleMenu();
       alert("با موفقیت از حساب کاربری خارج شدید.");
       window.location.reload();
     }
 
     // ==========================================
-    // منطق نصب PWA (Progressive Web App)
+    // ۳. منطق نصب PWA (اصلاح شده و تضمینی)
     // ==========================================
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => { navigator.serviceWorker.register('./service-worker.js'); });
+    }
+
     let deferredPrompt;
     const pwaBanner = document.getElementById('pwa-install-banner');
     const pwaInstallBtn = document.getElementById('pwa-install-btn');
     const pwaCloseBtn = document.getElementById('pwa-close-btn');
     const iosInstructions = document.getElementById('ios-instructions');
 
-    // بررسی اینکه آیا اپ قبلاً نصب شده یا کاربر قبلاً "بعداً" رو زده
     const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
     const hasDismissed = localStorage.getItem('pwa_dismissed') === 'true';
 
     if (!isStandalone && !hasDismissed) {
-      // تشخیص کاربران آیفون (سافاری)
+      // تشخیص iOS (آیفون و آیپد)
       const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
       
       if (isIOS) {
-        // برای آیفون مرورگر اجازه پاپ‌آپ نمیده، پس مستقیم راهنما رو نشون میدیم
+        // برای iOS مرورگر اجازه پاپ‌آپ نصب رو نمیده، پس مستقیم راهنما رو نشون میدیم
         setTimeout(() => {
           iosInstructions.style.display = 'block';
-          pwaInstallBtn.style.display = 'none'; // دکمه نصب رو مخفی میکنیم چون سافاری خودکار عمل نمیکنه
+          if(pwaInstallBtn) pwaInstallBtn.style.display = 'none'; // دکمه نصب رو مخفی میکنیم
           pwaBanner.classList.add('show');
         }, 3000);
       } else {
         // برای اندروید و کامپیوتر
         window.addEventListener('beforeinstallprompt', (e) => {
+          // جلوگیری از نمایش خودکار مینی‌اینفو
           e.preventDefault();
+          // ذخیره رویداد برای استفاده در دکمه
           deferredPrompt = e;
           
           // نمایش بنر بعد از ۳ ثانیه
@@ -922,7 +715,6 @@ body.dark-mode .history-banner {
       }
     }
 
-    // دکمه نصب
     if(pwaInstallBtn) {
         pwaInstallBtn.addEventListener('click', async () => {
           if (deferredPrompt) {
@@ -930,8 +722,6 @@ body.dark-mode .history-banner {
             const { outcome } = await deferredPrompt.userChoice;
             if (outcome === 'accepted') {
               console.log('کاربر اپلیکیشن را نصب کرد.');
-            } else {
-              console.log('کاربر نصب را لغو کرد.');
             }
             deferredPrompt = null;
           }
@@ -939,19 +729,12 @@ body.dark-mode .history-banner {
         });
     }
 
-    // دکمه بعداً
     if(pwaCloseBtn) {
         pwaCloseBtn.addEventListener('click', () => {
           pwaBanner.classList.remove('show');
-          localStorage.setItem('pwa_dismissed', 'true'); // دیگه برای این کاربر نشون نده
+          localStorage.setItem('pwa_dismissed', 'true'); // دیگه نشون نده
         });
     }
-
-    // وقتی اپ نصب شد، بنر رو مخفی کن
-    window.addEventListener('appinstalled', () => {
-      pwaBanner.classList.remove('show');
-      console.log('اپلیکیشن نصب شد.');
-    });
   </script>
 </body>
 </html>
