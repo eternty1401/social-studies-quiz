@@ -133,7 +133,7 @@
         
         /* باکس امتیاز مخصوص */
         .stat-box.points-box { border-color: #fde047; background: #fefce8; }
-        .stat-box.points-box h3 { color: #ca8a04; }
+        .stat-box.points-box h3 { color: #ca8a04; font-size: 1.5rem;}
 
         /* بخش پیام انگیزشی */
         .motivation-box {
@@ -269,7 +269,7 @@
                 <!-- باکس امتیاز -->
                 <div class="stat-box points-box">
                     <span class="emoji">🎯</span>
-                    <h3 id="student-points">0</h3>
+                    <h3 id="student-points">...</h3>
                     <span>امتیاز شما</span>
                 </div>
             </div>
@@ -325,7 +325,7 @@
                 
                 fetchGrades();
                 updateCheckinButton(); 
-                processDailyPoints(); // سیستم امتیازدهی (با هشدار خطا)
+                processDailyPoints(); // سیستم امتیازدهی با هشدار خطا
                 loadAnnouncement(); // لود اطلاعیه‌ها
             }
         };
@@ -388,36 +388,29 @@
 
         // 👇 سیستم امتیازدهی با نمایش هشدار خطا (برای دیباگ) 👇
         async function processDailyPoints() {
-            // برای تست، ما حافظه مرورگر را چک نمی‌کنیم تا همیشه درخواست به سرور برود
+            // ترفند جلوگیری از کش مرورگر
+            const timestamp = new Date().getTime();
+            
             try {
-                const res = await fetch('https://api.motadars.ir/add_points.php', {
+                const res = await fetch('https://api.motadars.ir/add_points.php?t=' + timestamp, {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({ student_name: studentName })
                 });
                 
-                const textResponse = await res.clone().text(); // خواندن پاسخ خام سرور
-                console.log("پاسخ سرور:", textResponse);
+                const textResponse = await res.text(); 
+                const data = JSON.parse(textResponse);
                 
-                // تلاش برای تبدیل پاسخ به JSON
-                try {
-                    const data = JSON.parse(textResponse);
-                    if(data.status === 'success') {
-                        document.getElementById('student-points').innerText = data.new_points;
-                    } else {
-                        // نمایش خطای دقیق به شما (مثلا اگر رمز دیتابیس اشتباه باشد)
-                        alert("⚠️ خطای سرور: " + data.message);
-                        fetchCurrentPoints();
-                    }
-                } catch (jsonErr) {
-                    // اگر پاسخ سرور JSON نبود (مثلا خطای PHP بود)
-                    alert("⚠️ خطای غیرمنتظره از سرور. متن پاسخ: " + textResponse.substring(0, 100));
+                if(data.status === 'success') {
+                    document.getElementById('student-points').innerText = data.new_points;
+                    // alert("🎉 امتیاز شما با موفقیت به " + data.new_points + " تغییر یافت."); // برای تست موفقیت
+                } else {
+                    // نمایش خطای دقیق به شما
+                    alert("⚠️ خطای سرور: " + data.message);
                     fetchCurrentPoints();
                 }
-
             } catch(e) { 
-                alert("❌ خطای شبکه: اصلا به سرور وصل نشد. فایل add_points.php را چک کنید.");
-                console.error(e);
+                alert("❌ خطای شبکه یا CORS. متن خطا: " + e.message);
                 fetchCurrentPoints(); 
             }
         }
