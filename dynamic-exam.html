@@ -301,8 +301,21 @@
             })
         })
         .then(res => res.json())
-        .then(data => {
+        .then(async data => {
             if(data.status === 'success') {
+                
+                // 👇 بخش جدید: دادن امتیاز بابت شرکت در آزمون (اگر تقلب نکرده باشد) 👇
+                if (!isCheating) {
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const grade = urlParams.get('grade') || '7';
+                    // یک شناسه یکتا برای هر آزمون می‌سازیم تا دانش‌آموز بابت هر آزمون فقط یک بار امتیاز بگیرد
+                    const activityId = `exam_g${grade}_lesson_${fromLesson}_to_${toLesson}`;
+                    
+                    // ۲۰ امتیاز برای شرکت در آزمون
+                    await awardPoints(20, activityId); 
+                }
+                // 👆 پایان بخش جدید 👆
+
                 document.body.innerHTML = `
                     <div style="display:flex; justify-content:center; align-items:center; height:100vh; text-align:center; background:#f1f5f9;">
                         <div style="background:white; padding:40px; border-radius:20px; box-shadow:0 10px 30px rgba(0,0,0,0.1);">
@@ -321,6 +334,40 @@
             alert('خطا در ارتباط با سرور.');
             if(btn) { btn.disabled = false; btn.innerText = 'ثبت نهایی'; }
         });
+    }
+
+    // 👇 تابع جدید برای ارتباط با API امتیازدهی 👇
+    async function awardPoints(points, activityId) {
+        // استفاده از متغیر سراسری studentName
+        if (!studentName) return; 
+        
+        const today = new Date().toLocaleDateString('fa-IR');
+        const storageKey = `awarded_${activityId}_${today}`;
+        
+        // اگر دانش‌آموز قبلاً (امروز) بابت این آزمون امتیاز گرفته باشد، دوباره نمی‌دهیم
+        if (localStorage.getItem(storageKey)) {
+            console.log("امتیاز قبلا ثبت شده است.");
+            return; 
+        }
+
+        try {
+            const res = await fetch('https://api.motadars.ir/add_points.php', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ student_name: studentName, points: points })
+            });
+            const data = await res.json();
+            
+            if (data.status === 'success') {
+                // ذخیره در حافظه برای جلوگیری از تقلب
+                localStorage.setItem(storageKey, 'true');
+                
+                // نمایش پیام موفقیت‌آمیز بودن دریافت امتیاز
+                alert(`🎉 تبریک! شما بابت شرکت در این آزمون ${points} امتیاز دریافت کردید.\nامتیاز کل شما: ${data.new_points}`);
+            }
+        } catch (e) {
+            console.log("خطا در ارتباط با سرور برای ثبت امتیاز.");
+        }
     }
 </script>
 </body>
