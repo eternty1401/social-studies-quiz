@@ -408,7 +408,6 @@
         let typeChartInstance = null;
         let leaderboardData = []; 
         
-        // 👇 این خط برای رفع باگ رمز عبور اضافه شده است 👇
         let teacherPassword = sessionStorage.getItem('teacher_pass') || null;
 
         if(localStorage.getItem('teacher_logged_in') === 'true') {
@@ -424,8 +423,8 @@
         async function loginTeacher() {
             const pass = document.getElementById('teacherPass').value;
             if(!pass) return alert('رمز را وارد کنید');
-            teacherPassword = pass; // ذخیره رمز
-            sessionStorage.setItem('teacher_pass', pass); // ذخیره در حافظه موقت
+            teacherPassword = pass;
+            sessionStorage.setItem('teacher_pass', pass);
             fetchData(pass);
         }
 
@@ -434,7 +433,7 @@
             if(!pass) {
                 pass = prompt("برای امنیت، لطفاً رمز عبور را دوباره وارد کنید:");
                 if(!pass) { logout(); return; }
-                teacherPassword = pass; // ذخیره رمز
+                teacherPassword = pass;
                 sessionStorage.setItem('teacher_pass', pass);
             }
             
@@ -457,7 +456,6 @@
                     loadDashboardData(); 
                 } else {
                     alert('❌ ' + data.message);
-                    // اگر رمز اشتباه بود، از حساب خارج شود
                     if(!manualPass) logout();
                 }
             } catch (e) {
@@ -915,8 +913,10 @@
             } catch(e) { alert('خطای شبکه'); }
         }
 
+        // 👇 تابع حذف دانش‌آموز (کاملاً اصلاح شده و بدون باگ) 👇
         async function deleteStudent(id, name) {
             if(!confirm(`آیا از حذف کامل «${name}» مطمئنید؟ (نمرات قبلی او حذف نمی‌شوند، فقط اکانتش پاک می‌شود)`)) return;
+            
             try {
                 const res = await fetch('https://api.motadars.ir/manage_student.php', {
                     method: 'POST',
@@ -925,14 +925,19 @@
                 });
                 const data = await res.json();
                 
-                // 👇 این خط برای پیدا کردن مشکل اضافه شده است 👇
-                alert("پاسخ سرور: " + JSON.stringify(data)); 
-                
                 if(data.status === 'success') {
-                    fetchData();
+                    // حذف دانش‌آموز از لیست روی صفحه (بدون نیاز به رفرش)
+                    allData.students = allData.students.filter(s => s.id !== id);
+                    renderAccounts();
+                    alert('✅ دانش‌آموز با موفقیت از سیستم حذف شد.');
+                } else {
+                    alert('❌ خطا در حذف: ' + data.message);
                 }
-            } catch(e) { alert('خطای شبکه: ' + e.message); }
+            } catch(e) { 
+                alert('خطای شبکه: ' + e.message); 
+            }
         }
+        // 👆 پایان تابع حذف 👆
 
         // ------------------ بخش حضور و غیاب ------------------
         async function renderAttendance() {
@@ -1580,7 +1585,7 @@
 
         function logout() {
             localStorage.removeItem('teacher_logged_in');
-            sessionStorage.removeItem('teacher_pass'); // پاک کردن رمز از حافظه موقت هنگام خروج
+            sessionStorage.removeItem('teacher_pass');
             location.reload();
         }
     </script>
