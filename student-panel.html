@@ -312,7 +312,7 @@
     <script>
         const studentName = localStorage.getItem('student_name');
         const schoolName = localStorage.getItem('school_name');
-        const studentUsername = localStorage.getItem('student_username'); // برای تغییر رمز استفاده می‌شود
+        const studentUsername = localStorage.getItem('student_username');
 
         // در هنگام بارگذاری صفحه
         window.onload = () => {
@@ -325,7 +325,7 @@
                 
                 fetchGrades();
                 updateCheckinButton(); 
-                processDailyPoints(); // سیستم امتیازدهی
+                processDailyPoints(); // سیستم امتیازدهی (با هشدار خطا)
                 loadAnnouncement(); // لود اطلاعیه‌ها
             }
         };
@@ -368,7 +368,7 @@
             return studentGrade;
         }
 
-        // توابع اطلاعیه‌ها و امتیاز
+        // توابع اطلاعیه‌ها
         async function loadAnnouncement() {
             const grade = getStudentGrade();
             try {
@@ -386,36 +386,42 @@
             } catch(e) { console.log("خطا در لود اطلاعیه"); }
         }
 
-        // سیستم امتیازدهی (حالا با نام دانش‌آموز)
+        // 👇 سیستم امتیازدهی با نمایش هشدار خطا (برای دیباگ) 👇
         async function processDailyPoints() {
-            const today = new Date().toLocaleDateString('fa-IR');
-            const storageKey = 'last_point_date_' + studentName; 
-            const lastPointDate = localStorage.getItem(storageKey);
-
-            if (lastPointDate !== today) {
+            // برای تست، ما حافظه مرورگر را چک نمی‌کنیم تا همیشه درخواست به سرور برود
+            try {
+                const res = await fetch('https://api.motadars.ir/add_points.php', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ student_name: studentName })
+                });
+                
+                const textResponse = await res.clone().text(); // خواندن پاسخ خام سرور
+                console.log("پاسخ سرور:", textResponse);
+                
+                // تلاش برای تبدیل پاسخ به JSON
                 try {
-                    const res = await fetch('https://api.motadars.ir/add_points.php', {
-                        method: 'POST',
-                        headers: {'Content-Type': 'application/json'},
-                        body: JSON.stringify({ student_name: studentName })
-                    });
-                    const data = await res.json();
-                    
+                    const data = JSON.parse(textResponse);
                     if(data.status === 'success') {
                         document.getElementById('student-points').innerText = data.new_points;
-                        localStorage.setItem(storageKey, today);
                     } else {
-                        console.log("خطا از سرور:", data.message);
+                        // نمایش خطای دقیق به شما (مثلا اگر رمز دیتابیس اشتباه باشد)
+                        alert("⚠️ خطای سرور: " + data.message);
                         fetchCurrentPoints();
                     }
-                } catch(e) { 
-                    console.log("خطای شبکه در ثبت امتیاز");
-                    fetchCurrentPoints(); 
+                } catch (jsonErr) {
+                    // اگر پاسخ سرور JSON نبود (مثلا خطای PHP بود)
+                    alert("⚠️ خطای غیرمنتظره از سرور. متن پاسخ: " + textResponse.substring(0, 100));
+                    fetchCurrentPoints();
                 }
-            } else {
-                fetchCurrentPoints();
+
+            } catch(e) { 
+                alert("❌ خطای شبکه: اصلا به سرور وصل نشد. فایل add_points.php را چک کنید.");
+                console.error(e);
+                fetchCurrentPoints(); 
             }
         }
+        // 👆 پایان کد دیباگ 👆
 
         async function fetchCurrentPoints() {
             try {
@@ -618,7 +624,6 @@
                 const res = await fetch('https://api.motadars.ir/change_password.php', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
-                    // اینجا از نام کاربری استفاده می‌شود (چون سیستم تغییر رمز شما احتمالا بر اساس یوزرنیم است)
                     body: JSON.stringify({ username: studentUsername, old_password: oldPass, new_password: newPass })
                 });
                 const data = await res.json();
