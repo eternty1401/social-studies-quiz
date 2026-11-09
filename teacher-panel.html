@@ -407,24 +407,35 @@
         let schoolChartInstance = null;
         let typeChartInstance = null;
         let leaderboardData = []; 
+        
+        // 👇 این خط برای رفع باگ رمز عبور اضافه شده است 👇
+        let teacherPassword = sessionStorage.getItem('teacher_pass') || null;
 
         if(localStorage.getItem('teacher_logged_in') === 'true') {
             document.getElementById('loginBox').style.display = 'none';
             document.getElementById('dashboard').style.display = 'block';
-            fetchData();
+            if(teacherPassword) {
+                fetchData(teacherPassword);
+            } else {
+                fetchData();
+            }
         }
 
         async function loginTeacher() {
             const pass = document.getElementById('teacherPass').value;
             if(!pass) return alert('رمز را وارد کنید');
+            teacherPassword = pass; // ذخیره رمز
+            sessionStorage.setItem('teacher_pass', pass); // ذخیره در حافظه موقت
             fetchData(pass);
         }
 
         async function fetchData(manualPass = null) {
-            let pass = manualPass;
+            let pass = manualPass || teacherPassword;
             if(!pass) {
                 pass = prompt("برای امنیت، لطفاً رمز عبور را دوباره وارد کنید:");
                 if(!pass) { logout(); return; }
+                teacherPassword = pass; // ذخیره رمز
+                sessionStorage.setItem('teacher_pass', pass);
             }
             
             try {
@@ -446,6 +457,7 @@
                     loadDashboardData(); 
                 } else {
                     alert('❌ ' + data.message);
+                    // اگر رمز اشتباه بود، از حساب خارج شود
                     if(!manualPass) logout();
                 }
             } catch (e) {
@@ -561,7 +573,7 @@
             }
         }
 
-        // ------------------ بخش جدول رتبه‌بندی (اصلاح شده) ------------------
+        // ------------------ بخش جدول رتبه‌بندی ------------------
         async function loadLeaderboard() {
             const box = document.getElementById('leaderboardBox');
             box.innerHTML = '<p style="text-align: center; color: #64748b;">در حال دریافت اطلاعات...</p>';
@@ -594,7 +606,6 @@
                 let rankClass = rank <= 3 ? `top-${rank}` : '';
                 let rankEmoji = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : rank;
 
-                // پیدا کردن پایه دانش‌آموز از روی فایل students-data.js
                 let gradeStr = "";
                 if (typeof schoolData !== 'undefined') {
                     for (const sKey in schoolData) {
@@ -913,9 +924,14 @@
                     body: JSON.stringify({ action: 'delete', id: id })
                 });
                 const data = await res.json();
-                alert(data.message);
-                if(data.status === 'success') fetchData();
-            } catch(e) { alert('خطای شبکه'); }
+                
+                // 👇 این خط برای پیدا کردن مشکل اضافه شده است 👇
+                alert("پاسخ سرور: " + JSON.stringify(data)); 
+                
+                if(data.status === 'success') {
+                    fetchData();
+                }
+            } catch(e) { alert('خطای شبکه: ' + e.message); }
         }
 
         // ------------------ بخش حضور و غیاب ------------------
@@ -1564,6 +1580,7 @@
 
         function logout() {
             localStorage.removeItem('teacher_logged_in');
+            sessionStorage.removeItem('teacher_pass'); // پاک کردن رمز از حافظه موقت هنگام خروج
             location.reload();
         }
     </script>
