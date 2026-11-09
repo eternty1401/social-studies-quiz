@@ -39,7 +39,7 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* 👇 استایل کادر آزمون فعال (جدید) 👇 */
+        /* استایل کادر آزمون فعال */
         .active-exam-box {
             display: none;
             background: linear-gradient(135deg, #10b981, #059669);
@@ -66,7 +66,6 @@
             transition: 0.3s;
         }
         .active-exam-box a:hover { transform: scale(1.05); background: #f0fdf4; }
-        /* 👆 پایان استایل کادر آزمون 👆 */
 
         /* دکمه‌های بالای صفحه */
         .top-actions {
@@ -250,7 +249,7 @@
         }
         .loading { text-align: center; color: white; font-size: 1.2rem; margin-top: 50px; font-weight: bold; }
 
-        /* Modal */
+        /* Modal عمومی */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); display: none; justify-content: center; align-items: center; z-index: 1000; padding: 20px; }
         .modal-content { background: white; padding: 25px; border-radius: 20px; width: 100%; max-width: 400px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
         .modal-content h3 { margin-bottom: 20px; color: #1e293b; text-align: center; font-weight: 900; }
@@ -283,7 +282,7 @@
 
     <div class="container" id="panel-content" style="display: none;">
         
-        <!-- کادر آزمون فعال (جدید) -->
+        <!-- کادر آزمون فعال -->
         <div class="active-exam-box" id="active-exam-box">
             <h3>📝 آزمون فعال برای شما!</h3>
             <p id="active-exam-title">در حال بارگذاری...</p>
@@ -398,7 +397,7 @@
                 updateCheckinButton(); 
                 processDailyPoints(); 
                 loadAnnouncement(); 
-                loadActiveExam(); // فراخوانی تابع نمایش آزمون فعال
+                loadActiveExam(); 
             }
         };
 
@@ -440,16 +439,21 @@
             return studentGrade;
         }
 
-        // 👇 تابع جدید برای دریافت لینک آزمون فعال 👇
+        // 👇 تابع دریافت لینک آزمون فعال (با ارسال مدرسه) 👇
         async function loadActiveExam() {
             const grade = getStudentGrade();
             if (grade === "نامشخص") return;
+
+            // تشخیص کلید مدرسه دانش‌آموز
+            let schoolKey = "all";
+            if (schoolName.includes("حسن بن علی")) schoolKey = "hasan_bin_ali";
+            else if (schoolName.includes("حضرت مهدی")) schoolKey = "hazrat_mahdi";
 
             try {
                 const res = await fetch('https://api.motadars.ir/get_active_exam_link.php', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ grade: grade })
+                    body: JSON.stringify({ grade: grade, school: schoolKey })
                 });
                 const data = await res.json();
                 
@@ -465,16 +469,19 @@
                 console.log("خطا در دریافت لینک آزمون");
             }
         }
-        // 👆 پایان تابع آزمون 👆
 
         // سیستم لود اطلاعیه‌ها
         async function loadAnnouncement() {
             const grade = getStudentGrade();
+            let schoolKey = "all";
+            if (schoolName.includes("حسن بن علی")) schoolKey = "hasan_bin_ali";
+            else if (schoolName.includes("حضرت مهدی")) schoolKey = "hazrat_mahdi";
+
             try {
                 const res = await fetch('https://api.motadars.ir/get_student_announcements.php', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ grade: grade })
+                    body: JSON.stringify({ grade: grade, school: schoolKey })
                 });
                 const data = await res.json();
                 
@@ -487,6 +494,10 @@
 
         // سیستم امتیازدهی روزانه
         async function processDailyPoints() {
+            // ۱. اول از همه، امتیاز فعلی را از دیتابیس بگیر و نشان بده
+            await fetchCurrentPoints();
+
+            // ۲. سپس بررسی کن اگر امروز امتیاز نگرفته، ۵ امتیاز به او بده
             const today = new Date().toLocaleDateString('fa-IR');
             const storageKey = 'last_point_date_' + studentName; 
             const lastPointDate = localStorage.getItem(storageKey);
@@ -503,15 +514,10 @@
                     if(data.status === 'success') {
                         document.getElementById('student-points').innerText = data.new_points;
                         localStorage.setItem(storageKey, today); 
-                    } else {
-                        fetchCurrentPoints();
                     }
                 } catch(e) { 
                     console.log("خطا در ثبت امتیاز روزانه");
-                    fetchCurrentPoints(); 
                 }
-            } else {
-                fetchCurrentPoints();
             }
         }
 
@@ -525,8 +531,13 @@
                 const data = await res.json();
                 if(data.status === 'success') {
                     document.getElementById('student-points').innerText = data.points || 0;
+                } else {
+                    document.getElementById('student-points').innerText = "0";
                 }
-            } catch(e) { console.log("خطا در دریافت امتیاز"); }
+            } catch(e) { 
+                console.log("خطا در دریافت امتیاز"); 
+                document.getElementById('student-points').innerText = "0";
+            }
         }
 
         // توابع مربوط به جدول رتبه‌بندی
