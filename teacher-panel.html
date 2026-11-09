@@ -245,22 +245,25 @@
                 <div id="essayBox"></div>
             </div>
 
-            <!-- مدیریت آزمون‌ها -->
+            <!-- مدیریت آزمون‌ها (تغییر یافته) -->
             <div id="examLinksSection" style="display: none;">
                 <div class="exam-link-form">
                     <h3>🔗 ساخت لینک آزمون برای دانش‌آموزان</h3>
+                    <input type="text" id="link-title" placeholder="نام آزمون (مثلاً: آزمون تستی درس ۳)">
                     <select id="link-grade">
                         <option value="7">پایه هفتم</option>
                         <option value="8">پایه هشتم</option>
                         <option value="9">پایه نهم</option>
                     </select>
-                    <input type="number" id="link-from" placeholder="از درس شماره..." min="1" max="24">
-                    <input type="number" id="link-to" placeholder="تا درس شماره..." min="1" max="24">
-                    <button class="btn-generate" onclick="generateExamLink()">تولید لینک آزمون</button>
+                    <div style="display: flex; gap: 10px;">
+                        <input type="number" id="link-from" placeholder="از درس..." min="1" max="24" style="flex:1;">
+                        <input type="number" id="link-to" placeholder="تا درس..." min="1" max="24" style="flex:1;">
+                    </div>
+                    <button class="btn-generate" onclick="generateExamLink()">تولید و ارسال به پنل دانش‌آموزان</button>
                     <button class="btn-generate" style="background: #8b5cf6; margin-top: 15px;" onclick="openPdfModal()">📄 دریافت فایل چاپی آزمون (PDF)</button>
                 </div>
                 <div id="generated-link-box" class="link-result-box">
-                    <p>لینک آزمون آماده شد. کپی کنید و در گروه کلاس بفرستید:</p>
+                    <p>لینک آزمون آماده و در پنل دانش‌آموزان قرار گرفت:</p>
                     <input type="text" id="final-exam-link" readonly>
                     <button class="btn-copy-link" onclick="copyExamLink()">📋 کپی لینک</button>
                 </div>
@@ -913,7 +916,6 @@
             } catch(e) { alert('خطای شبکه'); }
         }
 
-        // 👇 تابع حذف دانش‌آموز (کاملاً اصلاح شده و بدون باگ) 👇
         async function deleteStudent(id, name) {
             if(!confirm(`آیا از حذف کامل «${name}» مطمئنید؟ (نمرات قبلی او حذف نمی‌شوند، فقط اکانتش پاک می‌شود)`)) return;
             
@@ -926,7 +928,6 @@
                 const data = await res.json();
                 
                 if(data.status === 'success') {
-                    // حذف دانش‌آموز از لیست روی صفحه (بدون نیاز به رفرش)
                     allData.students = allData.students.filter(s => s.id !== id);
                     renderAccounts();
                     alert('✅ دانش‌آموز با موفقیت از سیستم حذف شد.');
@@ -937,7 +938,6 @@
                 alert('خطای شبکه: ' + e.message); 
             }
         }
-        // 👆 پایان تابع حذف 👆
 
         // ------------------ بخش حضور و غیاب ------------------
         async function renderAttendance() {
@@ -1188,18 +1188,43 @@
             }
         }
 
-        // ------------------ بخش مدیریت آزمون‌ها ------------------
-        function generateExamLink() {
+        // ------------------ بخش مدیریت آزمون‌ها (تغییر یافته) ------------------
+        async function generateExamLink() {
+            const title = document.getElementById('link-title').value.trim();
             const grade = document.getElementById('link-grade').value;
             const from = document.getElementById('link-from').value;
             const to = document.getElementById('link-to').value;
 
+            if (!title) return alert('لطفاً نام آزمون را وارد کنید.');
             if (!from || !to) return alert('لطفاً بازه درس‌ها را وارد کنید.');
 
             const link = `https://motadars.ir/dynamic-exam.html?grade=${grade}&from=${from}&to=${to}`;
             
-            document.getElementById('final-exam-link').value = link;
-            document.getElementById('generated-link-box').style.display = 'block';
+            const btn = event.target;
+            btn.disabled = true;
+            btn.innerText = 'در حال ارسال...';
+
+            try {
+                const res = await fetch('https://api.motadars.ir/save_exam_link.php', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ grade: grade, title: title, link: link })
+                });
+                const data = await res.json();
+                
+                if(data.status === 'success') {
+                    document.getElementById('final-exam-link').value = link;
+                    document.getElementById('generated-link-box').style.display = 'block';
+                    alert('✅ لینک ساخته شد و در پنل دانش‌آموزان پایه ' + grade + ' نمایش داده می‌شود.');
+                } else {
+                    alert('❌ خطا: ' + data.message);
+                }
+            } catch (e) {
+                alert('خطا در ارتباط با سرور.');
+            } finally {
+                btn.disabled = false;
+                btn.innerText = 'تولید و ارسال به پنل دانش‌آموزان';
+            }
         }
 
         function copyExamLink() {
