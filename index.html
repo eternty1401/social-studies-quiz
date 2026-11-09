@@ -11,7 +11,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700;900&display=swap" rel="stylesheet">
 <style>
   /* ========================================= */
-  /* ===== استایل‌های اصلی سایت شما (دست نخورده) ===== */
+  /* ===== استایل‌های اصلی سایت شما ===== */
   /* ========================================= */
   * { margin:0; padding:0; box-sizing:border-box; font-family:'Vazirmatn',sans-serif; }
   
@@ -101,17 +101,25 @@
   .footer .heart { color: #ff6b9d; animation: pulse 1.5s infinite; display: inline-block; }
   @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.2); } }
 
+  /* ===== منوی همبرگری ===== */
   .menu-btn { position: fixed; top: 20px; right: 20px; width: 45px; height: 45px; background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.3); border-radius: 50%; z-index: 1000; display: flex; flex-direction: column; justify-content: center; align-items: center; cursor: pointer; transition: 0.3s; gap: 5px; }
   .menu-btn:hover { transform: scale(1.1); background: rgba(255,255,255,0.3); }
   .menu-btn span { display: block; width: 22px; height: 2px; background: #fff; transition: 0.3s; border-radius: 2px;}
+  
   .side-menu { position: fixed; top: 0; right: -300px; width: 280px; height: 100vh; background: rgba(30, 30, 50, 0.95); backdrop-filter: blur(20px); z-index: 1002; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); display: flex; flex-direction: column; box-shadow: -5px 0 30px rgba(0,0,0,0.5); }
   body.dark-mode .side-menu { background: rgba(10, 15, 30, 0.98); }
   .side-menu.open { right: 0; }
-  .close-btn { position: absolute; top: 15px; left: 20px; font-size: 35px; color: #fff; text-decoration: none; line-height: 1; }
-  .menu-header { text-align: center; padding: 30px 20px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 10px; }
-  .menu-header h2 { font-size: 1.2rem; color: #fff; font-weight: 700; }
+  
+  .close-btn { position: absolute; top: 15px; left: 20px; font-size: 35px; color: #fff; text-decoration: none; line-height: 1; z-index: 10;}
+  
+  /* هدر منو (تغییر یافته) */
+  .menu-header { display: flex; justify-content: space-between; align-items: center; padding: 25px 20px 15px; border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 10px; }
+  .menu-header h2 { font-size: 1.1rem; color: #fff; font-weight: 700; margin: 0; }
+  .menu-header .welcome-text { font-size: 0.85rem; color: #fbbf24; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 140px; }
+
   .side-menu a:not(.close-btn) { padding: 16px 25px; color: #fff; text-decoration: none; font-size: 1rem; border-bottom: 1px solid rgba(255,255,255,0.05); transition: 0.2s; display: flex; align-items: center; gap: 12px; font-weight: 500; }
   .side-menu a:not(.close-btn):hover { background: rgba(255,255,255,0.1); padding-right: 30px; }
+  
   .overlay-bg { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); z-index: 1001; opacity: 0; visibility: hidden; transition: 0.3s; }
   .overlay-bg.show { opacity: 1; visibility: visible; }
 
@@ -170,19 +178,16 @@
   }
   @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
   
-  /* هدر کارت */
   .auth-header { text-align: center; margin-bottom: 25px; }
   .auth-icon { font-size: 2.8rem; margin-bottom: 10px; display: inline-block; animation: bounce 2s infinite; }
   @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
   .auth-header h2 { color: #4c1d95; font-size: 1.5rem; font-weight: 900; }
   .auth-header p { color: #6b7280; font-size: 0.9rem; margin-top: 5px; }
 
-  /* تب‌ها */
   .auth-tabs { display: flex; gap: 10px; margin-bottom: 20px; }
   .auth-tab-btn { flex: 1; padding: 12px; border: none; background: #f1f5f9; color: #64748b; font-size: 1rem; font-weight: 700; cursor: pointer; border-radius: 10px; transition: 0.3s; font-family: inherit; }
   .auth-tab-btn.active { background: #8b5cf6; color: white; box-shadow: 0 4px 10px rgba(139, 92, 246, 0.3); }
 
-  /* فرم */
   .auth-section { display: none; }
   .auth-section.active { display: block; animation: fadeIn 0.4s ease; }
   @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
@@ -304,14 +309,18 @@
       <span></span><span></span><span></span>
     </div>
 
-    <!-- منوی کشویی کناری -->
+    <!-- منوی کشویی کناری (تغییر یافته) -->
     <div id="sideMenu" class="side-menu">
       <a href="javascript:void(0)" class="close-btn" onclick="toggleMenu()">&times;</a>
+      
+      <!-- هدر منو: منوی اصلی سمت راست، خوش آمدی سمت چپ -->
       <div class="menu-header">
         <h2>منوی اصلی</h2>
+        <span id="welcome-user-name" class="welcome-text"></span>
       </div>
+      
       <a href="index.html">🏠 صفحه اصلی</a>
-      <a href="student-panel.html" id="menu-auth-link">🎓 پنل دانش‌آموز</a>
+      <a href="student-panel.html">🎓 پنل دانش‌آموز</a>
       <a href="teacher-panel.html">👨‍🏫 پنل معلم</a>
       <a href="#">📞 تماس با ما</a>
       <a href="#" id="menu-logout-link" style="color: #ff6b6b; display: none;" onclick="logoutStudent(event)">🚪 خروج از حساب</a>
@@ -489,12 +498,10 @@
         box.style.display = 'block';
     }
 
-    // اعتبارسنجی شماره موبایل
     function isValidPhone(phone) {
         return /^09\d{9}$/.test(phone);
     }
 
-    // بررسی اینکه آیا کاربر تمام فیلدهای اجباری ثبت‌نام را پر کرده است یا نه
     function checkRegValidity() {
         const name = document.getElementById('reg-name').value.trim();
         const school = document.getElementById('reg-school').value;
@@ -504,7 +511,6 @@
 
         const btn = document.getElementById('reg-submit-btn');
 
-        // دکمه فقط زمانی فعال می‌شود که همه چیز پر شده باشد
         if (name && school && grade && username && password.length >= 6) {
             btn.disabled = false;
         } else {
@@ -512,7 +518,6 @@
         }
     }
 
-    // تابع ورود
     async function handleLogin(e) {
         e.preventDefault();
         const username = document.getElementById('login-username').value.trim();
@@ -560,7 +565,6 @@
         }
     }
 
-    // تابع ثبت‌نام
     async function handleRegister(e) {
         e.preventDefault();
         const name = document.getElementById('reg-name').value.trim();
@@ -618,7 +622,7 @@
     }
 
     // ==========================================
-    // ۲. کدهای صفحه اصلی (دقیقاً مثل فایل اصلی خودتان)
+    // ۲. کدهای صفحه اصلی
     // ==========================================
 
     const themeBtn = document.getElementById('themeBtn');
@@ -645,10 +649,11 @@
       document.getElementById('menuOverlay').classList.toggle('show');
     }
 
+    // تابع آپدیت منو (تغییر یافته)
     function updateMenuUI(name) {
-        const authLink = document.getElementById('menu-auth-link');
+        const welcomeSpan = document.getElementById('welcome-user-name');
         const logoutLink = document.getElementById('menu-logout-link');
-        if (authLink) authLink.innerHTML = `👋 خوش آمدی، ${name}`;
+        if (welcomeSpan) welcomeSpan.innerText = `👋 ${name}`;
         if (logoutLink) logoutLink.style.display = 'flex';
     }
 
