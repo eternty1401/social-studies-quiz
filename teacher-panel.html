@@ -94,11 +94,12 @@
         .score-buttons-container { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; background: white; padding: 8px; border-radius: 8px; border: 1px solid #cbd5e1; }
         .score-label { font-size: 0.85rem; color: #64748b; font-weight: bold; display: flex; align-items: center; margin-left: 5px; }
         .btn-score { padding: 6px 15px; border: 1px solid #94a3b8; background: white; border-radius: 6px; cursor: pointer; font-family: inherit; font-size: 0.9rem; font-weight: bold; color: #475569; transition: 0.2s; }
-        .btn-score.active { background: #10b981; color: white; border-color: #10b981; }
+        .btn-score:hover { background: #e2e8f0; }
+        .btn-score.active { background: #10b981; color: white; border-color: #10b981; box-shadow: 0 2px 5px rgba(16,185,129,0.4); }
         .grading-box { background: #f0fdf4; padding: 15px; border-radius: 10px; border: 2px dashed #22c55e; margin-top: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
         .total-score-display { font-size: 1.2rem; font-weight: 900; color: #166534; }
         .total-score-display span { font-size: 1.5rem; color: #ef4444; }
-        .btn-submit-grade { background: #22c55e; color: white; border: none; padding: 12px 25px; border-radius: 8px; font-family: inherit; font-size: 1rem; font-weight: bold; cursor: pointer; }
+        .btn-submit-grade { background: #22c55e; color: white; border: none; padding: 12px 25px; border-radius: 8px; font-family: inherit; font-size: 1rem; font-weight: bold; cursor: pointer; transition: 0.3s; }
 
         .exam-link-form { background: white; padding: 25px; border-radius: 15px; margin-bottom: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
         .exam-link-form h3 { color: #1e3c72; margin-bottom: 15px; }
@@ -138,26 +139,35 @@
         .btn-save { flex: 1; background: #10b981; color: white; border: none; padding: 12px; border-radius: 8px; font-family: inherit; font-size: 1rem; font-weight: bold; cursor: pointer; }
         .btn-cancel { flex: 1; background: #e2e8f0; color: #475569; border: none; padding: 12px; border-radius: 8px; font-family: inherit; font-size: 1rem; font-weight: bold; cursor: pointer; }
 
-        /* استایل‌های چت پنل معلم */
+        /* ====== استایل‌های چت (اصلاح شده و ریسپانسیو) ====== */
         .chat-layout { display: flex; gap: 20px; height: 70vh; background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
-        .chat-sidebar { width: 300px; background: #f8fafc; border-left: 1px solid #e2e8f0; overflow-y: auto; display: flex; flex-direction: column; }
-        .chat-sidebar-header { padding: 15px; background: #e2e8f0; font-weight: bold; color: #334155; border-bottom: 1px solid #cbd5e1; }
+        
+        .chat-sidebar { width: 300px; flex-shrink: 0; background: #f8fafc; border-left: 1px solid #e2e8f0; display: flex; flex-direction: column; }
+        .chat-sidebar-header { padding: 15px; background: #e2e8f0; font-weight: bold; color: #334155; border-bottom: 1px solid #cbd5e1; display: flex; justify-content: space-between; align-items: center; }
         .chat-thread-item { padding: 15px; border-bottom: 1px solid #e2e8f0; cursor: pointer; transition: 0.2s; display: flex; justify-content: space-between; align-items: center; }
         .chat-thread-item:hover { background: #e2e8f0; }
         .chat-thread-item.active { background: #e0f2fe; border-right: 4px solid #3b82f6; }
         .thread-name { font-weight: bold; color: #1e293b; font-size: 0.95rem; }
         .unread-badge { background: #ef4444; color: white; font-size: 0.75rem; padding: 2px 8px; border-radius: 10px; font-weight: bold; }
-        .chat-main { flex: 1; display: flex; flex-direction: column; }
-        .chat-main-header { padding: 15px; border-bottom: 1px solid #e2e8f0; font-weight: bold; color: #1e293b; background: white; }
+        
+        .chat-main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+        .chat-main-header { padding: 15px; border-bottom: 1px solid #e2e8f0; font-weight: bold; color: #1e293b; background: white; text-align: center; }
         .chat-main-messages { flex: 1; padding: 20px; overflow-y: auto; background: #f1f5f9; display: flex; flex-direction: column; gap: 15px; }
         .chat-main-input { padding: 15px; border-top: 1px solid #e2e8f0; display: flex; gap: 10px; background: white; }
         .chat-main-input input { flex: 1; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; outline: none; font-family: inherit; }
         .chat-main-input button { background: #3b82f6; color: white; border: none; padding: 0 25px; border-radius: 8px; font-weight: bold; cursor: pointer; font-family: inherit; }
 
-        .msg-bubble { max-width: 70%; padding: 12px 18px; border-radius: 15px; font-size: 0.95rem; line-height: 1.6; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .msg-bubble { max-width: 80%; padding: 12px 18px; border-radius: 15px; font-size: 0.95rem; line-height: 1.6; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
         .msg-teacher { align-self: flex-end; background: #3b82f6; color: white; border-bottom-right-radius: 0; }
         .msg-student { align-self: flex-start; background: white; color: #334155; border-bottom-left-radius: 0; }
         .msg-time { font-size: 0.7rem; opacity: 0.7; margin-top: 5px; display: block; text-align: left; }
+
+        /* ریسپانسیو برای گوشی */
+        @media (max-width: 768px) {
+            .chat-layout { flex-direction: column; height: auto; }
+            .chat-sidebar { width: 100%; height: 250px; border-left: none; border-bottom: 1px solid #e2e8f0; }
+            .chat-main { height: 400px; }
+        }
 
         /* PDF */
         .exam-pdf-page { font-family: 'Vazirmatn', sans-serif; direction: rtl; color: black; font-size: 14px; background: white; padding: 5px; line-height: 1.5; }
@@ -219,7 +229,6 @@
                 <button class="tab-btn" id="tab-essay" onclick="switchTab('essay')">📝 تصحیح تشریحی</button>
                 <button class="tab-btn" id="tab-exam-links" onclick="switchTab('exam-links')">📝 مدیریت آزمون‌ها</button>
                 <button class="tab-btn" id="tab-announcements" onclick="switchTab('announcements')">📢 اطلاع‌رسانی</button>
-                <!-- تب جدید چت -->
                 <button class="tab-btn" id="tab-messages" onclick="switchTab('messages')">💬 پیام‌ها</button>
                 <button class="tab-btn" id="tab-leaderboard" onclick="switchTab('leaderboard')">🏆 رتبه‌بندی</button>
                 <button class="tab-btn" id="tab-accounts" onclick="switchTab('accounts')">👥 اکانت‌ها</button>
@@ -323,7 +332,10 @@
                 <div class="chat-layout">
                     <!-- لیست دانش‌آموزان -->
                     <div class="chat-sidebar">
-                        <div class="chat-sidebar-header">لیست گفتگوها</div>
+                        <div class="chat-sidebar-header">
+                            <span>لیست گفتگوها</span>
+                            <button onclick="loadChatThreads()" style="background:none; border:none; cursor:pointer; font-size:1.2rem;" title="بروزرسانی">🔄</button>
+                        </div>
                         <div id="chatThreadsList" style="overflow-y:auto; flex:1;">
                             <p style="text-align:center; padding:20px; font-size:0.9rem; color:#64748b;">در حال دریافت...</p>
                         </div>
@@ -409,7 +421,7 @@
         let schoolChartInstance = null;
         let typeChartInstance = null;
         let leaderboardData = []; 
-        let activeChatStudent = null; // برای چت
+        let activeChatStudent = null; 
         
         let teacherPassword = sessionStorage.getItem('teacher_pass') || null;
 
@@ -472,11 +484,11 @@
             else if(tabName === 'attendance') { document.getElementById('todayDateDisplay').innerText = new Date().toLocaleDateString('fa-IR'); renderAttendance(); }
             else if(tabName === 'essay') renderEssays();
             else if(tabName === 'announcements') loadAnnouncements();
-            else if(tabName === 'messages') loadChatThreads(); // لود لیست چت‌ها
+            else if(tabName === 'messages') loadChatThreads(); 
             else if(tabName === 'leaderboard') loadLeaderboard();
         }
 
-        // 👇 توابع چت پنل معلم 👇
+        // 👇 توابع چت پنل معلم (اصلاح شده) 👇
         async function loadChatThreads() {
             const list = document.getElementById('chatThreadsList');
             list.innerHTML = '<p style="text-align:center; padding:20px; font-size:0.9rem; color:#64748b;">در حال دریافت...</p>';
@@ -499,8 +511,12 @@
                             </div>
                         `;
                     });
+                } else {
+                    list.innerHTML = `<p style="color:red; text-align:center; padding:20px;">خطا: ${data.message}</p>`;
                 }
-            } catch(e) { list.innerHTML = '<p style="color:red; text-align:center;">خطا</p>'; }
+            } catch(e) { 
+                list.innerHTML = '<p style="color:red; text-align:center; padding:20px;">خطای شبکه در دریافت لیست</p>'; 
+            }
         }
 
         async function openChatWith(studentName, element) {
@@ -513,7 +529,7 @@
             document.getElementById('teacherSendBtn').disabled = false;
             
             await loadChatMessages();
-            loadChatThreads(); // برای آپدیت کردن وضعیت خوانده شده
+            loadChatThreads(); // آپدیت وضعیت خوانده شده
         }
 
         async function loadChatMessages() {
@@ -546,8 +562,10 @@
                         `;
                     });
                     box.scrollTop = box.scrollHeight;
+                } else {
+                    box.innerHTML = `<p style="color:red; text-align:center;">خطا: ${data.message}</p>`;
                 }
-            } catch(e) { box.innerHTML = '<p style="color:red; text-align:center;">خطا.</p>'; }
+            } catch(e) { box.innerHTML = '<p style="color:red; text-align:center;">خطا در ارتباط با سرور.</p>'; }
         }
 
         async function sendTeacherMessage() {
