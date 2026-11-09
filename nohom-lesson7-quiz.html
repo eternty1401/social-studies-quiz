@@ -1,9 +1,6 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
  <script src="telegram.js"></script>
-<script type="module" src="firebase-config.js"></script>
-<script type="module" src="firebase-config.js"></script>
-<script type="module" src="firebase-config.js"></script>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -38,7 +35,7 @@
   .progress-fill { height:100%; background:linear-gradient(90deg,#00acc1,#00838f); border-radius:50px; transition:width 0.4s ease; width:0%; }
   .question-box h3 { font-size:1.1rem; color:#2c3e50; line-height:1.9; margin-bottom:22px; font-weight:800; }
   .question-num { display:inline-block; background:#00acc1; color:#fff; width:32px; height:32px; border-radius:50%; text-align:center; line-height:32px; font-weight:900; font-size:0.95rem; margin-left:8px; }
-   .options-list { display:flex; flex-direction:column; gap:12px; }
+  .options-list { display:flex; flex-direction:column; gap:12px; }
   .option-item { padding:14px 20px; background:#f8fdfd; border:2px solid #d6eef0; border-radius:14px; cursor:pointer; transition:0.22s; display:flex; align-items:center; gap:14px; font-size:0.98rem; font-weight:500; }
   .option-item:hover { border-color:#00acc1; background:#e0f7fa; transform:translateX(-3px); }
   .option-item .opt-letter { width:32px; height:32px; border-radius:8px; background:#e0f7fa; color:#00838f; display:flex; align-items:center; justify-content:center; font-weight:900; flex-shrink:0; transition:0.22s; }
@@ -289,6 +286,7 @@ function goNext() {
   else renderQuestion();
 }
 
+// 👇 تغییرات اصلی در این تابع ایجاد شده است 👇
 function finishQuiz() {
   clearInterval(timerInterval);
   document.getElementById("quizScreen").classList.add("hidden");
@@ -297,14 +295,21 @@ function finishQuiz() {
   quizQuestions.forEach((q, i) => { if (userAnswers[i] === q.correctIndex) correct++; });
   const wrong = TOTAL_QUESTIONS - correct;
   const percent = Math.round((correct / TOTAL_QUESTIONS) * 100);
- submitScoreToTelegram(score, correctCount);
-if (typeof window.saveGradeToFirebase === 'function') {
-  window.saveGradeToFirebase(studentName, document.title, Math.ceil((correctCount / selectedQuestions.length) * 20), correctCount);
-}
+
+  // سیستم امتیازدهی هوشمند
+  let pointsToGive = 20; // ۲۰ امتیاز پایه برای شرکت
+  if (percent >= 80) pointsToGive = 50; // ۵۰ امتیاز برای نمره بالای ۸۰
+  else if (percent >= 50) pointsToGive = 30; // ۳۰ امتیاز برای نمره بالای ۵۰
+  
+  const activityId = 'exam_nohom_lesson7'; // شناسه یکتای این آزمون
+  awardPoints(pointsToGive, activityId);
+
+  // بقیه کدهای نمایش نتیجه
   document.getElementById("correctCount").textContent = toFa(correct);
   document.getElementById("wrongCount").textContent = toFa(wrong);
   document.getElementById("scoreNum").textContent = toFa(percent);
   document.getElementById("scorePercent").textContent = "٪";
+  
   const circle = document.getElementById("scoreCircle");
   circle.classList.remove("green", "orange", "red");
   const msg = document.getElementById("scoreMessage");
@@ -312,6 +317,46 @@ if (typeof window.saveGradeToFirebase === 'function') {
   else if (percent >= 50) { circle.classList.add("orange"); msg.textContent = "⚠️ خوب بود، اما با کمی تلاش بیشتر می‌تونی عالی بشی!"; }
   else { circle.classList.add("red"); msg.textContent = "📚 نیاز به مرور بیشتر داری. درسنامه رو یه بار دیگه بخون!"; }
 }
+
+// 👇 تابع جدید برای ارتباط با دیتابیس و دادن امتیاز 👇
+async function awardPoints(points, activityId) {
+    const studentName = localStorage.getItem('student_name');
+    
+    // اگر دانش‌آموز لاگین نکرده باشد، امتیازی ثبت نمی‌شود
+    if (!studentName) {
+        console.log("کاربر لاگین نیست. امتیاز ثبت نشد.");
+        return; 
+    }
+
+    // بررسی اینکه آیا امروز قبلا بابت این آزمون امتیاز گرفته یا نه
+    const today = new Date().toLocaleDateString('fa-IR');
+    const storageKey = `awarded_${activityId}_${today}`;
+    
+    if (localStorage.getItem(storageKey)) {
+        console.log("شما امروز قبلا بابت این آزمون امتیاز گرفته‌اید.");
+        return; 
+    }
+
+    try {
+        const res = await fetch('https://api.motadars.ir/add_points.php', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ student_name: studentName, points: points })
+        });
+        const data = await res.json();
+        
+        if (data.status === 'success') {
+            localStorage.setItem(storageKey, 'true');
+            // با یک تاخیر کوچک پیام را نشان میدهیم تا روی صفحه نتیجه نیفتد
+            setTimeout(() => {
+                alert(`🎉 تبریک! شما بابت شرکت در این آزمون ${points} امتیاز دریافت کردید.\nامتیاز کل شما: ${data.new_points}`);
+            }, 500);
+        }
+    } catch (e) {
+        console.log("خطا در ارتباط با سرور برای ثبت امتیاز.");
+    }
+}
+// 👆 پایان تابع جدید 👆
 
 document.getElementById("reviewBtn").addEventListener("click", () => {
   document.getElementById("resultScreen").classList.add("hidden");
