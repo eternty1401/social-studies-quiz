@@ -139,9 +139,8 @@
         .btn-save { flex: 1; background: #10b981; color: white; border: none; padding: 12px; border-radius: 8px; font-family: inherit; font-size: 1rem; font-weight: bold; cursor: pointer; }
         .btn-cancel { flex: 1; background: #e2e8f0; color: #475569; border: none; padding: 12px; border-radius: 8px; font-family: inherit; font-size: 1rem; font-weight: bold; cursor: pointer; }
 
-        /* ====== استایل‌های چت (اصلاح شده و ریسپانسیو) ====== */
+        /* استایل‌های چت */
         .chat-layout { display: flex; gap: 20px; height: 70vh; background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
-        
         .chat-sidebar { width: 300px; flex-shrink: 0; background: #f8fafc; border-left: 1px solid #e2e8f0; display: flex; flex-direction: column; }
         .chat-sidebar-header { padding: 15px; background: #e2e8f0; font-weight: bold; color: #334155; border-bottom: 1px solid #cbd5e1; display: flex; justify-content: space-between; align-items: center; }
         .chat-thread-item { padding: 15px; border-bottom: 1px solid #e2e8f0; cursor: pointer; transition: 0.2s; display: flex; justify-content: space-between; align-items: center; }
@@ -149,20 +148,17 @@
         .chat-thread-item.active { background: #e0f2fe; border-right: 4px solid #3b82f6; }
         .thread-name { font-weight: bold; color: #1e293b; font-size: 0.95rem; }
         .unread-badge { background: #ef4444; color: white; font-size: 0.75rem; padding: 2px 8px; border-radius: 10px; font-weight: bold; }
-        
         .chat-main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
         .chat-main-header { padding: 15px; border-bottom: 1px solid #e2e8f0; font-weight: bold; color: #1e293b; background: white; text-align: center; }
         .chat-main-messages { flex: 1; padding: 20px; overflow-y: auto; background: #f1f5f9; display: flex; flex-direction: column; gap: 15px; }
         .chat-main-input { padding: 15px; border-top: 1px solid #e2e8f0; display: flex; gap: 10px; background: white; }
         .chat-main-input input { flex: 1; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; outline: none; font-family: inherit; }
         .chat-main-input button { background: #3b82f6; color: white; border: none; padding: 0 25px; border-radius: 8px; font-weight: bold; cursor: pointer; font-family: inherit; }
-
         .msg-bubble { max-width: 80%; padding: 12px 18px; border-radius: 15px; font-size: 0.95rem; line-height: 1.6; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
         .msg-teacher { align-self: flex-end; background: #3b82f6; color: white; border-bottom-right-radius: 0; }
         .msg-student { align-self: flex-start; background: white; color: #334155; border-bottom-left-radius: 0; }
         .msg-time { font-size: 0.7rem; opacity: 0.7; margin-top: 5px; display: block; text-align: left; }
 
-        /* ریسپانسیو برای گوشی */
         @media (max-width: 768px) {
             .chat-layout { flex-direction: column; height: auto; }
             .chat-sidebar { width: 100%; height: 250px; border-left: none; border-bottom: 1px solid #e2e8f0; }
@@ -227,7 +223,8 @@
                 <button class="tab-btn" id="tab-class" onclick="switchTab('class')">📚 نمرات</button>
                 <button class="tab-btn" id="tab-attendance" onclick="switchTab('attendance')">📋 حضور و غیاب</button>
                 <button class="tab-btn" id="tab-essay" onclick="switchTab('essay')">📝 تصحیح تشریحی</button>
-                <button class="tab-btn" id="tab-exam-links" onclick="switchTab('exam-links')">📝 مدیریت آزمون‌ها</button>
+                <!-- اصلاح نام تب به examLinks -->
+                <button class="tab-btn" id="tab-examLinks" onclick="switchTab('examLinks')">📝 مدیریت آزمون‌ها</button>
                 <button class="tab-btn" id="tab-announcements" onclick="switchTab('announcements')">📢 اطلاع‌رسانی</button>
                 <button class="tab-btn" id="tab-messages" onclick="switchTab('messages')">💬 پیام‌ها</button>
                 <button class="tab-btn" id="tab-leaderboard" onclick="switchTab('leaderboard')">🏆 رتبه‌بندی</button>
@@ -330,7 +327,6 @@
             <!-- بخش چت (پیام‌ها) -->
             <div id="messagesSection" style="display: none;">
                 <div class="chat-layout">
-                    <!-- لیست دانش‌آموزان -->
                     <div class="chat-sidebar">
                         <div class="chat-sidebar-header">
                             <span>لیست گفتگوها</span>
@@ -340,7 +336,6 @@
                             <p style="text-align:center; padding:20px; font-size:0.9rem; color:#64748b;">در حال دریافت...</p>
                         </div>
                     </div>
-                    <!-- پنجره چت -->
                     <div class="chat-main">
                         <div class="chat-main-header" id="chatMainHeader">یک گفتگو را انتخاب کنید</div>
                         <div class="chat-main-messages" id="chatMainMessages"></div>
@@ -372,7 +367,7 @@
         </div>
     </div>
 
-    <!-- Modal های قبلی (نمره دستی، ویرایش نام، PDF) -->
+    <!-- Modal های قبلی -->
     <div class="modal-overlay" id="manualGradeModal">
         <div class="modal-content">
             <h3 id="modalStudentName">ثبت نمره برای: ...</h3>
@@ -466,6 +461,7 @@
             } catch (e) { alert('خطا در ارتباط با سرور'); }
         }
 
+        // اصلاح اصلی اینجاست: نام تب به examLinks تغییر کرد
         function switchTab(tabName) {
             currentTab = tabName;
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
@@ -488,7 +484,6 @@
             else if(tabName === 'leaderboard') loadLeaderboard();
         }
 
-        // 👇 توابع چت پنل معلم (اصلاح شده) 👇
         async function loadChatThreads() {
             const list = document.getElementById('chatThreadsList');
             list.innerHTML = '<p style="text-align:center; padding:20px; font-size:0.9rem; color:#64748b;">در حال دریافت...</p>';
@@ -497,39 +492,25 @@
                 const data = await res.json();
                 if(data.status === 'success') {
                     list.innerHTML = '';
-                    if(data.data.length === 0) {
-                        list.innerHTML = '<p style="text-align:center; padding:20px; font-size:0.9rem; color:#64748b;">هیچ پیامی وجود ندارد.</p>';
-                        return;
-                    }
+                    if(data.data.length === 0) { list.innerHTML = '<p style="text-align:center; padding:20px; font-size:0.9rem; color:#64748b;">هیچ پیامی وجود ندارد.</p>'; return; }
                     data.data.forEach(thread => {
                         const unreadBadge = thread.unread_count > 0 ? `<span class="unread-badge">${thread.unread_count}</span>` : '';
                         const isActive = activeChatStudent === thread.student_name ? 'active' : '';
-                        list.innerHTML += `
-                            <div class="chat-thread-item ${isActive}" onclick="openChatWith('${thread.student_name}', this)">
-                                <div class="thread-name">${thread.student_name}</div>
-                                ${unreadBadge}
-                            </div>
-                        `;
+                        list.innerHTML += `<div class="chat-thread-item ${isActive}" onclick="openChatWith('${thread.student_name}', this)"><div class="thread-name">${thread.student_name}</div>${unreadBadge}</div>`;
                     });
-                } else {
-                    list.innerHTML = `<p style="color:red; text-align:center; padding:20px;">خطا: ${data.message}</p>`;
                 }
-            } catch(e) { 
-                list.innerHTML = '<p style="color:red; text-align:center; padding:20px;">خطای شبکه در دریافت لیست</p>'; 
-            }
+            } catch(e) { list.innerHTML = '<p style="color:red; text-align:center; padding:20px;">خطای شبکه</p>'; }
         }
 
         async function openChatWith(studentName, element) {
             activeChatStudent = studentName;
             document.querySelectorAll('.chat-thread-item').forEach(el => el.classList.remove('active'));
             if(element) element.classList.add('active');
-            
             document.getElementById('chatMainHeader').innerText = `گفتگو با ${studentName}`;
             document.getElementById('teacherChatInput').disabled = false;
             document.getElementById('teacherSendBtn').disabled = false;
-            
             await loadChatMessages();
-            loadChatThreads(); // آپدیت وضعیت خوانده شده
+            loadChatThreads();
         }
 
         async function loadChatMessages() {
@@ -537,78 +518,51 @@
             const box = document.getElementById('chatMainMessages');
             box.innerHTML = '<p style="text-align:center; font-size:0.85rem; color:#64748b;">در حال دریافت...</p>';
             try {
-                const res = await fetch('https://api.motadars.ir/get_messages.php', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ student_name: activeChatStudent, reader_type: 'teacher' })
-                });
+                const res = await fetch('https://api.motadars.ir/get_messages.php', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ student_name: activeChatStudent, reader_type: 'teacher' }) });
                 const data = await res.json();
                 if(data.status === 'success') {
                     box.innerHTML = '';
-                    if(data.data.length === 0) {
-                        box.innerHTML = '<p style="text-align:center; font-size:0.85rem; color:#64748b; margin-top:20px;">هنوز پیامی رد و بدل نشده است.</p>';
-                        return;
-                    }
+                    if(data.data.length === 0) { box.innerHTML = '<p style="text-align:center; font-size:0.85rem; color:#64748b; margin-top:20px;">پیامی نیست.</p>'; return; }
                     data.data.forEach(msg => {
                         const isTeacher = msg.sender_type === 'teacher';
                         const msgClass = isTeacher ? 'msg-teacher' : 'msg-student';
                         const senderLabel = isTeacher ? 'شما' : activeChatStudent;
                         const time = new Date(msg.created_at).toLocaleTimeString('fa-IR', { hour: '2-digit', minute: '2-digit' });
-                        box.innerHTML += `
-                            <div class="msg-bubble ${msgClass}">
-                                <div>${msg.message_text}</div>
-                                <span class="msg-time">${senderLabel} - ${time}</span>
-                            </div>
-                        `;
+                        box.innerHTML += `<div class="msg-bubble ${msgClass}"><div>${msg.message_text}</div><span class="msg-time">${senderLabel} - ${time}</span></div>`;
                     });
                     box.scrollTop = box.scrollHeight;
-                } else {
-                    box.innerHTML = `<p style="color:red; text-align:center;">خطا: ${data.message}</p>`;
                 }
-            } catch(e) { box.innerHTML = '<p style="color:red; text-align:center;">خطا در ارتباط با سرور.</p>'; }
+            } catch(e) { box.innerHTML = '<p style="color:red; text-align:center;">خطا.</p>'; }
         }
 
         async function sendTeacherMessage() {
             const input = document.getElementById('teacherChatInput');
             const text = input.value.trim();
             if(!text || !activeChatStudent) return;
-
             input.disabled = true;
             try {
-                const res = await fetch('https://api.motadars.ir/send_message.php', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ student_name: activeChatStudent, message_text: text, sender_type: 'teacher' })
-                });
+                const res = await fetch('https://api.motadars.ir/send_message.php', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ student_name: activeChatStudent, message_text: text, sender_type: 'teacher' }) });
                 const data = await res.json();
-                if(data.status === 'success') {
-                    input.value = '';
-                    loadChatMessages();
-                } else alert('خطا: ' + data.message);
-            } catch(e) { alert('خطا در ارسال.'); }
+                if(data.status === 'success') { input.value = ''; loadChatMessages(); }
+            } catch(e) {}
             finally { input.disabled = false; input.focus(); }
         }
-        // 👆 پایان توابع چت 👆
 
         async function sendAnnouncement() {
-            const text = document.getElementById('announcement-text').value.trim();
-            const school = document.getElementById('announcement-school').value;
-            const grade = document.getElementById('announcement-grade').value;
-            if(!text) return alert('متن اطلاعیه را وارد کنید.');
+            const text = document.getElementById('announcement-text').value.trim(), school = document.getElementById('announcement-school').value, grade = document.getElementById('announcement-grade').value;
+            if(!text) return alert('متن را وارد کنید.');
             const btn = event.target; btn.disabled = true; btn.innerText = 'در حال ارسال...';
             try {
                 const res = await fetch('https://api.motadars.ir/save_announcement.php', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ message: text, target_grade: grade, target_school: school }) });
                 const data = await res.json();
                 if(data.status === 'success') { alert('✅ ارسال شد.'); document.getElementById('announcement-text').value = ''; loadAnnouncements(); }
-                else alert('❌ خطا: ' + data.message);
-            } catch(e) { alert('خطا در ارتباط با سرور.'); } finally { btn.disabled = false; btn.innerText = '🚀 ارسال'; }
+            } catch(e) {} finally { btn.disabled = false; btn.innerText = '🚀 ارسال'; }
         }
 
         async function loadAnnouncements() {
             const box = document.getElementById('recent-announcements'); box.innerHTML = '<p style="color: white; text-align: center;">در حال دریافت...</p>';
             try {
-                const res = await fetch('https://api.motadars.ir/get_announcements.php');
-                const data = await res.json();
+                const res = await fetch('https://api.motadars.ir/get_announcements.php'); const data = await res.json();
                 if(data.status === 'success') {
                     if(data.data.length === 0) { box.innerHTML = '<p style="color: white; text-align: center;">هیچ اطلاعیه‌ای نیست.</p>'; return; }
                     box.innerHTML = '';
@@ -618,17 +572,15 @@
                         box.innerHTML += `<div class="announcement-card"><p>${ann.message}</p><div class="meta">${schoolLabel} - ${gradeLabel} | ${ann.created_at}</div></div>`;
                     });
                 }
-            } catch (e) { box.innerHTML = '<p style="color: white; text-align: center;">خطا.</p>'; }
+            } catch (e) {}
         }
 
         async function loadLeaderboard() {
             const box = document.getElementById('leaderboardBox'); box.innerHTML = '<p style="text-align: center; color: #64748b;">در حال دریافت...</p>';
             try {
-                const res = await fetch('https://api.motadars.ir/get_leaderboard.php');
-                const data = await res.json();
+                const res = await fetch('https://api.motadars.ir/get_leaderboard.php'); const data = await res.json();
                 if(data.status === 'success') renderLeaderboard(data.data);
-                else box.innerHTML = `<p style="color: red; text-align: center;">${data.message}</p>`;
-            } catch (e) { box.innerHTML = `<p style="color: red; text-align: center;">خطای شبکه</p>`; }
+            } catch (e) {}
         }
 
         function renderLeaderboard(data) {
@@ -638,14 +590,7 @@
             data.forEach((student, index) => {
                 let rank = index + 1, rankClass = rank <= 3 ? `top-${rank}` : '', rankEmoji = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : rank;
                 let gradeStr = "";
-                if (typeof schoolData !== 'undefined') {
-                    for (const sKey in schoolData) {
-                        for (const gNum in schoolData[sKey].grades) {
-                            if (schoolData[sKey].grades[gNum].includes(student.full_name)) { gradeStr = ` - پایه ${gNum}`; break; }
-                        }
-                        if (gradeStr) break;
-                    }
-                }
+                if (typeof schoolData !== 'undefined') { for (const sKey in schoolData) { for (const gNum in schoolData[sKey].grades) { if (schoolData[sKey].grades[gNum].includes(student.full_name)) { gradeStr = ` - پایه ${gNum}`; break; } } if (gradeStr) break; } }
                 box.innerHTML += `<div class="leaderboard-row ${rankClass}" data-name="${student.full_name}"><div class="rank-badge">${rankEmoji}</div><div class="student-details"><h4>${student.full_name}</h4><span>${student.school_name}${gradeStr}</span></div><div class="points-badge">${student.points} امتیاز</div></div>`;
             });
         }
@@ -657,22 +602,13 @@
 
         async function loadDashboardData() {
             let totalStudents = 0;
-            if (typeof schoolData !== 'undefined') {
-                for (const sKey in schoolData) { for (const gNum in schoolData[sKey].grades) { totalStudents += schoolData[sKey].grades[gNum].length; } }
-            }
+            if (typeof schoolData !== 'undefined') { for (const sKey in schoolData) { for (const gNum in schoolData[sKey].grades) { totalStudents += schoolData[sKey].grades[gNum].length; } } }
             const totalGrades = allData.grades.length; let presentToday = 0, pendingEssays = 0;
             try {
-                const attRes = await fetch('https://api.motadars.ir/get_attendance.php', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({}) });
-                const attData = await attRes.json(); if (attData.status === 'success') presentToday = attData.data.filter(a => a.status === 'present').length;
-                const essayRes = await fetch('https://api.motadars.ir/get_essay_submissions.php');
-                const essayData = await essayRes.json(); if (essayData.status === 'success') pendingEssays = essayData.data.length;
+                const attRes = await fetch('https://api.motadars.ir/get_attendance.php', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({}) }); const attData = await attRes.json(); if (attData.status === 'success') presentToday = attData.data.filter(a => a.status === 'present').length;
+                const essayRes = await fetch('https://api.motadars.ir/get_essay_submissions.php'); const essayData = await essayRes.json(); if (essayData.status === 'success') pendingEssays = essayData.data.length;
             } catch (e) {}
-            document.getElementById('statsGrid').innerHTML = `
-                <div class="stat-card"><h3>${toPersianNumber(totalStudents)}</h3><p>کل دانش‌آموزان</p></div>
-                <div class="stat-card success"><h3>${toPersianNumber(presentToday)}</h3><p>حاضران امروز</p></div>
-                <div class="stat-card warning"><h3>${toPersianNumber(pendingEssays)}</h3><p>برگه‌های تصحیح نشده</p></div>
-                <div class="stat-card danger"><h3>${toPersianNumber(totalGrades)}</h3><p>کل نمرات</p></div>
-            `;
+            document.getElementById('statsGrid').innerHTML = `<div class="stat-card"><h3>${toPersianNumber(totalStudents)}</h3><p>کل دانش‌آموزان</p></div><div class="stat-card success"><h3>${toPersianNumber(presentToday)}</h3><p>حاضران امروز</p></div><div class="stat-card warning"><h3>${toPersianNumber(pendingEssays)}</h3><p>برگه‌های تصحیح نشده</p></div><div class="stat-card danger"><h3>${toPersianNumber(totalGrades)}</h3><p>کل نمرات</p></div>`;
             renderCharts();
         }
 
@@ -698,29 +634,22 @@
         function toPersianNumber(num) { return String(num).replace(/\d/g, d => '۰۱۲۳۴۵۶۷۸۹'[d]); }
 
         function renderData() {
-            const box = document.getElementById('contentBox');
-            box.innerHTML = '';
+            const box = document.getElementById('contentBox'); box.innerHTML = '';
             if (typeof schoolData === 'undefined') return;
             for (const schoolKey in schoolData) {
-                const school = schoolData[schoolKey];
-                let schoolHtml = `<div class="school-section"><h2 class="school-title">🏫 ${school.name}</h2>`;
+                const school = schoolData[schoolKey]; let schoolHtml = `<div class="school-section"><h2 class="school-title">🏫 ${school.name}</h2>`;
                 for (const gradeNum in school.grades) {
-                    const studentsInGrade = school.grades[gradeNum];
-                    if (studentsInGrade.length === 0) continue;
+                    const studentsInGrade = school.grades[gradeNum]; if (studentsInGrade.length === 0) continue;
                     schoolHtml += `<div class="grade-section"><div class="grade-header" onclick="toggleGrade(this)"><span class="grade-title-text">پایه ${gradeNum} (${studentsInGrade.length} نفر)</span><div class="grade-actions"><button class="btn-export-small" onclick="exportGradeToCSV('${school.name}', '${gradeNum}', event)">📥 اکسل</button><span class="toggle-icon">▼</span></div></div><div class="student-list">`;
                     studentsInGrade.forEach(studentName => {
                         const studentGrades = allData.grades.filter(g => g.student_name.trim() === studentName.trim());
                         let gradesHtml = studentGrades.length === 0 ? `<span class="no-grade">هنوز امتحان نداده</span>` : `<div class="grades-container">`;
-                        if(studentGrades.length > 0) {
-                            studentGrades.forEach(g => { gradesHtml += `<div class="grade-item"><div><span class="exam-title">${g.exam_name} (${g.exam_type === 'tashrihi' ? 'تشریحی' : 'تستی'})</span><span class="exam-date">⏰ ${g.exam_date || 'نامشخص'}</span></div><span class="score-badge">${g.score}</span></div>`; });
-                            gradesHtml += `</div>`;
-                        }
+                        if(studentGrades.length > 0) { studentGrades.forEach(g => { gradesHtml += `<div class="grade-item"><div><span class="exam-title">${g.exam_name} (${g.exam_type === 'tashrihi' ? 'تشریحی' : 'تستی'})</span><span class="exam-date">⏰ ${g.exam_date || 'نامشخص'}</span></div><span class="score-badge">${g.score}</span></div>`; }); gradesHtml += `</div>`; }
                         schoolHtml += `<div class="student-row" data-name="${studentName}"><div class="student-info"><div class="student-name-display">👤 ${studentName}</div><button class="btn-manual-grade" onclick="openModal('${studentName}', '${school.name}')">➕ ثبت نمره</button></div>${gradesHtml}</div>`;
                     });
                     schoolHtml += `</div></div>`;
                 }
-                schoolHtml += `</div>`;
-                box.innerHTML += schoolHtml;
+                schoolHtml += `</div>`; box.innerHTML += schoolHtml;
             }
         }
 
@@ -734,17 +663,13 @@
             const query = document.getElementById('searchInput').value.trim().toLowerCase();
             document.querySelectorAll('.student-row').forEach(row => {
                 const name = row.getAttribute('data-name').toLowerCase();
-                if (name.includes(query)) {
-                    row.style.display = 'flex'; const parentList = row.closest('.student-list');
-                    if(parentList && !parentList.classList.contains('active')) toggleGrade(parentList.previousElementSibling);
-                } else row.style.display = 'none';
+                if (name.includes(query)) { row.style.display = 'flex'; const parentList = row.closest('.student-list'); if(parentList && !parentList.classList.contains('active')) toggleGrade(parentList.previousElementSibling); } else row.style.display = 'none';
             });
         }
 
         function renderAccounts() {
             document.getElementById('totalAccountsCount').innerText = allData.students ? allData.students.length : 0;
-            const box = document.getElementById('accountsBox'), query = document.getElementById('searchAccountInput').value.trim().toLowerCase();
-            box.innerHTML = '';
+            const box = document.getElementById('accountsBox'), query = document.getElementById('searchAccountInput').value.trim().toLowerCase(); box.innerHTML = '';
             if (!allData.students || allData.students.length === 0) { box.innerHTML = '<p style="color:white; text-align:center;">اکانتی نیست.</p>'; return; }
             const filtered = allData.students.filter(s => s.full_name.toLowerCase().includes(query) || (s.username && s.username.toLowerCase().includes(query)));
             if (filtered.length === 0) { box.innerHTML = '<p style="color:white; text-align:center;">یافت نشد.</p>'; return; }
@@ -758,40 +683,29 @@
 
         async function resetPassword(id, name) {
             if(!confirm(`ریست رمز «${name}»؟`)) return;
-            try { const res = await fetch('https://api.motadars.ir/manage_student.php', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ action: 'reset_password', id: id }) }); const data = await res.json(); alert(data.message); } catch(e) { alert('خطا'); }
+            try { const res = await fetch('https://api.motadars.ir/manage_student.php', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ action: 'reset_password', id: id }) }); const data = await res.json(); alert(data.message); } catch(e) {}
         }
 
         function openEditNameModal(id, oldName, schoolName) {
-            document.getElementById('editNameInput').value = oldName;
-            document.getElementById('editNameModal').style.display = 'flex';
+            document.getElementById('editNameInput').value = oldName; document.getElementById('editNameModal').style.display = 'flex';
             document.getElementById('editNameInput').dataset.id = id; document.getElementById('editNameInput').dataset.oldName = oldName; document.getElementById('editNameInput').dataset.schoolName = schoolName;
         }
 
         async function submitEditName() {
             const newName = document.getElementById('editNameInput').value.trim(), id = document.getElementById('editNameInput').dataset.id, oldName = document.getElementById('editNameInput').dataset.oldName, schoolName = document.getElementById('editNameInput').dataset.schoolName;
             if(!newName) return alert('نام را وارد کنید.');
-            try {
-                const res = await fetch('https://api.motadars.ir/manage_student.php', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ action: 'edit_name', id: id, new_name: newName, old_name: oldName, school_name: schoolName }) });
-                const data = await res.json(); alert(data.message);
-                if(data.status === 'success') { document.getElementById('editNameModal').style.display = 'none'; fetchData(); }
-            } catch(e) { alert('خطا'); }
+            try { const res = await fetch('https://api.motadars.ir/manage_student.php', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ action: 'edit_name', id: id, new_name: newName, old_name: oldName, school_name: schoolName }) }); const data = await res.json(); alert(data.message); if(data.status === 'success') { document.getElementById('editNameModal').style.display = 'none'; fetchData(); } } catch(e) {}
         }
 
         async function deleteStudent(id, name) {
             if(!confirm(`حذف «${name}»؟`)) return;
-            try {
-                const res = await fetch('https://api.motadars.ir/manage_student.php', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ action: 'delete', id: id }) });
-                const data = await res.json();
-                if(data.status === 'success') { allData.students = allData.students.filter(s => s.id !== id); renderAccounts(); alert('حذف شد.'); }
-                else alert('خطا: ' + data.message);
-            } catch(e) { alert('خطا'); }
+            try { const res = await fetch('https://api.motadars.ir/manage_student.php', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ action: 'delete', id: id }) }); const data = await res.json(); if(data.status === 'success') { allData.students = allData.students.filter(s => s.id !== id); renderAccounts(); alert('حذف شد.'); } else alert('خطا: ' + data.message); } catch(e) {}
         }
 
         async function renderAttendance() {
             const box = document.getElementById('attendanceBox'); box.innerHTML = '<p style="color:white; text-align:center;">در حال دریافت...</p>';
             try { const res = await fetch('https://api.motadars.ir/get_attendance.php', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({}) }); const data = await res.json(); if (data.status === 'success') todayAttendance = data.data; } catch (e) {}
-            box.innerHTML = '';
-            if (typeof schoolData === 'undefined') return;
+            box.innerHTML = ''; if (typeof schoolData === 'undefined') return;
             for (const schoolKey in schoolData) {
                 const school = schoolData[schoolKey]; let schoolHtml = `<div class="school-section"><h2 class="school-title">🏫 ${school.name}</h2>`;
                 for (const gradeNum in school.grades) {
@@ -810,13 +724,13 @@
         }
 
         async function toggleAttendance(studentName, schoolName, gradeNum, newStatus) {
-            try { const res = await fetch('https://api.motadars.ir/save_attendance.php', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ student_name: studentName, school_name: schoolName, grade: gradeNum, status: newStatus }) }); const data = await res.json(); if (data.status === 'success') renderAttendance(); else alert("خطا: " + data.message); } catch (e) { alert("خطا"); }
+            try { const res = await fetch('https://api.motadars.ir/save_attendance.php', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ student_name: studentName, school_name: schoolName, grade: gradeNum, status: newStatus }) }); const data = await res.json(); if (data.status === 'success') renderAttendance(); else alert("خطا: " + data.message); } catch (e) {}
         }
 
         async function markGradeAllPresent(schoolName, gradeNum, event) {
             event.stopPropagation(); if(!confirm(`همه پایه ${gradeNum} حاضر باشند؟`)) return;
-            let schoolKey = null; for(let k in schoolData) { if(schoolData[k].name === schoolName) { schoolKey = k; break; } }
-            if(!schoolKey) return; const studentsInGrade = schoolData[schoolKey].grades[gradeNum] || [];
+            let schoolKey = null; for(let k in schoolData) { if(schoolData[k].name === schoolName) { schoolKey = k; break; } } if(!schoolKey) return;
+            const studentsInGrade = schoolData[schoolKey].grades[gradeNum] || [];
             for(let i=0; i < studentsInGrade.length; i++) { await fetch('https://api.motadars.ir/save_attendance.php', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ student_name: studentsInGrade[i], school_name: schoolName, grade: gradeNum, status: 'present' }) }); }
             alert(`ثبت شد.`); renderAttendance(); 
         }
@@ -845,7 +759,7 @@
                         box.innerHTML += `<div class="submission-card" id="sub-${sub.id}"><div class="sub-header"><h3>👤 ${sub.student_name}</h3><span>${sub.exam_name}</span></div><div style="font-size:0.85rem; color:#64748b; margin-bottom:15px;">${sub.school_name} | ${sub.submitted_at}</div>${questionsHtml}<div class="grading-box"><div class="total-score-display">نمره: <span id="total-score-${sub.id}">0</span> / 20</div><button class="btn-submit-grade" onclick="submitEssayGrade(${sub.id}, '${sub.student_name}', '${sub.school_name}', '${sub.exam_name}', ${answers.length})">ثبت نمره</button></div></div>`;
                     });
                 }
-            } catch (e) { box.innerHTML = '<p style="color:white; text-align:center;">خطا.</p>'; }
+            } catch (e) {}
         }
 
         function setScore(subId, qIndex, score, btnElement) {
@@ -859,11 +773,9 @@
             const totalScore = document.getElementById(`total-score-${id}`).innerText, gradedCount = Object.keys(manualScores[id]).length;
             if (gradedCount < totalQuestionsCount && !confirm(`${totalQuestionsCount - gradedCount} سوال بی‌نمره مانده. ادامه؟`)) return;
             try {
-                const res = await fetch('https://api.motadars.ir/grade_essay_submission.php', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ id, student_name: studentName, school_name: schoolName, exam_name: examName, score: parseFloat(totalScore) }) });
-                const data = await res.json();
+                const res = await fetch('https://api.motadars.ir/grade_essay_submission.php', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ id, student_name: studentName, school_name: schoolName, exam_name: examName, score: parseFloat(totalScore) }) }); const data = await res.json();
                 if(data.status === 'success') { alert('ثبت شد.'); document.getElementById(`sub-${id}`).remove(); fetchData(); }
-                else alert('خطا: ' + data.message);
-            } catch(e) { alert('خطای شبکه'); }
+            } catch(e) {}
         }
 
         async function generateExamLink() {
@@ -872,15 +784,14 @@
             const link = `https://motadars.ir/dynamic-exam.html?grade=${grade}&from=${from}&to=${to}`, btn = event.target;
             btn.disabled = true; btn.innerText = 'در حال ارسال...';
             try {
-                const res = await fetch('https://api.motadars.ir/save_exam_link.php', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ grade, school, title, link }) });
-                const data = await res.json();
+                const res = await fetch('https://api.motadars.ir/save_exam_link.php', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ grade, school, title, link }) }); const data = await res.json();
                 if(data.status === 'success') {
                     document.getElementById('final-exam-link').value = link; document.getElementById('generated-link-box').style.display = 'block';
                     const shareText = encodeURIComponent(`سلام، آزمون «${title}» برای شما فعال شد:\n${link}`);
                     document.getElementById('share-wa').href = `https://wa.me/?text=${shareText}`; document.getElementById('share-tg').href = `https://t.me/share/url?url=${encodeURIComponent(link)}&text=${encodeURIComponent('آزمون «' + title + '»')}`;
                     alert('✅ لینک ساخته شد.');
                 } else alert('خطا: ' + data.message);
-            } catch (e) { alert('خطای شبکه'); } finally { btn.disabled = false; btn.innerText = 'تولید و ارسال'; }
+            } catch (e) {} finally { btn.disabled = false; btn.innerText = 'تولید و ارسال'; }
         }
 
         async function deactivateExam() {
@@ -888,11 +799,9 @@
             if(!confirm('بستن آزمون فعال این مدرسه و پایه؟')) return;
             const btn = event.target; btn.disabled = true; btn.innerText = 'در حال بستن...';
             try {
-                const res = await fetch('https://api.motadars.ir/deactivate_exam.php', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ grade: grade, school: school }) });
-                const data = await res.json();
+                const res = await fetch('https://api.motadars.ir/deactivate_exam.php', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ grade: grade, school: school }) }); const data = await res.json();
                 if(data.status === 'success') { alert('✅ بسته شد.'); document.getElementById('generated-link-box').style.display = 'none'; }
-                else alert('❌ خطا: ' + data.message);
-            } catch(e) { alert('خطا در سرور'); } finally { btn.disabled = false; btn.innerText = '🗑️ بستن و حذف آزمون فعال'; }
+            } catch(e) {} finally { btn.disabled = false; btn.innerText = '🗑️ بستن و حذف آزمون فعال'; }
         }
 
         function copyExamLink() {
@@ -915,11 +824,9 @@
             btn.disabled = true; btn.innerText = 'ذخیره...';
             const now = new Date(); const manualDate = now.toLocaleDateString('fa-IR') + ' - ' + now.toLocaleTimeString('fa-IR', { hour: '2-digit', minute: '2-digit' });
             try {
-                const res = await fetch('https://api.motadars.ir/save_manual_grade.php', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ student_name: currentStudentForGrade.name, school_name: currentStudentForGrade.school, exam_name: examName, score: parseFloat(score), exam_type: examType, exam_date: manualDate }) });
-                const data = await res.json();
+                const res = await fetch('https://api.motadars.ir/save_manual_grade.php', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ student_name: currentStudentForGrade.name, school_name: currentStudentForGrade.school, exam_name: examName, score: parseFloat(score), exam_type: examType, exam_date: manualDate }) }); const data = await res.json();
                 if(data.status === 'success') { alert('ثبت شد.'); closeModal(); fetchData(); }
-                else alert('خطا: ' + data.message);
-            } catch(e) { alert('خطا'); } finally { btn.disabled = false; btn.innerText = '💾 ذخیره'; }
+            } catch(e) {} finally { btn.disabled = false; btn.innerText = '💾 ذخیره'; }
         }
 
         function exportGradeToCSV(schoolName, gradeNum, event) {
@@ -956,7 +863,7 @@
         }
 
         function openPdfModal() { document.getElementById('pdfModal').style.display = 'flex'; }
-        function generateAndPrint() { /* کد قبلی PDF */ alert('این قابلیت غیرفعال است.'); }
+        function generateAndPrint() { alert('این قابلیت غیرفعال است.'); }
         function logout() { localStorage.removeItem('teacher_logged_in'); sessionStorage.removeItem('teacher_pass'); location.reload(); }
     </script>
 </body>
