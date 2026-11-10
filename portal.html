@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>پرتال معلمان | مدرّس</title>
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
+<style>
+  :root {
+    --primary: #1e40af;
+    --primary-hover: #1e3a8a;
+    --bg: #f0f4f8;
+    --card: #ffffff;
+    --text: #1e293b;
+    --text-muted: #64748b;
+    --border: #cbd5e1;
+    --success: #16a34a;
+    --error: #dc2626;
+  }
+  
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  
+  body {
+    font-family: Vazirmatn, Tahoma, sans-serif;
+    background-color: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ===== Utilities ===== */
+  .hidden { display: none !important; }
+  .container { max-width: 600px; margin: 0 auto; padding: 16px; width: 100%; }
+  
+  /* ===== Header ===== */
+  .app-header {
+    background: var(--primary);
+    color: white;
+    padding: 16px;
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: bold;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+
+  /* ===== Cards & Forms ===== */
+  .card {
+    background: var(--card);
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+    margin-top: 20px;
+  }
+
+  .form-group { margin-bottom: 16px; }
+  .form-group label {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+  }
+  
+  .form-control {
+    width: 100%;
+    padding: 12px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 1rem;
+    background: #f8fafc;
+    transition: all 0.2s;
+  }
+  .form-control:focus {
+    outline: none;
+    border-color: var(--primary);
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.1);
+  }
+
+  .btn {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .btn-primary { background: var(--primary); color: white; }
+  .btn-primary:hover { background: var(--primary-hover); }
+  .btn-danger { background: #fee2e2; color: var(--error); }
+  .btn-danger:hover { background: #fecaca; }
+
+  /* ===== Tabs (Auth) ===== */
+  .auth-tabs {
+    display: flex;
+    margin-bottom: 24px;
+    border-bottom: 2px solid var(--border);
+  }
+  .auth-tab {
+    flex: 1;
+    text-align: center;
+    padding: 12px;
+    cursor: pointer;
+    font-weight: bold;
+    color: var(--text-muted);
+    border-bottom: 3px solid transparent;
+    margin-bottom: -2px;
+  }
+  .auth-tab.active {
+    color: var(--primary);
+    border-bottom-color: var(--primary);
+  }
+
+  /* ===== Dashboard ===== */
+  .user-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: white;
+    padding: 16px;
+    border-radius: 12px;
+    margin-top: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  }
+  .credits-badge {
+    background: #dcfce7;
+    color: var(--success);
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 0.9rem;
+  }
+  .dashboard-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin: 24px 0 12px;
+    color: var(--text);
+  }
+
+  .alert {
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 16px;
+    font-size: 0.9rem;
+    display: none;
+  }
+  .alert-error { background: #fee2e2; color: var(--error); border: 1px solid #fecaca; }
+  .alert-success { background: #dcfce7; color: var(--success); border: 1px solid #bbf7d0; }
+
+  .exam-modes {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+  }
+  .exam-modes .btn { flex: 1; }
+</style>
+</head>
+<body>
+
+<div class="app-header">پرتال معلمان مدرّس</div>
+
+<div class="container" id="loading-screen">
+  <div style="text-align: center; padding: 40px;">در حال بارگذاری...</div>
+</div>
+
+<!-- ================= صفحه ورود و ثبت‌نام ================= -->
+<div class="container hidden" id="auth-screen">
+  <div class="card">
+    
+    <div class="auth-tabs">
+      <div class="auth-tab active" id="tab-login" onclick="switchAuthTab('login')">ورود</div>
+      <div class="auth-tab" id="tab-register" onclick="switchAuthTab('register')">ثبت‌نام</div>
+    </div>
+
+    <div class="alert alert-error" id="auth-error"></div>
+
+    <!-- فرم ورود -->
+    <form id="form-login" onsubmit="handleLogin(event)">
+      <div class="form-group">
+        <label>شماره موبایل</label>
+        <input type="tel" class="form-control" id="login-username" placeholder="09123456789" required>
+      </div>
+      <div class="form-group">
+        <label>رمز عبور</label>
+        <input type="password" class="form-control" id="login-password" placeholder="••••••" required>
+      </div>
+      <button type="submit" class="btn btn-primary" id="btn-login">ورود به حساب</button>
+    </form>
+
+    <!-- فرم ثبت‌نام -->
+    <form id="form-register" class="hidden" onsubmit="handleRegister(event)">
+      <div class="form-group">
+        <label>نام و نام خانوادگی</label>
+        <input type="text" class="form-control" id="reg-fullname" required>
+      </div>
+      <div class="form-group">
+        <label>نام مدرسه</label>
+        <input type="text" class="form-control" id="reg-school" required>
+      </div>
+      <div class="form-group">
+        <label>درس تدریس</label>
+        <input type="text" class="form-control" id="reg-subject" required>
+      </div>
+      <div class="form-group">
+        <label>شماره موبایل</label>
+        <input type="tel" class="form-control" id="reg-username" placeholder="09123456789" required>
+      </div>
+      <div class="form-group">
+        <label>رمز عبور (حداقل ۶ کاراکتر)</label>
+        <input type="password" class="form-control" id="reg-password" required>
+      </div>
+      <button type="submit" class="btn btn-primary" id="btn-register">ثبت‌نام و ورود</button>
+    </form>
+
+  </div>
+</div>
+
+<!-- ================= داشبورد ================= -->
+<div class="container hidden" id="dashboard-screen">
+  
+  <div class="user-info">
+    <div>
+      <strong id="dash-name">نام معلم</strong><br>
+      <span style="font-size: 0.85rem; color: var(--text-muted);" id="dash-school">مدرسه</span>
+    </div>
+    <div class="credits-badge">
+      اعتبار: <span id="dash-credits">0</span> آزمون
+    </div>
+  </div>
+
+  <div class="dashboard-title">ساخت آزمون جدید</div>
+  
+  <div class="card">
+    <div class="alert alert-error" id="exam-error"></div>
+    
+    <form id="form-exam" onsubmit="handleCreateExam(event)">
+      <div class="form-group">
+        <label>نام اداره آموزش و پرورش</label>
+        <input type="text" class="form-control" id="exam-admin" placeholder="مثلاً: اداره کل آموزش و پرورش تهران" required>
+      </div>
+      <div class="form-group">
+        <label>نام مدرسه</label>
+        <input type="text" class="form-control" id="exam-school" required>
+      </div>
+      <div class="form-group">
+        <label>نام درس</label>
+        <input type="text" class="form-control" id="exam-subject" required>
+      </div>
+      <div class="form-group">
+        <label>نام معلم (برای درج روی سربرگ)</label>
+        <input type="text" class="form-control" id="exam-teacher-name" required>
+      </div>
+      <div class="form-group">
+        <label>مدت زمان امتحان (دقیقه)</label>
+        <input type="number" class="form-control" id="exam-duration" value="60" min="10" required>
+      </div>
+
+      <div class="exam-modes">
+        <button type="button" class="btn btn-primary" onclick="generateExam('pdf')">دریافت PDF</button>
+        <button type="button" class="btn btn-primary" onclick="generateExam('online')" style="background: var(--success);">ساخت لینک آنلاین</button>
+      </div>
+    </form>
+  </div>
+
+  <div style="margin-top: 24px; margin-bottom: 40px;">
+    <button class="btn btn-danger" onclick="handleLogout()">خروج از حساب</button>
+  </div>
+</div>
+
+<script>
+  const API_BASE = 'https://api.motadars.ir';
+  let currentTeacher = null;
+
+  // ===== ابزارهای کمکی =====
+  function showScreen(screenId) {
+    document.getElementById('loading-screen').classList.add('hidden');
+    document.getElementById('auth-screen').classList.add('hidden');
+    document.getElementById('dashboard-screen').classList.add('hidden');
+    document.getElementById(screenId).classList.remove('hidden');
+  }
+
+  function showError(elementId, message) {
+    const el = document.getElementById(elementId);
+    el.textContent = message;
+    el.style.display = 'block';
+    setTimeout(() => el.style.display = 'none', 5000);
+  }
+
+  // ===== احراز هویت =====
+  function switchAuthTab(tab) {
+    document.getElementById('tab-login').classList.toggle('active', tab === 'login');
+    document.getElementById('tab-register').classList.toggle('active', tab === 'register');
+    document.getElementById('form-login').classList.toggle('hidden', tab !== 'login');
+    document.getElementById('form-register').classList.toggle('hidden', tab !== 'register');
+  }
+
+  async function handleLogin(e) {
+    e.preventDefault();
+    const btn = document.getElementById('btn-login');
+    btn.disabled = true; btn.textContent = 'در حال ورود...';
+    
+    try {
+      const res = await fetch(`${API_BASE}/login_teacher.php`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          username: document.getElementById('login-username').value,
+          password: document.getElementById('login-password').value
+        })
+      });
+      const data = await res.json();
+      
+      if (res.ok && data.ok) {
+        localStorage.setItem('teacher_token', data.token);
+        onAuthSuccess(data.teacher);
+      } else {
+        showError('auth-error', data.message || 'خطا در ورود');
+      }
+    } catch (err) {
+      showError('auth-error', 'خطای شبکه. اینترنت را بررسی کنید.');
+    } finally {
+      btn.disabled = false; btn.textContent = 'ورود به حساب';
+    }
+  }
+
+  async function handleRegister(e) {
+    e.preventDefault();
+    const btn = document.getElementById('btn-register');
+    btn.disabled = true; btn.textContent = 'در حال ثبت‌نام...';
+    
+    try {
+      const res = await fetch(`${API_BASE}/register_teacher.php`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          full_name: document.getElementById('reg-fullname').value,
+          school_name: document.getElementById('reg-school').value,
+          subject: document.getElementById('reg-subject').value,
+          username: document.getElementById('reg-username').value,
+          password: document.getElementById('reg-password').value
+        })
+      });
+      const data = await res.json();
+      
+      if (res.ok && data.ok) {
+        localStorage.setItem('teacher_token', data.token);
+        onAuthSuccess(data.teacher);
+      } else {
+        showError('auth-error', data.message || 'خطا در ثبت‌نام');
+      }
+    } catch (err) {
+      showError('auth-error', 'خطای شبکه. اینترنت را بررسی کنید.');
+    } finally {
+      btn.disabled = false; btn.textContent = 'ثبت‌نام و ورود';
+    }
+  }
+
+  function onAuthSuccess(teacher) {
+    currentTeacher = teacher;
+    document.getElementById('dash-name').textContent = teacher.full_name;
+    document.getElementById('dash-school').textContent = teacher.school_name;
+    document.getElementById('dash-credits').textContent = teacher.credits;
+    
+    // پر کردن خودکار فیلدهای آزمون با اطلاعات معلم
+    document.getElementById('exam-school').value = teacher.school_name || '';
+    document.getElementById('exam-subject').value = teacher.subject || '';
+    document.getElementById('exam-teacher-name').value = teacher.full_name || '';
+    
+    showScreen('dashboard-screen');
+  }
+
+  function handleLogout() {
+    localStorage.removeItem('teacher_token');
+    currentTeacher = null;
+    document.getElementById('form-login').reset();
+    showScreen('auth-screen');
+    switchAuthTab('login');
+  }
+
+  // ===== ساخت آزمون (فعلاً فقط UI) =====
+  function generateExam(mode) {
+    // اینجا بعداً به API پرداخت و ساخت آزمون وصل می‌شود
+    if (currentTeacher.credits <= 0) {
+      showError('exam-error', 'اعتبار شما کافی نیست. لطفاً ابتدا اعتبار خریداری کنید.');
+      return;
+    }
+    alert(`حالت ${mode === 'pdf' ? 'PDF' : 'آنلاین'} انتخاب شد.\n(در مرحله بعد اینجا به درگاه پرداخت و تولید آزمون متصل می‌شود)`);
+  }
+
+  // ===== بررسی وضعیت ورود در بارگذاری صفحه =====
+  async function checkAuth() {
+    const token = localStorage.getItem('teacher_token');
+    if (!token) {
+      showScreen('auth-screen');
+      return;
+    }
+
+    try {
+      const res = await fetch(`${API_BASE}/me.php`, {
+        headers: { 'X-Teacher-Token': token }
+      });
+      const data = await res.json();
+      
+      if (res.ok && data.ok) {
+        onAuthSuccess(data.teacher);
+      } else {
+        localStorage.removeItem('teacher_token');
+        showScreen('auth-screen');
+      }
+    } catch (err) {
+      showScreen('auth-screen'); // در صورت قطعی اینترنت، بفرست به لاگین
+    }
+  }
+
+  // اجرای اولیه
+  document.addEventListener('DOMContentLoaded', checkAuth);
+</script>
+</body>
+</html>
