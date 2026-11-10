@@ -15,7 +15,11 @@
     --text-muted: #64748b;
     --border: #cbd5e1;
     --success: #16a34a;
+    --success-bg: #dcfce7;
     --error: #dc2626;
+    --error-bg: #fee2e2;
+    --warning: #d97706;
+    --warning-bg: #fef3c7;
   }
   
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -30,11 +34,9 @@
     flex-direction: column;
   }
 
-  /* ===== Utilities ===== */
   .hidden { display: none !important; }
   .container { max-width: 600px; margin: 0 auto; padding: 16px; width: 100%; }
   
-  /* ===== Header ===== */
   .app-header {
     background: var(--primary);
     color: white;
@@ -45,7 +47,6 @@
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   }
 
-  /* ===== Cards & Forms ===== */
   .card {
     background: var(--card);
     border-radius: 12px;
@@ -79,6 +80,11 @@
     background: #fff;
     box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.1);
   }
+  .form-control[readonly] {
+    background: #e2e8f0;
+    color: #475569;
+    cursor: not-allowed;
+  }
 
   .btn {
     width: 100%;
@@ -91,12 +97,14 @@
     cursor: pointer;
     transition: background 0.2s;
   }
+  .btn:disabled { opacity: 0.7; cursor: not-allowed; }
   .btn-primary { background: var(--primary); color: white; }
-  .btn-primary:hover { background: var(--primary-hover); }
-  .btn-danger { background: #fee2e2; color: var(--error); }
+  .btn-primary:hover:not(:disabled) { background: var(--primary-hover); }
+  .btn-success { background: var(--success); color: white; }
+  .btn-success:hover:not(:disabled) { background: #15803d; }
+  .btn-danger { background: var(--error-bg); color: var(--error); }
   .btn-danger:hover { background: #fecaca; }
 
-  /* ===== Tabs (Auth) ===== */
   .auth-tabs {
     display: flex;
     margin-bottom: 24px;
@@ -117,7 +125,6 @@
     border-bottom-color: var(--primary);
   }
 
-  /* ===== Dashboard ===== */
   .user-info {
     display: flex;
     justify-content: space-between;
@@ -129,18 +136,22 @@
     box-shadow: 0 2px 4px rgba(0,0,0,0.05);
   }
   .credits-badge {
-    background: #dcfce7;
+    background: var(--success-bg);
     color: var(--success);
-    padding: 6px 12px;
+    padding: 8px 16px;
     border-radius: 20px;
     font-weight: bold;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
+    border: 1px solid #bbf7d0;
   }
   .dashboard-title {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     font-weight: bold;
     margin: 24px 0 12px;
     color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 8px;
   }
 
   .alert {
@@ -149,16 +160,43 @@
     margin-bottom: 16px;
     font-size: 0.9rem;
     display: none;
+    line-height: 1.5;
   }
-  .alert-error { background: #fee2e2; color: var(--error); border: 1px solid #fecaca; }
-  .alert-success { background: #dcfce7; color: var(--success); border: 1px solid #bbf7d0; }
+  .alert-error { background: var(--error-bg); color: var(--error); border: 1px solid #fecaca; }
+  .alert-success { background: var(--success-bg); color: var(--success); border: 1px solid #bbf7d0; }
+  .alert-warning { background: var(--warning-bg); color: var(--warning); border: 1px solid #fde68a; }
 
   .exam-modes {
     display: flex;
     gap: 12px;
-    margin-top: 20px;
+    margin-top: 24px;
   }
   .exam-modes .btn { flex: 1; }
+
+  /* استایل کادر نمایش لینک آنلاین */
+  .link-box {
+    margin-top: 16px;
+    padding: 16px;
+    background: #f8fafc;
+    border: 1px dashed var(--primary);
+    border-radius: 8px;
+    text-align: center;
+  }
+  .link-box a {
+    display: block;
+    color: var(--primary);
+    font-weight: bold;
+    word-break: break-all;
+    margin: 8px 0;
+    text-decoration: none;
+    direction: ltr;
+  }
+  .link-box button {
+    width: auto;
+    padding: 8px 16px;
+    font-size: 0.9rem;
+    margin-top: 8px;
+  }
 </style>
 </head>
 <body>
@@ -166,7 +204,7 @@
 <div class="app-header">پرتال معلمان مدرّس</div>
 
 <div class="container" id="loading-screen">
-  <div style="text-align: center; padding: 40px;">در حال بارگذاری...</div>
+  <div style="text-align: center; padding: 40px; color: var(--text-muted);">در حال بارگذاری...</div>
 </div>
 
 <!-- ================= صفحه ورود و ثبت‌نام ================= -->
@@ -205,7 +243,7 @@
       </div>
       <div class="form-group">
         <label>درس تدریس</label>
-        <input type="text" class="form-control" id="reg-subject" required>
+        <input type="text" class="form-control" id="reg-subject" value="مطالعات اجتماعی" required>
       </div>
       <div class="form-group">
         <label>شماره موبایل</label>
@@ -234,12 +272,15 @@
     </div>
   </div>
 
-  <div class="dashboard-title">ساخت آزمون جدید</div>
+  <div class="dashboard-title">
+    <span>📝</span> ساخت آزمون جدید
+  </div>
   
   <div class="card">
     <div class="alert alert-error" id="exam-error"></div>
+    <div class="alert alert-success" id="exam-success"></div>
     
-    <form id="form-exam" onsubmit="handleCreateExam(event)">
+    <form id="form-exam" onsubmit="event.preventDefault()">
       <div class="form-group">
         <label>نام اداره آموزش و پرورش</label>
         <input type="text" class="form-control" id="exam-admin" placeholder="مثلاً: اداره کل آموزش و پرورش تهران" required>
@@ -250,7 +291,8 @@
       </div>
       <div class="form-group">
         <label>نام درس</label>
-        <input type="text" class="form-control" id="exam-subject" required>
+        <!-- نام درس به صورت پیش‌فرض مطالعات اجتماعی تنظیم شد -->
+        <input type="text" class="form-control" id="exam-subject" value="مطالعات اجتماعی" required>
       </div>
       <div class="form-group">
         <label>نام معلم (برای درج روی سربرگ)</label>
@@ -262,10 +304,17 @@
       </div>
 
       <div class="exam-modes">
-        <button type="button" class="btn btn-primary" onclick="generateExam('pdf')">دریافت PDF</button>
-        <button type="button" class="btn btn-primary" onclick="generateExam('online')" style="background: var(--success);">ساخت لینک آنلاین</button>
+        <button type="button" class="btn btn-primary" id="btn-pdf" onclick="generateExam('pdf')">دریافت PDF</button>
+        <button type="button" class="btn btn-success" id="btn-online" onclick="generateExam('online')">ساخت لینک آنلاین</button>
       </div>
     </form>
+
+    <!-- کادر نمایش لینک ساخته شده -->
+    <div class="link-box hidden" id="link-box">
+      <p style="font-size: 0.9rem; color: var(--text-muted);">لینک آزمون آنلاین شما آماده شد:</p>
+      <a href="#" id="exam-link-text" target="_blank"></a>
+      <button class="btn btn-primary" onclick="copyLink()">کپی کردن لینک</button>
+    </div>
   </div>
 
   <div style="margin-top: 24px; margin-bottom: 40px;">
@@ -285,11 +334,18 @@
     document.getElementById(screenId).classList.remove('hidden');
   }
 
-  function showError(elementId, message) {
+  function showAlert(elementId, message, type = 'error') {
     const el = document.getElementById(elementId);
     el.textContent = message;
     el.style.display = 'block';
-    setTimeout(() => el.style.display = 'none', 5000);
+    if (type === 'error') {
+        setTimeout(() => el.style.display = 'none', 6000);
+    }
+  }
+
+  function hideAlerts() {
+    document.getElementById('exam-error').style.display = 'none';
+    document.getElementById('exam-success').style.display = 'none';
   }
 
   // ===== احراز هویت =====
@@ -298,6 +354,7 @@
     document.getElementById('tab-register').classList.toggle('active', tab === 'register');
     document.getElementById('form-login').classList.toggle('hidden', tab !== 'login');
     document.getElementById('form-register').classList.toggle('hidden', tab !== 'register');
+    document.getElementById('auth-error').style.display = 'none';
   }
 
   async function handleLogin(e) {
@@ -320,10 +377,10 @@
         localStorage.setItem('teacher_token', data.token);
         onAuthSuccess(data.teacher);
       } else {
-        showError('auth-error', data.message || 'خطا در ورود');
+        showAlert('auth-error', data.message || 'خطا در ورود');
       }
     } catch (err) {
-      showError('auth-error', 'خطای شبکه. اینترنت را بررسی کنید.');
+      showAlert('auth-error', 'خطای شبکه. اینترنت را بررسی کنید.');
     } finally {
       btn.disabled = false; btn.textContent = 'ورود به حساب';
     }
@@ -352,10 +409,10 @@
         localStorage.setItem('teacher_token', data.token);
         onAuthSuccess(data.teacher);
       } else {
-        showError('auth-error', data.message || 'خطا در ثبت‌نام');
+        showAlert('auth-error', data.message || 'خطا در ثبت‌نام');
       }
     } catch (err) {
-      showError('auth-error', 'خطای شبکه. اینترنت را بررسی کنید.');
+      showAlert('auth-error', 'خطای شبکه. اینترنت را بررسی کنید.');
     } finally {
       btn.disabled = false; btn.textContent = 'ثبت‌نام و ورود';
     }
@@ -369,9 +426,14 @@
     
     // پر کردن خودکار فیلدهای آزمون با اطلاعات معلم
     document.getElementById('exam-school').value = teacher.school_name || '';
-    document.getElementById('exam-subject').value = teacher.subject || '';
+    // نام درس به صورت پیش‌فرض مطالعات اجتماعی تنظیم شد
+    document.getElementById('exam-subject').value = 'مطالعات اجتماعی';
     document.getElementById('exam-teacher-name').value = teacher.full_name || '';
     
+    // مخفی کردن کادر لینک در صورت وجود از قبل
+    document.getElementById('link-box').classList.add('hidden');
+    hideAlerts();
+
     showScreen('dashboard-screen');
   }
 
@@ -383,14 +445,85 @@
     switchAuthTab('login');
   }
 
-  // ===== ساخت آزمون (فعلاً فقط UI) =====
-  function generateExam(mode) {
-    // اینجا بعداً به API پرداخت و ساخت آزمون وصل می‌شود
+  // ===== ساخت آزمون =====
+  async function generateExam(mode) {
     if (currentTeacher.credits <= 0) {
-      showError('exam-error', 'اعتبار شما کافی نیست. لطفاً ابتدا اعتبار خریداری کنید.');
+      showAlert('exam-error', 'اعتبار شما کافی نیست. لطفاً ابتدا اعتبار خریداری کنید.');
       return;
     }
-    alert(`حالت ${mode === 'pdf' ? 'PDF' : 'آنلاین'} انتخاب شد.\n(در مرحله بعد اینجا به درگاه پرداخت و تولید آزمون متصل می‌شود)`);
+
+    // چک کردن خالی نبودن فیلدها
+    const admin = document.getElementById('exam-admin').value.trim();
+    if(!admin) {
+      showAlert('exam-error', 'لطفاً نام اداره آموزش و پرورش را وارد کنید.');
+      return;
+    }
+
+    hideAlerts();
+    document.getElementById('link-box').classList.add('hidden');
+
+    const activeBtn = mode === 'pdf' ? document.getElementById('btn-pdf') : document.getElementById('btn-online');
+    const originalText = activeBtn.textContent;
+    
+    document.getElementById('btn-pdf').disabled = true;
+    document.getElementById('btn-online').disabled = true;
+    activeBtn.textContent = 'در حال ساخت...';
+
+    try {
+      const res = await fetch(`${API_BASE}/create_exam.php`, {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json',
+          'X-Teacher-Token': localStorage.getItem('teacher_token')
+        },
+        body: JSON.stringify({
+          header_admin: admin,
+          header_school: document.getElementById('exam-school').value.trim(),
+          header_subject: document.getElementById('exam-subject').value.trim(),
+          header_teacher_name: document.getElementById('exam-teacher-name').value.trim(),
+          duration: parseInt(document.getElementById('exam-duration').value),
+          exam_type: mode
+        })
+      });
+      
+      const data = await res.json();
+      
+      if (res.ok && data.ok) {
+        // آپدیت اعتبار در صفحه
+        currentTeacher.credits = data.credits;
+        document.getElementById('dash-credits').textContent = data.credits;
+        
+        if (mode === 'online') {
+          showAlert('exam-success', 'آزمون با موفقیت ساخته شد!', 'success');
+          const linkBox = document.getElementById('link-box');
+          const linkText = document.getElementById('exam-link-text');
+          linkText.href = data.exam_link;
+          linkText.textContent = data.exam_link;
+          linkBox.classList.remove('hidden');
+          // اسکرول به کادر لینک
+          linkBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        } else {
+          showAlert('exam-success', 'اطلاعات ذخیره شد و ۱ اعتبار کسر گردید. (تولید PDF در مرحله بعد)', 'success');
+        }
+      } else {
+        showAlert('exam-error', data.message || 'خطا در ساخت آزمون');
+      }
+    } catch (err) {
+      showAlert('exam-error', 'خطای شبکه. اینترنت را بررسی کنید.');
+    } finally {
+      document.getElementById('btn-pdf').disabled = false;
+      document.getElementById('btn-online').disabled = false;
+      activeBtn.textContent = originalText;
+    }
+  }
+
+  function copyLink() {
+    const linkText = document.getElementById('exam-link-text').textContent;
+    navigator.clipboard.writeText(linkText).then(() => {
+      alert('لینک کپی شد!');
+    }).catch(() => {
+      alert('خطا در کپی کردن. لطفا دستی کپی کنید.');
+    });
   }
 
   // ===== بررسی وضعیت ورود در بارگذاری صفحه =====
