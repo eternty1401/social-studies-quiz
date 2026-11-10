@@ -223,7 +223,6 @@
                 <button class="tab-btn" id="tab-class" onclick="switchTab('class')">📚 نمرات</button>
                 <button class="tab-btn" id="tab-attendance" onclick="switchTab('attendance')">📋 حضور و غیاب</button>
                 <button class="tab-btn" id="tab-essay" onclick="switchTab('essay')">📝 تصحیح تشریحی</button>
-                <!-- اصلاح نام تب به examLinks -->
                 <button class="tab-btn" id="tab-examLinks" onclick="switchTab('examLinks')">📝 مدیریت آزمون‌ها</button>
                 <button class="tab-btn" id="tab-announcements" onclick="switchTab('announcements')">📢 اطلاع‌رسانی</button>
                 <button class="tab-btn" id="tab-messages" onclick="switchTab('messages')">💬 پیام‌ها</button>
@@ -367,7 +366,7 @@
         </div>
     </div>
 
-    <!-- Modal های قبلی -->
+    <!-- Modal های قبلی (نمره دستی، ویرایش نام، PDF) -->
     <div class="modal-overlay" id="manualGradeModal">
         <div class="modal-content">
             <h3 id="modalStudentName">ثبت نمره برای: ...</h3>
@@ -461,7 +460,6 @@
             } catch (e) { alert('خطا در ارتباط با سرور'); }
         }
 
-        // اصلاح اصلی اینجاست: نام تب به examLinks تغییر کرد
         function switchTab(tabName) {
             currentTab = tabName;
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
@@ -863,7 +861,244 @@
         }
 
         function openPdfModal() { document.getElementById('pdfModal').style.display = 'flex'; }
-        function generateAndPrint() { alert('این قابلیت غیرفعال است.'); }
+
+        // 👇 تابع تولید PDF (کامل و بدون مشکل) 👇
+        function generateAndPrint() {
+            const school = document.getElementById('pdf-school').value.trim() || '.....................';
+            const grade = document.getElementById('pdf-grade').value;
+            const duration = document.getElementById('pdf-duration').value || '50';
+            const fromLesson = parseInt(document.getElementById('pdf-from').value) || 1;
+            const toLesson = parseInt(document.getElementById('pdf-to').value) || 24;
+            const examType = document.getElementById('pdf-type') ? document.getElementById('pdf-type').value : 'mixed';
+
+            let questionBank = [];
+            if (grade === '7' && typeof grade7Questions !== 'undefined') questionBank = grade7Questions;
+            else if (grade === '8' && typeof grade8Questions !== 'undefined') questionBank = grade8Questions;
+            else if (grade === '9' && typeof grade9Questions !== 'undefined') questionBank = grade9Questions;
+            
+            if (questionBank.length === 0) {
+                alert('بانک سوالات برای این پایه یافت نشد.');
+                return;
+            }
+
+            let filteredQuestions = questionBank.filter(q => q.lesson >= fromLesson && q.lesson <= toLesson);
+            
+            if (filteredQuestions.length === 0) {
+                alert('سوالی در این بازه درسی یافت نشد.');
+                return;
+            }
+
+            filteredQuestions.sort(() => Math.random() - 0.5);
+
+            let selectedQuestions = [];
+            let currentScore = 0;
+
+            function addQ(type, maxCount) {
+                let pool = filteredQuestions.filter(q => q.type === type);
+                pool.sort(() => Math.random() - 0.5);
+                let count = 0;
+                for (let q of pool) {
+                    if (count >= maxCount) break;
+                    let qScore = (q.type === 'essay') ? 2 : 0.5;
+                    if (currentScore + qScore <= 20) {
+                        selectedQuestions.push({ ...q, score: qScore });
+                        currentScore += qScore;
+                        count++;
+                    }
+                }
+            }
+
+            addQ('truefalse', 4);
+            addQ('testi', 4);
+            addQ('jakhali', 4);
+            addQ('essay', 10); 
+
+            if (currentScore < 20) {
+                let remainingPool = filteredQuestions.filter(q => !selectedQuestions.includes(q));
+                remainingPool.sort(() => Math.random() - 0.5);
+                for (let q of remainingPool) {
+                    if (currentScore >= 20) break;
+                    let qScore = (q.type === 'essay') ? 2 : 0.5;
+                    if (currentScore + qScore <= 20) {
+                        selectedQuestions.push({ ...q, score: qScore });
+                        currentScore += qScore;
+                    }
+                }
+            }
+
+            if (currentScore < 20) {
+                alert(`متاسفانه با سوالات این بازه، نمره به ۲۰ نمی‌رسد (حداکثر ${currentScore}). لطفا بازه بیشتری انتخاب کنید.`);
+                return;
+            }
+
+            let truefalseQ = selectedQuestions.filter(q => q.type === 'truefalse');
+            let testiQ = selectedQuestions.filter(q => q.type === 'testi');
+            let jakhaliQ = selectedQuestions.filter(q => q.type === 'jakhali');
+            let essayQ = selectedQuestions.filter(q => q.type === 'essay');
+
+            let answerKeyHTML = '';
+            let pdfHTML = `
+                <div class="exam-pdf-page">
+                    <table class="exam-header-table">
+                        <tr><td colspan="3" class="exam-header-title">به نام خدای رنگین کمان</td></tr>
+                        <tr>
+                            <td style="width: 33%;">نام درس: مطالعات اجتماعی</td>
+                            <td style="width: 34%;">اداره آموزش و پرورش سیریک</td>
+                            <td style="width: 33%;">مدرسه ${school}</td>
+                        </tr>
+                        <tr>
+                            <td>پایه: ${grade === '7' ? 'هفتم' : grade === '8' ? 'هشتم' : 'نهم'}</td>
+                            <td>مدت امتحان: ${duration} دقیقه</td>
+                            <td>تاریخ امتحان: ..........................</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="text-align: right;">نام و نام خانوادگی دانش‌آموز: ......................................................</td>
+                            <td><b>طراح سوال: ابراهیم اسحقی</b></td>
+                        </tr>
+                    </table>
+
+                    <div class="exam-motto">«در سکوت سخت تلاش کن، بگذار موفقیتت صدای تو باشد» (امتحان از درس ${fromLesson} تا ${toLesson})</div>
+
+                    <table class="exam-main-table">
+                        <thead>
+                            <tr>
+                                <th class="col-row">ردیف</th>
+                                <th class="col-question">سوالات</th>
+                                <th class="col-score">بارم</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
+
+            const letters = ['الف', 'ب', 'ج', 'د', 'هـ', 'و', 'ز', 'ح', 'ط', 'ی', 'ک', 'ل', 'م', 'ن'];
+            let groupNum = 1;
+
+            if (truefalseQ.length > 0) {
+                pdfHTML += `<tr>
+                    <td class="col-row">${groupNum++}</td>
+                    <td class="col-question">
+                        <div class="q-group-title">الف) درست یا نادرست بودن عبارات زیر را مشخص کنید.</div>`;
+                
+                truefalseQ.forEach((q, i) => {
+                    let answerText = (q.answer === 0 || (Array.isArray(q.answer) && q.answer[0] === 0)) ? "صحیح" : "غلط";
+                    answerKeyHTML += `<tr><td>${letters[i]}</td><td>${answerText}</td></tr>`;
+                    
+                    pdfHTML += `
+                        <div class="sub-q">
+                            <div class="sub-q-label">${letters[i]})</div>
+                            <div class="sub-q-content">
+                                ${q.q}
+                                <span class="tf-inline">
+                                    <span class="option-item"><span class="opt-box"></span> صحیح</span>
+                                    <span class="option-item"><span class="opt-box"></span> غلط</span>
+                                </span>
+                            </div>
+                        </div>`;
+                });
+                pdfHTML += `</td><td class="col-score">${truefalseQ.length * 0.5}</td></tr>`;
+            }
+
+            if (testiQ.length > 0) {
+                pdfHTML += `<tr>
+                    <td class="col-row">${groupNum++}</td>
+                    <td class="col-question">
+                        <div class="q-group-title">ب) گزینه صحیح را انتخاب کنید.</div>`;
+                
+                testiQ.forEach((q, i) => {
+                    let correctIndex = Array.isArray(q.answer) ? q.answer[0] : q.answer;
+                    let answerText = q.options[correctIndex] || 'نامشخص';
+                    answerKeyHTML += `<tr><td>${letters[i]}</td><td>${answerText}</td></tr>`;
+
+                    pdfHTML += `
+                        <div class="sub-q" style="flex-direction: column;">
+                            <div style="display: flex; width: 100%;">
+                                <div class="sub-q-label">${letters[i]})</div>
+                                <div class="sub-q-content">${q.q}</div>
+                            </div>
+                            <div class="options-inline" style="padding-right: 25px;">
+                                ${q.options.map((opt, j) => `<span class="option-item"><span class="opt-box"></span> ${['الف', 'ب', 'ج', 'د'][j]}) ${opt}</span>`).join('')}
+                            </div>
+                        </div>`;
+                });
+                pdfHTML += `</td><td class="col-score">${testiQ.length * 0.5}</td></tr>`;
+            }
+
+            if (jakhaliQ.length > 0) {
+                pdfHTML += `<tr>
+                    <td class="col-row">${groupNum++}</td>
+                    <td class="col-question">
+                        <div class="q-group-title">ج) جاهای خالی را با کلمات مناسب پر کنید.</div>`;
+                
+                jakhaliQ.forEach((q, i) => {
+                    let answerText = Array.isArray(q.answer) ? q.answer.join(' / ') : q.answer;
+                    answerKeyHTML += `<tr><td>${letters[i]}</td><td>${answerText}</td></tr>`;
+
+                    pdfHTML += `
+                        <div class="sub-q">
+                            <div class="sub-q-label">${letters[i]})</div>
+                            <div class="sub-q-content">${q.q}</div>
+                        </div>`;
+                });
+                pdfHTML += `</td><td class="col-score">${jakhaliQ.length * 0.5}</td></tr>`;
+            }
+
+            if (essayQ.length > 0) {
+                pdfHTML += `<tr>
+                    <td class="col-row">${groupNum++}</td>
+                    <td class="col-question">
+                        <div class="q-group-title">د) به سوالات زیر پاسخ کامل دهید.</div>`;
+                
+                essayQ.forEach((q, i) => {
+                    let answerText = q.key || 'بدون کلید';
+                    answerKeyHTML += `<tr><td>${i+1}</td><td>${answerText}</td></tr>`;
+
+                    pdfHTML += `
+                        <div class="sub-q" style="flex-direction: column;">
+                            <div style="display: flex; width: 100%;">
+                                <div class="sub-q-label">${i+1})</div>
+                                <div class="sub-q-content">${q.q}</div>
+                            </div>
+                            <div class="tashrihi-space"></div>
+                        </div>`;
+                });
+                pdfHTML += `</td><td class="col-score">${essayQ.length * 2}</td></tr>`;
+            }
+
+            pdfHTML += `</tbody></table>`;
+
+            pdfHTML += `
+                <div class="page-break" style="padding-top: 20px;">
+                    <h2 style="text-align: center; margin-bottom: 15px; font-size: 18px;">پاسخنامه و کلید سوالات</h2>
+                    <table class="answer-key-table">
+                        <thead>
+                            <tr><th style="width: 20%;">شماره سوال</th><th>پاسخ صحیح / کلید</th></tr>
+                        </thead>
+                        <tbody>
+                            ${answerKeyHTML}
+                        </tbody>
+                    </table>
+                    <div style="margin-top: 30px; text-align: center; color: #666; font-weight: bold;">طراح سوال: ابراهیم اسحقی</div>
+                </div>
+            `;
+
+            pdfHTML += `</div>`; 
+
+            const container = document.getElementById('pdf-container');
+            container.innerHTML = pdfHTML;
+            container.style.display = 'block';
+
+            document.getElementById('pdfModal').style.display = 'none';
+
+            setTimeout(() => {
+                window.print();
+                setTimeout(() => {
+                    container.style.display = 'none';
+                    container.innerHTML = '';
+                }, 2000);
+            }, 500);
+        }
+        // 👆 پایان تابع تولید PDF 👆
+
         function logout() { localStorage.removeItem('teacher_logged_in'); sessionStorage.removeItem('teacher_pass'); location.reload(); }
     </script>
 </body>
