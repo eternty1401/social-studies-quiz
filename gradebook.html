@@ -501,12 +501,13 @@ table.grid tbody tr:nth-child(even) td.col-student{background:#f4f7fc}
 /* ==================================================================
    تنظیمات
    ================================================================== */
-const API_BASE = 'https://api.motadars.ir';   // اگر فایل‌ها در زیرپوشه‌اند: 'https://api.motadars.ir/api'
-const API_KEY  = '';                          // اگر در config.php مقدار دادید، همان را اینجا بگذارید
+const API_BASE = 'https://api.motadars.ir';   
+const API_KEY  = '';                          
 
+// 👇 نام مدارس دقیقاً مطابق با دیتابیس تغییر کرد 👇
 const SCHOOLS = [
-  'حسن بن علی (نوشهرکلنگی)',
-  'حضرت مهدی (سرزه)'
+  'مدرسه حسن بن علی نوشهر کلنگی',
+  'مدرسه حضرت مهدی سرزه'
 ];
 const GRADES = [7, 8, 9];
 
@@ -521,7 +522,7 @@ const state = {
   grade:  Number(localStorage.getItem('gb_grade'))  || 7,
   assessments: [],
   students: [],
-  grades: new Map(),      // "assessmentId|studentName" -> score
+  grades: new Map(),      
   tasks: [],
   reportSchool: localStorage.getItem('gb_school') || SCHOOLS[0],
   reportGrade:  Number(localStorage.getItem('gb_grade')) || 7,
@@ -566,23 +567,31 @@ function headers(extra = {}){
   if (API_KEY) h['X-API-Key'] = API_KEY;
   return h;
 }
+
 async function apiGet(path, params = {}){
   const url = new URL(API_BASE.replace(/\/$/, '') + '/' + path);
   Object.entries(params).forEach(([k, v]) => {
     if (v !== undefined && v !== null && v !== '') url.searchParams.set(k, v);
   });
+  
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 ثانیه تایم اوت
+
   let res, data;
   try{
-    res  = await fetch(url.toString(), { headers: headers() });
+    res  = await fetch(url.toString(), { headers: headers(), signal: controller.signal });
+    clearTimeout(timeoutId);
     data = await res.json();
   }catch(e){
-    throw new Error('ارتباط با سرور برقرار نشد');
+    clearTimeout(timeoutId);
+    throw new Error('ارتباط با سرور برقرار نشد (خطای شبکه)');
   }
   if (!res.ok || !data || data.ok === false){
     throw new Error((data && data.error) || 'خطای سرور');
   }
   return data;
 }
+
 async function apiPost(path, body){
   let res, data;
   try{
@@ -1092,9 +1101,15 @@ function refreshDashboard(){
    ================================================================== */
 document.addEventListener('DOMContentLoaded', async () => {
   buildSelects();
-  await loadGradebook();
-  await loadPlanner();
-  refreshDashboard();
+  try {
+    await loadGradebook();
+    await loadPlanner();
+  } catch (err) {
+    console.error(err);
+    document.getElementById('dashTasks').innerHTML = `<div class="empty" style="color:#ef4444;">⚠️ ${err.message}</div>`;
+  } finally {
+    refreshDashboard();
+  }
 });
 </script>
 </body>
