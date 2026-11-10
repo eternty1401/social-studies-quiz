@@ -1,0 +1,1101 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1d4ed8">
+<title>دفترچه نمرات و برنامه‌ریزی هوشمند | مدرّس</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;800&display=swap" rel="stylesheet">
+
+<style>
+/* ===================== متغیرها ===================== */
+:root{
+  --brand1:#1e3a8a;
+  --brand2:#1d4ed8;
+  --brand3:#3b82f6;
+  --brand4:#60a5fa;
+  --bg:#eef2f9;
+  --card:#ffffff;
+  --text:#0f172a;
+  --muted:#64748b;
+  --border:#e2e8f0;
+  --radius:18px;
+  --shadow:0 6px 20px rgba(15,23,42,.07);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{
+  font-family:'Vazirmatn',system-ui,-apple-system,'Segoe UI',sans-serif;
+  background:var(--bg); color:var(--text); direction:rtl;
+  min-height:100vh; padding-bottom:90px;
+  -webkit-font-smoothing:antialiased;
+}
+input,select,button,textarea{font-family:inherit}
+
+/* ===================== هدر ===================== */
+.app-header{
+  background:linear-gradient(135deg,#1e3a8a 0%,#1d4ed8 45%,#3b82f6 100%);
+  color:#fff; padding:18px 16px 24px;
+  border-radius:0 0 26px 26px;
+  box-shadow:0 10px 30px rgba(29,78,216,.25);
+  position:relative; overflow:hidden;
+}
+.app-header::after{
+  content:''; position:absolute; left:-50px; top:-70px;
+  width:200px; height:200px; border-radius:50%;
+  background:rgba(255,255,255,.12);
+}
+.app-header::before{
+  content:''; position:absolute; right:-30px; bottom:-90px;
+  width:160px; height:160px; border-radius:50%;
+  background:rgba(255,255,255,.08);
+}
+.app-header h1{margin:0; font-size:19px; font-weight:800; position:relative}
+.app-header p{margin:6px 0 0; font-size:12.5px; opacity:.88; position:relative}
+.back-link{
+  display:inline-flex; align-items:center; gap:5px;
+  color:#fff; text-decoration:none; font-size:12.5px; font-weight:600;
+  background:rgba(255,255,255,.16); padding:6px 12px; border-radius:999px;
+  margin-bottom:12px; position:relative;
+}
+
+/* ===================== تب‌ها ===================== */
+.tabs{
+  display:flex; gap:8px; padding:12px 12px 6px;
+  overflow-x:auto; scrollbar-width:none;
+  position:sticky; top:0; z-index:50;
+  background:linear-gradient(180deg,var(--bg) 75%,rgba(238,242,249,0));
+}
+.tabs::-webkit-scrollbar{display:none}
+.tab-btn{
+  flex:0 0 auto; border:none; background:#fff; color:#475569;
+  padding:10px 16px; border-radius:14px;
+  font-size:13.5px; font-weight:700; cursor:pointer;
+  box-shadow:0 2px 8px rgba(15,23,42,.06);
+  transition:.2s; display:flex; align-items:center; gap:6px; white-space:nowrap;
+}
+.tab-btn.active{
+  background:linear-gradient(135deg,var(--brand2),var(--brand3));
+  color:#fff; box-shadow:0 8px 18px rgba(29,78,216,.35);
+}
+
+/* ===================== پنل‌ها ===================== */
+main{padding:6px 12px}
+.panel{display:none; animation:fade .25s ease}
+.panel.active{display:block}
+@keyframes fade{from{opacity:0; transform:translateY(6px)} to{opacity:1; transform:none}}
+
+.card{
+  background:var(--card); border-radius:var(--radius);
+  padding:14px; box-shadow:var(--shadow); margin-bottom:12px;
+}
+.card h2{
+  margin:0 0 12px; font-size:15px; font-weight:800; color:#1e293b;
+  display:flex; align-items:center; gap:6px;
+}
+.card h2 .hint{font-size:11.5px; font-weight:500; color:var(--muted); margin-right:auto}
+
+/* ===================== فرم‌ها ===================== */
+select,input[type=text],input[type=number],input[type=date]{
+  width:100%; padding:11px 12px; font-size:14px;
+  border:1px solid #dbe3ef; border-radius:12px;
+  background:#f8fafc; color:var(--text); outline:none;
+  transition:.15s;
+}
+select:focus,input[type=text]:focus,input[type=number]:focus,input[type=date]:focus{
+  border-color:var(--brand3); background:#fff;
+  box-shadow:0 0 0 3px rgba(59,130,246,.15);
+}
+label.field{display:block; margin-bottom:10px}
+label.field span{display:block; font-size:12.5px; font-weight:600; color:#475569; margin-bottom:5px}
+.filters{display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:10px}
+
+/* ===================== دکمه‌ها ===================== */
+.btn{
+  border:none; border-radius:12px; padding:11px 16px;
+  font-size:14px; font-weight:700; cursor:pointer;
+  transition:.15s; display:inline-flex; align-items:center; justify-content:center; gap:6px;
+}
+.btn:active{transform:scale(.97)}
+.btn-primary{
+  background:linear-gradient(135deg,var(--brand2),var(--brand3));
+  color:#fff; box-shadow:0 8px 18px rgba(29,78,216,.3);
+}
+.btn-ghost{background:#eef2ff; color:var(--brand2)}
+.btn-danger{background:#fee2e2; color:#b91c1c}
+.btn-success{background:linear-gradient(135deg,#15803d,#22c55e); color:#fff; box-shadow:0 8px 18px rgba(22,163,74,.3)}
+.btn-block{width:100%}
+.btn-sm{padding:8px 12px; font-size:12.5px; border-radius:10px}
+
+/* ===================== آمار داشبورد ===================== */
+.stats{display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:12px}
+.stat{
+  background:#fff; border-radius:16px; padding:14px 6px; text-align:center;
+  box-shadow:var(--shadow);
+}
+.stat .num{
+  font-size:23px; font-weight:800; line-height:1.2;
+  background:linear-gradient(135deg,var(--brand2),var(--brand3));
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+}
+.stat .lbl{font-size:11.5px; color:var(--muted); margin-top:3px}
+
+/* ===================== بج‌ها ===================== */
+.badge{display:inline-block; padding:2px 8px; border-radius:999px; font-size:11px; font-weight:700}
+.badge-oral{background:#dcfce7; color:#15803d}
+.badge-written{background:#dbeafe; color:#1d4ed8}
+.badge-quiz{background:#fef3c7; color:#b45309}
+.badge-homework{background:#e0e7ff; color:#4338ca}
+.badge-exam{background:#fee2e2; color:#b91c1c}
+.badge-event{background:#fce7f3; color:#be185d}
+
+/* ===================== گرید اکسل‌مانند ===================== */
+.grid-wrap{
+  overflow:auto;
+  max-height:60vh;
+  border:1px solid var(--border);
+  border-radius:14px;
+  background:#fff;
+  -webkit-overflow-scrolling:touch;
+  overscroll-behavior:contain;
+}
+table.grid{border-collapse:separate; border-spacing:0; width:max-content; min-width:100%}
+table.grid th,table.grid td{
+  border-bottom:1px solid var(--border);
+  border-left:1px solid var(--border);
+  padding:7px 8px; font-size:13px; white-space:nowrap;
+  background:#fff;
+}
+table.grid th:last-child,table.grid td:last-child{border-left:none}
+
+table.grid thead th{
+  position:sticky; top:0; z-index:2;
+  background:linear-gradient(180deg,#eff6ff,#dbeafe);
+  color:#1e3a8a; font-weight:700;
+  min-width:110px; text-align:center;
+  vertical-align:middle;
+}
+table.grid .col-student{
+  position:sticky; right:0; z-index:3;
+  background:#f8fafc; text-align:right;
+  min-width:132px; max-width:150px;
+  font-weight:600; font-size:13px;
+  overflow:hidden; text-overflow:ellipsis;
+  box-shadow:-6px 0 12px -8px rgba(15,23,42,.25);
+}
+table.grid thead .col-student{
+  z-index:4;
+  background:linear-gradient(180deg,#dbeafe,#bfdbfe);
+}
+table.grid .col-assessment{position:relative; padding-top:8px; padding-bottom:8px}
+table.grid .a-title{font-size:12.5px; font-weight:700; margin-bottom:4px; max-width:120px;
+  overflow:hidden; text-overflow:ellipsis}
+table.grid .a-meta{font-size:10.5px; font-weight:500; opacity:.85; display:flex; gap:4px;
+  justify-content:center; align-items:center; flex-wrap:wrap}
+table.grid .a-del{
+  position:absolute; top:2px; left:2px;
+  border:none; background:rgba(239,68,68,.12); color:#dc2626;
+  width:20px; height:20px; border-radius:50%; font-size:14px; line-height:1;
+  cursor:pointer; display:flex; align-items:center; justify-content:center;
+}
+table.grid .a-del:active{background:rgba(239,68,68,.3)}
+
+table.grid input.score{
+  width:60px; padding:7px 4px; text-align:center;
+  border:1px solid var(--border); border-radius:9px;
+  font-size:14px; font-weight:600; background:#fff; color:var(--text);
+  outline:none; transition:.15s;
+}
+table.grid input.score:focus{
+  border-color:var(--brand3); box-shadow:0 0 0 3px rgba(59,130,246,.18);
+}
+table.grid input.score.invalid{
+  border-color:#ef4444; background:#fef2f2;
+}
+table.grid tbody tr:nth-child(even) td{background:#fcfdff}
+table.grid tbody tr:nth-child(even) td.col-student{background:#f4f7fc}
+
+/* ===================== خالی ===================== */
+.empty{
+  text-align:center; padding:34px 16px; color:var(--muted);
+  font-size:13.5px; line-height:2;
+}
+
+/* ===================== برنامه‌ریز ===================== */
+.task{
+  display:flex; align-items:center; gap:10px;
+  padding:10px; border-radius:14px; background:#f8fafc;
+  margin-bottom:8px; border:1px solid #eef2f7;
+  transition:.2s;
+}
+.task.done{opacity:.62}
+.task.done .task-title{text-decoration:line-through}
+.task-check{
+  width:26px; height:26px; border-radius:50%;
+  border:2px solid #cbd5e1; background:#fff; color:#16a34a;
+  font-weight:800; cursor:pointer; flex:0 0 auto;
+  display:flex; align-items:center; justify-content:center; font-size:13px;
+  transition:.2s;
+}
+.task.done .task-check{background:#16a34a; border-color:#16a34a; color:#fff}
+.task-body{flex:1; min-width:0}
+.task-title{font-size:13.5px; font-weight:600; word-break:break-word}
+.task-meta{font-size:11.5px; color:var(--muted); margin-top:4px;
+  display:flex; gap:6px; align-items:center; flex-wrap:wrap}
+.task-del{
+  border:none; background:transparent; color:#ef4444;
+  font-size:16px; cursor:pointer; padding:6px; flex:0 0 auto;
+}
+.planner-form{display:grid; gap:8px; grid-template-columns:1fr 1fr}
+.planner-form .full{grid-column:1/-1}
+
+/* ===================== کارنامه ===================== */
+.final-score{
+  text-align:center; padding:20px; border-radius:18px;
+  background:linear-gradient(135deg,var(--brand1),var(--brand2) 60%,var(--brand3));
+  color:#fff; margin-bottom:12px;
+  box-shadow:0 10px 26px rgba(29,78,216,.3);
+  position:relative; overflow:hidden;
+}
+.final-score::after{
+  content:''; position:absolute; left:-40px; top:-40px;
+  width:140px; height:140px; border-radius:50%;
+  background:rgba(255,255,255,.1);
+}
+.final-score .big{font-size:44px; font-weight:800; line-height:1.1; position:relative}
+.final-score .cap{font-size:12.5px; opacity:.9; margin-top:6px; position:relative}
+.type-chips{display:flex; gap:8px; flex-wrap:wrap; justify-content:center; margin-top:14px; position:relative}
+.type-chip{
+  background:rgba(255,255,255,.2); border-radius:12px;
+  padding:7px 12px; font-size:12px; font-weight:700;
+}
+
+.report-table{width:100%; border-collapse:collapse; font-size:13px}
+.report-table th,.report-table td{
+  padding:10px 8px; border-bottom:1px solid #eef2f7; text-align:right;
+}
+.report-table th{
+  background:#f8fafc; color:#475569; font-weight:700; font-size:12px;
+  position:sticky; top:0;
+}
+.report-table tbody tr:last-child td{border-bottom:none}
+.report-table .score-cell{font-weight:800; color:var(--brand2)}
+.report-table .missing{color:#cbd5e1; font-weight:500}
+
+/* ===================== مودال ===================== */
+.modal{
+  position:fixed; inset:0; z-index:200;
+  background:rgba(15,23,42,.5);
+  display:none; align-items:flex-end; justify-content:center;
+  backdrop-filter:blur(2px);
+}
+.modal.open{display:flex}
+.modal-box{
+  background:#fff; width:100%; max-width:480px;
+  border-radius:22px 22px 0 0; padding:18px 18px 24px;
+  max-height:90vh; overflow:auto;
+  animation:slideUp .25s ease;
+}
+@keyframes slideUp{from{transform:translateY(100%)} to{transform:none}}
+.modal-box h3{
+  margin:0 0 14px; font-size:16px; font-weight:800; color:#1e293b;
+  display:flex; align-items:center; justify-content:space-between;
+}
+.modal-close{
+  border:none; background:#f1f5f9; color:#475569;
+  width:30px; height:30px; border-radius:50%; font-size:17px; cursor:pointer;
+}
+
+/* ===================== نوار ذخیره ===================== */
+.save-bar{
+  position:fixed; bottom:0; right:0; left:0; z-index:60;
+  padding:12px 14px calc(12px + env(safe-area-inset-bottom));
+  background:linear-gradient(180deg,rgba(238,242,249,0),#eef2f9 45%);
+  display:none;
+}
+.save-bar.show{display:block}
+
+/* ===================== توست ===================== */
+#toast{
+  position:fixed; bottom:24px; right:50%;
+  transform:translate(50%,120px);
+  background:#0f172a; color:#fff;
+  padding:12px 20px; border-radius:14px;
+  font-size:13.5px; font-weight:600; z-index:300;
+  transition:.32s cubic-bezier(.2,.9,.3,1); opacity:0;
+  max-width:90vw; text-align:center; box-shadow:0 10px 30px rgba(0,0,0,.25);
+}
+#toast.show{transform:translate(50%,0); opacity:1}
+#toast.error{background:#b91c1c}
+#toast.success{background:#15803d}
+
+/* ===================== لودینگ ===================== */
+.spinner{
+  width:18px; height:18px; border-radius:50%;
+  border:2.5px solid rgba(255,255,255,.35); border-top-color:#fff;
+  animation:spin .7s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+@media (min-width:600px){
+  .filters{grid-template-columns:1fr 1fr 1fr}
+  .app-header h1{font-size:21px}
+}
+</style>
+</head>
+<body>
+
+<!-- ==================== هدر ==================== -->
+<header class="app-header">
+  <a href="teacher-panel.html" class="back-link">→ بازگشت به پنل</a>
+  <h1>📚 دفترچه نمرات و برنامه‌ریزی هوشمند</h1>
+  <p>مدیریت نمرات، ارزشیابی‌ها و برنامه‌های درسی</p>
+</header>
+
+<!-- ==================== تب‌ها ==================== -->
+<nav class="tabs">
+  <button class="tab-btn active" data-tab="dashboard">🏠 داشبورد</button>
+  <button class="tab-btn" data-tab="gradebook">📝 دفترچه نمرات</button>
+  <button class="tab-btn" data-tab="planner">📅 برنامه‌ریز</button>
+  <button class="tab-btn" data-tab="report">🎓 کارنامه</button>
+</nav>
+
+<main>
+
+  <!-- ==================== ۱) داشبورد ==================== -->
+  <section id="tab-dashboard" class="panel active">
+    <div class="stats">
+      <div class="stat"><div class="num" id="statStudents">۰</div><div class="lbl">دانش‌آموز</div></div>
+      <div class="stat"><div class="num" id="statAssessments">۰</div><div class="lbl">ارزشیابی</div></div>
+      <div class="stat"><div class="num" id="statPending">۰</div><div class="lbl">کار باقی‌مانده</div></div>
+    </div>
+
+    <div class="card">
+      <h2>⚡ دسترسی سریع</h2>
+      <div style="display:grid;gap:8px;grid-template-columns:1fr 1fr">
+        <button class="btn btn-primary" onclick="switchTab('gradebook')">📝 ثبت نمره</button>
+        <button class="btn btn-ghost" onclick="switchTab('planner')">📅 برنامه‌ریز</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>⏳ کارهای باقی‌مانده <span class="hint" id="dashClassLabel"></span></h2>
+      <div id="dashTasks"><div class="empty">در حال بارگذاری…</div></div>
+    </div>
+  </section>
+
+  <!-- ==================== ۲) دفترچه نمرات ==================== -->
+  <section id="tab-gradebook" class="panel">
+    <div class="card">
+      <h2>🎯 انتخاب کلاس</h2>
+      <div class="filters">
+        <select id="selSchool"></select>
+        <select id="selGrade"></select>
+        <button class="btn btn-primary" id="btnNewAssessment" style="grid-column:1/-1">
+          + ارزشیابی جدید
+        </button>
+      </div>
+      <p style="margin:0;font-size:11.5px;color:#64748b" id="gridMeta"></p>
+    </div>
+
+    <div class="card">
+      <h2>📊 جدول نمرات <span class="hint">برای اسکرول افقی بکشید ←</span></h2>
+      <div class="grid-wrap" id="gridWrap">
+        <div class="empty">در حال بارگذاری…</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== ۳) برنامه‌ریز ==================== -->
+  <section id="tab-planner" class="panel">
+    <div class="card">
+      <h2>➕ افزودن کار جدید</h2>
+      <form class="planner-form" id="plannerForm">
+        <input class="full" type="text" id="taskTitle" placeholder="مثلاً: تصحیح برگه‌های پایه هشتم" required>
+        <select id="taskType">
+          <option value="homework">📖 تکلیف</option>
+          <option value="exam">📝 آزمون</option>
+          <option value="event">🎉 رویداد</option>
+        </select>
+        <input type="date" id="taskDate">
+        <button class="btn btn-primary full" type="submit">افزودن به برنامه</button>
+      </form>
+    </div>
+
+    <div class="card">
+      <h2>⏳ در انتظار انجام</h2>
+      <div id="pendingList"><div class="empty">در حال بارگذاری…</div></div>
+    </div>
+
+    <div class="card">
+      <h2>✅ انجام‌شده‌ها</h2>
+      <div id="doneList"><div class="empty">موردی نیست</div></div>
+    </div>
+  </section>
+
+  <!-- ==================== ۴) کارنامه ==================== -->
+  <section id="tab-report" class="panel">
+    <div class="card">
+      <h2>🎓 انتخاب دانش‌آموز</h2>
+      <div class="filters">
+        <select id="selReportSchool"></select>
+        <select id="selReportGrade"></select>
+        <select id="selReportStudent" style="grid-column:1/-1"></select>
+      </div>
+    </div>
+    <div id="reportBox">
+      <div class="card"><div class="empty">یک دانش‌آموز انتخاب کنید تا کارنامه‌اش نمایش داده شود.</div></div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ==================== نوار ذخیره ==================== -->
+<div class="save-bar" id="saveBar">
+  <button class="btn btn-success btn-block" id="btnSaveGrades">💾 ذخیره همه نمرات</button>
+</div>
+
+<!-- ==================== مودال ارزشیابی ==================== -->
+<div class="modal" id="modalAssessment">
+  <div class="modal-box">
+    <h3>
+      <span>➕ ارزشیابی جدید</span>
+      <button class="modal-close" id="modalClose">×</button>
+    </h3>
+    <form id="assessmentForm">
+      <label class="field">
+        <span>عنوان ارزشیابی</span>
+        <input type="text" name="title" placeholder="مثلاً: آزمون کتبی فصل ۳" required maxlength="150">
+      </label>
+      <label class="field">
+        <span>نوع</span>
+        <select name="type">
+          <option value="written">📝 کتبی</option>
+          <option value="oral">🗣️ شفاهی</option>
+          <option value="quiz">✏️ آزمونک</option>
+        </select>
+      </label>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+        <label class="field">
+          <span>نمره کل</span>
+          <input type="number" name="max_score" value="20" min="1" max="100" step="0.25" required>
+        </label>
+        <label class="field">
+          <span>ضریب (٪)</span>
+          <input type="number" name="weight" value="100" min="1" max="100" step="1" required>
+        </label>
+      </div>
+      <button class="btn btn-primary btn-block" type="submit" style="margin-top:6px">
+        ایجاد ارزشیابی
+      </button>
+    </form>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+/* ==================================================================
+   تنظیمات
+   ================================================================== */
+const API_BASE = 'https://api.motadars.ir';   // اگر فایل‌ها در زیرپوشه‌اند: 'https://api.motadars.ir/api'
+const API_KEY  = '';                          // اگر در config.php مقدار دادید، همان را اینجا بگذارید
+
+const SCHOOLS = [
+  'حسن بن علی (نوشهرکلنگی)',
+  'حضرت مهدی (سرزه)'
+];
+const GRADES = [7, 8, 9];
+
+const TYPE_LABELS = { oral: 'شفاهی', written: 'کتبی', quiz: 'آزمونک' };
+const TASK_LABELS = { homework: 'تکلیف', exam: 'آزمون', event: 'رویداد' };
+
+/* ==================================================================
+   State
+   ================================================================== */
+const state = {
+  school: localStorage.getItem('gb_school') || SCHOOLS[0],
+  grade:  Number(localStorage.getItem('gb_grade'))  || 7,
+  assessments: [],
+  students: [],
+  grades: new Map(),      // "assessmentId|studentName" -> score
+  tasks: [],
+  reportSchool: localStorage.getItem('gb_school') || SCHOOLS[0],
+  reportGrade:  Number(localStorage.getItem('gb_grade')) || 7,
+};
+
+/* ==================================================================
+   ابزارها
+   ================================================================== */
+function esc(s){
+  return String(s ?? '').replace(/[&<>"']/g, m => (
+    { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[m]
+  ));
+}
+function num(n){
+  if (n === null || n === undefined || n === '') return '';
+  const v = Number(n);
+  return Number.isInteger(v) ? String(v) : String(v);
+}
+function faDate(d){
+  if (!d) return '';
+  try{
+    return new Date(d + 'T00:00:00').toLocaleDateString('fa-IR', {
+      year:'numeric', month:'long', day:'numeric'
+    });
+  }catch(e){ return d; }
+}
+
+let toastTimer = null;
+function toast(msg, kind = 'success'){
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = 'show ' + kind;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { el.className = ''; }, 2800);
+}
+
+/* ==================================================================
+   لایه API
+   ================================================================== */
+function headers(extra = {}){
+  const h = Object.assign({ 'Accept': 'application/json' }, extra);
+  if (API_KEY) h['X-API-Key'] = API_KEY;
+  return h;
+}
+async function apiGet(path, params = {}){
+  const url = new URL(API_BASE.replace(/\/$/, '') + '/' + path);
+  Object.entries(params).forEach(([k, v]) => {
+    if (v !== undefined && v !== null && v !== '') url.searchParams.set(k, v);
+  });
+  let res, data;
+  try{
+    res  = await fetch(url.toString(), { headers: headers() });
+    data = await res.json();
+  }catch(e){
+    throw new Error('ارتباط با سرور برقرار نشد');
+  }
+  if (!res.ok || !data || data.ok === false){
+    throw new Error((data && data.error) || 'خطای سرور');
+  }
+  return data;
+}
+async function apiPost(path, body){
+  let res, data;
+  try{
+    res = await fetch(API_BASE.replace(/\/$/, '') + '/' + path, {
+      method: 'POST',
+      headers: headers({ 'Content-Type': 'application/json' }),
+      body: JSON.stringify(body)
+    });
+    data = await res.json();
+  }catch(e){
+    throw new Error('ارتباط با سرور برقرار نشد');
+  }
+  if (!res.ok || !data || data.ok === false){
+    throw new Error((data && data.error) || 'خطای سرور');
+  }
+  return data;
+}
+
+/* ==================================================================
+   تب‌ها
+   ================================================================== */
+function switchTab(name){
+  document.querySelectorAll('.tab-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.tab === name);
+  });
+  document.querySelectorAll('.panel').forEach(p => {
+    p.classList.toggle('active', p.id === 'tab-' + name);
+  });
+  document.getElementById('saveBar').classList.toggle('show', name === 'gradebook');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  if (name === 'report')  loadReportStudents();
+  if (name === 'planner') loadPlanner();
+  if (name === 'dashboard') refreshDashboard();
+}
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => switchTab(btn.dataset.tab));
+});
+
+/* ==================================================================
+   انتخابگرها
+   ================================================================== */
+function buildSelects(){
+  const optsS = SCHOOLS.map(s => `<option value="${esc(s)}">${esc(s)}</option>`).join('');
+  const optsG = GRADES.map(g => `<option value="${g}">پایه ${g}</option>`).join('');
+
+  const pairs = [
+    ['selSchool',       state.school],
+    ['selReportSchool', state.reportSchool],
+  ];
+  pairs.forEach(([id, val]) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.innerHTML = optsS;
+    el.value = val;
+  });
+
+  [['selGrade', state.grade], ['selReportGrade', state.reportGrade]].forEach(([id, val]) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.innerHTML = optsG;
+    el.value = val;
+  });
+}
+
+/* ==================================================================
+   دفترچه نمرات
+   ================================================================== */
+async function loadGradebook(){
+  const wrap = document.getElementById('gridWrap');
+  wrap.innerHTML = '<div class="empty">در حال بارگذاری…</div>';
+
+  try{
+    const data = await apiGet('get_gradebook_data.php', {
+      school: state.school, grade: state.grade
+    });
+    state.assessments = data.assessments || [];
+    state.students    = data.students || [];
+    state.grades      = new Map(Object.entries(data.grades || {}));
+    renderGrid();
+    refreshDashboard();
+  }catch(err){
+    wrap.innerHTML = `<div class="empty">⚠️ ${esc(err.message)}</div>`;
+    toast(err.message, 'error');
+  }
+}
+
+function renderGrid(){
+  const wrap = document.getElementById('gridWrap');
+  const meta = document.getElementById('gridMeta');
+
+  meta.textContent = `${state.students.length} دانش‌آموز • ${state.assessments.length} ارزشیابی`;
+
+  if (state.assessments.length === 0){
+    wrap.innerHTML = `<div class="empty">📋 هنوز ارزشیابی‌ای برای این کلاس ساخته نشده.<br>روی «+ ارزشیابی جدید» بزنید.</div>`;
+    return;
+  }
+  if (state.students.length === 0){
+    wrap.innerHTML = `<div class="empty">هیچ دانش‌آموزی برای این مدرسه/پایه پیدا نشد.</div>`;
+    return;
+  }
+
+  /* --- هدر --- */
+  let head = '<tr><th class="col-student">دانش‌آموز</th>';
+  state.assessments.forEach(a => {
+    head += `<th class="col-assessment">
+      <button class="a-del" data-del="${a.id}" title="حذف ارزشیابی">×</button>
+      <div class="a-title">${esc(a.title)}</div>
+      <div class="a-meta">
+        <span class="badge badge-${esc(a.type)}">${TYPE_LABELS[a.type] || a.type}</span>
+        <span>از ${num(a.max_score)}</span>
+      </div>
+      <div class="a-meta">ضریب ${num(a.weight)}٪</div>
+    </th>`;
+  });
+  head += '</tr>';
+
+  /* --- بدنه --- */
+  let body = '';
+  state.students.forEach(s => {
+    body += `<tr><td class="col-student">${esc(s.full_name)}</td>`;
+    state.assessments.forEach(a => {
+      const key = a.id + '|' + s.full_name;
+      const val = state.grades.has(key) ? state.grades.get(key) : '';
+      body += `<td>
+        <input class="score" type="number" inputmode="decimal" step="0.25"
+               min="0" max="${a.max_score}"
+               value="${val === null ? '' : num(val)}"
+               data-aid="${a.id}"
+               data-student="${esc(s.full_name)}">
+      </td>`;
+    });
+    body += '</tr>';
+  });
+
+  wrap.innerHTML = `<table class="grid"><thead>${head}</thead><tbody>${body}</tbody></table>`;
+}
+
+/* --- رویدادهای گرید --- */
+document.getElementById('gridWrap').addEventListener('input', e => {
+  const inp = e.target.closest('input.score');
+  if (!inp) return;
+
+  const key = inp.dataset.aid + '|' + inp.dataset.student;
+  const raw = inp.value.trim();
+
+  if (raw === ''){
+    state.grades.delete(key);
+    inp.classList.remove('invalid');
+    return;
+  }
+
+  const v = Number(raw);
+  state.grades.set(key, v);
+
+  const max = Number(inp.max);
+  inp.classList.toggle('invalid', Number.isFinite(v) && v > max);
+});
+
+document.getElementById('gridWrap').addEventListener('click', async e => {
+  const btn = e.target.closest('[data-del]');
+  if (!btn) return;
+
+  if (!confirm('این ارزشیابی و همه‌ی نمراتش حذف شود؟')) return;
+
+  try{
+    await apiPost('delete_assessment.php', { id: Number(btn.dataset.del) });
+    toast('ارزشیابی حذف شد');
+    await loadGradebook();
+  }catch(err){
+    toast(err.message, 'error');
+  }
+});
+
+/* --- ذخیره نمرات --- */
+document.getElementById('btnSaveGrades').addEventListener('click', async function(){
+  const inputs = document.querySelectorAll('#gridWrap input.score');
+  if (!inputs.length){ toast('چیزی برای ذخیره نیست', 'error'); return; }
+
+  /* اعتبارسنجی */
+  let invalid = false;
+  inputs.forEach(inp => {
+    const max = Number(inp.max);
+    if (inp.value.trim() !== '' && Number(inp.value) > max){
+      inp.classList.add('invalid');
+      invalid = true;
+    }
+  });
+  if (invalid){ toast('نمره‌ای بیشتر از نمره کل وارد شده!', 'error'); return; }
+
+  /* گروه‌بندی بر اساس ارزشیابی */
+  const byAssess = new Map();
+  inputs.forEach(inp => {
+    const aid  = Number(inp.dataset.aid);
+    const name = inp.dataset.student;
+    const raw  = inp.value.trim();
+
+    if (!byAssess.has(aid)) byAssess.set(aid, []);
+    byAssess.get(aid).push({
+      student_name: name,
+      score: raw === '' ? null : Number(raw)
+    });
+  });
+
+  const original = this.innerHTML;
+  this.innerHTML = '<span class="spinner"></span> در حال ذخیره…';
+  this.disabled = true;
+
+  try{
+    for (const [aid, grades] of byAssess){
+      await apiPost('save_grades.php', { assessment_id: aid, grades });
+    }
+    toast('نمرات با موفقیت ذخیره شد ✅', 'success');
+  }catch(err){
+    toast(err.message, 'error');
+  }finally{
+    this.innerHTML = original;
+    this.disabled = false;
+  }
+});
+
+/* --- تغییر کلاس --- */
+document.getElementById('selSchool').addEventListener('change', e => {
+  state.school = e.target.value;
+  localStorage.setItem('gb_school', state.school);
+  document.getElementById('selReportSchool').value = state.school;
+  state.reportSchool = state.school;
+  loadGradebook();
+});
+document.getElementById('selGrade').addEventListener('change', e => {
+  state.grade = Number(e.target.value);
+  localStorage.setItem('gb_grade', state.grade);
+  document.getElementById('selReportGrade').value = state.grade;
+  state.reportGrade = state.grade;
+  loadGradebook();
+});
+
+/* --- مودال ارزشیابی --- */
+const modal = document.getElementById('modalAssessment');
+document.getElementById('btnNewAssessment').addEventListener('click', () => {
+  modal.classList.add('open');
+  document.querySelector('#assessmentForm [name=title]').focus();
+});
+document.getElementById('modalClose').addEventListener('click', () => modal.classList.remove('open'));
+modal.addEventListener('click', e => { if (e.target === modal) modal.classList.remove('open'); });
+
+document.getElementById('assessmentForm').addEventListener('submit', async function(e){
+  e.preventDefault();
+  const fd = new FormData(this);
+  const payload = {
+    title:       String(fd.get('title') || '').trim(),
+    type:        String(fd.get('type') || 'written'),
+    max_score:   Number(fd.get('max_score')),
+    weight:      Number(fd.get('weight')),
+    school_name: state.school,
+    grade_level: state.grade,
+  };
+  if (!payload.title){ toast('عنوان را وارد کنید', 'error'); return; }
+
+  const btn = this.querySelector('button[type=submit]');
+  const original = btn.innerHTML;
+  btn.innerHTML = '<span class="spinner"></span>';
+  btn.disabled = true;
+
+  try{
+    await apiPost('save_assessment.php', payload);
+    modal.classList.remove('open');
+    this.reset();
+    this.querySelector('[name=max_score]').value = 20;
+    this.querySelector('[name=weight]').value = 100;
+    toast('ارزشیابی ساخته شد ✅');
+    await loadGradebook();
+  }catch(err){
+    toast(err.message, 'error');
+  }finally{
+    btn.innerHTML = original;
+    btn.disabled = false;
+  }
+});
+
+/* ==================================================================
+   برنامه‌ریز
+   ================================================================== */
+async function loadPlanner(){
+  const p = document.getElementById('pendingList');
+  const d = document.getElementById('doneList');
+  p.innerHTML = '<div class="empty">در حال بارگذاری…</div>';
+  d.innerHTML = '';
+
+  try{
+    const data = await apiGet('get_planner.php');
+    state.tasks = data.tasks || [];
+    renderPlanner();
+    refreshDashboard();
+  }catch(err){
+    p.innerHTML = `<div class="empty">⚠️ ${esc(err.message)}</div>`;
+  }
+}
+
+function renderPlanner(){
+  const pending = state.tasks.filter(t => t.status === 'pending');
+  const done    = state.tasks.filter(t => t.status === 'done');
+
+  document.getElementById('pendingList').innerHTML =
+    pending.length ? pending.map(taskHTML).join('') : '<div class="empty">🎉 همه‌چیز انجام شده!</div>';
+  document.getElementById('doneList').innerHTML =
+    done.length ? done.map(taskHTML).join('') : '<div class="empty">موردی نیست</div>';
+}
+
+function taskHTML(t){
+  const isDone = t.status === 'done';
+  return `<div class="task ${isDone ? 'done' : ''}">
+    <button class="task-check" data-toggle="${t.id}" data-status="${isDone ? 'pending' : 'done'}">
+      ${isDone ? '✓' : ''}
+    </button>
+    <div class="task-body">
+      <div class="task-title">${esc(t.title)}</div>
+      <div class="task-meta">
+        <span class="badge badge-${esc(t.task_type)}">${TASK_LABELS[t.task_type] || t.task_type}</span>
+        ${t.target_date ? '<span>📅 ' + esc(faDate(t.target_date)) + '</span>' : ''}
+      </div>
+    </div>
+    <button class="task-del" data-deltask="${t.id}" title="حذف">🗑</button>
+  </div>`;
+}
+
+document.getElementById('plannerForm').addEventListener('submit', async function(e){
+  e.preventDefault();
+  const title = document.getElementById('taskTitle').value.trim();
+  const type  = document.getElementById('taskType').value;
+  const date  = document.getElementById('taskDate').value;
+
+  if (!title){ toast('عنوان را وارد کنید', 'error'); return; }
+
+  try{
+    await apiPost('save_planner_task.php', {
+      title, task_type: type, target_date: date || null
+    });
+    document.getElementById('taskTitle').value = '';
+    document.getElementById('taskDate').value = '';
+    toast('به برنامه اضافه شد ✅');
+    await loadPlanner();
+  }catch(err){
+    toast(err.message, 'error');
+  }
+});
+
+document.body.addEventListener('click', async e => {
+  const tgl = e.target.closest('[data-toggle]');
+  if (tgl){
+    try{
+      await apiPost('toggle_planner_task.php', {
+        id: Number(tgl.dataset.toggle),
+        status: tgl.dataset.status
+      });
+      await loadPlanner();
+    }catch(err){ toast(err.message, 'error'); }
+    return;
+  }
+  const del = e.target.closest('[data-deltask]');
+  if (del){
+    if (!confirm('این کار حذف شود؟')) return;
+    try{
+      await apiPost('delete_planner_task.php', { id: Number(del.dataset.deltask) });
+      toast('حذف شد');
+      await loadPlanner();
+    }catch(err){ toast(err.message, 'error'); }
+  }
+});
+
+/* ==================================================================
+   کارنامه
+   ================================================================== */
+document.getElementById('selReportSchool').addEventListener('change', e => {
+  state.reportSchool = e.target.value;
+  document.getElementById('selSchool').value = state.reportSchool;
+  state.school = state.reportSchool;
+  localStorage.setItem('gb_school', state.school);
+  loadReportStudents();
+});
+document.getElementById('selReportGrade').addEventListener('change', e => {
+  state.reportGrade = Number(e.target.value);
+  document.getElementById('selGrade').value = state.reportGrade;
+  state.grade = state.reportGrade;
+  localStorage.setItem('gb_grade', state.grade);
+  loadReportStudents();
+});
+document.getElementById('selReportStudent').addEventListener('change', loadReport);
+
+async function loadReportStudents(){
+  const sel = document.getElementById('selReportStudent');
+  sel.innerHTML = '<option value="">در حال بارگذاری…</option>';
+
+  try{
+    const data = await apiGet('get_gradebook_data.php', {
+      school: state.reportSchool, grade: state.reportGrade
+    });
+    const students = data.students || [];
+    sel.innerHTML = '<option value="">— انتخاب دانش‌آموز —</option>' +
+      students.map(s => `<option value="${esc(s.full_name)}">${esc(s.full_name)}</option>`).join('');
+
+    document.getElementById('reportBox').innerHTML =
+      '<div class="card"><div class="empty">یک دانش‌آموز انتخاب کنید تا کارنامه‌اش نمایش داده شود.</div></div>';
+  }catch(err){
+    sel.innerHTML = '<option value="">خطا در بارگذاری</option>';
+    toast(err.message, 'error');
+  }
+}
+
+async function loadReport(){
+  const name = document.getElementById('selReportStudent').value;
+  const box  = document.getElementById('reportBox');
+
+  if (!name){
+    box.innerHTML = '<div class="card"><div class="empty">یک دانش‌آموز انتخاب کنید.</div></div>';
+    return;
+  }
+
+  box.innerHTML = '<div class="card"><div class="empty">در حال محاسبه…</div></div>';
+
+  try{
+    const data = await apiGet('get_student_report.php', {
+      student_name: name,
+      school: state.reportSchool,
+      grade: state.reportGrade
+    });
+
+    const items = data.items || [];
+
+    /* کارت معدل */
+    let html = `<div class="final-score">
+      <div class="big">${data.final === null ? '—' : num(data.final)}</div>
+      <div class="cap">معدل نهایی (از ۲۰) — ${esc(name)}</div>
+      <div class="type-chips">
+        <div class="type-chip">🗣️ شفاهی: ${data.by_type.oral === null ? '—' : num(data.by_type.oral)}</div>
+        <div class="type-chip">📝 کتبی: ${data.by_type.written === null ? '—' : num(data.by_type.written)}</div>
+        <div class="type-chip">✏️ آزمونک: ${data.by_type.quiz === null ? '—' : num(data.by_type.quiz)}</div>
+      </div>
+    </div>`;
+
+    /* جدول نمرات */
+    if (items.length === 0){
+      html += '<div class="card"><div class="empty">هنوز ارزشیابی‌ای ثبت نشده است.</div></div>';
+    }else{
+      html += `<div class="card"><h2>📋 ریز نمرات</h2>
+        <table class="report-table">
+          <thead><tr>
+            <th>عنوان</th><th>نوع</th><th>نمره</th><th>از ۲۰</th><th>ضریب</th>
+          </tr></thead>
+          <tbody>
+            ${items.map(it => `<tr>
+              <td>${esc(it.title)}</td>
+              <td><span class="badge badge-${esc(it.type)}">${TYPE_LABELS[it.type] || it.type}</span></td>
+              <td class="${it.score === null ? 'missing' : 'score-cell'}">
+                ${it.score === null ? 'ثبت نشده' : num(it.score) + ' / ' + num(it.max_score)}
+              </td>
+              <td class="${it.out_of_20 === null ? 'missing' : ''}">
+                ${it.out_of_20 === null ? '—' : num(it.out_of_20)}
+              </td>
+              <td>${num(it.weight)}٪</td>
+            </tr>`).join('')}
+          </tbody>
+        </table>
+      </div>`;
+    }
+
+    box.innerHTML = html;
+  }catch(err){
+    box.innerHTML = `<div class="card"><div class="empty">⚠️ ${esc(err.message)}</div></div>`;
+  }
+}
+
+/* ==================================================================
+   داشبورد
+   ================================================================== */
+function refreshDashboard(){
+  document.getElementById('statStudents').textContent    = state.students.length;
+  document.getElementById('statAssessments').textContent = state.assessments.length;
+
+  const pending = state.tasks.filter(t => t.status === 'pending');
+  document.getElementById('statPending').textContent = pending.length;
+
+  document.getElementById('dashClassLabel').textContent =
+    `${state.school} • پایه ${state.grade}`;
+
+  const box = document.getElementById('dashTasks');
+  if (pending.length === 0){
+    box.innerHTML = '<div class="empty">🎉 کار باقی‌مانده‌ای نداری!</div>';
+  }else{
+    box.innerHTML = pending.slice(0, 5).map(t => `
+      <div class="task">
+        <button class="task-check" data-toggle="${t.id}" data-status="done"></button>
+        <div class="task-body">
+          <div class="task-title">${esc(t.title)}</div>
+          <div class="task-meta">
+            <span class="badge badge-${esc(t.task_type)}">${TASK_LABELS[t.task_type] || t.task_type}</span>
+            ${t.target_date ? '<span>📅 ' + esc(faDate(t.target_date)) + '</span>' : ''}
+          </div>
+        </div>
+      </div>
+    `).join('');
+  }
+}
+
+/* ==================================================================
+   شروع
+   ================================================================== */
+document.addEventListener('DOMContentLoaded', async () => {
+  buildSelects();
+  await loadGradebook();
+  await loadPlanner();
+  refreshDashboard();
+});
+</script>
+</body>
+</html>
