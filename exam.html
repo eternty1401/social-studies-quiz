@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>آزمون | مدرّس</title>
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
+<style>
+  :root { --primary: #1e40af; --bg: #f0f4f8; --card: #fff; --text: #1e293b; --border: #cbd5e1; --success: #16a34a; --error: #dc2626; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: Vazirmatn, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; padding: 16px; }
+  .container { max-width: 800px; margin: 0 auto; }
+  
+  /* استایل کادر ورود نام */
+  .name-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center; z-index: 1000; }
+  .name-box { background: #fff; padding: 30px; border-radius: 12px; width: 90%; max-width: 400px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
+  .name-box h2 { color: var(--primary); margin-bottom: 15px; font-size: 1.2rem; }
+  .name-box input { width: 100%; padding: 12px; border: 1.5px solid var(--border); border-radius: 8px; font-family: inherit; font-size: 1rem; margin-bottom: 15px; text-align: center; }
+  .name-box button { width: 100%; padding: 12px; background: var(--primary); color: white; border: none; border-radius: 8px; font-family: inherit; font-size: 1rem; font-weight: bold; cursor: pointer; }
+
+  .exam-header { background: #fff; padding: 20px; border-radius: 12px; text-align: center; border: 2px solid var(--primary); margin-bottom: 20px; }
+  .header-row { display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 10px; color: #475569; }
+  .header-title { font-size: 1.2rem; font-weight: bold; color: var(--primary); }
+  .header-sub { font-size: 1rem; font-weight: 600; margin-top: 8px; }
+  .student-name-line { margin-top: 15px; font-weight: bold; text-align: right; border-bottom: 1px dashed #94a3b8; padding-bottom: 5px; }
+  
+  .timer-box { position: sticky; top: 10px; background: var(--primary); color: white; padding: 12px; border-radius: 10px; text-align: center; font-size: 1.2rem; font-weight: bold; z-index: 100; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-bottom: 20px; }
+  .timer-box.warning { background: var(--error); animation: pulse 1s infinite; }
+  @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.7; } 100% { opacity: 1; } }
+
+  .question-card { background: #fff; border-radius: 12px; padding: 20px; margin-bottom: 16px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+  .q-text { font-weight: bold; margin-bottom: 16px; font-size: 1.05rem; }
+  .q-num { color: var(--primary); margin-left: 6px; }
+  
+  .options-list { display: flex; flex-direction: column; gap: 10px; }
+  .option-item { display: flex; align-items: center; padding: 12px; border: 1.5px solid var(--border); border-radius: 8px; cursor: pointer; transition: all 0.2s; }
+  .option-item:hover { background: #f8fafc; border-color: var(--primary); }
+  .option-item input { margin-left: 10px; width: 18px; height: 18px; accent-color: var(--primary); }
+  
+  input[type="text"], textarea { width: 100%; padding: 12px; border: 1.5px solid var(--border); border-radius: 8px; font-family: inherit; font-size: 1rem; background: #f8fafc; resize: vertical; }
+  input[type="text"]:focus, textarea:focus { outline: none; border-color: var(--primary); background: #fff; }
+
+  .btn-submit { width: 100%; padding: 16px; background: var(--success); color: white; border: none; border-radius: 10px; font-size: 1.1rem; font-weight: bold; cursor: pointer; margin-top: 20px; font-family: inherit; }
+  .btn-print { width: 100%; padding: 16px; background: var(--primary); color: white; border: none; border-radius: 10px; font-size: 1.1rem; font-weight: bold; cursor: pointer; margin-top: 20px; font-family: inherit; display: none; }
+  .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  .result-box { background: #fff; padding: 30px; border-radius: 12px; text-align: center; display: none; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+  .score-circle { width: 120px; height: 120px; border-radius: 50%; border: 8px solid var(--success); display: flex; align-items: center; justify-content: center; font-size: 2.5rem; font-weight: bold; color: var(--success); margin: 20px auto; }
+  .error-msg { background: #fee2e2; color: var(--error); padding: 20px; border-radius: 12px; text-align: center; display: none; font-weight: bold; }
+
+  @media print {
+    body { background: #fff; padding: 0; }
+    .timer-box, .btn-submit, .btn-print, .name-overlay { display: none !important; }
+    .exam-header { border: 2px solid #000; }
+    .question-card { box-shadow: none; border: 1px solid #ccc; page-break-inside: avoid; }
+    .option-item { border: 1px solid #eee; }
+  }
+</style>
+</head>
+<body>
+
+<!-- کادر دریافت نام دانش‌آموز -->
+<div class="name-overlay" id="name-overlay" style="display:none;">
+  <div class="name-box">
+    <h2>لطفاً نام و نام خانوادگی خود را وارد کنید</h2>
+    <input type="text" id="student-name-input" placeholder="مثلاً: علی رضایی">
+    <button onclick="startExam()">ورود به آزمون</button>
+  </div>
+</div>
+
+<div class="container" id="loading" style="text-align:center; padding:50px;">در حال دریافت آزمون...</div>
+<div class="error-msg" id="error-msg"></div>
+
+<div id="exam-wrapper" style="display:none;">
+  <div class="timer-box" id="timer-box">زمان باقیمانده: <span id="timer-text">--:--</span></div>
+
+  <div class="exam-header" id="exam-header">
+    <!-- هدر توسط جاوااسکریپت پر میشه -->
+  </div>
+
+  <form id="exam-form">
+    <div id="questions-container"></div>
+    <button type="submit" class="btn-submit" id="btn-submit">ارسال پاسخ‌ها و پایان آزمون</button>
+    <button type="button" class="btn-print" id="btn-print" onclick="window.print()">🖨️ چاپ / ذخیره PDF</button>
+  </form>
+</div>
+
+<div class="result-box" id="result-box">
+  <h2>نتیجه آزمون</h2>
+  <div class="score-circle" id="score-display">0</div>
+  <p>از ۲۰ نمره</p>
+  <p style="margin-top:10px; color:#64748b;" id="result-detail">تعداد پاسخ صحیح: ۰</p>
+</div>
+
+<script>
+  const API_BASE = 'https://api.motadars.ir';
+  const urlParams = new URLSearchParams(window.location.search);
+  const examCode = urlParams.get('code');
+  let examData = null;
+  let questionsData = null;
+  let examDuration = 60 * 60;
+  let timerInterval;
+  let isSubmitted = false;
+  let studentName = '';
+
+  document.addEventListener('DOMContentLoaded', () => {
+    if (!examCode) return showError('لینک آزمون نامعتبر است.');
+    fetchExam();
+  });
+
+  async function fetchExam() {
+    try {
+      const res = await fetch(`${API_BASE}/get_exam.php?code=${examCode}`);
+      const data = await res.json();
+      
+      if (!res.ok || !data.ok) {
+        return showError(data.message || 'خطا در دریافت آزمون.');
+      }
+
+      document.getElementById('loading').style.display = 'none';
+      examData = data.exam;
+      questionsData = data.questions;
+      
+      // اگر آزمون آنلاین بود، اول اسم بگیر
+      if (examData.exam_type === 'online') {
+        document.getElementById('name-overlay').style.display = 'flex';
+      } else {
+        renderExam(); // اگر PDF بود، مستقیم نشون بده
+      }
+
+    } catch (err) {
+      showError('خطای شبکه. اینترنت خود را بررسی کنید.');
+    }
+  }
+
+  function startExam() {
+    const name = document.getElementById('student-name-input').value.trim();
+    if (name.length < 3) return alert('لطفاً نام و نام خانوادگی خود را کامل وارد کنید.');
+    
+    studentName = name;
+    document.getElementById('name-overlay').style.display = 'none';
+    renderExam();
+    
+    examDuration = examData.duration * 60;
+    startTimer();
+    document.getElementById('btn-submit').style.display = 'block';
+    document.getElementById('btn-print').style.display = 'none';
+  }
+
+  function renderExam() {
+    let nameLine = '';
+    if (examData.exam_type === 'online') {
+      nameLine = `<div class="student-name-line">نام دانش‌آموز: ${studentName}</div>`;
+    } else {
+      nameLine = `<div class="student-name-line" style="margin-top:15px; border-bottom:none;">نام و نام خانوادگی دانش‌آموز: ......................................................</div>`;
+    }
+
+    document.getElementById('exam-header').innerHTML = `
+      <div class="header-row"><span>${examData.header_admin}</span><span>تاریخ: ${examData.exam_date || '---'}</span></div>
+      <div class="header-title">آزمون ${examData.header_subject}</div>
+      <div class="header-row" style="justify-content:space-between; margin-top:10px;">
+        <span>مدرسه: ${examData.header_school}</span>
+        <span>معلم: ${examData.header_teacher_name}</span>
+      </div>
+      <div class="header-row" style="justify-content:center; margin-top:5px;">
+        <span>مدت زمان: ${examData.duration} دقیقه</span>
+      </div>
+      ${nameLine}
+    `;
+
+    const container = document.getElementById('questions-container');
+    container.innerHTML = '';
+
+    questionsData.forEach((q, index) => {
+      const card = document.createElement('div');
+      card.className = 'question-card';
+      
+      let inputHtml = '';
+      if (q.type === 'testi' || q.type === 'truefalse') {
+        inputHtml = `<div class="options-list">`;
+        q.options.forEach((opt, i) => {
+          inputHtml += `
+            <label class="option-item">
+              <input type="radio" name="q_${q.id}" value="${i}">
+              <span>${opt}</span>
+            </label>
+          `;
+        });
+        inputHtml += `</div>`;
+      } else if (q.type === 'jakhali') {
+        inputHtml = `<input type="text" name="q_${q.id}" placeholder="پاسخ خود را وارد کنید...">`;
+      } else if (q.type === 'essay') {
+        inputHtml = `<textarea name="q_${q.id}" rows="4" placeholder="پاسخ تشریحی خود را بنویسید..."></textarea>`;
+      }
+
+      card.innerHTML = `
+        <div class="q-text"><span class="q-num">سوال ${index + 1}:</span> ${q.question_text}</div>
+        ${inputHtml}
+      `;
+      container.appendChild(card);
+    });
+
+    document.getElementById('exam-wrapper').style.display = 'block';
+
+    // تنظیم دکمه‌ها بر اساس نوع آزمون
+    if (examData.exam_type === 'pdf') {
+      document.getElementById('timer-box').style.display = 'none';
+      document.getElementById('btn-submit').style.display = 'none';
+      document.getElementById('btn-print').style.display = 'block';
+    }
+  }
+
+  function startTimer() {
+    const timerText = document.getElementById('timer-text');
+    const timerBox = document.getElementById('timer-box');
+
+    timerInterval = setInterval(() => {
+      const minutes = Math.floor(examDuration / 60);
+      const seconds = examDuration % 60;
+      timerText.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+      
+      if (examDuration <= 300) timerBox.classList.add('warning');
+      if (examDuration <= 0) {
+        clearInterval(timerInterval);
+        if (!isSubmitted) {
+          alert('زمان آزمون به پایان رسید!');
+          submitExam();
+        }
+      }
+      examDuration--;
+    }, 1000);
+  }
+
+  document.getElementById('exam-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    if (confirm('آیا از ارسال پاسخ‌ها مطمئن هستید؟')) submitExam();
+  });
+
+  async function submitExam() {
+    if (isSubmitted) return;
+    isSubmitted = true;
+    clearInterval(timerInterval);
+    const btn = document.getElementById('btn-submit');
+    btn.disabled = true; btn.textContent = 'در حال تصحیح...';
+
+    const answers = {};
+    const formData = new FormData(document.getElementById('exam-form'));
+    for (let [key, value] of formData.entries()) {
+      if (key.startsWith('q_')) answers[key.replace('q_', '')] = value;
+    }
+
+    try {
+      const res = await fetch(`${API_BASE}/submit_exam.php`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code: examCode, student_name: studentName, answers: answers })
+      });
+      const data = await res.json();
+
+      if (res.ok && data.ok) {
+        document.getElementById('exam-wrapper').style.display = 'none';
+        document.getElementById('result-box').style.display = 'block';
+        document.getElementById('score-display').textContent = data.score;
+        document.getElementById('result-detail').textContent = `تعداد پاسخ صحیح: ${data.correct_count} از ${data.total_questions}`;
+      } else {
+        alert(data.message || 'خطا در تصحیح.');
+        btn.disabled = false; btn.textContent = 'ارسال پاسخ‌ها';
+      }
+    } catch (err) {
+      alert('خطای شبکه.');
+      btn.disabled = false; btn.textContent = 'ارسال پاسخ‌ها';
+    }
+  }
+
+  function showError(msg) {
+    document.getElementById('loading').style.display = 'none';
+    const err = document.getElementById('error-msg');
+    err.textContent = msg; err.style.display = 'block';
+  }
+</script>
+</body>
+</html>
