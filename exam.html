@@ -10,7 +10,7 @@
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: 'Vazirmatn', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
 
-  /* استایل‌های آنلاین */
+  /* ===== استایل‌های آزمون آنلاین ===== */
   .container { max-width: 800px; margin: 0 auto; padding: 16px; }
   .name-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center; z-index: 1000; }
   .name-box { background: #fff; padding: 30px; border-radius: 12px; width: 90%; max-width: 400px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
@@ -37,7 +37,7 @@
   .result-box { background: #fff; padding: 30px; border-radius: 12px; text-align: center; display: none; }
   .score-circle { width: 120px; height: 120px; border-radius: 50%; border: 8px solid var(--success); display: flex; align-items: center; justify-content: center; font-size: 2.5rem; font-weight: bold; color: var(--success); margin: 20px auto; }
 
-  /* استایل‌های PDF */
+  /* ===== استایل‌های اختصاصی PDF ===== */
   #pdf-container { display: none; background: white; width: 100%; padding: 10px; }
   .exam-pdf-page { font-family: 'Vazirmatn', sans-serif; direction: rtl; color: black; font-size: 13px; background: white; padding: 5px; line-height: 1.5; width: 100%; max-width: 800px; margin: 0 auto; }
   .exam-header-table { width: 100%; border-collapse: collapse; margin-bottom: 10px; text-align: center; }
@@ -67,6 +67,7 @@
   .answer-key-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 13px; table-layout: fixed; }
   .answer-key-table th, .answer-key-table td { border: 1px solid black; padding: 6px; text-align: center; }
 
+  /* تنظیمات چاپ */
   @media print {
     body { background: #fff; padding: 0; }
     body * { visibility: hidden; }
@@ -80,6 +81,7 @@
 </head>
 <body>
 
+<!-- کادر دریافت نام دانش‌آموز (آنلاین) -->
 <div class="name-overlay" id="name-overlay" style="display:none;">
   <div class="name-box">
     <h2>لطفاً نام و نام خانوادگی خود را وارد کنید</h2>
@@ -91,6 +93,7 @@
 <div class="container" id="loading" style="text-align:center; padding:50px;">در حال دریافت آزمون...</div>
 <div class="container" id="error-msg" style="background:#fee2e2; color:#dc2626; padding:20px; border-radius:12px; text-align:center; display:none; font-weight:bold;"></div>
 
+<!-- بخش آزمون آنلاین -->
 <div id="exam-wrapper" class="container" style="display:none;">
   <div class="timer-box" id="timer-box">زمان: <span id="timer-text">--:--</span></div>
   <div class="exam-header" id="exam-header-online"></div>
@@ -100,6 +103,7 @@
   </form>
 </div>
 
+<!-- بخش آزمون PDF -->
 <div id="pdf-wrapper" class="container" style="display:none;">
   <div class="no-print" style="margin-bottom: 20px; text-align: center;">
     <button type="button" class="btn-print" style="display: inline-block; width: auto; padding: 12px 30px;" onclick="window.print()">🖨️ چاپ / ذخیره PDF</button>
@@ -107,6 +111,7 @@
   <div id="pdf-container"></div>
 </div>
 
+<!-- نتیجه آزمون -->
 <div class="result-box container" id="result-box">
   <h2>نتیجه آزمون</h2>
   <div class="score-circle" id="score-display">0</div>
@@ -142,7 +147,7 @@
     } catch (err) { showError('خطای شبکه.'); }
   }
 
-  // ===== رندر PDF (اصلاح شده با منطق هوشمند) =====
+  // ===== رندر PDF =====
   function renderPDFLayout() {
     document.getElementById('pdf-wrapper').style.display = 'block';
     const school = examData.header_school || '.....................';
@@ -187,9 +192,7 @@
     const letters = ['الف', 'ب', 'ج', 'د', 'هـ', 'و', 'ز', 'ح', 'ط', 'ی', 'ک', 'ل', 'م', 'ن', 'س', 'ع', 'ف', 'ص', 'ق', 'ر'];
     let groupNum = 1;
 
-    // ==========================================
-    // صفحه اول: سوالات عینی (فقط اگر وجود داشته باشند)
-    // ==========================================
+    // ===== صفحه اول: سوالات عینی =====
     if (objCount > 0) {
         pdfHTML += `
               <table class="exam-main-table">
@@ -231,13 +234,9 @@
         pdfHTML += `</tbody></table>`; 
     }
 
-    // ==========================================
-    // صفحه دوم: سوالات تشریحی (فقط اگر وجود داشته باشند)
-    // ==========================================
+    // ===== صفحه دوم: سوالات تشریحی =====
     if (essayQ.length > 0) {
-        if (objCount > 0) {
-            pdfHTML += `<div class="page-break"></div>`; // اگر سوال عینی هست، برو صفحه بعد
-        }
+        if (objCount > 0) { pdfHTML += `<div class="page-break"></div>`; }
         
         pdfHTML += `
               <table class="exam-main-table">
@@ -253,9 +252,7 @@
         pdfHTML += `</td><td class="col-score">${(essayQ.length * pointPerQ).toFixed(2)}</td></tr></tbody></table>`;
     }
 
-    // ==========================================
-    // صفحه آخر: پاسخنامه
-    // ==========================================
+    // ===== صفحه سوم: پاسخنامه =====
     pdfHTML += `
           <div class="page-break"></div>
           <h2 style="text-align: center; margin: 15px 0; font-size: 16px;">پاسخنامه و کلید سوالات</h2>
@@ -336,7 +333,14 @@
         body: JSON.stringify({ code: examCode, student_name: studentName, answers: answers })
       });
       
-      const data = await res.json();
+      // خواندن پاسخ به صورت متن برای جلوگیری از خطای JSON
+      const text = await res.text();
+      let data;
+      try {
+          data = JSON.parse(text); // تلاش برای تبدیل به JSON
+      } catch (e) {
+          throw new Error("پاسخ نامعتبر از سرور (احتمالا خطای هاست): " + text);
+      }
       
       if (res.ok && data.ok) {
         document.getElementById('exam-wrapper').style.display = 'none';
@@ -348,7 +352,7 @@
         btn.disabled = false; btn.textContent = 'ارسال پاسخ‌ها'; 
       }
     } catch (err) { 
-      alert('خطای شبکه یا فرمت نامعتبر: ' + err.message); 
+      alert('خطای شبکه: ' + err.message); 
       btn.disabled = false; btn.textContent = 'ارسال پاسخ‌ها'; 
     }
   }
