@@ -10,7 +10,7 @@
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: 'Vazirmatn', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
 
-  /* ===== استایل‌های حالت آنلاین ===== */
+  /* استایل‌های آنلاین */
   .container { max-width: 800px; margin: 0 auto; padding: 16px; }
   .name-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center; z-index: 1000; }
   .name-box { background: #fff; padding: 30px; border-radius: 12px; width: 90%; max-width: 400px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
@@ -21,28 +21,23 @@
   .exam-header { background: #fff; padding: 20px; border-radius: 12px; text-align: center; border: 2px solid var(--primary); margin-bottom: 20px; }
   .header-row { display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 10px; color: #475569; }
   .header-title { font-size: 1.2rem; font-weight: bold; color: var(--primary); }
-  .header-sub { font-size: 1rem; font-weight: 600; margin-top: 8px; }
   .student-name-line { margin-top: 15px; font-weight: bold; text-align: right; border-bottom: 1px dashed #94a3b8; padding-bottom: 5px; }
   
-  .timer-box { position: sticky; top: 10px; background: var(--primary); color: white; padding: 12px; border-radius: 10px; text-align: center; font-size: 1.2rem; font-weight: bold; z-index: 100; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-bottom: 20px; }
-  .timer-box.warning { background: var(--error); animation: pulse 1s infinite; }
-  @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.7; } 100% { opacity: 1; } }
-
-  .question-card { background: #fff; border-radius: 12px; padding: 20px; margin-bottom: 16px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+  .timer-box { position: sticky; top: 10px; background: var(--primary); color: white; padding: 12px; border-radius: 10px; text-align: center; font-size: 1.2rem; font-weight: bold; z-index: 100; margin-bottom: 20px; }
+  .timer-box.warning { background: var(--error); }
+  
+  .question-card { background: #fff; border-radius: 12px; padding: 20px; margin-bottom: 16px; }
   .q-text { font-weight: bold; margin-bottom: 16px; font-size: 1.05rem; }
-  .q-num { color: var(--primary); margin-left: 6px; }
   .options-list { display: flex; flex-direction: column; gap: 10px; }
-  .option-item { display: flex; align-items: center; padding: 12px; border: 1.5px solid var(--border); border-radius: 8px; cursor: pointer; transition: all 0.2s; }
-  .option-item:hover { background: #f8fafc; border-color: var(--primary); }
-  .option-item input { margin-left: 10px; width: 18px; height: 18px; accent-color: var(--primary); }
-  input[type="text"], textarea { width: 100%; padding: 12px; border: 1.5px solid var(--border); border-radius: 8px; font-family: inherit; font-size: 1rem; background: #f8fafc; resize: vertical; }
-  .btn-submit { width: 100%; padding: 16px; background: var(--success); color: white; border: none; border-radius: 10px; font-size: 1.1rem; font-weight: bold; cursor: pointer; margin-top: 20px; font-family: inherit; }
-  .btn-print { width: 100%; padding: 16px; background: var(--primary); color: white; border: none; border-radius: 10px; font-size: 1.1rem; font-weight: bold; cursor: pointer; margin-top: 20px; font-family: inherit; display: none; }
-  .result-box { background: #fff; padding: 30px; border-radius: 12px; text-align: center; display: none; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+  .option-item { display: flex; align-items: center; padding: 12px; border: 1.5px solid var(--border); border-radius: 8px; cursor: pointer; }
+  .option-item input { margin-left: 10px; width: 18px; height: 18px; }
+  input[type="text"], textarea { width: 100%; padding: 12px; border: 1.5px solid var(--border); border-radius: 8px; font-family: inherit; }
+  .btn-submit { width: 100%; padding: 16px; background: var(--success); color: white; border: none; border-radius: 10px; font-size: 1.1rem; font-weight: bold; cursor: pointer; margin-top: 20px; }
+  .btn-print { width: 100%; padding: 16px; background: var(--primary); color: white; border: none; border-radius: 10px; font-size: 1.1rem; font-weight: bold; cursor: pointer; margin-top: 20px; display: none; }
+  .result-box { background: #fff; padding: 30px; border-radius: 12px; text-align: center; display: none; }
   .score-circle { width: 120px; height: 120px; border-radius: 50%; border: 8px solid var(--success); display: flex; align-items: center; justify-content: center; font-size: 2.5rem; font-weight: bold; color: var(--success); margin: 20px auto; }
-  .error-msg { background: #fee2e2; color: var(--error); padding: 20px; border-radius: 12px; text-align: center; display: none; font-weight: bold; }
 
-  /* ===== استایل‌های اختصاصی PDF (برگه امتحانی استاندارد) ===== */
+  /* استایل‌های PDF */
   #pdf-container { display: none; background: white; width: 100%; padding: 10px; }
   .exam-pdf-page { font-family: 'Vazirmatn', sans-serif; direction: rtl; color: black; font-size: 14px; background: white; padding: 5px; line-height: 1.5; width: 100%; max-width: 800px; margin: 0 auto; }
   .exam-header-table { width: 100%; border-collapse: collapse; margin-bottom: 10px; text-align: center; }
@@ -67,7 +62,6 @@
   .answer-key-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 14px; table-layout: fixed; }
   .answer-key-table th, .answer-key-table td { border: 1px solid black; padding: 6px; text-align: center; }
 
-  /* استایل‌های چاپ */
   @media print {
     body { background: #fff; padding: 0; }
     body * { visibility: hidden; }
@@ -82,7 +76,6 @@
 </head>
 <body>
 
-<!-- کادر دریافت نام دانش‌آموز (آنلاین) -->
 <div class="name-overlay" id="name-overlay" style="display:none;">
   <div class="name-box">
     <h2>لطفاً نام و نام خانوادگی خود را وارد کنید</h2>
@@ -92,48 +85,39 @@
 </div>
 
 <div class="container" id="loading" style="text-align:center; padding:50px;">در حال دریافت آزمون...</div>
-<div class="error-msg container" id="error-msg"></div>
+<div class="container" id="error-msg" style="background:#fee2e2; color:#dc2626; padding:20px; border-radius:12px; text-align:center; display:none; font-weight:bold;"></div>
 
-<!-- حالت آنلاین -->
 <div id="exam-wrapper" class="container" style="display:none;">
-  <div class="timer-box" id="timer-box">زمان باقیمانده: <span id="timer-text">--:--</span></div>
+  <div class="timer-box" id="timer-box">زمان: <span id="timer-text">--:--</span></div>
   <div class="exam-header" id="exam-header-online"></div>
   <form id="exam-form">
     <div id="questions-container"></div>
-    <button type="submit" class="btn-submit" id="btn-submit">ارسال پاسخ‌ها و پایان آزمون</button>
+    <button type="submit" class="btn-submit" id="btn-submit">ارسال پاسخ‌ها</button>
   </form>
 </div>
 
-<!-- حالت PDF (برگه جدول‌کشی شده) -->
 <div id="pdf-wrapper" class="container" style="display:none;">
   <div class="no-print" style="margin-bottom: 20px; text-align: center;">
     <button type="button" class="btn-print" style="display: inline-block; width: auto; padding: 12px 30px;" onclick="window.print()">🖨️ چاپ / ذخیره PDF</button>
-    <p style="margin-top: 10px; color: #64748b; font-size: 0.9rem;">برای دریافت فایل، دکمه بالا را بزنید و در قسمت مقصد، "Save as PDF" را انتخاب کنید.</p>
   </div>
   <div id="pdf-container"></div>
 </div>
 
-<!-- نتیجه آزمون آنلاین -->
 <div class="result-box container" id="result-box">
   <h2>نتیجه آزمون</h2>
   <div class="score-circle" id="score-display">0</div>
   <p>از ۲۰ نمره</p>
-  <p style="margin-top:10px; color:#64748b;" id="result-detail">تعداد پاسخ صحیح: ۰</p>
+  <p id="result-detail" style="color:#64748b; margin-top:10px;">تعداد پاسخ صحیح: ۰</p>
 </div>
 
 <script>
   const API_BASE = 'https://api.motadars.ir';
   const urlParams = new URLSearchParams(window.location.search);
   const examCode = urlParams.get('code');
-  let examData = null;
-  let questionsData = null;
-  let examDuration = 60 * 60;
-  let timerInterval;
-  let isSubmitted = false;
-  let studentName = '';
+  let examData = null, questionsData = null, examDuration = 0, timerInterval, isSubmitted = false, studentName = '';
 
   document.addEventListener('DOMContentLoaded', () => {
-    if (!examCode) return showError('لینک آزمون نامعتبر است.');
+    if (!examCode) return showError('لینک نامعتبر است.');
     fetchExam();
   });
 
@@ -141,34 +125,31 @@
     try {
       const res = await fetch(`${API_BASE}/get_exam.php?code=${examCode}`);
       const data = await res.json();
+      if (!res.ok || !data.ok) return showError(data.message || 'خطا در دریافت.');
       
-      if (!res.ok || !data.ok) return showError(data.message || 'خطا در دریافت آزمون.');
-
       document.getElementById('loading').style.display = 'none';
-      examData = data.exam;
-      questionsData = data.questions;
+      examData = data.exam; questionsData = data.questions;
       
       if (examData.exam_type === 'online') {
         document.getElementById('name-overlay').style.display = 'flex';
       } else {
-        renderPDFLayout(); // اگر PDF بود، برگه استاندارد رو بساز
+        renderPDFLayout();
       }
-    } catch (err) {
-      showError('خطای شبکه. اینترنت خود را بررسی کنید.');
-    }
+    } catch (err) { showError('خطای شبکه.'); }
   }
 
-  // ==========================================
-  // بخش رندر کردن PDF (دقیقاً مشابه فایل شما)
-  // ==========================================
+  // ===== رندر PDF (اصلاح شده) =====
   function renderPDFLayout() {
     document.getElementById('pdf-wrapper').style.display = 'block';
-
     const school = examData.header_school || '.....................';
     const duration = examData.duration || '50';
     const examDate = examData.exam_date || '..........................';
     const admin = examData.header_admin || 'اداره آموزش و پرورش';
     const teacherName = examData.header_teacher_name || '.....................';
+
+    // تقسیم بارم: مجموع 20 نمره بین کل سوالات
+    const totalQuestions = questionsData.length;
+    const pointPerQ = (20 / totalQuestions).toFixed(2);
 
     let truefalseQ = questionsData.filter(q => q.type === 'truefalse');
     let testiQ = questionsData.filter(q => q.type === 'testi');
@@ -195,17 +176,9 @@
                   <td><b>طراح سوال: ${teacherName}</b></td>
               </tr>
           </table>
-
           <div class="exam-motto">«در سکوت سخت تلاش کن، بگذار موفقیتت صدای تو باشد»</div>
-
           <table class="exam-main-table">
-              <thead>
-                  <tr>
-                      <th class="col-row">ردیف</th>
-                      <th class="col-question">سوالات</th>
-                      <th class="col-score">بارم</th>
-                  </tr>
-              </thead>
+              <thead><tr><th class="col-row">ردیف</th><th class="col-question">سوالات</th><th class="col-score">بارم</th></tr></thead>
               <tbody>
     `;
 
@@ -213,132 +186,57 @@
     let groupNum = 1;
 
     if (truefalseQ.length > 0) {
-        pdfHTML += `<tr>
-            <td class="col-row">${groupNum++}</td>
-            <td class="col-question">
-                <div class="q-group-title">الف) درست یا نادرست بودن عبارات زیر را مشخص کنید.</div>`;
-        
+        pdfHTML += `<tr><td class="col-row">${groupNum++}</td><td class="col-question"><div class="q-group-title">الف) درست یا نادرست بودن عبارات زیر را مشخص کنید.</div>`;
         truefalseQ.forEach((q, i) => {
-            let answerText = (q.answer === 0 || (Array.isArray(q.answer) && q.answer[0] === 0)) ? "صحیح" : "غلط";
+            let answerText = (Array.isArray(q.answer) ? q.answer[0] : q.answer) === 0 ? "صحیح" : "غلط";
             answerKeyHTML += `<tr><td>${letters[i]}</td><td>${answerText}</td></tr>`;
-            
-            pdfHTML += `
-                <div class="sub-q">
-                    <div class="sub-q-label">${letters[i]})</div>
-                    <div class="sub-q-content">
-                        ${q.question_text}
-                        <span class="tf-inline">
-                            <span class="option-item-pdf"><span class="opt-box"></span> صحیح</span>
-                            <span class="option-item-pdf"><span class="opt-box"></span> غلط</span>
-                        </span>
-                    </div>
-                </div>`;
+            pdfHTML += `<div class="sub-q"><div class="sub-q-label">${letters[i]})</div><div class="sub-q-content">${q.question_text}<span class="tf-inline"><span class="option-item-pdf"><span class="opt-box"></span> صحیح</span><span class="option-item-pdf"><span class="opt-box"></span> غلط</span></span></div></div>`;
         });
-        pdfHTML += `</td><td class="col-score">${truefalseQ.length * 0.5}</td></tr>`;
+        pdfHTML += `</td><td class="col-score">${(truefalseQ.length * pointPerQ).toFixed(2)}</td></tr>`;
     }
 
     if (testiQ.length > 0) {
-        pdfHTML += `<tr>
-            <td class="col-row">${groupNum++}</td>
-            <td class="col-question">
-                <div class="q-group-title">ب) گزینه صحیح را انتخاب کنید.</div>`;
-        
+        pdfHTML += `<tr><td class="col-row">${groupNum++}</td><td class="col-question"><div class="q-group-title">ب) گزینه صحیح را انتخاب کنید.</div>`;
         testiQ.forEach((q, i) => {
             let correctIndex = Array.isArray(q.answer) ? q.answer[0] : q.answer;
             let answerText = q.options[correctIndex] || 'نامشخص';
             answerKeyHTML += `<tr><td>${letters[i]}</td><td>${answerText}</td></tr>`;
-
-            pdfHTML += `
-                <div class="sub-q" style="flex-direction: column;">
-                    <div style="display: flex; width: 100%;">
-                        <div class="sub-q-label">${letters[i]})</div>
-                        <div class="sub-q-content">${q.question_text}</div>
-                    </div>
-                    <div class="options-inline" style="padding-right: 25px;">
-                        ${q.options.map((opt, j) => `<span class="option-item-pdf"><span class="opt-box"></span> ${['الف', 'ب', 'ج', 'د'][j]}) ${opt}</span>`).join('')}
-                    </div>
-                </div>`;
+            pdfHTML += `<div class="sub-q" style="flex-direction: column;"><div style="display: flex; width: 100%;"><div class="sub-q-label">${letters[i]})</div><div class="sub-q-content">${q.question_text}</div></div><div class="options-inline" style="padding-right: 25px;">${q.options.map((opt, j) => `<span class="option-item-pdf"><span class="opt-box"></span> ${['الف', 'ب', 'ج', 'د'][j]}) ${opt}</span>`).join('')}</div></div>`;
         });
-        pdfHTML += `</td><td class="col-score">${testiQ.length * 0.5}</td></tr>`;
+        pdfHTML += `</td><td class="col-score">${(testiQ.length * pointPerQ).toFixed(2)}</td></tr>`;
     }
 
     if (jakhaliQ.length > 0) {
-        pdfHTML += `<tr>
-            <td class="col-row">${groupNum++}</td>
-            <td class="col-question">
-                <div class="q-group-title">ج) جاهای خالی را با کلمات مناسب پر کنید.</div>`;
-        
+        pdfHTML += `<tr><td class="col-row">${groupNum++}</td><td class="col-question"><div class="q-group-title">ج) جاهای خالی را با کلمات مناسب پر کنید.</div>`;
         jakhaliQ.forEach((q, i) => {
             let answerText = Array.isArray(q.answer) ? q.answer.join(' / ') : q.answer;
             answerKeyHTML += `<tr><td>${letters[i]}</td><td>${answerText}</td></tr>`;
-
-            pdfHTML += `
-                <div class="sub-q">
-                    <div class="sub-q-label">${letters[i]})</div>
-                    <div class="sub-q-content">${q.question_text}</div>
-                </div>`;
+            pdfHTML += `<div class="sub-q"><div class="sub-q-label">${letters[i]})</div><div class="sub-q-content">${q.question_text}</div></div>`;
         });
-        pdfHTML += `</td><td class="col-score">${jakhaliQ.length * 0.5}</td></tr>`;
+        pdfHTML += `</td><td class="col-score">${(jakhaliQ.length * pointPerQ).toFixed(2)}</td></tr>`;
     }
 
     if (essayQ.length > 0) {
-        pdfHTML += `<tr>
-            <td class="col-row">${groupNum++}</td>
-            <td class="col-question">
-                <div class="q-group-title">د) به سوالات زیر پاسخ کامل دهید.</div>`;
-        
+        pdfHTML += `<tr><td class="col-row">${groupNum++}</td><td class="col-question"><div class="q-group-title">د) به سوالات زیر پاسخ کامل دهید.</div>`;
         essayQ.forEach((q, i) => {
-            // برای سوالات تشریحی، چون فیلد question_key توی دیتابیس داریم
-            // اینجا ما باید از همون دیتابیس جواب رو بکشیم. ولی چون API جواب رو نمی‌فرسته،
-            // در پاسخنامه بنویسید "طبق کلید معلم" یا اینکه در API جواب تشریحی رو هم بفرستیم.
-            // فعلاً چون get_exam جواب‌ها رو نمی‌فرسته، اینجا برای امنیت نمیشه جواب رو چاپ کرد.
-            // ولی در کلید سوالات میشه نوشت: (پاسخ تشریحی)
-            answerKeyHTML += `<tr><td>${i+1}</td><td>پاسخ در برگه دانش‌آموز بررسی شود.</td></tr>`;
-
-            pdfHTML += `
-                <div class="sub-q" style="flex-direction: column;">
-                    <div style="display: flex; width: 100%;">
-                        <div class="sub-q-label">${i+1})</div>
-                        <div class="sub-q-content">${q.question_text}</div>
-                    </div>
-                    <div class="tashrihi-space"></div>
-                </div>`;
+            let answerText = q.question_key || 'پاسخ بررسی شود.';
+            answerKeyHTML += `<tr><td>${i+1}</td><td>${answerText}</td></tr>`;
+            pdfHTML += `<div class="sub-q" style="flex-direction: column;"><div style="display: flex; width: 100%;"><div class="sub-q-label">${i+1})</div><div class="sub-q-content">${q.question_text}</div></div><div class="tashrihi-space"></div></div>`;
         });
-        pdfHTML += `</td><td class="col-score">${essayQ.length * 2}</td></tr>`;
+        pdfHTML += `</td><td class="col-score">${(essayQ.length * pointPerQ).toFixed(2)}</td></tr>`;
     }
 
-    pdfHTML += `</tbody></table>`;
-
-    pdfHTML += `
-        <div class="page-break" style="padding-top: 20px;">
-            <h2 style="text-align: center; margin-bottom: 15px; font-size: 18px;">پاسخنامه و کلید سوالات</h2>
-            <table class="answer-key-table">
-                <thead>
-                    <tr><th style="width: 20%;">شماره سوال</th><th>پاسخ صحیح / کلید</th></tr>
-                </thead>
-                <tbody>
-                    ${answerKeyHTML}
-                </tbody>
-            </table>
-            <div style="margin-top: 30px; text-align: center; color: #666; font-weight: bold;">طراح سوال: ${teacherName}</div>
-        </div>
-    `;
-
-    pdfHTML += `</div>`; 
+    pdfHTML += `</tbody></table><div class="page-break" style="padding-top: 20px;"><h2 style="text-align: center; margin-bottom: 15px; font-size: 18px;">پاسخنامه و کلید سوالات</h2><table class="answer-key-table"><thead><tr><th style="width: 20%;">شماره سوال</th><th>پاسخ صحیح / کلید</th></tr></thead><tbody>${answerKeyHTML}</tbody></table><div style="margin-top: 30px; text-align: center; color: #666; font-weight: bold;">طراح سوال: ${teacherName}</div></div></div>`;
     document.getElementById('pdf-container').innerHTML = pdfHTML;
   }
 
-  // ==========================================
-  // بخش آزمون آنلاین
-  // ==========================================
+  // ===== رندر آنلاین =====
   function startExam() {
     const name = document.getElementById('student-name-input').value.trim();
-    if (name.length < 3) return alert('لطفاً نام و نام خانوادگی خود را کامل وارد کنید.');
-    
+    if (name.length < 3) return alert('نام کامل را وارد کنید.');
     studentName = name;
     document.getElementById('name-overlay').style.display = 'none';
     renderOnlineLayout();
-    
     examDuration = examData.duration * 60;
     startTimer();
     document.getElementById('btn-submit').style.display = 'block';
@@ -346,119 +244,71 @@
 
   function renderOnlineLayout() {
     document.getElementById('exam-wrapper').style.display = 'block';
-
     document.getElementById('exam-header-online').innerHTML = `
       <div class="header-row"><span>${examData.header_admin}</span><span>تاریخ: ${examData.exam_date || '---'}</span></div>
       <div class="header-title">آزمون ${examData.header_subject}</div>
-      <div class="header-row" style="justify-content:space-between; margin-top:10px;">
-        <span>مدرسه: ${examData.header_school}</span>
-        <span>معلم: ${examData.header_teacher_name}</span>
-      </div>
-      <div class="header-row" style="justify-content:center; margin-top:5px;">
-        <span>مدت زمان: ${examData.duration} دقیقه</span>
-      </div>
+      <div class="header-row" style="justify-content:space-between; margin-top:10px;"><span>مدرسه: ${examData.header_school}</span><span>معلم: ${examData.header_teacher_name}</span></div>
+      <div class="header-row" style="justify-content:center; margin-top:5px;"><span>مدت زمان: ${examData.duration} دقیقه</span></div>
       <div class="student-name-line">نام دانش‌آموز: ${studentName}</div>
     `;
-
     const container = document.getElementById('questions-container');
     container.innerHTML = '';
-
     questionsData.forEach((q, index) => {
-      const card = document.createElement('div');
-      card.className = 'question-card';
-      
+      const card = document.createElement('div'); card.className = 'question-card';
       let inputHtml = '';
       if (q.type === 'testi' || q.type === 'truefalse') {
         inputHtml = `<div class="options-list">`;
-        q.options.forEach((opt, i) => {
-          inputHtml += `
-            <label class="option-item">
-              <input type="radio" name="q_${q.id}" value="${i}">
-              <span>${opt}</span>
-            </label>
-          `;
-        });
+        q.options.forEach((opt, i) => { inputHtml += `<label class="option-item"><input type="radio" name="q_${q.id}" value="${i}"><span>${opt}</span></label>`; });
         inputHtml += `</div>`;
-      } else if (q.type === 'jakhali') {
-        inputHtml = `<input type="text" name="q_${q.id}" placeholder="پاسخ خود را وارد کنید...">`;
-      } else if (q.type === 'essay') {
-        inputHtml = `<textarea name="q_${q.id}" rows="4" placeholder="پاسخ تشریحی خود را بنویسید..."></textarea>`;
-      }
-
-      card.innerHTML = `
-        <div class="q-text"><span class="q-num">سوال ${index + 1}:</span> ${q.question_text}</div>
-        ${inputHtml}
-      `;
+      } else if (q.type === 'jakhali') { inputHtml = `<input type="text" name="q_${q.id}" placeholder="پاسخ...">`; } 
+      else if (q.type === 'essay') { inputHtml = `<textarea name="q_${q.id}" rows="4" placeholder="پاسخ تشریحی..."></textarea>`; }
+      card.innerHTML = `<div class="q-text"><span class="q-num">سوال ${index + 1}:</span> ${q.question_text}</div>${inputHtml}`;
       container.appendChild(card);
     });
   }
 
   function startTimer() {
-    const timerText = document.getElementById('timer-text');
-    const timerBox = document.getElementById('timer-box');
-
+    const timerText = document.getElementById('timer-text'), timerBox = document.getElementById('timer-box');
     timerInterval = setInterval(() => {
-      const minutes = Math.floor(examDuration / 60);
-      const seconds = examDuration % 60;
+      const minutes = Math.floor(examDuration / 60), seconds = examDuration % 60;
       timerText.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-      
       if (examDuration <= 300) timerBox.classList.add('warning');
-      if (examDuration <= 0) {
-        clearInterval(timerInterval);
-        if (!isSubmitted) {
-          alert('زمان آزمون به پایان رسید!');
-          submitExam();
-        }
-      }
+      if (examDuration <= 0) { clearInterval(timerInterval); if (!isSubmitted) { alert('زمان تمام شد!'); submitExam(); } }
       examDuration--;
     }, 1000);
   }
 
   document.getElementById('exam-form')?.addEventListener('submit', (e) => {
-    e.preventDefault();
-    if (confirm('آیا از ارسال پاسخ‌ها مطمئن هستید؟')) submitExam();
+    e.preventDefault(); if (confirm('ارسال پاسخ‌ها؟')) submitExam();
   });
 
   async function submitExam() {
     if (isSubmitted) return;
     isSubmitted = true;
     clearInterval(timerInterval);
-    const btn = document.getElementById('btn-submit');
-    btn.disabled = true; btn.textContent = 'در حال تصحیح...';
-
-    const answers = {};
-    const formData = new FormData(document.getElementById('exam-form'));
-    for (let [key, value] of formData.entries()) {
-      if (key.startsWith('q_')) answers[key.replace('q_', '')] = value;
-    }
+    const btn = document.getElementById('btn-submit'); btn.disabled = true; btn.textContent = 'در حال تصحیح...';
+    const answers = {}, formData = new FormData(document.getElementById('exam-form'));
+    for (let [key, value] of formData.entries()) { if (key.startsWith('q_')) answers[key.replace('q_', '')] = value; }
 
     try {
       const res = await fetch(`${API_BASE}/submit_exam.php`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ code: examCode, student_name: studentName, answers: answers })
       });
       const data = await res.json();
-
       if (res.ok && data.ok) {
         document.getElementById('exam-wrapper').style.display = 'none';
         document.getElementById('result-box').style.display = 'block';
         document.getElementById('score-display').textContent = data.score;
-        document.getElementById('result-detail').textContent = `تعداد پاسخ صحیح: ${data.correct_count} از ${data.total_questions}`;
-      } else {
-        alert(data.message || 'خطا در تصحیح.');
-        btn.disabled = false; btn.textContent = 'ارسال پاسخ‌ها';
-      }
-    } catch (err) {
-      alert('خطای شبکه.');
-      btn.disabled = false; btn.textContent = 'ارسال پاسخ‌ها';
-    }
+        document.getElementById('result-detail').textContent = `پاسخ صحیح: ${data.correct_count} از ${data.total_questions}`;
+      } else { alert(data.message || 'خطا'); btn.disabled = false; btn.textContent = 'ارسال پاسخ‌ها'; }
+    } catch (err) { alert('خطای شبکه'); btn.disabled = false; btn.textContent = 'ارسال پاسخ‌ها'; }
   }
 
   function showError(msg) {
     document.getElementById('loading').style.display = 'none';
-    const err = document.getElementById('error-msg');
-    err.textContent = msg; err.style.display = 'block';
+    document.getElementById('error-msg').textContent = msg;
+    document.getElementById('error-msg').style.display = 'block';
   }
 </script>
 </body>
