@@ -151,7 +151,7 @@
             font-weight: 700;
         }
 
-        /* فرم بازه درسی (همون حالت قبل) */
+        /* فرم بازه درسی */
         .range-inputs {
             display: flex;
             gap: 16px;
@@ -234,7 +234,7 @@
 
     <div class="wizard-container">
         
-        <!-- استپ ۱ -->
+        <!-- استپ ۱: مقطع -->
         <div class="step active" id="step-1">
             <h2 class="step-title">مقطع تحصیلی</h2>
             <p class="step-subtitle">برای شروع، مقطع خود را انتخاب کنید.</p>
@@ -250,7 +250,7 @@
             </div>
         </div>
 
-        <!-- استپ ۲ -->
+        <!-- استپ ۲: رشته -->
         <div class="step" id="step-2-field">
             <h2 class="step-title">رشته تحصیلی</h2>
             <p class="step-subtitle">رشته خود را انتخاب کنید.</p>
@@ -267,21 +267,21 @@
             </div>
         </div>
 
-        <!-- استپ ۳ -->
+        <!-- استپ ۳: پایه -->
         <div class="step" id="step-3-grade">
             <h2 class="step-title">پایه تحصیلی</h2>
             <p class="step-subtitle">پایه خود را انتخاب کنید.</p>
             <div class="grid-3" id="grades-container"></div>
         </div>
 
-        <!-- استپ ۴ -->
+        <!-- استپ ۴: درس -->
         <div class="step" id="step-4-subject">
             <h2 class="step-title">انتخاب کتاب درسی</h2>
             <p class="step-subtitle">یک درس انتخاب کنید.</p>
             <div class="grid-1" id="subjects-container"></div>
         </div>
 
-        <!-- استپ ۵ (بازه درسی) -->
+        <!-- استپ ۵: بازه درسی -->
         <div class="step" id="step-5-lesson">
             <h2 class="step-title">بازه درسی</h2>
             <p class="step-subtitle">از چه درس‌هایی سوال طرح شود؟</p>
@@ -308,24 +308,58 @@
     </div>
 
     <script>
-        const tg = window.Telegram.WebApp;
-        tg.ready();
-        tg.expand();
-
+        // ===== راه‌اندازی امن تلگرام (برای جلوگیری از فلش زدن) =====
+        let tg = null;
         let appData = null;
         let selection = { level: null, field: null, grade: null, subject: null };
 
+        function initTelegram() {
+            if (!window.Telegram || !window.Telegram.WebApp) {
+                setTimeout(initTelegram, 50);
+                return;
+            }
+            
+            tg = window.Telegram.WebApp;
+            tg.ready();
+            
+            // فقط اگر Expand نشده بود، اکسپند کن
+            try {
+                if (!tg.isExpanded) {
+                    tg.expand();
+                }
+                // جلوگیری از سوایپ تصادفی (بستن مینی‌اپ)
+                if (tg.disableVerticalSwipes) {
+                    tg.disableVerticalSwipes();
+                }
+            } catch (e) {
+                console.log('Telegram Expand Error:', e);
+            }
+
+            // اعمال تم تاریک در صورت نیاز
+            if (tg.colorScheme === 'dark') {
+                document.body.classList.add('dark');
+            }
+            
+            // لود دیتا
+            loadData();
+        }
+
+        // شروع با کمی تاخیر برای اطمینان از لود کامل WebView
+        window.addEventListener('load', () => {
+            setTimeout(initTelegram, 100);
+        });
+
+        // ===== بارگذاری داده‌ها =====
         async function loadData() {
             try {
                 const res = await fetch('subjects.json');
                 appData = await res.json();
             } catch (e) {
-                tg.showAlert('خطا در بارگذاری اطلاعات.');
+                tg.showAlert('خطا در بارگذاری اطلاعات دروس.');
             }
         }
 
-        document.addEventListener('DOMContentLoaded', loadData);
-
+        // ===== مدیریت استپ‌ها =====
         function showStep(stepId) {
             document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
             document.getElementById(stepId).classList.add('active');
@@ -346,7 +380,7 @@
             if (stepId === 'step-5-lesson') progress = 100;
             document.getElementById('progressBar').style.width = progress + '%';
             
-            if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
+            if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
         }
 
         function prevStep() {
@@ -360,6 +394,7 @@
             else if (active === 'step-5-lesson') showStep('step-4-subject');
         }
 
+        // ===== انتخاب‌ها =====
         function selectLevel(levelId) {
             selection.level = levelId;
             if (levelId === 'motavassete_dovom') showStep('step-2-field');
@@ -429,16 +464,17 @@
         }
 
         function showComingSoon() {
-            if (tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('warning');
+            if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('warning');
             tg.showAlert('این کتاب درسی به زودی به بانک سوالات اضافه خواهد شد.');
         }
 
+        // ===== ارسال نهایی =====
         function submitExam() {
             const from = parseInt(document.getElementById('lessonFrom').value);
             const to = parseInt(document.getElementById('lessonTo').value);
             
             if (from < 1 || to > 24 || from > to) {
-                tg.showAlert('بازه درسی نامعتبر است (۱ تا ۲۴).');
+                tg.showAlert('بازه درسی نامعتبر است. اعداد باید بین ۱ تا ۲۴ و از کوچک به بزرگ باشند.');
                 return;
             }
             
@@ -449,7 +485,7 @@
             selection.lessonFrom = from;
             selection.lessonTo = to;
             
-            if (tg.sendData) {
+            if (tg && tg.sendData) {
                 tg.sendData(JSON.stringify(selection));
                 tg.close();
             } else {
