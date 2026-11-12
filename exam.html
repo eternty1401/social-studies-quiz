@@ -261,8 +261,11 @@
       if (shortAnswerQ.length) {
         let items = '';
         shortAnswerQ.forEach(q => {
-          // ⭐ باگ فیکس شد: اول question_key، بعد answer
-          const key = q.question_key || (Array.isArray(q.answer) ? q.answer[0] : q.answer) || 'پاسخ بررسی شود.';
+          // ⭐ اصلاح نهایی: چک کردن سختگیرانه‌تر برای جلوگیری از خطای پاسخ خالی
+          const s = v => (typeof v === 'string' ? v.trim() : '');
+          const first = Array.isArray(q.answer) ? q.answer[0] : q.answer;
+          const key = s(q.question_key) || s(first) || 'پاسخ بررسی شود.';
+          
           answerKeyHTML += `<tr><td>${qCounter}</td><td>${key}</td></tr>`;
           items += `<div class="q-item"><div class="q-line">
             <span class="q-t"><b>${toFa(qCounter++)}-</b> ${q.question_text}</span>
@@ -279,8 +282,11 @@
           <td class="score-col"></td>
         </tr>`;
         longAnswerQ.forEach((q, i) => {
-          // ⭐ باگ فیکس شد: اول question_key، بعد answer
-          const key = q.question_key || (Array.isArray(q.answer) ? q.answer[0] : q.answer) || 'پاسخ بررسی شود.';
+          // ⭐ اصلاح نهایی: چک کردن سختگیرانه‌تر برای جلوگیری از خطای پاسخ خالی
+          const s = v => (typeof v === 'string' ? v.trim() : '');
+          const first = Array.isArray(q.answer) ? q.answer[0] : q.answer;
+          const key = s(q.question_key) || s(first) || 'پاسخ بررسی شود.';
+          
           answerKeyHTML += `<tr><td>${qCounter}</td><td>${key}</td></tr>`;
           const sc = q.score || defaultLongScores[i] || 1;
           page2HTML += `<tr>
