@@ -27,7 +27,7 @@
             background-color: var(--bg);
             color: var(--text);
             line-height: 1.6;
-            padding-bottom: 100px; /* فضا برای دکمه پایین */
+            padding-bottom: 100px;
         }
 
         /* هدر صفحه */
@@ -381,10 +381,6 @@
                 };
             });
 
-            // اضافه کردن تایم‌اوت ۱۵ ثانیه‌ای برای جلوگیری از گیر کردن
-            const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), 15000);
-
             try {
                 const token = localStorage.getItem('teacher_token');
                 const res = await fetch(`${API_BASE}/confirm_exam.php`, {
@@ -397,27 +393,28 @@
                         code: examCode,
                         header: headerData,
                         questions: editedQuestions
-                    }),
-                    signal: controller.signal // اتصال تایم‌اوت
+                    })
                 });
                 
-                clearTimeout(timeoutId); // لغو تایم‌اوت در صورت موفقیت
-
-                const data = await res.json();
+                // خواندن پاسخ به صورت متن خام برای دیباگ
+                const textData = await res.text();
+                let data;
+                try {
+                    data = JSON.parse(textData);
+                } catch (e) {
+                    alert("❌ خطای سرور (پاسخ JSON معتبر نیست):\n" + textData);
+                    throw new Error("Invalid JSON");
+                }
                 
                 if (res.ok && data.ok) {
-                    tg.showAlert('✅ آزمون با موفقیت تایید شد!', () => {
-                        window.location.href = data.final_link;
-                    });
+                    alert('✅ آزمون با موفقیت تایید شد!');
+                    window.location.href = data.final_link;
                 } else {
-                    tg.showAlert('❌ خطا: ' + (data.message || 'ناشناخته'));
+                    alert('❌ خطا: ' + (data.message || 'ناشناخته'));
                 }
             } catch (e) {
-                clearTimeout(timeoutId);
-                if (e.name === 'AbortError') {
-                    tg.showAlert('❌ سرور پاسخ نداد (Timeout). لطفاً اینترنت خود را بررسی کنید.');
-                } else {
-                    tg.showAlert('❌ خطای شبکه در ارتباط با سرور.');
+                if (e.message !== "Invalid JSON") {
+                    alert('❌ خطای شبکه یا سرور: ' + e.message);
                 }
             } finally {
                 // در هر شرایطی دکمه رو آزاد کن
