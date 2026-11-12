@@ -1,254 +1,418 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ویرایش آزمون | مدرّس</title>
-<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
-<style>
-  :root { --primary: #1e40af; --bg: #f0f4f8; --card: #fff; --text: #1e293b; --border: #cbd5e1; --success: #16a34a; --error: #dc2626; }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Vazirmatn', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; padding-bottom: 80px; }
-  
-  .container { max-width: 800px; margin: 0 auto; padding: 16px; }
-  .header-box { background: white; padding: 20px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
-  .header-box h2 { color: var(--primary); margin-bottom: 15px; font-size: 1.2rem; border-bottom: 2px solid var(--border); padding-bottom: 10px; }
-  
-  .form-row { display: flex; gap: 10px; margin-bottom: 10px; }
-  .form-group { flex: 1; }
-  .form-group label { display: block; font-size: 0.85rem; font-weight: bold; color: var(--text-muted); margin-bottom: 5px; }
-  .form-control { width: 100%; padding: 10px; border: 1.5px solid var(--border); border-radius: 8px; font-family: inherit; font-size: 1rem; }
-  
-  .question-item { background: white; padding: 15px; border-radius: 12px; margin-bottom: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); border-right: 4px solid var(--primary); }
-  .q-header { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.85rem; color: var(--text-muted); font-weight: bold; }
-  
-  .loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.9); display: flex; justify-content: center; align-items: center; z-index: 9999; font-size: 1.2rem; font-weight: bold; color: var(--primary); }
-  
-  .bottom-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: white; padding: 15px; box-shadow: 0 -2px 10px rgba(0,0,0,0.1); text-align: center; z-index: 100; }
-  .btn-confirm { background: var(--success); color: white; border: none; padding: 15px 40px; border-radius: 10px; font-family: inherit; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; max-width: 400px; transition: 0.2s; }
-  .btn-confirm:disabled { opacity: 0.5; cursor: not-allowed; }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ویرایش آزمون | سوالینو</title>
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    
+    <style>
+        :root {
+            --primary: #3b82f6;
+            --bg: var(--tg-theme-bg-color, #f8fafc);
+            --card: var(--tg-theme-secondary-bg-color, #ffffff);
+            --text: var(--tg-theme-text-color, #0f172a);
+            --hint: var(--tg-theme-hint-color, #64748b);
+            --border: rgba(148, 163, 184, 0.2);
+            --success: #10b981;
+            --error: #ef4444;
+            --warning: #f59e0b;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            padding-bottom: 100px; /* فضا برای دکمه پایین */
+        }
+
+        /* هدر صفحه */
+        .page-header {
+            padding: 16px 20px;
+            background: rgba(var(--tg-theme-bg-color-rgb, 248, 250, 252), 0.8);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .page-header h1 { font-size: 1.2rem; font-weight: 800; color: var(--primary); }
+        .token-warning { font-size: 0.75rem; color: var(--error); background: #fee2e2; padding: 4px 8px; border-radius: 8px; }
+
+        .container { max-width: 600px; margin: 0 auto; padding: 20px 16px; }
+
+        /* کارت‌های عمومی */
+        .card {
+            background: var(--card);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid var(--border);
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02);
+        }
+
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* فرم سربرگ */
+        .form-row { display: flex; gap: 12px; margin-bottom: 12px; }
+        .form-group { flex: 1; }
+        .form-group label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--hint);
+            margin-bottom: 6px;
+        }
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 1.5px solid var(--border);
+            border-radius: 10px;
+            font-family: inherit;
+            font-size: 0.95rem;
+            background: var(--bg);
+            color: var(--text);
+            transition: border-color 0.2s;
+        }
+        .form-control:focus { outline: none; border-color: var(--primary); }
+
+        /* کارت سوالات */
+        .question-item {
+            background: var(--card);
+            border-radius: 14px;
+            padding: 16px;
+            margin-bottom: 16px;
+            border: 1px solid var(--border);
+            position: relative;
+        }
+        
+        .q-badge {
+            position: absolute;
+            top: -10px;
+            right: 16px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 2px 12px;
+            border-radius: 20px;
+            color: white;
+        }
+        .q-badge.testi { background: #8b5cf6; }
+        .q-badge.truefalse { background: #ec4899; }
+        .q-badge.jakhali { background: #f59e0b; }
+        .q-badge.essay { background: #10b981; }
+
+        .q-text-input {
+            width: 100%;
+            padding: 12px;
+            border: 1.5px solid var(--border);
+            border-radius: 10px;
+            font-family: inherit;
+            font-size: 0.95rem;
+            background: var(--bg);
+            color: var(--text);
+            resize: vertical;
+            min-height: 80px;
+            margin-top: 8px;
+        }
+        
+        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
+        .option-input { padding: 10px; font-size: 0.9rem; }
+
+        .key-input {
+            margin-top: 10px;
+            background: #f0fdf4;
+            border: 1.5px dashed #22c55e;
+            color: #166534;
+            font-weight: 600;
+        }
+        /* دارک مود برای فیلد جواب */
+        body.dark .key-input { background: #064e3b; color: #86efac; border-color: #059669; }
+
+        /* دکمه پایین صفحه */
+        .bottom-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(to top, var(--bg) 70%, transparent);
+            z-index: 100;
+        }
+        .btn-confirm {
+            width: 100%;
+            padding: 16px;
+            background: var(--success);
+            color: white;
+            border: none;
+            border-radius: 14px;
+            font-family: inherit;
+            font-size: 1.1rem;
+            font-weight: 800;
+            cursor: pointer;
+            box-shadow: 0 10px 20px -5px rgba(16, 185, 129, 0.4);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-confirm:active { transform: scale(0.98); }
+        .btn-confirm:disabled { background: var(--hint); box-shadow: none; }
+
+        /* لودینگ */
+        .loading-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--bg); display: flex; flex-direction: column;
+            justify-content: center; align-items: center; z-index: 9999;
+        }
+        .loader {
+            width: 40px; height: 40px; border: 4px solid var(--border);
+            border-radius: 50%; border-top-color: var(--primary);
+            animation: spin 1s linear infinite; margin-bottom: 16px;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
 </head>
 <body>
 
-<div class="loading-overlay" id="loading">در حال دریافت اطلاعات آزمون...</div>
-
-<div class="container" id="main-container" style="display: none;">
-  
-  <div class="header-box">
-    <h2>📝 ویرایش سربرگ آزمون</h2>
-    <div class="form-row">
-      <div class="form-group">
-        <label>اداره آموزش و پرورش</label>
-        <input type="text" id="head-admin" class="form-control">
-      </div>
-      <div class="form-group">
-        <label>نام مدرسه</label>
-        <input type="text" id="head-school" class="form-control">
-      </div>
+    <div class="loading-overlay" id="loading">
+        <div class="loader"></div>
+        <h3 style="color: var(--primary);">در حال دریافت پیش‌نویس...</h3>
     </div>
-    <div class="form-row">
-      <div class="form-group">
-        <label>تاریخ امتحان</label>
-        <input type="text" id="head-date" class="form-control">
-      </div>
-      <div class="form-group">
-        <label>مدت زمان (دقیقه)</label>
-        <input type="number" id="head-duration" class="form-control">
-      </div>
+
+    <header class="page-header">
+        <h1>📝 ویرایش آزمون</h1>
+        <div class="token-warning">هنوز اعتباری کسر نشده</div>
+    </header>
+
+    <div class="container" id="main-content" style="display: none;">
+        
+        <!-- سربرگ -->
+        <div class="card">
+            <div class="card-title">🏢 اطلاعات سربرگ</div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>اداره آموزش و پرورش</label>
+                    <input type="text" id="head-admin" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>نام مدرسه</label>
+                    <input type="text" id="head-school" class="form-control">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>نام دبیر</label>
+                    <input type="text" id="head-teacher" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>تاریخ امتحان</label>
+                    <input type="text" id="head-date" class="form-control">
+                </div>
+            </div>
+            <div class="form-group" style="width: 50%;">
+                <label>مدت زمان (دقیقه)</label>
+                <input type="number" id="head-duration" class="form-control">
+            </div>
+        </div>
+
+        <h3 style="margin-bottom: 16px; color: var(--text);">📚 ویرایش سوالات</h3>
+        
+        <div id="questions-container">
+            <!-- سوالات به صورت داینامیک پر می‌شوند -->
+        </div>
+
     </div>
-  </div>
 
-  <h3 style="margin-bottom: 15px; color: var(--primary);">📚 ویرایش سوالات</h3>
-  <div id="questions-container"></div>
+    <div class="bottom-bar" id="bottom-bar" style="display: none;">
+        <button class="btn-confirm" id="btn-confirm" onclick="submitChanges()">
+            ✅ تایید نهایی و کسر ۱ اعتبار
+        </button>
+    </div>
 
-</div>
+    <script>
+        const API_BASE = 'https://api.motadars.ir';
+        const urlParams = new URLSearchParams(window.location.search);
+        const examCode = urlParams.get('code');
+        const teacherToken = urlParams.get('token');
+        
+        let examData = null;
+        let questionsData = [];
 
-<div class="bottom-bar" id="bottom-bar" style="display: none;">
-  <p style="font-size: 0.9rem; color: var(--error); margin-bottom: 10px;">⚠️ با کلیک روی دکمه زیر، ۱ اعتبار از حساب شما کسر شده و لینک نهایی ساخته می‌شود.</p>
-  <button class="btn-confirm" id="btn-confirm" onclick="submitChanges()">✅ تایید نهایی و کسر اعتبار</button>
-</div>
+        const tg = window.Telegram.WebApp;
+        tg.ready();
+        tg.expand();
+        
+        // اعمال تم تاریک/روشن تلگرام
+        if (tg.colorScheme === 'dark') document.body.classList.add('dark');
 
-<script>
-  const API_BASE = 'https://api.motadars.ir';
-  const urlParams = new URLSearchParams(window.location.search);
-  const examCode = urlParams.get('code');
-  const teacherToken = urlParams.get('token'); // توکن از طریق لینک تلگرام میاد
-  
-  let examData = null;
-  let questionsData = [];
+        document.addEventListener('DOMContentLoaded', () => {
+            if (!examCode || !teacherToken) {
+                document.getElementById('loading').innerHTML = "<h3 style='color:red;'>لینک نامعتبر است.</h3>";
+                return;
+            }
+            localStorage.setItem('teacher_token', teacherToken);
+            fetchDraft();
+        });
 
-  document.addEventListener('DOMContentLoaded', () => {
-    if (!examCode) {
-      document.getElementById('loading').innerText = "❌ لینک نامعتبر است.";
-      return;
-    }
-    // ذخیره توکن برای درخواست‌های بعدی
-    if (teacherToken) {
-      localStorage.setItem('teacher_token', teacherToken);
-    }
-    fetchDraft();
-  });
+        async function fetchDraft() {
+            try {
+                const res = await fetch(`${API_BASE}/get_draft_exam.php?code=${examCode}`);
+                const data = await res.json();
+                
+                if (!res.ok || !data.ok) {
+                    document.getElementById('loading').innerHTML = `<h3 style='color:red;'>${data.message}</h3>`;
+                    return;
+                }
 
-  async function fetchDraft() {
-    try {
-      const res = await fetch(`${API_BASE}/get_draft_exam.php?code=${examCode}`);
-      const data = await res.json();
-      
-      if (!res.ok || !data.ok) {
-        document.getElementById('loading').innerText = "❌ " + (data.message || "خطا در دریافت آزمون");
-        return;
-      }
+                examData = data.exam;
+                questionsData = data.questions;
+                renderUI();
+                
+            } catch (e) {
+                document.getElementById('loading').innerHTML = "<h3 style='color:red;'>خطای شبکه.</h3>";
+            }
+        }
 
-      examData = data.exam;
-      questionsData = data.questions;
-      renderUI();
-      
-    } catch (e) {
-      document.getElementById('loading').innerText = "❌ خطای شبکه.";
-    }
-  }
+        function renderUI() {
+            document.getElementById('head-admin').value = examData.header_admin;
+            document.getElementById('head-school').value = examData.header_school;
+            document.getElementById('head-teacher').value = examData.header_teacher_name || '';
+            document.getElementById('head-date').value = examData.exam_date;
+            document.getElementById('head-duration').value = examData.duration;
 
-  function renderUI() {
-    document.getElementById('head-admin').value = examData.header_admin;
-    document.getElementById('head-school').value = examData.header_school;
-    document.getElementById('head-date').value = examData.exam_date;
-    document.getElementById('head-duration').value = examData.duration;
+            const container = document.getElementById('questions-container');
+            container.innerHTML = '';
 
-    const container = document.getElementById('questions-container');
-    container.innerHTML = '';
+            questionsData.forEach((q, index) => {
+                const div = document.createElement('div');
+                div.className = 'question-item';
+                
+                let typeName = '';
+                let badgeClass = '';
+                if (q.type === 'testi') { typeName = 'تستی'; badgeClass = 'testi'; }
+                else if (q.type === 'truefalse') { typeName = 'صحیح / غلط'; badgeClass = 'truefalse'; }
+                else if (q.type === 'jakhali') { typeName = 'جاخالی'; badgeClass = 'jakhali'; }
+                else if (q.type === 'essay') { typeName = 'تشریحی'; badgeClass = 'essay'; }
 
-    questionsData.forEach((q, index) => {
-      let typeName = '';
-      if (q.type === 'truefalse') typeName = 'صحیح / غلط';
-      else if (q.type === 'testi') typeName = 'تستی';
-      else if (q.type === 'jakhali') typeName = 'جاخالی';
-      else if (q.type === 'essay') typeName = 'تشریحی';
+                let optionsHtml = '';
+                if (q.type === 'testi') {
+                    optionsHtml = `<div class="options-grid">` + q.options.map((opt, i) => `
+                        <input type="text" class="form-control option-input" data-qid="${q.id}" data-index="${i}" value="${opt}" placeholder="گزینه ${['الف', 'ب', 'ج', 'د'][i]}">
+                    `).join('') + `</div>`;
+                } else if (q.type === 'truefalse') {
+                     optionsHtml = `<div class="options-grid">` + q.options.map((opt, i) => `
+                        <input type="text" class="form-control option-input" data-qid="${q.id}" data-index="${i}" value="${opt}" placeholder="گزینه ${i+1}">
+                    `).join('') + `</div>`;
+                }
 
-      const div = document.createElement('div');
-      div.className = 'question-item';
-      
-      let optionsHtml = '';
-      if (q.type === 'testi') {
-        optionsHtml = q.options.map((opt, i) => `
-          <div class="form-group" style="margin-top:8px;">
-            <label>گزینه ${['الف', 'ب', 'ج', 'د'][i]}</label>
-            <input type="text" class="form-control option-input" data-qid="${q.id}" data-index="${i}" value="${opt}">
-          </div>
-        `).join('');
-      } else if (q.type === 'truefalse') {
-        optionsHtml = q.options.map((opt, i) => `
-          <div class="form-group" style="margin-top:8px;">
-            <label>گزینه ${i+1}</label>
-            <input type="text" class="form-control option-input" data-qid="${q.id}" data-index="${i}" value="${opt}">
-          </div>
-        `).join('');
-      }
+                let keyHtml = '';
+                if (q.type === 'essay' || q.type === 'jakhali') {
+                    let currentKey = q.question_key || (Array.isArray(q.answer) ? q.answer[0] : q.answer) || '';
+                    keyHtml = `
+                        <input type="text" class="form-control key-input" data-qid="${q.id}" value="${currentKey}" placeholder="پاسخ صحیح / کلید سوال">
+                    `;
+                }
 
-      let keyHtml = '';
-      if (q.type === 'essay') {
-        keyHtml = `
-          <div class="form-group" style="margin-top:8px;">
-            <label>پاسخ تشریحی (کلید)</label>
-            <input type="text" class="form-control key-input" data-qid="${q.id}" value="${q.answer && q.answer[0] ? q.answer[0] : ''}">
-          </div>
-        `;
-      } else if (q.type === 'jakhali') {
-        keyHtml = `
-          <div class="form-group" style="margin-top:8px;">
-            <label>جواب جای خالی (کلید)</label>
-            <input type="text" class="form-control key-input" data-qid="${q.id}" value="${q.answer && q.answer[0] ? q.answer[0] : ''}">
-          </div>
-        `;
-      }
+                div.innerHTML = `
+                    <span class="q-badge ${badgeClass}">${typeName}</span>
+                    <label style="font-size: 0.85rem; color: var(--hint); margin-top: 8px; display: block;">متن سوال ${index + 1}</label>
+                    <textarea class="q-text-input text-input" data-qid="${q.id}" rows="2">${q.question_text}</textarea>
+                    ${optionsHtml}
+                    ${keyHtml}
+                `;
+                container.appendChild(div);
+            });
 
-      div.innerHTML = `
-        <div class="q-header">
-          <span>سوال ${index + 1} (${typeName})</span>
-        </div>
-        <div class="form-group">
-          <label>متن سوال</label>
-          <textarea class="form-control text-input" data-qid="${q.id}" rows="2">${q.question_text}</textarea>
-        </div>
-        ${optionsHtml}
-        ${keyHtml}
-      `;
-      container.appendChild(div);
-    });
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('main-content').style.display = 'block';
+            document.getElementById('bottom-bar').style.display = 'block';
+        }
 
-    document.getElementById('loading').style.display = 'none';
-    document.getElementById('main-container').style.display = 'block';
-    document.getElementById('bottom-bar').style.display = 'block';
-  }
+        async function submitChanges() {
+            const btn = document.getElementById('btn-confirm');
+            btn.disabled = true;
+            btn.innerHTML = 'در حال ذخیره و کسر اعتبار...';
 
-  async function submitChanges() {
-    const btn = document.getElementById('btn-confirm');
-    btn.disabled = true;
-    btn.innerText = 'در حال ذخیره و کسر اعتبار...';
+            const headerData = {
+                admin: document.getElementById('head-admin').value,
+                school: document.getElementById('head-school').value,
+                teacher: document.getElementById('head-teacher').value,
+                date: document.getElementById('head-date').value,
+                duration: parseInt(document.getElementById('head-duration').value),
+                type: examData.exam_type
+            };
 
-    // جمع‌آوری اطلاعات ویرایش شده
-    const headerData = {
-      admin: document.getElementById('head-admin').value,
-      school: document.getElementById('head-school').value,
-      date: document.getElementById('head-date').value,
-      duration: parseInt(document.getElementById('head-duration').value),
-      type: examData.exam_type
-    };
+            const editedQuestions = questionsData.map(q => {
+                let text = document.querySelector(`.text-input[data-qid="${q.id}"]`).value;
+                let options = q.options;
+                let answer = q.answer;
 
-    const editedQuestions = questionsData.map(q => {
-      let text = document.querySelector(`.text-input[data-qid="${q.id}"]`).value;
-      let options = q.options;
-      let answer = q.answer;
+                if (q.type === 'testi' || q.type === 'truefalse') {
+                    options = q.options.map((_, i) => document.querySelector(`.option-input[data-qid="${q.id}"][data-index="${i}"]`).value);
+                }
+                
+                if (q.type === 'essay' || q.type === 'jakhali') {
+                    let keyVal = document.querySelector(`.key-input[data-qid="${q.id}"]`).value;
+                    answer = [keyVal];
+                }
 
-      if (q.type === 'testi' || q.type === 'truefalse') {
-        options = q.options.map((_, i) => document.querySelector(`.option-input[data-qid="${q.id}"][data-index="${i}"]`).value);
-      }
-      
-      if (q.type === 'essay' || q.type === 'jakhali') {
-        let keyVal = document.querySelector(`.key-input[data-qid="${q.id}"]`).value;
-        answer = [keyVal]; // ذخیره به صورت آرایه برای هماهنگی با دیتابیس
-      }
+                return {
+                    id: q.id,
+                    type: q.type,
+                    text: text,
+                    options: options,
+                    answer: answer
+                };
+            });
 
-      return {
-        id: q.id,
-        type: q.type,
-        text: text,
-        options: options,
-        answer: answer
-      };
-    });
-
-    try {
-      const token = localStorage.getItem('teacher_token');
-      const res = await fetch(`${API_BASE}/confirm_exam.php`, {
-        method: 'POST',
-        headers: { 
-          'Content-Type': 'application/json',
-          'X-Teacher-Token': token
-        },
-        body: JSON.stringify({
-          code: examCode,
-          header: headerData,
-          questions: editedQuestions
-        })
-      });
-      
-      const data = await res.json();
-      
-      if (res.ok && data.ok) {
-        alert('✅ آزمون با موفقیت تایید شد!\n\nجهت مشاهده و چاپ، روی OK کلیک کنید.');
-        window.location.href = data.final_link;
-      } else {
-        alert('❌ خطا: ' + (data.message || 'ناشناخته'));
-        btn.disabled = false;
-        btn.innerText = '✅ تایید نهایی و کسر اعتبار';
-      }
-    } catch (e) {
-      alert('❌ خطای شبکه در ارتباط با سرور.');
-      btn.disabled = false;
-      btn.innerText = '✅ تایید نهایی و کسر اعتبار';
-    }
-  }
-</script>
+            try {
+                const token = localStorage.getItem('teacher_token');
+                const res = await fetch(`${API_BASE}/confirm_exam.php`, {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'X-Teacher-Token': token
+                    },
+                    body: JSON.stringify({
+                        code: examCode,
+                        header: headerData,
+                        questions: editedQuestions
+                    })
+                });
+                
+                const data = await res.json();
+                
+                if (res.ok && data.ok) {
+                    tg.showAlert('✅ آزمون با موفقیت تایید شد!', () => {
+                        window.location.href = data.final_link;
+                    });
+                } else {
+                    tg.showAlert('❌ خطا: ' + (data.message || 'ناشناخته'));
+                    btn.disabled = false;
+                    btn.innerHTML = '✅ تایید نهایی و کسر ۱ اعتبار';
+                }
+            } catch (e) {
+                tg.showAlert('❌ خطای شبکه در ارتباط با سرور.');
+                btn.disabled = false;
+                btn.innerHTML = '✅ تایید نهایی و کسر ۱ اعتبار';
+            }
+        }
+    </script>
 </body>
 </html>
