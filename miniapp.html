@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>سوالینو | ساخت آزمون</title>
+    <!-- فونت وزیرمتن -->
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
+    <!-- اسکریپت مینی‌اپ تلگرام -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    
+    <style>
+        :root {
+            --primary: #3b82f6;
+            --primary-hover: #2563eb;
+            --bg: var(--tg-theme-bg-color, #f8fafc);
+            --card: var(--tg-theme-secondary-bg-color, #ffffff);
+            --text: var(--tg-theme-text-color, #0f172a);
+            --hint: var(--tg-theme-hint-color, #64748b);
+            --border: #e2e8f0;
+            --success: #10b981;
+            --error: #ef4444;
+            --radius: 16px;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
+        
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+            transition: background-color 0.3s;
+        }
+
+        /* ===== هدر ===== */
+        .app-header {
+            padding: 20px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid var(--border);
+        }
+        .app-header h1 {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .back-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text);
+            display: none;
+            padding: 4px 8px;
+            border-radius: 8px;
+            transition: background 0.2s;
+        }
+        .back-btn:hover { background: var(--border); }
+        .back-btn.active { display: block; }
+
+        /* ===== نوار پیشرفت ===== */
+        .progress-container {
+            width: 100%;
+            height: 4px;
+            background: var(--border);
+            position: fixed;
+            top: 65px;
+            left: 0;
+            z-index: 101;
+        }
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--success));
+            width: 16.66%;
+            transition: width 0.4s ease;
+            border-radius: 0 4px 4px 0;
+        }
+
+        /* ===== کانتینر اصلی ===== */
+        .wizard-container {
+            padding: 24px 16px 100px;
+            max-width: 600px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        /* ===== استپ‌ها ===== */
+        .step {
+            display: none;
+            animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .step.active { display: block; }
+        
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .step-title {
+            font-size: 1.4rem;
+            font-weight: 800;
+            margin-bottom: 8px;
+            text-align: center;
+        }
+        .step-subtitle {
+            font-size: 0.9rem;
+            color: var(--hint);
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        /* ===== کارت‌های انتخاب ===== */
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+        .grid-1 { display: flex; flex-direction: column; gap: 12px; }
+
+        .select-card {
+            background: var(--card);
+            border: 2px solid var(--border);
+            border-radius: var(--radius);
+            padding: 20px 16px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            position: relative;
+            overflow: hidden;
+        }
+        .select-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.1);
+        }
+        .select-card:active { transform: scale(0.98); }
+        
+        .select-card.disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            background: #f1f5f9;
+        }
+        .select-card.disabled:hover {
+            border-color: var(--border);
+            transform: none;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+        }
+
+        .select-card .icon { font-size: 2rem; margin-bottom: 8px; display: block; }
+        .select-card .title { font-weight: 700; font-size: 1rem; }
+        .select-card .subtitle { font-size: 0.75rem; color: var(--hint); margin-top: 4px; }
+        
+        /* برچسب به زودی */
+        .badge-soon {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: var(--error);
+            color: white;
+            font-size: 0.65rem;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-weight: bold;
+        }
+
+        /* ===== فرم بازه درسی ===== */
+        .range-inputs {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            margin-top: 16px;
+        }
+        .range-inputs .form-group { flex: 1; }
+        .form-group label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--hint);
+            margin-bottom: 8px;
+        }
+        .form-control {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid var(--border);
+            border-radius: var(--radius);
+            font-family: inherit;
+            font-size: 1rem;
+            text-align: center;
+            background: var(--card);
+            color: var(--text);
+            transition: border-color 0.2s;
+        }
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        /* ===== دکمه اصلی ===== */
+        .bottom-action {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(to top, var(--bg) 70%, transparent);
+            z-index: 100;
+        }
+        .btn-primary {
+            width: 100%;
+            padding: 16px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: var(--radius);
+            font-family: inherit;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 10px 20px -5px rgba(59, 130, 246, 0.5);
+            transition: all 0.2s;
+        }
+        .btn-primary:active { transform: scale(0.98); }
+        .btn-primary:disabled {
+            background: var(--border);
+            color: var(--hint);
+            box-shadow: none;
+            cursor: not-allowed;
+        }
+
+        /* ===== لودینگ ===== */
+        .loader {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+
+    <!-- هدر -->
+    <header class="app-header">
+        <h1>✨ سوالینو</h1>
+        <button class="back-btn" id="backBtn" onclick="prevStep()">➡️</button>
+    </header>
+
+    <!-- نوار پیشرفت -->
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <!-- محتوای اصلی -->
+    <div class="wizard-container">
+        
+        <!-- استپ ۱: انتخاب مقطع -->
+        <div class="step active" id="step-1">
+            <h2 class="step-title">مقطع تحصیلی خود را انتخاب کنید</h2>
+            <p class="step-subtitle">برای شروع، مقطع مورد نظر را مشخص کنید.</p>
+            <div class="grid-2">
+                <div class="select-card" onclick="selectLevel('motavassete_aval')">
+                    <span class="icon">🎒</span>
+                    <div class="title">متوسطه اول</div>
+                    <div class="subtitle">پایه هفتم، هشتم، نهم</div>
+                </div>
+                <div class="select-card" onclick="selectLevel('motavassete_dovom')">
+                    <span class="icon">🎓</span>
+                    <div class="title">متوسطه دوم</div>
+                    <div class="subtitle">دهم، یازدهم، دوازدهم</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- استپ ۲: انتخاب رشته (فقط برای متوسطه دوم) -->
+        <div class="step" id="step-2-field">
+            <h2 class="step-title">رشته تحصیلی</h2>
+            <p class="step-subtitle">لطفاً رشته خود را انتخاب کنید.</p>
+            <div class="grid-1">
+                <div class="select-card" onclick="selectField('math')">
+                    <span class="icon">📐</span>
+                    <div class="title">رشته ریاضی و فیزیک</div>
+                </div>
+                <div class="select-card" onclick="selectField('science')">
+                    <span class="icon">🔬</span>
+                    <div class="title">رشته علوم تجربی</div>
+                </div>
+                <div class="select-card" onclick="selectField('humanities')">
+                    <span class="icon">📖</span>
+                    <div class="title">رشته علوم انسانی</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- استپ ۳: انتخاب پایه -->
+        <div class="step" id="step-3-grade">
+            <h2 class="step-title">پایه تحصیلی</h2>
+            <p class="step-subtitle">پایه مورد نظر را انتخاب کنید.</p>
+            <div class="grid-3" id="grades-container">
+                <!-- به صورت داینامیک پر می‌شود -->
+            </div>
+        </div>
+
+        <!-- استپ ۴: انتخاب درس -->
+        <div class="step" id="step-4-subject">
+            <h2 class="step-title">انتخاب کتاب درسی</h2>
+            <p class="step-subtitle">برای ساخت آزمون، یک درس انتخاب کنید.</p>
+            <div class="grid-1" id="subjects-container">
+                <!-- به صورت داینامیک پر می‌شود -->
+            </div>
+        </div>
+
+        <!-- استپ ۵: انتخاب بازه درسی -->
+        <div class="step" id="step-5-lesson">
+            <h2 class="step-title">بازه درسی</h2>
+            <p class="step-subtitle">از چه درس‌هایی می‌خواهید سوال طرح شود؟</p>
+            <div class="range-inputs">
+                <div class="form-group">
+                    <label>از درس</label>
+                    <input type="number" class="form-control" id="lessonFrom" value="1" min="1" max="24">
+                </div>
+                <span style="font-weight: bold; color: var(--hint);">تا</span>
+                <div class="form-group">
+                    <label>تا درس</label>
+                    <input type="number" class="form-control" id="lessonTo" value="4" min="1" max="24">
+                </div>
+            </div>
+            
+            <!-- دکمه ساخت -->
+            <div style="margin-top: 32px;">
+                <button class="btn-primary" id="generateBtn" onclick="submitExam()">
+                    🚀 تولید آزمون
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // راه‌اندازی تلگرام
+        const tg = window.Telegram.WebApp;
+        tg.ready();
+        tg.expand();
+
+        // متغیرهای سراسری
+        let appData = null;
+        let currentStep = 1;
+        const totalSteps = 5;
+        
+        let selection = {
+            level: null,     // motavassete_aval یا motavassete_dovom
+            field: null,     // math, science, humanities
+            grade: null,     // 7, 8, 9, 10, 11, 12
+            subject: null,   // نام درس
+            lessonFrom: 1,
+            lessonTo: 4
+        };
+
+        // بارگذاری اطلاعات JSON
+        async function loadData() {
+            try {
+                const res = await fetch('subjects.json');
+                appData = await res.json();
+            } catch (e) {
+                tg.showAlert('خطا در بارگذاری اطلاعات. لطفاً اتصال اینترنت را بررسی کنید.');
+            }
+        }
+
+        // شروع
+        document.addEventListener('DOMContentLoaded', async () => {
+            await loadData();
+        });
+
+        // مدیریت استپ‌ها
+        function showStep(stepId) {
+            document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+            document.getElementById(stepId).classList.add('active');
+            
+            // مدیریت دکمه بازگشت
+            const backBtn = document.getElementById('backBtn');
+            if (stepId === 'step-1') backBtn.classList.remove('active');
+            else backBtn.classList.add('active');
+            
+            // آپدیت نوار پیشرفت
+            const stepNum = stepId.split('-')[1];
+            let progress = 20;
+            if (stepNum == '1') progress = 20;
+            else if (stepNum == '2') progress = 40;
+            else if (stepNum == '3') progress = 60;
+            else if (stepNum == '4') progress = 80;
+            else if (stepNum == '5') progress = 100;
+            
+            document.getElementById('progressBar').style.width = progress + '%';
+            
+            // افکت لرزش تلگرام
+            if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
+        }
+
+        // دکمه بازگشت
+        function prevStep() {
+            const activeStep = document.querySelector('.step.active').id;
+            
+            if (activeStep === 'step-2-field') showStep('step-1');
+            else if (activeStep === 'step-3-grade') {
+                if (selection.level === 'motavassete_dovom') showStep('step-2-field');
+                else showStep('step-1');
+            }
+            else if (activeStep === 'step-4-subject') showStep('step-3-grade');
+            else if (activeStep === 'step-5-lesson') showStep('step-4-subject');
+        }
+
+        // ===== استپ ۱: انتخاب مقطع =====
+        function selectLevel(levelId) {
+            selection.level = levelId;
+            
+            if (levelId === 'motavassete_dovom') {
+                showStep('step-2-field');
+            } else {
+                renderGrades();
+                showStep('step-3-grade');
+            }
+        }
+
+        // ===== استپ ۲: انتخاب رشته =====
+        function selectField(fieldId) {
+            selection.field = fieldId;
+            renderGrades();
+            showStep('step-3-grade');
+        }
+
+        // ===== استپ ۳: رندر پایه‌ها =====
+        function renderGrades() {
+            const container = document.getElementById('grades-container');
+            container.innerHTML = '';
+            
+            let gradesData = {};
+            if (selection.level === 'motavassete_aval') {
+                gradesData = appData.motavassete_aval.grades;
+            } else {
+                gradesData = appData.motavassete_dovom.fields[selection.field].grades;
+            }
+            
+            for (const gradeId in gradesData) {
+                const g = gradesData[gradeId];
+                container.innerHTML += `
+                    <div class="select-card" onclick="selectGrade('${gradeId}')">
+                        <span class="icon">🏫</span>
+                        <div class="title">${g.name}</div>
+                    </div>
+                `;
+            }
+        }
+
+        // ===== استپ ۴: انتخاب پایه =====
+        function selectGrade(gradeId) {
+            selection.grade = gradeId;
+            renderSubjects();
+            showStep('step-4-subject');
+        }
+
+        // ===== رندر دروس =====
+        function renderSubjects() {
+            const container = document.getElementById('subjects-container');
+            container.innerHTML = '';
+            
+            let subjects = [];
+            if (selection.level === 'motavassete_aval') {
+                subjects = appData.motavassete_aval.grades[selection.grade].subjects;
+            } else {
+                subjects = appData.motavassete_dovom.fields[selection.field].grades[selection.grade].subjects;
+            }
+            
+            subjects.forEach(sub => {
+                const disabledClass = sub.active ? '' : 'disabled';
+                const onclickAction = sub.active ? `selectSubject('${sub.name}')` : `showComingSoon()`;
+                const badge = sub.active ? '' : `<span class="badge-soon">به زودی</span>`;
+                
+                container.innerHTML += `
+                    <div class="select-card ${disabledClass}" onclick="${onclickAction}">
+                        ${badge}
+                        <div class="title" style="text-align: right; padding: 0 10px;">${sub.name}</div>
+                    </div>
+                `;
+            });
+        }
+
+        // ===== انتخاب درس =====
+        function selectSubject(subjectName) {
+            selection.subject = subjectName;
+            showStep('step-5-lesson');
+        }
+
+        // ===== نمایش پیام به زودی =====
+        function showComingSoon() {
+            if (tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('warning');
+            tg.showAlert('این کتاب درسی به زودی به بانک سوالات اضافه خواهد شد.');
+        }
+
+        // ===== ثبت نهایی =====
+        function submitExam() {
+            const from = parseInt(document.getElementById('lessonFrom').value);
+            const to = parseInt(document.getElementById('lessonTo').value);
+            
+            if (from < 1 || to > 24 || from > to) {
+                tg.showAlert('بازه درسی نامعتبر است. اعداد باید بین ۱ تا ۲۴ و از کوچک به بزرگ باشند.');
+                return;
+            }
+            
+            const btn = document.getElementById('generateBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="loader"></span> در حال ارسال...';
+            
+            selection.lessonFrom = from;
+            selection.lessonTo = to;
+            
+            // ارسال اطلاعات به ربات تلگرام
+            if (tg.sendData) {
+                tg.sendData(JSON.stringify(selection));
+                tg.close();
+            } else {
+                // برای تست در مرورگر
+                alert('اطلاعات ارسال شد: ' + JSON.stringify(selection));
+                btn.disabled = false;
+                btn.innerHTML = '🚀 تولید آزمون';
+            }
+        }
+    </script>
+</body>
+</html>
