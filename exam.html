@@ -37,44 +37,53 @@
   .result-box { background: #fff; padding: 30px; border-radius: 12px; text-align: center; display: none; }
   .score-circle { width: 120px; height: 120px; border-radius: 50%; border: 8px solid var(--success); display: flex; align-items: center; justify-content: center; font-size: 2.5rem; font-weight: bold; color: var(--success); margin: 20px auto; }
 
-  /* ===== استایل‌های جدید PDF (دقیقاً طبق درخواست شما) ===== */
+  /* ===== استایل‌های جدید PDF (دقیقاً مثل عکس سفید و تمیز) ===== */
   #pdf-container { display: none; background: white; width: 100%; padding: 10px; }
-  .exam-pdf-page { font-family: 'Vazirmatn', sans-serif; direction: rtl; color: #000; font-size: 13px; background: white; padding: 0; line-height: 1.5; width: 100%; max-width: 800px; margin: 0 auto; }
+  .exam-paper { font-family: 'Vazirmatn', sans-serif; direction: rtl; color: #000; font-size: 13px; background: white; padding: 0; line-height: 1.5; width: 100%; max-width: 800px; margin: 0 auto; }
   
   /* سربرگ */
-  .exam-header-table { width: 100%; border-collapse: collapse; margin-bottom: 5px; text-align: center; }
+  .exam-header-table { width: 100%; border-collapse: collapse; margin-bottom: 8px; text-align: center; }
   .exam-header-table td { border: 1.5px solid #000; padding: 4px 6px; font-size: 12px; }
   .exam-header-title { font-size: 15px; font-weight: bold; padding: 5px !important; }
-  .exam-motto { text-align: center; font-weight: bold; font-size: 12px; margin: 5px 0 10px 0; }
+  .exam-motto { text-align: center; font-weight: bold; font-size: 12px; margin: 8px 0; }
   
-  /* ساختار صفحات برای پر شدن دقیق و فقط 2 صفحه بودن */
-  .pdf-page-1, .pdf-page-2 {
-      height: 255mm; /* تنظیم برای جا شدن دقیق در یک صفحه A4 با حاشیه */
+  /* بدنه سوالات (کادر دور همه سوالات) */
+  .exam-body {
+      border: 1.5px solid #000;
+      padding: 10px 15px;
+      height: 245mm; /* پر کردن دقیق صفحه A4 */
       display: flex;
       flex-direction: column;
-      page-break-after: always;
-      position: relative;
   }
+  
+  .pdf-page-1 { page-break-after: always; }
+  .pdf-page-2 { page-break-after: always; }
 
-  /* جدول اصلی سوالات (بدون ستون ردیف و بارم) */
-  .exam-table { width: 100%; border-collapse: collapse; flex-grow: 1; }
-  .exam-table td { border: 1.5px solid #000; padding: 10px 12px; font-size: 13px; vertical-align: top; }
+  /* بخش‌ها */
+  .section { display: flex; flex-direction: column; flex-grow: 1; margin-bottom: 10px; }
+  .section-title { text-align: center; font-weight: bold; border-bottom: 1.5px solid #000; padding-bottom: 4px; margin-bottom: 10px; font-size: 14px; background: #f9f9f9; }
   
-  .group-title { text-align: center; font-weight: bold; background: #f0f0f0; font-size: 14px; padding: 6px !important; }
+  /* سوالات */
+  .question-line { margin-bottom: 8px; font-size: 13px; display: flex; align-items: flex-start; }
+  .question-line.tf { justify-content: space-between; }
+  .q-options { margin-right: 20px; display: flex; gap: 15px; margin-top: 4px; font-size: 12.5px; }
   
-  /* گزینه‌ها */
-  .tf-container { display: flex; justify-content: space-between; align-items: center; width: 100%; }
-  .tf-options { font-weight: bold; font-size: 13px; margin-right: 20px; white-space: nowrap; }
-  .mc-options { display: flex; gap: 15px; margin-top: 8px; font-size: 13px; flex-wrap: wrap; }
+  /* خط جداکننده نقطه‌چین */
+  .dashed-line { border-bottom: 1px dashed #000; margin: 8px 0 12px 0; width: 100%; }
   
-  /* فضای خالی برای پاسخ‌های کوتاه و بلند */
-  .answer-space-short { height: 40px; }
-  .answer-space-long { height: 80px; }
+  /* فضای پاسخ */
+  .answer-space-short { border-bottom: 1px dashed #999; height: 35px; width: 100%; margin-top: 5px; }
+  .answer-space-long { border-bottom: 1px dashed #999; height: 70px; width: 100%; margin-top: 5px; }
+  
+  /* برای اینکه صفحه دوم دقیقاً پر شود */
+  .section-grow { flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
+  .subjective-item { flex-grow: 1; display: flex; flex-direction: column; }
 
   /* پاسخنامه */
   .answer-key-title { text-align: center; font-weight: bold; font-size: 16px; margin: 15px 0 10px; }
   .answer-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-  .answer-table td { border: 1px solid #555; padding: 6px; text-align: center; }
+  .answer-table th, .answer-table td { border: 1px solid #000; padding: 6px; text-align: center; }
+  .answer-table th { background: #f0f0f0; }
 
   @media print {
     body > *:not(#pdf-wrapper) { display: none !important; }
@@ -84,6 +93,7 @@
     
     @page { margin: 8mm; size: A4; }
     .no-print { display: none !important; }
+    .exam-body { height: 260mm; } /* تنظیم ارتفاع برای چاپ */
   }
 </style>
 </head>
@@ -151,7 +161,7 @@
     } catch (err) { showError('خطای شبکه: ' + err.message); }
   }
 
-  // ===== رندر PDF (دقیقاً طبق عکس و خواسته شما) =====
+  // ===== رندر PDF (دقیقاً طبق عکس شما) =====
   function renderPDFLayout() {
     document.getElementById('pdf-wrapper').style.display = 'block';
     try {
@@ -161,7 +171,6 @@
         const admin = examData.header_admin || 'اداره آموزش و پرورش';
         const teacherName = examData.header_teacher_name || '.....................';
 
-        // تفکیک سوالات
         let tfQ = questionsData.filter(q => q.type === 'truefalse');
         let jakhaliQ = questionsData.filter(q => q.type === 'jakhali');
         let testiQ = questionsData.filter(q => q.type === 'testi');
@@ -196,78 +205,82 @@
         `;
 
         // ===== صفحه اول =====
-        let page1HTML = `<div class="pdf-page-1">${headerHTML}<table class="exam-table"><tbody>`;
+        let page1HTML = `<div class="pdf-page-1">${headerHTML}<div class="exam-body">`;
 
         if (tfQ.length > 0) {
-            page1HTML += `<tr><td class="group-title">صحیح / غلط</td></tr>`;
+            page1HTML += `<div class="section"><div class="section-title">صحیح / غلط (۲ نمره)</div>`;
             tfQ.forEach((q, i) => {
                 let answerText = (Array.isArray(q.answer) ? q.answer[0] : q.answer) === 0 ? "صحیح" : "غلط";
-                answerKeyHTML += `<tr><td>${qCounter}.</td><td>${answerText}</td></tr>`;
-                page1HTML += `<tr><td><div class="tf-container"><span>${letters[i]}) ${q.question_text}</span><span class="tf-options">( ) صحیح &nbsp;&nbsp; ( ) غلط</span></div></td></tr>`;
+                answerKeyHTML += `<tr><td>${qCounter}</td><td>${answerText}</td></tr>`;
+                page1HTML += `<div class="question-line tf"><span><b>${letters[i]})</b> (۰.۵) ${q.question_text}</span><span>( ) صحیح &nbsp;&nbsp; ( ) غلط</span></div>`;
                 qCounter++;
             });
+            page1HTML += `<div class="dashed-line"></div></div>`;
         }
 
         if (jakhaliQ.length > 0) {
-            page1HTML += `<tr><td class="group-title">جاخالی</td></tr>`;
+            page1HTML += `<div class="section"><div class="section-title">جاخالی (۲ نمره)</div>`;
             jakhaliQ.forEach((q, i) => {
                 let answerText = Array.isArray(q.answer) ? q.answer.join(' / ') : q.answer;
-                answerKeyHTML += `<tr><td>${qCounter}.</td><td>${answerText}</td></tr>`;
-                page1HTML += `<tr><td>${letters[i]}) ${q.question_text}</td></tr>`;
+                answerKeyHTML += `<tr><td>${qCounter}</td><td>${answerText}</td></tr>`;
+                page1HTML += `<div class="question-line"><span><b>${letters[i]})</b> (۰.۵) ${q.question_text}</span></div>`;
                 qCounter++;
             });
+            page1HTML += `<div class="dashed-line"></div></div>`;
         }
 
         if (testiQ.length > 0) {
-            page1HTML += `<tr><td class="group-title">تستی</td></tr>`;
+            page1HTML += `<div class="section"><div class="section-title">تستی (۲ نمره)</div>`;
             testiQ.forEach((q, i) => {
                 let correctIndex = Array.isArray(q.answer) ? q.answer[0] : q.answer;
                 let answerText = q.options[correctIndex] || 'نامشخص';
-                answerKeyHTML += `<tr><td>${qCounter}.</td><td>${answerText}</td></tr>`;
+                answerKeyHTML += `<tr><td>${qCounter}</td><td>${answerText}</td></tr>`;
                 let opts = q.options.map((opt, j) => `<span>( ) ${['الف', 'ب', 'ج', 'د'][j]}) ${opt}</span>`).join('');
-                page1HTML += `<tr><td><div>${letters[i]}) ${q.question_text}</div><div class="mc-options">${opts}</div></td></tr>`;
+                page1HTML += `<div class="question-line" style="flex-direction: column;"><span><b>${letters[i]})</b> (۰.۵) ${q.question_text}</span><div class="q-options">${opts}</div></div>`;
                 qCounter++;
             });
         }
-        page1HTML += `</tbody></table></div>`;
+        page1HTML += `</div></div>`; // پایان صفحه 1
 
         // ===== صفحه دوم =====
-        let page2HTML = `<div class="pdf-page-2"><table class="exam-table"><tbody>`;
+        // سربرگ حذف شد طبق درخواست شما
+        let page2HTML = `<div class="pdf-page-2"><div class="exam-body">`;
 
         if (shortAnswerQ.length > 0) {
-            page2HTML += `<tr><td class="group-title">پاسخ کوتاه</td></tr>`;
+            page2HTML += `<div class="section section-grow"><div class="section-title">پاسخ کوتاه (۴ نمره)</div>`;
             shortAnswerQ.forEach((q) => {
                 let answerText = q.question_key || 'پاسخ بررسی شود.';
-                answerKeyHTML += `<tr><td>${qCounter}.</td><td>${answerText}</td></tr>`;
-                page2HTML += `<tr><td><div>${qCounter}. ${q.question_text}</div><div class="answer-space-short"></div></td></tr>`;
+                answerKeyHTML += `<tr><td>${qCounter}</td><td>${answerText}</td></tr>`;
+                page2HTML += `<div class="subjective-item"><div><b>${qCounter}.</b> (۱) ${q.question_text}</div><div class="answer-space-short"></div></div>`;
                 qCounter++;
             });
+            page2HTML += `<div class="dashed-line"></div></div>`;
         }
 
         if (longAnswerQ.length > 0) {
-            page2HTML += `<tr><td class="group-title">تشریحی</td></tr>`;
+            page2HTML += `<div class="section section-grow"><div class="section-title">تشریحی (۱۰ نمره)</div>`;
             longAnswerQ.forEach((q) => {
                 let answerText = q.question_key || 'پاسخ بررسی شود.';
-                answerKeyHTML += `<tr><td>${qCounter}.</td><td>${answerText}</td></tr>`;
-                page2HTML += `<tr><td><div>${qCounter}. ${q.question_text}</div><div class="answer-space-long"></div></td></tr>`;
+                answerKeyHTML += `<tr><td>${qCounter}</td><td>${answerText}</td></tr>`;
+                page2HTML += `<div class="subjective-item"><div><b>${qCounter}.</b> (۱.۲۵) ${q.question_text}</div><div class="answer-space-long"></div></div>`;
                 qCounter++;
             });
         }
-        page2HTML += `</tbody></table></div>`;
+        page2HTML += `</div></div>`; // پایان صفحه 2
 
         // ===== صفحه سوم: پاسخنامه =====
         let page3HTML = `
           <div class="pdf-page-3" style="page-break-after: always;">
           <h2 class="answer-key-title">پاسخنامه و کلید سوالات</h2>
-          <table class="answer-table" style="width: 100%; border-collapse: collapse;">
-              <thead><tr><th style="width: 15%; border: 1px solid #555; background: #f0f0f0;">شماره</th><th style="border: 1px solid #555; background: #f0f0f0;">پاسخ صحیح / کلید</th></tr></thead>
+          <table class="answer-table">
+              <thead><tr><th style="width: 20%;">شماره سوال</th><th>پاسخ صحیح / کلید</th></tr></thead>
               <tbody>${answerKeyHTML}</tbody>
           </table>
           <div style="margin-top: 30px; text-align: center; color: #555; font-weight: bold;">طراح سوال: ${teacherName}</div>
           </div>
         `;
 
-        let pdfHTML = `<div class="exam-pdf-page">`;
+        let pdfHTML = `<div class="exam-paper">`;
         if (tfQ.length + jakhaliQ.length + testiQ.length > 0) pdfHTML += page1HTML;
         if (shortAnswerQ.length + longAnswerQ.length > 0) pdfHTML += page2HTML;
         pdfHTML += page3HTML;
