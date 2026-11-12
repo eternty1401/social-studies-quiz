@@ -381,6 +381,10 @@
                 };
             });
 
+            // اضافه کردن تایم‌اوت ۱۵ ثانیه‌ای برای جلوگیری از گیر کردن
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 15000);
+
             try {
                 const token = localStorage.getItem('teacher_token');
                 const res = await fetch(`${API_BASE}/confirm_exam.php`, {
@@ -393,9 +397,12 @@
                         code: examCode,
                         header: headerData,
                         questions: editedQuestions
-                    })
+                    }),
+                    signal: controller.signal // اتصال تایم‌اوت
                 });
                 
+                clearTimeout(timeoutId); // لغو تایم‌اوت در صورت موفقیت
+
                 const data = await res.json();
                 
                 if (res.ok && data.ok) {
@@ -404,11 +411,16 @@
                     });
                 } else {
                     tg.showAlert('❌ خطا: ' + (data.message || 'ناشناخته'));
-                    btn.disabled = false;
-                    btn.innerHTML = '✅ تایید نهایی و کسر ۱ اعتبار';
                 }
             } catch (e) {
-                tg.showAlert('❌ خطای شبکه در ارتباط با سرور.');
+                clearTimeout(timeoutId);
+                if (e.name === 'AbortError') {
+                    tg.showAlert('❌ سرور پاسخ نداد (Timeout). لطفاً اینترنت خود را بررسی کنید.');
+                } else {
+                    tg.showAlert('❌ خطای شبکه در ارتباط با سرور.');
+                }
+            } finally {
+                // در هر شرایطی دکمه رو آزاد کن
                 btn.disabled = false;
                 btn.innerHTML = '✅ تایید نهایی و کسر ۱ اعتبار';
             }
