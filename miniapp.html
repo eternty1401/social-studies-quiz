@@ -86,7 +86,7 @@
 
         /* کانتینر */
         .wizard-container {
-            padding: 24px 16px 40px;
+            padding: 24px 16px 120px;
             max-width: 600px;
             margin: 0 auto;
         }
@@ -151,34 +151,44 @@
             font-weight: 700;
         }
 
-        /* لیست فصل‌ها */
-        .chapter-list { display: flex; flex-direction: column; gap: 12px; margin-top: 20px; }
-        .chapter-item {
+        /* فرم بازه درسی */
+        .range-inputs {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            justify-content: center;
+            margin-top: 20px;
             background: var(--card);
-            padding: 16px;
+            padding: 20px;
             border-radius: 16px;
             border: 1.5px solid var(--border);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            transition: all 0.2s;
         }
-        .chapter-item:active { transform: scale(0.98); border-color: var(--primary); }
-        .chapter-num {
-            background: rgba(59, 130, 246, 0.1);
-            color: var(--primary);
-            width: 40px; height: 40px;
-            display: flex; align-items: center; justify-content: center;
-            border-radius: 12px; font-weight: 800; font-size: 1.1rem;
-            flex-shrink: 0;
-        }
-        .chapter-title {
+        .range-inputs .form-group { flex: 1; text-align: center; }
+        .form-group label { display: block; font-size: 0.85rem; font-weight: 600; color: var(--hint); margin-bottom: 8px; }
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 1.5px solid var(--border);
+            border-radius: 12px;
+            font-family: inherit;
+            font-size: 1.2rem;
             font-weight: 700;
-            font-size: 1rem;
+            text-align: center;
+            background: var(--bg);
+            color: var(--text);
         }
+        .form-control:focus { outline: none; border-color: var(--primary); }
 
-        /* دکمه‌ها */
+        /* دکمه اصلی */
+        .bottom-action {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 20px;
+            background: linear-gradient(to top, var(--bg) 80%, transparent);
+            z-index: 100;
+        }
         .btn-primary {
             width: 100%;
             padding: 16px;
@@ -194,7 +204,6 @@
             align-items: center;
             justify-content: center;
             gap: 8px;
-            margin-top: 20px;
         }
         .btn-primary:active { transform: scale(0.98); }
         .btn-primary:disabled { background: var(--hint); cursor: not-allowed; }
@@ -210,13 +219,6 @@
             animation: spin 1s ease-in-out infinite;
         }
         @keyframes spin { to { transform: rotate(360deg); } }
-        
-        .loading-text {
-            text-align: center;
-            color: var(--hint);
-            margin-top: 20px;
-            font-size: 0.95rem;
-        }
     </style>
 </head>
 <body>
@@ -232,7 +234,7 @@
 
     <div class="wizard-container">
         
-        <!-- استپ ۱: مقطع -->
+        <!-- استپ ۱ -->
         <div class="step active" id="step-1">
             <h2 class="step-title">مقطع تحصیلی</h2>
             <p class="step-subtitle">برای شروع، مقطع خود را انتخاب کنید.</p>
@@ -248,7 +250,7 @@
             </div>
         </div>
 
-        <!-- استپ ۲: رشته -->
+        <!-- استپ ۲ -->
         <div class="step" id="step-2-field">
             <h2 class="step-title">رشته تحصیلی</h2>
             <p class="step-subtitle">رشته خود را انتخاب کنید.</p>
@@ -265,40 +267,50 @@
             </div>
         </div>
 
-        <!-- استپ ۳: پایه -->
+        <!-- استپ ۳ -->
         <div class="step" id="step-3-grade">
             <h2 class="step-title">پایه تحصیلی</h2>
             <p class="step-subtitle">پایه خود را انتخاب کنید.</p>
             <div class="grid-3" id="grades-container"></div>
         </div>
 
-        <!-- استپ ۴: درس -->
+        <!-- استپ ۴ -->
         <div class="step" id="step-4-subject">
             <h2 class="step-title">انتخاب کتاب درسی</h2>
             <p class="step-subtitle">یک درس انتخاب کنید.</p>
             <div class="grid-1" id="subjects-container"></div>
         </div>
 
-        <!-- استپ ۵: فصل -->
-        <div class="step" id="step-5-chapter">
-            <h2 class="step-title">انتخاب فصل</h2>
-            <p class="step-subtitle">فصل مورد نظر خود را انتخاب کنید.</p>
+        <!-- استپ ۵ (بازه درسی) -->
+        <div class="step" id="step-5-lesson">
+            <h2 class="step-title">بازه درسی</h2>
+            <p class="step-subtitle">از چه درس‌هایی سوال طرح شود؟</p>
             
-            <div class="chapter-list" id="chapters-container">
-                <!-- لیست فصل‌ها داینامیک پر می‌شود -->
+            <div class="range-inputs">
+                <div class="form-group">
+                    <label>از درس</label>
+                    <input type="number" class="form-control" id="lessonFrom" value="1" min="1" max="24">
+                </div>
+                <span style="font-weight: bold; color: var(--hint); margin-top: 20px;">تا</span>
+                <div class="form-group">
+                    <label>تا درس</label>
+                    <input type="number" class="form-control" id="lessonTo" value="4" min="1" max="24">
+                </div>
             </div>
         </div>
 
     </div>
 
+    <div class="bottom-action" id="bottomAction" style="display: none;">
+        <button class="btn-primary" id="generateBtn" onclick="submitExam()">
+            🚀 تولید آزمون
+        </button>
+    </div>
+
     <script>
-        const API_BASE = 'https://api.motadars.ir';
         const tg = window.Telegram.WebApp;
         tg.ready();
         tg.expand();
-
-        // اعداد فارسی
-        const toFa = n => String(n).replace(/\d/g, d => '۰۱۲۳۴۵۶۷۸۹'[d]);
 
         let appData = null;
         let selection = { level: null, field: null, grade: null, subject: null };
@@ -319,15 +331,19 @@
             document.getElementById(stepId).classList.add('active');
             
             const backBtn = document.getElementById('backBtn');
+            const bottomAction = document.getElementById('bottomAction');
             
             if (stepId === 'step-1') backBtn.classList.remove('active');
             else backBtn.classList.add('active');
+            
+            if (stepId === 'step-5-lesson') bottomAction.style.display = 'block';
+            else bottomAction.style.display = 'none';
             
             let progress = 20;
             if (stepId === 'step-2-field') progress = 40;
             if (stepId === 'step-3-grade') progress = 60;
             if (stepId === 'step-4-subject') progress = 80;
-            if (stepId === 'step-5-chapter') progress = 100;
+            if (stepId === 'step-5-lesson') progress = 100;
             document.getElementById('progressBar').style.width = progress + '%';
             
             if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
@@ -341,7 +357,7 @@
                 else showStep('step-1');
             }
             else if (active === 'step-4-subject') showStep('step-3-grade');
-            else if (active === 'step-5-chapter') showStep('step-4-subject');
+            else if (active === 'step-5-lesson') showStep('step-4-subject');
         }
 
         function selectLevel(levelId) {
@@ -409,39 +425,7 @@
 
         function selectSubject(subjectName) {
             selection.subject = subjectName;
-            fetchChapters();
-            showStep('step-5-chapter');
-        }
-
-        async function fetchChapters() {
-            const container = document.getElementById('chapters-container');
-            container.innerHTML = '<div class="loading-text">در حال دریافت فصل‌ها...</div>';
-            
-            try {
-                const res = await fetch(`${API_BASE}/get_chapters.php?grade=${selection.grade}&subject=${selection.subject}`);
-                const data = await res.json();
-                
-                if (data.ok && data.chapters.length > 0) {
-                    container.innerHTML = '';
-                    data.chapters.forEach(ch => {
-                        container.innerHTML += `
-                            <div class="chapter-item" onclick="submitExam(${ch.chapter_number})">
-                                <div class="chapter-num">${toFa(ch.chapter_number)}</div>
-                                <div class="chapter-title">${ch.title}</div>
-                            </div>
-                        `;
-                    });
-                } else {
-                    container.innerHTML = `
-                        <div style="text-align: center; padding: 20px;">
-                            <p style="color: var(--hint); margin-bottom: 20px;">فصلی برای این درس ثبت نشده است.</p>
-                            <button class="btn-primary" onclick="submitExam(0)">تولید آزمون از کل کتاب</button>
-                        </div>
-                    `;
-                }
-            } catch (e) {
-                container.innerHTML = '<p style="text-align:center; color: red; margin-top:20px;">خطای شبکه در دریافت اطلاعات.</p>';
-            }
+            showStep('step-5-lesson');
         }
 
         function showComingSoon() {
@@ -449,16 +433,29 @@
             tg.showAlert('این کتاب درسی به زودی به بانک سوالات اضافه خواهد شد.');
         }
 
-        function submitExam(chapterNumber = 0) {
-            if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
+        function submitExam() {
+            const from = parseInt(document.getElementById('lessonFrom').value);
+            const to = parseInt(document.getElementById('lessonTo').value);
             
-            selection.chapter = chapterNumber;
+            if (from < 1 || to > 24 || from > to) {
+                tg.showAlert('بازه درسی نامعتبر است (۱ تا ۲۴).');
+                return;
+            }
+            
+            const btn = document.getElementById('generateBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="loader"></span> در حال ارسال...';
+            
+            selection.lessonFrom = from;
+            selection.lessonTo = to;
             
             if (tg.sendData) {
                 tg.sendData(JSON.stringify(selection));
                 tg.close();
             } else {
                 alert('اطلاعات ارسال شد: ' + JSON.stringify(selection));
+                btn.disabled = false;
+                btn.innerHTML = '🚀 تولید آزمون';
             }
         }
     </script>
