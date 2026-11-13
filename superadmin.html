@@ -120,6 +120,19 @@
         }
         .alert-success { background: #dcfce7; color: #166534; display: block; }
         .alert-error { background: #fee2e2; color: #991b1b; display: block; }
+
+        /* بخش آپلود عکس */
+        .upload-box {
+            background: #eff6ff;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1.5px dashed #93c5fd;
+            margin-bottom: 20px;
+        }
+        .upload-box label { color: #1e40af; display: block; margin-bottom: 8px; font-weight: bold; }
+        .upload-box input[type="file"] { background: white; padding: 10px; border-radius: 8px; border: 1px solid #bfdbfe; width: 100%; font-family: inherit; }
+        .url-result { margin-top: 10px; display: none; }
+        .url-result input { direction: ltr; text-align: left; background: #e0f2fe; color: #0369a1; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -144,17 +157,27 @@
         <div id="main-panel" style="display: none;">
             
             <div class="tabs">
-                <button class="tab-btn active" onclick="switchTab('json')">📥 آپلود سوالات (JSON)</button>
+                <button class="tab-btn active" onclick="switchTab('json')">📥 آپلود سوالات</button>
                 <button class="tab-btn" onclick="switchTab('chapter')">📚 مدیریت فصل‌ها</button>
             </div>
 
-            <!-- تب آپلود JSON -->
+            <!-- تب آپلود JSON و عکس -->
             <div id="tab-json" class="tab-content active">
                 <div class="card">
                     <div class="alert" id="json-alert"></div>
+
+                    <!-- آپلودر عکس -->
+                    <div class="upload-box">
+                        <label>📷 آپلود عکس (برای سوالات تصویری)</label>
+                        <input type="file" id="image-uploader" accept="image/*">
+                        <div class="url-result" id="upload-result">
+                            <label style="font-size: 0.85rem; margin-top: 5px;">لینک عکس (کپی شده):</label>
+                            <input type="text" id="uploaded-url" class="form-control" readonly>
+                        </div>
+                    </div>
                     
                     <div class="form-group">
-                        <label>نام کتاب/درس (مثلاً: ریاضی هفتم)</label>
+                        <label>نام کتاب/درس (مثلاً: ریاضی)</label>
                         <input type="text" id="json-subject" class="form-control" placeholder="ریاضی">
                     </div>
                     
@@ -207,12 +230,10 @@
     <script>
         const API_BASE = 'https://api.motadars.ir';
         const ADMIN_PASS = 'AdminPassword123!'; // همان رمزی که در فایل PHP گذاشتیم
-        let isLoggedIn = false;
 
         function login() {
             const pass = document.getElementById('admin-pass').value;
             if (pass === ADMIN_PASS) {
-                isLoggedIn = true;
                 document.getElementById('login-section').style.display = 'none';
                 document.getElementById('main-panel').style.display = 'block';
             } else {
@@ -240,7 +261,46 @@
             el.style.display = 'block';
         }
 
-        // آپلود JSON
+        // ===== سیستم آپلود عکس =====
+        document.getElementById('image-uploader').addEventListener('change', async function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const resultDiv = document.getElementById('upload-result');
+            const urlInput = document.getElementById('uploaded-url');
+            const uploader = document.getElementById('image-uploader');
+            
+            uploader.disabled = true;
+            resultDiv.style.display = 'block';
+            urlInput.value = 'در حال آپلود...';
+
+            const formData = new FormData();
+            formData.append('image', file);
+
+            try {
+                const res = await fetch(`${API_BASE}/upload_image.php`, {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await res.json();
+                
+                if (data.ok) {
+                    urlInput.value = data.url;
+                    navigator.clipboard.writeText(data.url);
+                    alert('✅ عکس با موفقیت آپلود شد!\n\nلینک عکس به صورت خودکار کپی شد. فقط کافیه توی فیلد image_url پیست کنی.');
+                } else {
+                    urlInput.value = 'خطا: ' + data.message;
+                }
+            } catch (err) {
+                urlInput.value = 'خطا در ارتباط با سرور.';
+            } finally {
+                uploader.disabled = false;
+                uploader.value = ''; // پاک کردن فایل انتخاب شده
+            }
+        });
+
+        // ===== آپلود گروهی JSON =====
         async function uploadJSON() {
             const btn = document.getElementById('btn-upload-json');
             const subject = document.getElementById('json-subject').value.trim();
@@ -285,7 +345,7 @@
             }
         }
 
-        // ثبت فصل
+        // ===== ثبت فصل =====
         async function createChapter() {
             const btn = document.getElementById('btn-create-chapter');
             
