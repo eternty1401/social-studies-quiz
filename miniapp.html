@@ -115,6 +115,7 @@
 
     <div class="main-container">
         
+        <!-- استپ ۱: انتخاب پایه -->
         <div class="step active" id="step-grade">
             <div class="step-title">پایه تحصیلی خود را انتخاب کنید</div>
             <div class="grade-grid">
@@ -133,6 +134,7 @@
             </div>
         </div>
 
+        <!-- استپ ۲: انتخاب بازه درسی -->
         <div class="step" id="step-range">
             <div class="step-title">بازه درسی را مشخص کنید</div>
             <div class="range-card">
@@ -164,6 +166,7 @@
         let tg = null;
         let selection = { grade: null };
 
+        // راه‌اندازی امن تلگرام
         function initTelegram() {
             if (!window.Telegram || !window.Telegram.WebApp) {
                 setTimeout(initTelegram, 50);
@@ -178,6 +181,15 @@
         }
 
         window.addEventListener('load', () => setTimeout(initTelegram, 100));
+
+        // ⭐ استخراج امن initData از تلگرام (کار با Menu Button، Reply Keyboard و Inline)
+        function getInitData() {
+            const tgApp = window.Telegram && window.Telegram.WebApp;
+            if (tgApp && tgApp.initData) return tgApp.initData;
+            // Fallback: استخراج از hash (اگر از Menu Button باز شده باشد)
+            const h = new URLSearchParams(location.hash.slice(1));
+            return h.get('tgWebAppData') || '';
+        }
 
         function showStep(stepId) {
             document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
@@ -216,26 +228,18 @@
             const to = parseInt(document.getElementById('lessonTo').value);
             
             if (from < 1 || to > 24 || from > to) {
-                if (tg) tg.showAlert('بازه درسی نامعتبر است.');
+                if (tg) tg.showAlert('بازه درسی نامعتبر است. اعداد باید بین ۱ تا ۲۴ و از کوچک به بزرگ باشند.');
                 return;
             }
             
             const btn = document.getElementById('generateBtn');
             btn.disabled = true;
-            btn.innerHTML = '<span class="loader"></span> در حال ساخت...';
+            btn.innerHTML = '<span class="loader"></span> در حال ساخت آزمون...';
             
-            // ⭐ منطق هوشمند دریافت tg_id (اول تلگرام، بعد لینک)
-            let tgId = null;
-            if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user && tg.initDataUnsafe.user.id) {
-                tgId = tg.initDataUnsafe.user.id;
-            }
-            if (!tgId) {
-                const urlParams = new URLSearchParams(window.location.search);
-                tgId = urlParams.get('tg_id');
-            }
+            const initData = getInitData();
 
-            if (!tgId) {
-                if(tg) tg.showAlert('خطا: اطلاعات کاربری یافت نشد. لطفا از طریق ربات وارد شوید.');
+            if (!initData) {
+                if(tg) tg.showAlert('خطا: اطلاعات تلگرام یافت نشد. لطفا از طریق ربات وارد شوید.');
                 btn.disabled = false;
                 btn.innerHTML = '🚀 تولید آزمون';
                 return;
@@ -246,7 +250,7 @@
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        telegram_id: tgId,
+                        initData: initData,
                         grade: selection.grade,
                         lessonFrom: from,
                         lessonTo: to
