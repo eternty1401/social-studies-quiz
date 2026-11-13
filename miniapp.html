@@ -81,7 +81,7 @@
             gap: 12px;
             margin-bottom: 30px;
         }
-        .grade-card {
+        .grade-card, .type-card {
             background: var(--card);
             border: 2px solid transparent;
             border-radius: 20px;
@@ -91,13 +91,14 @@
             box-shadow: var(--shadow-sm);
             transition: all 0.2s ease;
         }
-        .grade-card:active { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
-        .grade-card.selected {
+        .grade-card:active, .type-card:active { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+        .grade-card.selected, .type-card.selected {
             border-color: var(--primary);
             background: #eff6ff;
         }
-        .grade-icon { font-size: 2rem; margin-bottom: 8px; display: block; }
-        .grade-name { font-weight: 700; font-size: 1.1rem; }
+        .grade-icon, .type-icon { font-size: 2rem; margin-bottom: 8px; display: block; }
+        .grade-name, .type-name { font-weight: 700; font-size: 1.1rem; }
+        .type-desc { font-size: 0.8rem; color: var(--hint); margin-top: 5px; }
 
         /* بخش بازه درسی */
         .range-card {
@@ -148,6 +149,15 @@
             color: var(--hint);
             margin-top: 24px;
         }
+
+        /* کارت‌های نوع آزمون */
+        .type-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 30px;
+        }
+        .type-card { padding: 30px 15px; }
 
         /* دکمه اکشن بزرگ */
         .action-area {
@@ -251,6 +261,28 @@
                     </div>
                 </div>
             </div>
+            
+            <!-- دکمه رفتن به مرحله بعد -->
+            <button class="btn-generate" onclick="goToTypeStep()" style="background: #e2e8f0; color: #0f172a; box-shadow: none;">
+                مرحله بعد ⬅️
+            </button>
+        </div>
+
+        <!-- استپ ۳: انتخاب نوع آزمون (جدید) -->
+        <div class="step" id="step-type">
+            <div class="step-title">نوع آزمون را انتخاب کنید</div>
+            <div class="type-grid">
+                <div class="type-card" onclick="selectType('online', this)">
+                    <span class="type-icon">🌐</span>
+                    <span class="type-name">آزمون آنلاین</span>
+                    <div class="type-desc">لینک شرکت در آزمون برای دانش‌آموزان</div>
+                </div>
+                <div class="type-card" onclick="selectType('pdf', this)">
+                    <span class="type-icon">📄</span>
+                    <span class="type-name">آزمون چاپی (PDF)</span>
+                    <div class="type-desc">خروجی استاندارد جهت پرینت</div>
+                </div>
+            </div>
         </div>
 
     </div>
@@ -265,9 +297,9 @@
 
     <script>
         let tg = null;
-        let selection = { grade: null };
+        // اضافه شدن examType به آبجکت انتخاب‌ها
+        let selection = { grade: null, examType: 'pdf' }; 
 
-        // راه‌اندازی امن تلگرام
         function initTelegram() {
             if (!window.Telegram || !window.Telegram.WebApp) {
                 setTimeout(initTelegram, 50);
@@ -292,10 +324,13 @@
             
             if (stepId === 'step-grade') {
                 backBtn.classList.remove('active');
-                actionContainer.style.display = 'none';
+                actionContainer.style.display = 'none'; // دکمه تولید در مرحله اول مخفی
+            } else if (stepId === 'step-range') {
+                backBtn.classList.add('active');
+                actionContainer.style.display = 'none'; // در مرحله بازه، دکمه پایین مخفی باشد چون دکمه "مرحله بعد" داریم
             } else {
                 backBtn.classList.add('active');
-                actionContainer.style.display = 'block';
+                actionContainer.style.display = 'block'; // فقط در مرحله نوع آزمون، دکمه تولید نمایش داده شود
             }
             
             if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
@@ -311,11 +346,7 @@
             }, 300);
         }
 
-        function prevStep() {
-            showStep('step-grade');
-        }
-
-        async function submitExam() {
+        function goToTypeStep() {
             const from = parseInt(document.getElementById('lessonFrom').value);
             const to = parseInt(document.getElementById('lessonTo').value);
             
@@ -323,12 +354,38 @@
                 if (tg) tg.showAlert('بازه درسی نامعتبر است. اعداد باید بین ۱ تا ۲۴ و از کوچک به بزرگ باشند.');
                 return;
             }
+            showStep('step-type');
+        }
+
+        function selectType(type, element) {
+            document.querySelectorAll('.type-card').forEach(c => c.classList.remove('selected'));
+            element.classList.add('selected');
+            selection.examType = type;
+        }
+
+        // دکمه بازگشت (هوشمند)
+        function prevStep() {
+            const currentStep = document.querySelector('.step.active').id;
+            if (currentStep === 'step-type') {
+                showStep('step-range');
+            } else if (currentStep === 'step-range') {
+                showStep('step-grade');
+            }
+        }
+
+        async function submitExam() {
+            const from = parseInt(document.getElementById('lessonFrom').value);
+            const to = parseInt(document.getElementById('lessonTo').value);
             
+            if (!selection.examType) {
+                if (tg) tg.showAlert('لطفاً نوع آزمون (آنلاین یا PDF) را انتخاب کنید.');
+                return;
+            }
+
             const btn = document.getElementById('generateBtn');
             btn.disabled = true;
             btn.innerHTML = '<span class="loader"></span> در حال ساخت...';
             
-            // ⭐ سیستم ترکیبی برای دریافت هویت: هم از initData، هم از لینک
             function getInitData() {
                 const tgApp = window.Telegram && window.Telegram.WebApp;
                 if (tgApp && tgApp.initData) return tgApp.initData;
@@ -356,7 +413,8 @@
                         tg_id: fallbackTgId,
                         grade: selection.grade,
                         lessonFrom: from,
-                        lessonTo: to
+                        lessonTo: to,
+                        exam_type: selection.examType // ⭐ ارسال نوع آزمون به بک‌اند
                     })
                 });
 
