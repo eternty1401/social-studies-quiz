@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>تصحیح آزمون | سوالینو</title>
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        :root { --primary: #2563eb; --bg: #f8fafc; --card: #ffffff; --text: #0f172a; --hint: #64748b; --success: #10b981; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Vazirmatn', sans-serif; background: var(--bg); color: var(--text); padding-bottom: 100px; }
+        .header { background: var(--primary); color: white; padding: 20px; text-align: center; border-radius: 0 0 20px 20px; margin-bottom: 20px; }
+        .header h1 { font-size: 1.3rem; margin-bottom: 8px; }
+        .header p { font-size: 0.9rem; opacity: 0.9; }
+        .container { max-width: 600px; margin: 0 auto; padding: 0 16px; }
+        .card { background: var(--card); padding: 20px; border-radius: 16px; margin-bottom: 16px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; }
+        .q-badge { display: inline-block; background: #f1f5f9; color: var(--hint); font-size: 0.75rem; padding: 4px 10px; border-radius: 8px; margin-bottom: 12px; font-weight: 700; }
+        .q-text { font-weight: 800; margin-bottom: 16px; line-height: 1.7; font-size: 1.05rem; }
+        .a-box { background: #eff6ff; border-right: 4px solid var(--primary); padding: 12px; border-radius: 8px; margin-bottom: 12px; }
+        .a-title { font-size: 0.8rem; color: var(--primary); font-weight: 700; margin-bottom: 4px; }
+        .a-text { font-size: 0.95rem; line-height: 1.6; }
+        .key-box { background: #f0fdf4; border-right: 4px solid var(--success); padding: 12px; border-radius: 8px; font-size: 0.9rem; color: #166534; }
+        
+        .bottom-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: var(--card); padding: 16px; box-shadow: 0 -4px 10px rgba(0,0,0,0.05); display: flex; gap: 12px; align-items: center; }
+        .score-input { width: 100px; padding: 12px; border: 2px solid #e2e8f0; border-radius: 12px; font-family: inherit; font-size: 1.2rem; font-weight: 800; text-align: center; }
+        .btn-save { flex: 1; padding: 14px; background: var(--success); color: white; border: none; border-radius: 12px; font-family: inherit; font-weight: 800; font-size: 1rem; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>📝 تصحیح دستی آزمون</h1>
+        <p id="student-name">در حال بارگذاری...</p>
+    </div>
+
+    <div class="container" id="questions-container">
+        <!-- سوالات لود می‌شوند -->
+    </div>
+
+    <div class="bottom-bar" id="bottom-bar" style="display: none;">
+        <div style="font-size: 0.9rem; font-weight: 700;">نمره نهایی:</div>
+        <input type="number" id="final-score" class="score-input" min="0" max="20" step="0.25" placeholder="از 20">
+        <button class="btn-save" onclick="saveReview()">ثبت نمره</button>
+    </div>
+
+    <script>
+        const API_BASE = 'https://api.motadars.ir';
+        const params = new URLSearchParams(window.location.search);
+        const resultId = params.get('result_id');
+        let tg = null;
+
+        window.addEventListener('load', () => {
+            if (window.Telegram) { tg = window.Telegram.WebApp; tg.ready(); tg.expand(); }
+            if (!resultId) return;
+            fetchData();
+        });
+
+        async function fetchData() {
+            try {
+                const res = await fetch(`${API_BASE}/get_review_data.php?result_id=${resultId}`);
+                const data = await res.json();
+                
+                if (!data.ok) {
+                    document.getElementById('questions-container').innerHTML = `<h3 style="color:red">${data.message}</h3>`;
+                    return;
+                }
+
+                document.getElementById('student-name').innerText = `دانش‌آموز: ${data.student_name} | درس: ${data.subject}`;
+                document.getElementById('final-score').value = data.auto_score; // نمره خودکار به عنوان پیش‌فرض
+
+                const container = document.getElementById('questions-container');
+                if (data.questions.length === 0) {
+                    container.innerHTML = `<div class="card"><p>این آزمون هیچ سوال تشریحی یا جاخالی نداشته است.</p></div>`;
+                } else {
+                    data.questions.forEach((q, i) => {
+                        const div = document.createElement('div');
+                        div.className = 'card';
+                        let typeName = q.type === 'essay' ? 'تشریحی' : 'جاخالی';
+                        
+                        div.innerHTML = `
+                            <span class="q-badge">سوال ${i+1} - ${typeName}</span>
+                            <div class="q-text">${q.question_text}</div>
+                            <div class="a-box">
+                                <div class="a-title">پاسخ دانش‌آموز:</div>
+                                <div class="a-text">${q.student_answer}</div>
+                            </div>
+                            <div class="key-box">
+                                <b>کلید پیشنهادی معلم:</b> ${q.correct_key || 'ثبت نشده'}
+                            </div>
+                        `;
+                        container.appendChild(div);
+                    });
+                }
+
+                document.getElementById('bottom-bar').style.display = 'flex';
+
+            } catch (e) {
+                alert('خطا در دریافت اطلاعات');
+            }
+        }
+
+        async function saveReview() {
+            const score = document.getElementById('final-score').value;
+            if (score === '' || score < 0 || score > 20) {
+                alert('لطفاً نمره‌ای بین ۰ تا ۲۰ وارد کنید.');
+                return;
+            }
+
+            const btn = document.querySelector('.btn-save');
+            btn.disabled = true;
+            btn.innerText = 'در حال ثبت...';
+
+            try {
+                const res = await fetch(`${API_BASE}/save_review.php`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ result_id: resultId, final_score: score })
+                });
+                const data = await res.json();
+                
+                if (data.ok) {
+                    alert('✅ نمره با موفقیت ثبت شد.');
+                    if (tg) tg.close();
+                } else {
+                    alert('خطا: ' + data.message);
+                    btn.disabled = false;
+                    btn.innerText = 'ثبت نمره';
+                }
+            } catch (e) {
+                alert('خطای ارتباط با سرور.');
+                btn.disabled = false;
+                btn.innerText = 'ثبت نمره';
+            }
+        }
+    </script>
+</body>
+</html>
