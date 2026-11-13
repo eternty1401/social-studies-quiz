@@ -115,7 +115,6 @@
 
     <div class="main-container">
         
-        <!-- استپ ۱: انتخاب پایه -->
         <div class="step active" id="step-grade">
             <div class="step-title">پایه تحصیلی خود را انتخاب کنید</div>
             <div class="grade-grid">
@@ -134,7 +133,6 @@
             </div>
         </div>
 
-        <!-- استپ ۲: انتخاب بازه درسی -->
         <div class="step" id="step-range">
             <div class="step-title">بازه درسی را مشخص کنید</div>
             <div class="range-card">
@@ -218,27 +216,32 @@
             const to = parseInt(document.getElementById('lessonTo').value);
             
             if (from < 1 || to > 24 || from > to) {
-                if (tg) tg.showAlert('بازه درسی نامعتبر است. اعداد باید بین ۱ تا ۲۴ و از کوچک به بزرگ باشند.');
+                if (tg) tg.showAlert('بازه درسی نامعتبر است.');
                 return;
             }
             
             const btn = document.getElementById('generateBtn');
             btn.disabled = true;
-            btn.innerHTML = '<span class="loader"></span> در حال ساخت آزمون...';
+            btn.innerHTML = '<span class="loader"></span> در حال ساخت...';
             
-            // ⭐ دریافت tg_id از لینک مینی‌اپ
-            const urlParams = new URLSearchParams(window.location.search);
-            const tgId = urlParams.get('tg_id');
+            // ⭐ منطق هوشمند دریافت tg_id (اول تلگرام، بعد لینک)
+            let tgId = null;
+            if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user && tg.initDataUnsafe.user.id) {
+                tgId = tg.initDataUnsafe.user.id;
+            }
+            if (!tgId) {
+                const urlParams = new URLSearchParams(window.location.search);
+                tgId = urlParams.get('tg_id');
+            }
 
             if (!tgId) {
-                if(tg) tg.showAlert('خطا: اطلاعات کاربری یافت نشد. لطفا از طریق دکمه ربات وارد شوید.');
+                if(tg) tg.showAlert('خطا: اطلاعات کاربری یافت نشد. لطفا از طریق ربات وارد شوید.');
                 btn.disabled = false;
                 btn.innerHTML = '🚀 تولید آزمون';
                 return;
             }
 
             try {
-                // ارسال به API اختصاصی
                 const res = await fetch('https://api.motadars.ir/create_draft_miniapp.php', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -253,7 +256,6 @@
                 const data = await res.json();
 
                 if (data.ok) {
-                    // هدایت به صفحه ویرایش
                     window.location.href = data.edit_link;
                 } else {
                     if(tg) tg.showAlert(data.message || 'خطا در ساخت آزمون.');
