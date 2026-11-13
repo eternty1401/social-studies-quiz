@@ -26,55 +26,55 @@
   .timer-box { position: sticky; top: 10px; background: var(--primary); color: white; padding: 12px; border-radius: 10px; text-align: center; font-size: 1.2rem; font-weight: bold; z-index: 100; margin-bottom: 20px; }
   .timer-box.warning { background: var(--error); }
   
-  .question-card { background: #fff; border-radius: 12px; padding: 20px; margin-bottom: 16px; }
+  .question-card { background: #fff; border-radius: 12px; padding: 20px; margin-bottom: 16px; animation: slideUp 0.3s ease; }
+  @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  
   .q-text { font-weight: bold; margin-bottom: 16px; font-size: 1.05rem; }
   .options-list { display: flex; flex-direction: column; gap: 10px; }
-  .option-item { display: flex; align-items: center; padding: 12px; border: 1.5px solid var(--border); border-radius: 8px; cursor: pointer; }
+  .option-item { display: flex; align-items: center; padding: 12px; border: 1.5px solid var(--border); border-radius: 8px; cursor: pointer; transition: all 0.2s; }
+  .option-item:hover { border-color: var(--primary); background: #eff6ff; }
+  .option-item.selected { border-color: var(--primary); background: #eff6ff; font-weight: bold; }
   .option-item input { margin-left: 10px; width: 18px; height: 18px; }
-  input[type="text"], textarea { width: 100%; padding: 12px; border: 1.5px solid var(--border); border-radius: 8px; font-family: inherit; background: #fff; color: #000; }
-  .btn-submit { width: 100%; padding: 16px; background: var(--success); color: white; border: none; border-radius: 10px; font-size: 1.1rem; font-weight: bold; cursor: pointer; margin-top: 20px; }
-  .btn-print { width: 100%; padding: 16px; background: var(--primary); color: white; border: none; border-radius: 10px; font-size: 1.1rem; font-weight: bold; cursor: pointer; margin-top: 20px; display: none; }
+  
+  input[type="text"], textarea { width: 100%; padding: 12px; border: 1.5px solid var(--border); border-radius: 8px; font-family: inherit; background: #fff; color: #000; margin-top: 10px; }
+  textarea { resize: vertical; min-height: 120px; }
+
+  /* دکمه‌های ناوبری آنلاین */
+  .nav-buttons { display: flex; gap: 12px; margin-top: 20px; }
+  .btn { flex: 1; padding: 16px; border: none; border-radius: 10px; font-family: inherit; font-size: 1rem; font-weight: bold; cursor: pointer; transition: all 0.2s; }
+  .btn-prev { background: #e2e8f0; color: var(--text); }
+  .btn-next { background: var(--primary); color: white; }
+  .btn-submit { background: var(--success); color: white; }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
   .result-box { background: #fff; padding: 30px; border-radius: 12px; text-align: center; display: none; }
   .score-circle { width: 120px; height: 120px; border-radius: 50%; border: 8px solid var(--success); display: flex; align-items: center; justify-content: center; font-size: 2.5rem; font-weight: bold; color: var(--success); margin: 20px auto; }
 
-  /* ===== استایل PDF (مطابق نمونه) ===== */
+  /* ===== استایل PDF ===== */
   #pdf-container { display: none; background: white; width: 100%; padding: 10px; }
   .exam-paper { font-family: 'B Nazanin', 'BNazanin', 'Nazanin', 'Vazirmatn', Tahoma, sans-serif; direction: rtl; color: #000; font-size: 16px; background: white; padding: 0; line-height: 1.7; width: 100%; max-width: 800px; margin: 0 auto; }
-  
-  /* سربرگ */
   .exam-header-table { width: 100%; border-collapse: collapse; margin-bottom: 8px; text-align: center; }
   .exam-header-table td { border: 1.5px solid #000; padding: 4px 6px; font-size: 14px; }
   .exam-header-title { font-size: 17px; font-weight: bold; padding: 5px !important; }
   .exam-motto { text-align: center; font-weight: bold; font-size: 14px; margin: 8px 0; }
-  
-  /* جدول اصلی: ستون راست = سوالات، ستون چپ = بارم */
   .exam-table-main { width: 100%; border-collapse: collapse; table-layout: fixed; margin-bottom: 0; }
   .exam-table-main td { border: 1px solid #000; vertical-align: top; }
   .exam-table-main tr { page-break-inside: avoid; break-inside: avoid; }
-  
   .content-col { padding: 6px 14px 8px; }
   .score-col { width: 62px; text-align: center; vertical-align: middle !important; font-weight: bold; font-size: 17px; }
   .section-title { font-weight: bold; font-size: 16px; margin-bottom: 8px; text-align: right; }
-  
-  /* سوالات */
   .q-item { margin: 0 0 12px; }
   .q-line { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
   .q-line .q-t { flex: 1; text-align: right; }
   .tf-paren { white-space: nowrap; font-family: Tahoma, sans-serif; padding-left: 10px; }
-  
-  /* گزینه‌های تستی: چهار گزینه در یک ردیف */
   .mc-options { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px 10px; margin-top: 6px; font-size: 15px; }
   .mc-option { display: flex; align-items: center; gap: 4px; white-space: nowrap; }
   .mc-box { display: inline-block; width: 13px; height: 13px; border: 1.2px solid #000; border-radius: 2px; flex: none; }
-  
   .section-gap { height: 22px; }
-
-  /* پاسخنامه */
   .answer-key-title { text-align: center; font-weight: bold; font-size: 18px; margin: 15px 0 10px; }
   .answer-table { width: 100%; border-collapse: collapse; font-size: 15px; border: 1.5px solid #000; }
   .answer-table th, .answer-table td { border: 1px solid #000; padding: 6px; text-align: center; }
   .answer-table th { background: #f0f0f0; }
-  
   .pdf-page-1, .pdf-page-2 { page-break-after: always; break-after: page; }
 
   @media print {
@@ -100,61 +100,242 @@
 <div class="container" id="loading" style="text-align:center; padding:50px;">در حال دریافت آزمون...</div>
 <div class="container" id="error-msg" style="background:#fee2e2; color:#dc2626; padding:20px; border-radius:12px; text-align:center; display:none; font-weight:bold;"></div>
 
+<!-- بخش آزمون آنلاین -->
 <div id="exam-wrapper" class="container" style="display:none;">
-  <div class="timer-box" id="timer-box">زمان: <span id="timer-text">--:--</span></div>
+  <div class="timer-box" id="timer-box">زمان باقیمانده: <span id="timer-text">--:--</span></div>
   <div class="exam-header" id="exam-header-online"></div>
-  <form id="exam-form">
-    <div id="questions-container"></div>
-    <button type="submit" class="btn-submit" id="btn-submit">ارسال پاسخ‌ها</button>
-  </form>
+  
+  <!-- اینجا سوالات یکی یکی لود می‌شوند -->
+  <div id="online-question-container"></div>
 </div>
 
+<!-- بخش PDF -->
 <div id="pdf-wrapper" class="container" style="display:none;">
   <div class="no-print" style="margin-bottom: 20px; text-align: center;">
-    <button type="button" class="btn-print" style="display: inline-block; width: auto; padding: 12px 30px;" onclick="window.print()">🖨️ چاپ / ذخیره PDF</button>
+    <button type="button" class="btn-print" style="display: inline-block; width: auto; padding: 12px 30px; background:var(--primary); color:white; border:none; border-radius:8px; font-size:1.1rem; cursor:pointer;" onclick="window.print()">🖨️ چاپ / ذخیره PDF</button>
   </div>
   <div id="pdf-container"></div>
 </div>
 
+<!-- نتیجه آزمون آنلاین -->
 <div class="result-box container" id="result-box">
   <h2>نتیجه آزمون</h2>
   <div class="score-circle" id="score-display">0</div>
   <p>از ۲۰ نمره</p>
-  <p id="result-detail" style="color:#64748b; margin-top:10px;">تعداد پاسخ صحیح: ۰</p>
+  <p id="result-detail" style="color:#64748b; margin-top:10px;"></p>
 </div>
 
 <script>
   const API_BASE = 'https://api.motadars.ir';
   const urlParams = new URLSearchParams(window.location.search);
   const examCode = urlParams.get('code');
-  let examData = null, questionsData = null, examDuration = 0, timerInterval, isSubmitted = false, studentName = '';
+  
+  let examData = null;
+  let questionsData = []; // برای PDF
+  let onlineQuestions = []; // برای آنلاین
+  let examDuration = 0;
+  let timerInterval;
+  let isSubmitted = false;
+  let studentName = '';
+
+  // متغیرهای آزمون آنلاین
+  let currentIndex = 0;
+  let answers = {};
 
   document.addEventListener('DOMContentLoaded', () => {
     if (!examCode) return showError('لینک نامعتبر است.');
-    fetchExam();
+    fetchExamInfo();
   });
 
-  async function fetchExam() {
+  // ⭐ دریافت اطلاعات اولیه (نوع آزمون)
+  async function fetchExamInfo() {
     try {
+      // برای تشخیص نوع آزمون از get_exam.php استفاده می‌کنیم
       const res = await fetch(`${API_BASE}/get_exam.php?code=${examCode}`);
       const data = await res.json();
       if (!res.ok || !data.ok) return showError(data.message || 'خطا در دریافت.');
       
-      document.getElementById('loading').style.display = 'none';
-      examData = data.exam; questionsData = data.questions;
+      examData = data.exam; 
       
       if (examData.exam_type === 'online') {
+        document.getElementById('loading').style.display = 'none';
         document.getElementById('name-overlay').style.display = 'flex';
       } else {
+        // اگر PDF بود، سوالات رو از همین دیتا می‌خونیم
+        questionsData = data.questions;
+        document.getElementById('loading').style.display = 'none';
         renderPDFLayout();
       }
     } catch (err) { showError('خطای شبکه: ' + err.message); }
   }
 
-  // ===== کمکی =====
+  // ⭐ شروع آزمون آنلاین (گرفتن سوالات از فایل جدید)
+  async function startExam() {
+    const name = document.getElementById('student-name-input').value.trim();
+    if (name.length < 3) return alert('نام کامل را وارد کنید.');
+    studentName = name;
+    document.getElementById('name-overlay').style.display = 'none';
+    document.getElementById('loading').style.display = 'block';
+    document.getElementById('loading').innerText = 'در حال بارگذاری سوالات...';
+
+    try {
+      // استفاده از فایل جدید برای چک کردن is_active
+      const res = await fetch(`${API_BASE}/get_online_exam.php?code=${examCode}`);
+      const data = await res.json();
+
+      if (!data.ok) {
+        document.getElementById('loading').style.display = 'none';
+        return showError(data.message); // مثلاً اگر منقضی شده باشد
+      }
+
+      onlineQuestions = data.questions;
+      examDuration = (data.exam.duration || 60) * 60;
+      
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('exam-wrapper').style.display = 'block';
+      
+      // ساخت هدر
+      document.getElementById('exam-header-online').innerHTML = `
+        <div class="header-row"><span>${data.exam.header_admin || ''}</span><span>تاریخ: ${examData.exam_date || '---'}</span></div>
+        <div class="header-title">آزمون ${data.exam.header_subject}</div>
+        <div class="header-row" style="justify-content:space-between; margin-top:10px;"><span>مدرسه: ${data.exam.header_school || ''}</span><span>معلم: ${data.exam.teacher_name || ''}</span></div>
+        <div class="header-row" style="justify-content:center; margin-top:5px;"><span>مدت زمان: ${data.exam.duration} دقیقه</span></div>
+        <div class="student-name-line">نام دانش‌آموز: ${studentName}</div>
+      `;
+
+      startTimer();
+      renderOnlineQuestion();
+
+    } catch(e) {
+      document.getElementById('loading').style.display = 'none';
+      showError('خطا در دریافت سوالات آنلاین.');
+    }
+  }
+
+  // ⭐ رندر کردن سوال آنلاین (یکی یکی)
+  function renderOnlineQuestion() {
+    const container = document.getElementById('online-question-container');
+    const q = onlineQuestions[currentIndex];
+    
+    let inputHtml = '';
+    if (q.type === 'testi' || q.type === 'truefalse') {
+      inputHtml = `<div class="options-list">` + 
+        q.options.map((opt, i) => `
+        <label class="option-item ${answers[q.id] === i.toString() ? 'selected' : ''}">
+          <input type="radio" name="q_${q.id}" value="${i}" onchange="saveAnswer('${q.id}', this.value)" ${answers[q.id] === i.toString() ? 'checked' : ''}>
+          <span>${opt}</span>
+        </label>`).join('') + 
+      `</div>`;
+    } else if (q.type === 'jakhali') { 
+      inputHtml = `<input type="text" value="${answers[q.id] || ''}" placeholder="پاسخ خود را وارد کنید..." oninput="saveAnswer('${q.id}', this.value)">`; 
+    } else if (q.type === 'essay') { 
+      inputHtml = `<textarea placeholder="پاسخ تشریحی..." oninput="saveAnswer('${q.id}', this.value)">${answers[q.id] || ''}</textarea>`; 
+    }
+
+    container.innerHTML = `
+      <div class="question-card">
+        <div class="q-text"><span style="color:var(--primary)">سوال ${currentIndex + 1} از ${onlineQuestions.length}:</span> ${q.question_text}</div>
+        ${inputHtml}
+      </div>
+      <div class="nav-buttons">
+        <button class="btn btn-prev" onclick="prevQuestion()" ${currentIndex === 0 ? 'disabled' : ''}>قبلی</button>
+        ${currentIndex === onlineQuestions.length - 1 
+            ? `<button class="btn btn-submit" onclick="submitOnlineExam()">پایان و ثبت آزمون</button>`
+            : `<button class="btn btn-next" onclick="nextQuestion()">بعدی</button>`
+        }
+      </div>
+    `;
+  }
+
+  function saveAnswer(qId, value) {
+    answers[qId] = value;
+    if(event && event.target.type === 'radio') {
+      document.querySelectorAll('.option-item').forEach(el => el.classList.remove('selected'));
+      event.target.closest('.option-item').classList.add('selected');
+    }
+  }
+
+  function nextQuestion() {
+    if (currentIndex < onlineQuestions.length - 1) {
+      currentIndex++;
+      renderOnlineQuestion();
+    }
+  }
+
+  function prevQuestion() {
+    if (currentIndex > 0) {
+      currentIndex--;
+      renderOnlineQuestion();
+    }
+  }
+
+  // ⭐ ارسال به بک‌اند
+  async function submitOnlineExam(isAuto = false) {
+    if (!isAuto && !confirm('آیا از ثبت نهایی آزمون مطمئن هستید؟')) return;
+    if (isSubmitted) return;
+    isSubmitted = true;
+    clearInterval(timerInterval);
+
+    document.getElementById('online-question-container').innerHTML = '<div class="loading">در حال ثبت و تصحیح...</div>';
+    document.getElementById('timer-box').style.display = 'none';
+
+    try {
+      const res = await fetch(`${API_BASE}/submit_exam.php`, {
+        method: 'POST', 
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          code: examCode, 
+          student_name: studentName, 
+          answers: answers 
+        })
+      });
+      
+      const data = await res.json();
+      
+      if (data.ok) {
+        document.getElementById('exam-wrapper').style.display = 'none';
+        document.getElementById('result-box').style.display = 'block';
+        document.getElementById('score-display').textContent = data.score;
+        
+        if (data.status === 'pending_review') {
+            document.getElementById('score-display').style.borderColor = '#f59e0b';
+            document.getElementById('score-display').style.color = '#f59e0b';
+            document.getElementById('result-detail').innerHTML = `پاسخ صحیح تستی: ${data.correct_count} از ${data.total_questions}<br><br><b style="color:#dc2626">⚠️ این آزمون شامل سوالات تشریحی است و نیاز به تصحیح دستی توسط معلم دارد.</b>`;
+        } else {
+            document.getElementById('result-detail').textContent = `تعداد پاسخ صحیح: ${data.correct_count} از ${data.total_questions}`;
+        }
+      } else { 
+        alert('خطای سرور: ' + (data.message || 'ناشناخته')); 
+        isSubmitted = false;
+      }
+    } catch (err) { 
+      alert('خطای شبکه: ' + err.message); 
+      isSubmitted = false;
+    }
+  }
+
+  function startTimer() {
+    const timerText = document.getElementById('timer-text'), timerBox = document.getElementById('timer-box');
+    timerInterval = setInterval(() => {
+      const minutes = Math.floor(examDuration / 60), seconds = examDuration % 60;
+      timerText.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+      if (examDuration <= 300) timerBox.classList.add('warning');
+      if (examDuration <= 0) { clearInterval(timerInterval); if (!isSubmitted) { alert('زمان تمام شد!'); submitOnlineExam(true); } }
+      examDuration--;
+    }, 1000);
+  }
+
+  function showError(msg) {
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('error-msg').textContent = msg;
+    document.getElementById('error-msg').style.display = 'block';
+  }
+
+  // =========================================================================
+  // ===== بخش PDF (دقیقاً همان کدهای قبلی شما بدون هیچ تغییر) =====
+  // =========================================================================
   const toFa = n => String(n).replace(/\d/g, d => '۰۱۲۳۴۵۶۷۸۹'[d]);
 
-  // یک بخش با بارم ادغام‌شده (الف، ب، پ، ت)
   function sectionRow(title, score, itemsHTML) {
     return `<tr>
       <td class="content-col"><div class="section-title">${title}</div>${itemsHTML}</td>
@@ -162,7 +343,6 @@
     </tr>`;
   }
 
-  // ===== رندر PDF (مطابق نمونه) =====
   function renderPDFLayout() {
     document.getElementById('pdf-wrapper').style.display = 'block';
     try {
@@ -179,8 +359,6 @@
 
       const shortAnswerQ = allEssayQ.slice(0, 6);
       const longAnswerQ = allEssayQ.slice(6, 14);
-
-      // بارم هر سوال تشریحی (اگر در داده نبود، پیش‌فرض طبق نمونه)
       const defaultLongScores = [1, 1, 2, 2, 1, 1, 1, 1];
 
       let qCounter = 1; 
@@ -207,10 +385,8 @@
             <div class="exam-motto">«در سکوت سخت تلاش کن، بگذار موفقیتت صدای تو باشد»</div>
       `;
 
-      // ===== صفحه اول =====
       let page1HTML = `<div class="pdf-page-1">${headerHTML}<table class="exam-table-main">`;
 
-      // الف) صحیح / غلط
       if (tfQ.length) {
         let items = '';
         tfQ.forEach(q => {
@@ -224,7 +400,6 @@
         page1HTML += sectionRow('الف) عبارات صحیح و غلط را مشخص کنید.', 2, items);
       }
 
-      // ب) تستی
       if (testiQ.length) {
         let items = '';
         testiQ.forEach(q => {
@@ -239,7 +414,6 @@
         page1HTML += sectionRow('ب) گزینه صحیح را انتخاب کنید.', 2, items);
       }
 
-      // پ) جاخالی
       if (jakhaliQ.length) {
         let items = '';
         jakhaliQ.forEach(q => {
@@ -254,14 +428,11 @@
 
       page1HTML += `</table></div>`; 
 
-      // ===== صفحه دوم =====
       let page2HTML = `<div class="pdf-page-2"><table class="exam-table-main">`;
 
-      // ت) پاسخ کوتاه (بارم ۳ ادغام‌شده)
       if (shortAnswerQ.length) {
         let items = '';
         shortAnswerQ.forEach(q => {
-          // ⭐ اصلاح نهایی: چک کردن سختگیرانه‌تر برای جلوگیری از خطای پاسخ خالی
           const s = v => (typeof v === 'string' ? v.trim() : '');
           const first = Array.isArray(q.answer) ? q.answer[0] : q.answer;
           const key = s(q.question_key) || s(first) || 'پاسخ بررسی شود.';
@@ -275,14 +446,12 @@
         page2HTML += sectionRow('ت) به سوالات زیر پاسخ کوتاه دهید.', 3, items);
       }
 
-      // ث) تشریحی (هر سوال یک ردیف و بارم جدا)
       if (longAnswerQ.length) {
         page2HTML += `<tr>
           <td class="content-col" style="padding-bottom:2px;"><div class="section-title" style="margin-bottom:2px;">ث) به سوالات تشریحی زیر پاسخ کامل دهید.</div></td>
           <td class="score-col"></td>
         </tr>`;
         longAnswerQ.forEach((q, i) => {
-          // ⭐ اصلاح نهایی: چک کردن سختگیرانه‌تر برای جلوگیری از خطای پاسخ خالی
           const s = v => (typeof v === 'string' ? v.trim() : '');
           const first = Array.isArray(q.answer) ? q.answer[0] : q.answer;
           const key = s(q.question_key) || s(first) || 'پاسخ بررسی شود.';
@@ -300,7 +469,6 @@
 
       page2HTML += `</table></div>`; 
 
-      // ===== صفحه سوم: پاسخنامه =====
       const page3HTML = `
         <div class="pdf-page-3">
         <h2 class="answer-key-title">پاسخنامه و کلید سوالات</h2>
@@ -321,97 +489,6 @@
       showError('خطا در رسم برگه PDF: ' + e.message);
       document.getElementById('pdf-wrapper').style.display = 'none';
     }
-  }
-
-  // ===== رندر آنلاین =====
-  function startExam() {
-    const name = document.getElementById('student-name-input').value.trim();
-    if (name.length < 3) return alert('نام کامل را وارد کنید.');
-    studentName = name;
-    document.getElementById('name-overlay').style.display = 'none';
-    renderOnlineLayout();
-    examDuration = examData.duration * 60;
-    startTimer();
-    document.getElementById('btn-submit').style.display = 'block';
-  }
-
-  function renderOnlineLayout() {
-    document.getElementById('exam-wrapper').style.display = 'block';
-    document.getElementById('exam-header-online').innerHTML = `
-      <div class="header-row"><span>${examData.header_admin}</span><span>تاریخ: ${examData.exam_date || '---'}</span></div>
-      <div class="header-title">آزمون ${examData.header_subject}</div>
-      <div class="header-row" style="justify-content:space-between; margin-top:10px;"><span>مدرسه: ${examData.header_school}</span><span>معلم: ${examData.header_teacher_name}</span></div>
-      <div class="header-row" style="justify-content:center; margin-top:5px;"><span>مدت زمان: ${examData.duration} دقیقه</span></div>
-      <div class="student-name-line">نام دانش‌آموز: ${studentName}</div>
-    `;
-    const container = document.getElementById('questions-container');
-    container.innerHTML = '';
-    questionsData.forEach((q, index) => {
-      const card = document.createElement('div'); card.className = 'question-card';
-      let inputHtml = '';
-      if (q.type === 'testi' || q.type === 'truefalse') {
-        inputHtml = `<div class="options-list">`;
-        q.options.forEach((opt, i) => { inputHtml += `<label class="option-item"><input type="radio" name="q_${q.id}" value="${i}"><span>${opt}</span></label>`; });
-        inputHtml += `</div>`;
-      } else if (q.type === 'jakhali') { inputHtml = `<input type="text" name="q_${q.id}" placeholder="پاسخ خود را وارد کنید...">`; }
-      else if (q.type === 'essay') { inputHtml = `<textarea name="q_${q.id}" rows="4" placeholder="پاسخ تشریحی..."></textarea>`; }
-      card.innerHTML = `<div class="q-text"><span class="q-num">سوال ${index + 1}:</span> ${q.question_text}</div>${inputHtml}`;
-      container.appendChild(card);
-    });
-  }
-
-  function startTimer() {
-    const timerText = document.getElementById('timer-text'), timerBox = document.getElementById('timer-box');
-    timerInterval = setInterval(() => {
-      const minutes = Math.floor(examDuration / 60), seconds = examDuration % 60;
-      timerText.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-      if (examDuration <= 300) timerBox.classList.add('warning');
-      if (examDuration <= 0) { clearInterval(timerInterval); if (!isSubmitted) { alert('زمان تمام شد!'); submitExam(); } }
-      examDuration--;
-    }, 1000);
-  }
-
-  document.getElementById('exam-form')?.addEventListener('submit', (e) => {
-    e.preventDefault(); if (confirm('ارسال پاسخ‌ها؟')) submitExam();
-  });
-
-  async function submitExam() {
-    if (isSubmitted) return;
-    isSubmitted = true;
-    clearInterval(timerInterval);
-    const btn = document.getElementById('btn-submit'); btn.disabled = true; btn.textContent = 'در حال تصحیح...';
-    const answers = {}, formData = new FormData(document.getElementById('exam-form'));
-    for (let [key, value] of formData.entries()) { if (key.startsWith('q_')) answers[key.replace('q_', '')] = value; }
-
-    try {
-      const res = await fetch(`${API_BASE}/submit_exam.php`, {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ code: examCode, student_name: studentName, answers: answers })
-      });
-      
-      const text = await res.text();
-      let data;
-      try { data = JSON.parse(text); } catch (e) { throw new Error("پاسخ نامعتبر: " + text); }
-      
-      if (res.ok && data.ok) {
-        document.getElementById('exam-wrapper').style.display = 'none';
-        document.getElementById('result-box').style.display = 'block';
-        document.getElementById('score-display').textContent = data.score;
-        document.getElementById('result-detail').textContent = `پاسخ صحیح: ${data.correct_count} از ${data.total_questions}`;
-      } else { 
-        alert('خطای سرور: ' + (data.message || 'ناشناخته')); 
-        btn.disabled = false; btn.textContent = 'ارسال پاسخ‌ها'; 
-      }
-    } catch (err) { 
-      alert('خطای شبکه یا فرمت نامعتبر: ' + err.message); 
-      btn.disabled = false; btn.textContent = 'ارسال پاسخ‌ها'; 
-    }
-  }
-
-  function showError(msg) {
-    document.getElementById('loading').style.display = 'none';
-    document.getElementById('error-msg').textContent = msg;
-    document.getElementById('error-msg').style.display = 'block';
   }
 </script>
 </body>
