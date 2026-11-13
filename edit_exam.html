@@ -17,6 +17,8 @@
             --border: rgba(148, 163, 184, 0.2);
             --success: #10b981;
             --error: #ef4444;
+            --online-color: #8b5cf6;
+            --pdf-color: #f59e0b;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -24,7 +26,11 @@
 
         .page-header { padding: 16px 20px; background: #ffffff; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
         .page-header h1 { font-size: 1.2rem; font-weight: 800; color: var(--primary); }
-        .token-warning { font-size: 0.75rem; color: var(--error); background: #fee2e2; padding: 4px 8px; border-radius: 8px; }
+        
+        /* استایل جدید برای نمایش نوع آزمون */
+        .type-badge { font-size: 0.8rem; font-weight: 700; padding: 6px 12px; border-radius: 8px; color: white; display: flex; align-items: center; gap: 4px; }
+        .type-badge.online { background: var(--online-color); }
+        .type-badge.pdf { background: var(--pdf-color); }
 
         .container { max-width: 600px; margin: 0 auto; padding: 20px 16px; }
 
@@ -51,7 +57,7 @@
         .key-input { margin-top: 10px; background: #f0fdf4; border: 1.5px dashed #22c55e; color: #166534; font-weight: 600; }
 
         .bottom-bar { position: fixed; bottom: 0; left: 0; width: 100%; padding: 16px; background: linear-gradient(to top, var(--bg) 70%, transparent); z-index: 100; }
-        .btn-confirm { width: 100%; padding: 16px; background: var(--success); color: white; border: none; border-radius: 14px; font-family: inherit; font-size: 1.1rem; font-weight: 800; cursor: pointer; box-shadow: 0 10px 20px -5px rgba(16, 185, 129, 0.4); display: flex; justify-content: center; align-items: center; gap: 8px; }
+        .btn-confirm { width: 100%; padding: 16px; background: var(--success); color: white; border: none; border-radius: 14px; font-family: inherit; font-size: 1.1rem; font-weight: 800; cursor: pointer; box-shadow: 0 10px 20px -5px rgba(16, 185, 129, 0.4); display: flex; justify-content: center; align-items: center; gap: 8px; transition: all 0.2s; }
         .btn-confirm:active { transform: scale(0.98); }
         .btn-confirm:disabled { background: var(--hint); box-shadow: none; cursor: not-allowed; }
 
@@ -69,7 +75,8 @@
 
     <header class="page-header">
         <h1>📝 ویرایش آزمون</h1>
-        <div class="token-warning">هنوز اعتباری کسر نشده</div>
+        <!-- این باکس با جاوااسکریپت پر می‌شود -->
+        <div id="exam-type-indicator" class="type-badge" style="display: none;">...</div>
     </header>
 
     <div class="container" id="main-content" style="display: none;">
@@ -93,6 +100,7 @@
     </div>
 
     <div class="bottom-bar" id="bottom-bar" style="display: none;">
+        <!-- متن دکمه با جاوااسکریپت بر اساس نوع آزمون تغییر می‌کند -->
         <button class="btn-confirm" id="btn-confirm" onclick="submitChanges()">
             ✅ تایید نهایی و کسر ۱ اعتبار
         </button>
@@ -143,6 +151,22 @@
         }
 
         function renderUI() {
+            // ⭐ نمایش برچسب نوع آزمون در هدر
+            const typeIndicator = document.getElementById('exam-type-indicator');
+            const btnConfirm = document.getElementById('btn-confirm');
+            const isOnline = examData.exam_type === 'online';
+
+            typeIndicator.style.display = 'flex';
+            if (isOnline) {
+                typeIndicator.className = 'type-badge online';
+                typeIndicator.innerHTML = '🌐 آزمون آنلاین';
+                btnConfirm.innerHTML = '✅ تایید نهایی، کسر ۱ اعتبار و ساخت لینک آنلاین';
+            } else {
+                typeIndicator.className = 'type-badge pdf';
+                typeIndicator.innerHTML = '📄 آزمون چاپی (PDF)';
+                btnConfirm.innerHTML = '✅ تایید نهایی، کسر ۱ اعتبار و دریافت فایل PDF';
+            }
+
             document.getElementById('head-admin').value = examData.header_admin || '';
             document.getElementById('head-school').value = examData.header_school || '';
             document.getElementById('head-teacher').value = examData.header_teacher_name || '';
@@ -196,7 +220,7 @@
             const reset = () => { btn.disabled = false; btn.innerHTML = originalLabel; };
             
             btn.disabled = true;
-            btn.innerHTML = 'در حال ذخیره و کسر اعتبار...';
+            btn.innerHTML = '<span class="loader" style="width:20px;height:20px;border-width:2px;margin:0;"></span> در حال ذخیره و کسر اعتبار...';
 
             // جمع‌آوری اطلاعات
             const headerData = {
@@ -205,7 +229,7 @@
                 teacher: document.getElementById('head-teacher').value || 'نامشخص',
                 date: document.getElementById('head-date').value || 'نامشخص',
                 duration: parseInt(document.getElementById('head-duration').value) || 60,
-                type: examData.exam_type
+                type: examData.exam_type // اینجا نوع آزمون به بک‌اند ارسال می‌شود
             };
 
             const editedQuestions = questionsData.map(q => {
