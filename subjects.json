@@ -5,188 +5,20 @@
       "7": {
         "name": "پایه هفتم",
         "subjects": [
-          { "id": "social7", "name": "مطالعات اجتماعی", "active": true },
-          { "id": "math7", "name": "ریاضی", "active": false },
-          { "id": "science7", "name": "علوم", "active": false },
-          { "id": "arabic7", "name": "عربی", "active": false },
-          { "id": "english7", "name": "زبان انگلیسی", "active": false },
-          { "id": "literature7", "name": "ادبیات", "active": false }
+          { "id": "social7", "name": "مطالعات اجتماعی", "active": true }
         ]
       },
       "8": {
         "name": "پایه هشتم",
         "subjects": [
-          { "id": "social8", "name": "مطالعات اجتماعی", "active": true },
-          { "id": "math8", "name": "ریاضی", "active": false },
-          { "id": "science8", "name": "علوم", "active": false },
-          { "id": "arabic8", "name": "عربی", "active": false },
-          { "id": "english8", "name": "زبان انگلیسی", "active": false },
-          { "id": "literature8", "name": "ادبیات", "active": false }
+          { "id": "social8", "name": "مطالعات اجتماعی", "active": true }
         ]
       },
       "9": {
         "name": "پایه نهم",
         "subjects": [
-          { "id": "social9", "name": "مطالعات اجتماعی", "active": true },
-          { "id": "math9", "name": "ریاضی", "active": false },
-          { "id": "science9", "name": "علوم", "active": false },
-          { "id": "arabic9", "name": "عربی", "active": false },
-          { "id": "english9", "name": "زبان انگلیسی", "active": false },
-          { "id": "literature9", "name": "ادبیات", "active": false }
+          { "id": "social9", "name": "مطالعات اجتماعی", "active": true }
         ]
-      }
-    }
-  },
-  "motavassete_dovom": {
-    "name": "متوسطه دوم",
-    "fields": {
-      "math": {
-        "name": "رشته ریاضی",
-        "grades": {
-          "10": {
-            "name": "پایه دهم",
-            "subjects": [
-              { "id": "math10", "name": "ریاضی ۱", "active": false },
-              { "id": "physics10", "name": "فیزیک ۱", "active": false },
-              { "id": "chem10", "name": "شیمی ۱", "active": false },
-              { "id": "geometry10", "name": "هندسه ۱", "active": false },
-              { "id": "farsi10", "name": "فارسی ۱", "active": false },
-              { "id": "arabic10", "name": "عربی زبان قرآن", "active": false },
-              { "id": "geo10", "name": "جغرافیا ایران", "active": false },
-              { "id": "religion10", "name": "دین و زندگی", "active": false },
-              { "id": "english10", "name": "انگلیسی ۱", "active": false }
-            ]
-          },
-          "11": {
-            "name": "پایه یازدهم",
-            "subjects": [
-              { "id": "farsi11", "name": "فارسی ۲", "active": false },
-              { "id": "arabic11", "name": "عربی ۲", "active": false },
-              { "id": "religion11", "name": "دین و زندگی ۲", "active": false },
-              { "id": "history11", "name": "تاریخ معاصر", "active": false },
-              { "id": "english11", "name": "انگلیسی ۲", "active": false },
-              { "id": "calculus11", "name": "حسابان ۱", "active": false },
-              { "id": "geometry11", "name": "هندسه ۲", "active": false },
-              { "id": "stats11", "name": "آمار و احتمال", "active": false },
-              { "id": "physics11", "name": "فیزیک ۲", "active": false },
-              { "id": "chem11", "name": "شیمی ۲", "active": false },
-              { "id": "geology11", "name": "زمین شناسی", "active": false },
-              { "id": "human_env11", "name": "انسان و محیط زیست", "active": false }
-            ]
-          },
-          "12": {
-            "name": "پایه دوازدهم",
-            "subjects": [
-              { "id": "farsi12", "name": "زبان و ادبیات فارسی ۳", "active": false },
-              { "id": "arabic12", "name": "عربی ۳", "active": false },
-              { "id": "religion12", "name": "دین و زندگی ۳", "active": false },
-              { "id": "english12", "name": "زبان انگلیسی ۳", "active": false },
-              { "id": "calculus12", "name": "حسابان ۲", "active": false },
-              { "id": "geometry12", "name": "هندسه ۳", "active": false },
-              { "id": "discrete12", "name": "ریاضیات گسسته", "active": false }
-            ]
-          }
-        }
-      },
-      "science": {
-        "name": "رشته تجربی",
-        "grades": {
-          "10": {
-            "name": "پایه دهم",
-            "subjects": [
-              { "id": "farsi10t", "name": "فارسی ۱", "active": false },
-              { "id": "arabic10t", "name": "عربی ۱", "active": false },
-              { "id": "religion10t", "name": "دین و زندگی ۱", "active": false },
-              { "id": "english10t", "name": "انگلیسی ۱", "active": false },
-              { "id": "math10t", "name": "ریاضیات ۱", "active": false },
-              { "id": "biology10", "name": "زیست شناسی ۱", "active": false },
-              { "id": "physics10t", "name": "فیزیک ۱ (تجربی)", "active": false },
-              { "id": "chem10t", "name": "شیمی ۱", "active": false },
-              { "id": "geo10t", "name": "جغرافیا ایران", "active": false }
-            ]
-          },
-          "11": {
-            "name": "پایه یازدهم",
-            "subjects": [
-              { "id": "farsi11t", "name": "فارسی ۲", "active": false },
-              { "id": "arabic11t", "name": "عربی ۲", "active": false },
-              { "id": "religion11t", "name": "دین و زندگی ۲", "active": false },
-              { "id": "history11t", "name": "تاریخ معاصر", "active": false },
-              { "id": "english11t", "name": "انگلیسی ۲", "active": false },
-              { "id": "geology11t", "name": "زمین شناسی", "active": false },
-              { "id": "human_env11t", "name": "انسان و محیط زیست", "active": false },
-              { "id": "math11t", "name": "ریاضیات ۲", "active": false },
-              { "id": "physics11t", "name": "فیزیک ۲ (تجربی)", "active": false },
-              { "id": "chem11t", "name": "شیمی ۲", "active": false }
-            ]
-          },
-          "12": {
-            "name": "پایه دوازدهم",
-            "subjects": [
-              { "id": "farsi12t", "name": "زبان ادبیات ۳", "active": false },
-              { "id": "arabic12t", "name": "عربی ۳", "active": false },
-              { "id": "religion12t", "name": "دین و زندگی ۳", "active": false },
-              { "id": "english12t", "name": "انگلیسی ۳", "active": false },
-              { "id": "math12t", "name": "ریاضی ۳", "active": false },
-              { "id": "physics12t", "name": "فیزیک ۳ (تجربی)", "active": false },
-              { "id": "biology12", "name": "زیست شناسی ۳", "active": false },
-              { "id": "chem12t", "name": "شیمی ۳", "active": false }
-            ]
-          }
-        }
-      },
-      "humanities": {
-        "name": "رشته انسانی",
-        "grades": {
-          "10": {
-            "name": "پایه دهم",
-            "subjects": [
-              { "id": "farsi10h", "name": "فارسی ۱", "active": false },
-              { "id": "religion10h", "name": "دین و زندگی ۱ (ویژه انسانی)", "active": false },
-              { "id": "english10h", "name": "انگلیسی ۱", "active": false },
-              { "id": "arabic10h", "name": "عربی ۱", "active": false },
-              { "id": "math10h", "name": "ریاضی و آمار ۱", "active": false },
-              { "id": "economics10", "name": "اقتصاد", "active": false },
-              { "id": "literature10", "name": "علوم و فنون ادبی ۱", "active": false },
-              { "id": "history10", "name": "تاریخ ۱", "active": false },
-              { "id": "geo10h", "name": "جغرافیا ایران", "active": false },
-              { "id": "sociology10", "name": "جامعه شناسی ۱", "active": false },
-              { "id": "logic10", "name": "منطق", "active": false }
-            ]
-          },
-          "11": {
-            "name": "پایه یازدهم",
-            "subjects": [
-              { "id": "farsi11h", "name": "فارسی ۲", "active": false },
-              { "id": "religion11h", "name": "دین و زندگی ۲", "active": false },
-              { "id": "english11h", "name": "انگلیسی ۲", "active": false },
-              { "id": "arabic11h", "name": "عربی ۲", "active": false },
-              { "id": "math11h", "name": "ریاضی و آمار ۲", "active": false },
-              { "id": "literature11", "name": "علوم و فنون ادبی ۲", "active": false },
-              { "id": "geo11h", "name": "جغرافیا ۲", "active": false },
-              { "id": "history11h", "name": "تاریخ ۲", "active": false },
-              { "id": "sociology11", "name": "جامعه شناسی ۲", "active": false },
-              { "id": "philosophy11", "name": "فلسفه ۱", "active": false },
-              { "id": "psychology11", "name": "روانشناسی", "active": false },
-              { "id": "human_env11h", "name": "انسان و محیط", "active": false }
-            ]
-          },
-          "12": {
-            "name": "پایه دوازدهم",
-            "subjects": [
-              { "id": "farsi12h", "name": "زبان و ادبیات فارسی ۳", "active": false },
-              { "id": "religion12h", "name": "دین و زندگی ۳", "active": false },
-              { "id": "english12h", "name": "زبان انگلیسی ۳", "active": false },
-              { "id": "arabic12h", "name": "عربی ۳", "active": false },
-              { "id": "math12h", "name": "ریاضی و آمار ۳", "active": false },
-              { "id": "literature12", "name": "علوم و فنون ادبی ۳", "active": false },
-              { "id": "history12", "name": "تاریخ ۳", "active": false },
-              { "id": "geo12h", "name": "جغرافیا ۳", "active": false },
-              { "id": "sociology12", "name": "جامعه شناسی ۳", "active": false },
-              { "id": "philosophy12", "name": "فلسفه ۲", "active": false }
-            ]
-          }
-        }
       }
     }
   }
