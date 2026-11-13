@@ -53,7 +53,7 @@
         .bottom-bar { position: fixed; bottom: 0; left: 0; width: 100%; padding: 16px; background: linear-gradient(to top, var(--bg) 70%, transparent); z-index: 100; }
         .btn-confirm { width: 100%; padding: 16px; background: var(--success); color: white; border: none; border-radius: 14px; font-family: inherit; font-size: 1.1rem; font-weight: 800; cursor: pointer; box-shadow: 0 10px 20px -5px rgba(16, 185, 129, 0.4); display: flex; justify-content: center; align-items: center; gap: 8px; }
         .btn-confirm:active { transform: scale(0.98); }
-        .btn-confirm:disabled { background: var(--hint); box-shadow: none; }
+        .btn-confirm:disabled { background: var(--hint); box-shadow: none; cursor: not-allowed; }
 
         .loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999; }
         .loader { width: 40px; height: 40px; border: 4px solid var(--border); border-radius: 50%; border-top-color: var(--primary); animation: spin 1s linear infinite; margin-bottom: 16px; }
@@ -73,6 +73,7 @@
     </header>
 
     <div class="container" id="main-content" style="display: none;">
+        
         <div class="card">
             <div class="card-title">🏢 اطلاعات سربرگ</div>
             <div class="form-row">
@@ -85,29 +86,34 @@
             </div>
             <div class="form-group" style="width: 50%;"><label>مدت زمان (دقیقه)</label><input type="number" id="head-duration" class="form-control"></div>
         </div>
+
         <h3 style="margin-bottom: 16px; color: var(--text);">📚 ویرایش سوالات</h3>
         <div id="questions-container"></div>
+
     </div>
 
     <div class="bottom-bar" id="bottom-bar" style="display: none;">
-        <button class="btn-confirm" id="btn-confirm" onclick="submitChanges()">✅ تایید نهایی و کسر ۱ اعتبار</button>
+        <button class="btn-confirm" id="btn-confirm" onclick="submitChanges()">
+            ✅ تایید نهایی و کسر ۱ اعتبار
+        </button>
     </div>
 
     <script>
         const API_BASE = 'https://api.motadars.ir';
         const urlParams = new URLSearchParams(window.location.search);
         const examCode = urlParams.get('code');
-        const teacherToken = urlParams.get('token'); // مستقیم از URL می‌خونیم
+        const teacherToken = urlParams.get('token');
         
         let examData = null;
         let questionsData = [];
         let tg = null;
 
+        // راه‌اندازی امن تلگرام
         window.addEventListener('load', () => {
             if (window.Telegram && window.Telegram.WebApp) {
                 tg = window.Telegram.WebApp;
                 tg.ready();
-                tg.expand();
+                try { tg.expand(); } catch(e) {}
             }
             
             if (!examCode || !teacherToken) {
@@ -124,7 +130,7 @@
                 const data = await res.json();
                 
                 if (!res.ok || !data.ok) {
-                    document.getElementById('loading').innerHTML = `<h3 style='color:red;'>${data.message}</h3>`;
+                    document.getElementById('loading').innerHTML = `<h3 style='color:red;'>${data.message || 'خطا'}</h3>`;
                     return;
                 }
 
@@ -186,55 +192,55 @@
 
         async function submitChanges() {
             const btn = document.getElementById('btn-confirm');
+            const originalLabel = btn.innerHTML;
+            const reset = () => { btn.disabled = false; btn.innerHTML = originalLabel; };
             
-            // ⭐ قرار دادن کل عملیات در try/catch برای پیدا کردن خطای احتمالی
+            btn.disabled = true;
+            btn.innerHTML = 'در حال ذخیره و کسر اعتبار...';
+
+            // جمع‌آوری اطلاعات
+            const headerData = {
+                admin: document.getElementById('head-admin').value || 'نامشخص',
+                school: document.getElementById('head-school').value || 'نامشخص',
+                teacher: document.getElementById('head-teacher').value || 'نامشخص',
+                date: document.getElementById('head-date').value || 'نامشخص',
+                duration: parseInt(document.getElementById('head-duration').value) || 60,
+                type: examData.exam_type
+            };
+
+            const editedQuestions = questionsData.map(q => {
+                let textEl = document.querySelector(`.text-input[data-qid="${q.id}"]`);
+                let text = textEl ? textEl.value : q.question_text;
+                let options = q.options;
+                let answer = q.answer;
+
+                if (q.type === 'testi' || q.type === 'truefalse') {
+                    options = q.options.map((_, i) => {
+                        let optEl = document.querySelector(`.option-input[data-qid="${q.id}"][data-index="${i}"]`);
+                        return optEl ? optEl.value : '';
+                    });
+                }
+                
+                if (q.type === 'essay' || q.type === 'jakhali') {
+                    let keyEl = document.querySelector(`.key-input[data-qid="${q.id}"]`);
+                    let keyVal = keyEl ? keyEl.value : '';
+                    answer = [keyVal];
+                }
+
+                return { id: q.id, type: q.type, text: text, options: options, answer: answer };
+            });
+
+            // ⭐ تنظیم تایم‌اوت ۴۵ ثانیه‌ای
+            const ctrl = new AbortController();
+            const timer = setTimeout(() => ctrl.abort(), 45000);
+
             try {
-                btn.disabled = true;
-                btn.innerHTML = 'در حال ذخیره و کسر اعتبار...';
-
-                const headerData = {
-                    admin: document.getElementById('head-admin').value || 'نامشخص',
-                    school: document.getElementById('head-school').value || 'نامشخص',
-                    teacher: document.getElementById('head-teacher').value || 'نامشخص',
-                    date: document.getElementById('head-date').value || 'نامشخص',
-                    duration: parseInt(document.getElementById('head-duration').value) || 60,
-                    type: examData.exam_type
-                };
-
-                const editedQuestions = questionsData.map(q => {
-                    let textEl = document.querySelector(`.text-input[data-qid="${q.id}"]`);
-                    let text = textEl ? textEl.value : q.question_text;
-                    
-                    let options = q.options;
-                    let answer = q.answer;
-
-                    if (q.type === 'testi' || q.type === 'truefalse') {
-                        options = q.options.map((_, i) => {
-                            let optEl = document.querySelector(`.option-input[data-qid="${q.id}"][data-index="${i}"]`);
-                            return optEl ? optEl.value : '';
-                        });
-                    }
-                    
-                    if (q.type === 'essay' || q.type === 'jakhali') {
-                        let keyEl = document.querySelector(`.key-input[data-qid="${q.id}"]`);
-                        let keyVal = keyEl ? keyEl.value : '';
-                        answer = [keyVal];
-                    }
-
-                    return {
-                        id: q.id,
-                        type: q.type,
-                        text: text,
-                        options: options,
-                        answer: answer
-                    };
-                });
-
                 const res = await fetch(`${API_BASE}/confirm_exam.php`, {
                     method: 'POST',
+                    signal: ctrl.signal,
                     headers: { 
                         'Content-Type': 'application/json',
-                        'X-Teacher-Token': teacherToken // استفاده از متغیر مستقیم
+                        'X-Teacher-Token': teacherToken
                     },
                     body: JSON.stringify({
                         code: examCode,
@@ -248,24 +254,31 @@
                 try {
                     data = JSON.parse(textData);
                 } catch (e) {
-                    alert("❌ خطای سرور (پاسخ نامعتبر):\n" + textData);
-                    btn.disabled = false;
-                    btn.innerHTML = '✅ تایید نهایی و کسر ۱ اعتبار';
-                    return;
+                    throw new Error("پاسخ نامعتبر از سرور (" + res.status + "): " + textData.slice(0, 150));
                 }
                 
                 if (res.ok && data.ok) {
-                    alert('✅ آزمون با موفقیت تایید شد!\n\nانتقال به صفحه چاپ...');
-                    window.location.href = data.final_link;
+                    alert('✅ آزمون با موفقیت تایید شد!');
+                    // اگر تلگرام هست، لینک رو در مرورگر خارجی باز کن، وگرنه در خود صفحه
+                    if (tg && tg.openLink) {
+                        tg.openLink(data.final_link);
+                    } else {
+                        window.location.href = data.final_link;
+                    }
+                    reset();
                 } else {
-                    alert('❌ خطا از سمت سرور: ' + (data.message || 'ناشناخته'));
-                    btn.disabled = false;
-                    btn.innerHTML = '✅ تایید نهایی و کسر ۱ اعتبار';
+                    alert('❌ خطا: ' + (data.message || res.status));
+                    reset();
                 }
-            } catch (err) {
-                alert('❌ خطای جاوااسکریپت: ' + err.message);
-                btn.disabled = false;
-                btn.innerHTML = '✅ تایید نهایی و کسر ۱ اعتبار';
+            } catch (e) {
+                if (e.name === 'AbortError') {
+                    alert('❌ سرور پاسخ نداد (Timeout). لطفاً یک بار دیگر تلاش کنید.');
+                } else {
+                    alert('❌ خطا: ' + e.message);
+                }
+                reset();
+            } finally {
+                clearTimeout(timer);
             }
         }
     </script>
