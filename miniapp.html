@@ -32,6 +32,7 @@
             flex-direction: column;
         }
 
+        /* هدر شیک */
         .header {
             background: var(--primary-gradient);
             color: white;
@@ -42,18 +43,44 @@
             position: relative;
             overflow: hidden;
         }
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%; width: 200%; height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
+            pointer-events: none;
+        }
         .header h1 { font-size: 1.5rem; font-weight: 800; margin-bottom: 4px; display: flex; justify-content: center; align-items: center; gap: 8px; }
         .header p { font-size: 0.9rem; opacity: 0.9; font-weight: 400; }
 
-        .main-container { flex: 1; padding: 20px; max-width: 600px; margin: 0 auto; width: 100%; }
+        /* کانتینر اصلی */
+        .main-container {
+            flex: 1;
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+            width: 100%;
+        }
 
         .step { display: none; animation: slideUp 0.4s ease; }
         .step.active { display: block; }
         @keyframes slideUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
 
-        .step-title { font-size: 1.2rem; font-weight: 800; margin-bottom: 16px; text-align: center; color: var(--text); }
+        .step-title {
+            font-size: 1.2rem;
+            font-weight: 800;
+            margin-bottom: 16px;
+            text-align: center;
+            color: var(--text);
+        }
 
-        .grade-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 30px; }
+        /* کارت‌های انتخاب پایه */
+        .grade-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 30px;
+        }
         .grade-card {
             background: var(--card);
             border: 2px solid transparent;
@@ -65,42 +92,116 @@
             transition: all 0.2s ease;
         }
         .grade-card:active { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
-        .grade-card.selected { border-color: var(--primary); background: #eff6ff; }
+        .grade-card.selected {
+            border-color: var(--primary);
+            background: #eff6ff;
+        }
         .grade-icon { font-size: 2rem; margin-bottom: 8px; display: block; }
         .grade-name { font-weight: 700; font-size: 1.1rem; }
 
-        .range-card { background: var(--card); border-radius: 20px; padding: 24px; box-shadow: var(--shadow-sm); margin-bottom: 24px; }
-        .range-row { display: flex; align-items: center; justify-content: space-between; gap: 15px; }
-        .range-input-group { flex: 1; text-align: center; }
-        .range-input-group label { display: block; font-size: 0.85rem; color: var(--hint); margin-bottom: 8px; font-weight: 600; }
+        /* بخش بازه درسی */
+        .range-card {
+            background: var(--card);
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 24px;
+        }
+        .range-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+        }
+        .range-input-group {
+            flex: 1;
+            text-align: center;
+        }
+        .range-input-group label {
+            display: block;
+            font-size: 0.85rem;
+            color: var(--hint);
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
         .range-input {
-            width: 100%; padding: 15px; font-size: 1.5rem; font-weight: 800;
-            text-align: center; color: var(--primary); background: #eff6ff;
-            border: 2px solid #bfdbfe; border-radius: 16px; font-family: inherit;
+            width: 100%;
+            padding: 15px;
+            font-size: 1.5rem;
+            font-weight: 800;
+            text-align: center;
+            color: var(--primary);
+            background: #eff6ff;
+            border: 2px solid #bfdbfe;
+            border-radius: 16px;
+            font-family: inherit;
             transition: all 0.2s;
         }
-        .range-input:focus { outline: none; border-color: var(--primary); background: #fff; box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1); }
-        .range-divider { font-weight: 800; color: var(--hint); margin-top: 24px; }
+        .range-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: #fff;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+        }
+        .range-divider {
+            font-weight: 800;
+            color: var(--hint);
+            margin-top: 24px;
+        }
 
-        .action-area { margin-top: auto; padding-top: 20px; }
+        /* دکمه اکشن بزرگ */
+        .action-area {
+            margin-top: auto;
+            padding-top: 20px;
+        }
         .btn-generate {
-            width: 100%; padding: 18px; background: var(--primary-gradient); color: white;
-            border: none; border-radius: 16px; font-family: inherit; font-size: 1.1rem;
-            font-weight: 800; cursor: pointer; box-shadow: var(--shadow-lg);
-            display: flex; align-items: center; justify-content: center; gap: 10px;
+            width: 100%;
+            padding: 18px;
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            border-radius: 16px;
+            font-family: inherit;
+            font-size: 1.1rem;
+            font-weight: 800;
+            cursor: pointer;
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
             transition: all 0.2s;
         }
         .btn-generate:active { transform: scale(0.97); }
         .btn-generate:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
 
-        .loader { display: inline-block; width: 20px; height: 20px; border: 3px solid rgba(255,255,255,0.3); border-radius: 50%; border-top-color: #fff; animation: spin 1s linear infinite; }
+        /* لودینگ */
+        .loader {
+            display: inline-block;
+            width: 20px; height: 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s linear infinite;
+        }
         @keyframes spin { to { transform: rotate(360deg); } }
 
+        /* دکمه برگشت */
         .back-btn {
-            position: absolute; top: 24px; right: 20px; background: rgba(255,255,255,0.2);
-            border: none; color: white; width: 36px; height: 36px; border-radius: 50%;
-            display: none; align-items: center; justify-content: center;
-            font-size: 1.2rem; cursor: pointer; backdrop-filter: blur(4px);
+            position: absolute;
+            top: 24px;
+            right: 20px;
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            width: 36px; height: 36px;
+            border-radius: 50%;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            cursor: pointer;
+            backdrop-filter: blur(4px);
         }
         .back-btn.active { display: flex; }
     </style>
@@ -182,15 +283,6 @@
 
         window.addEventListener('load', () => setTimeout(initTelegram, 100));
 
-        // ⭐ استخراج امن initData از تلگرام (کار با Menu Button، Reply Keyboard و Inline)
-        function getInitData() {
-            const tgApp = window.Telegram && window.Telegram.WebApp;
-            if (tgApp && tgApp.initData) return tgApp.initData;
-            // Fallback: استخراج از hash (اگر از Menu Button باز شده باشد)
-            const h = new URLSearchParams(location.hash.slice(1));
-            return h.get('tgWebAppData') || '';
-        }
-
         function showStep(stepId) {
             document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
             document.getElementById(stepId).classList.add('active');
@@ -234,11 +326,21 @@
             
             const btn = document.getElementById('generateBtn');
             btn.disabled = true;
-            btn.innerHTML = '<span class="loader"></span> در حال ساخت آزمون...';
+            btn.innerHTML = '<span class="loader"></span> در حال ساخت...';
+            
+            // ⭐ سیستم ترکیبی برای دریافت هویت: هم از initData، هم از لینک
+            function getInitData() {
+                const tgApp = window.Telegram && window.Telegram.WebApp;
+                if (tgApp && tgApp.initData) return tgApp.initData;
+                const h = new URLSearchParams(location.hash.slice(1));
+                return h.get('tgWebAppData') || '';
+            }
             
             const initData = getInitData();
+            const urlParams = new URLSearchParams(window.location.search);
+            const fallbackTgId = urlParams.get('tg_id');
 
-            if (!initData) {
+            if (!initData && !fallbackTgId) {
                 if(tg) tg.showAlert('خطا: اطلاعات تلگرام یافت نشد. لطفا از طریق ربات وارد شوید.');
                 btn.disabled = false;
                 btn.innerHTML = '🚀 تولید آزمون';
@@ -251,6 +353,7 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         initData: initData,
+                        tg_id: fallbackTgId,
                         grade: selection.grade,
                         lessonFrom: from,
                         lessonTo: to
