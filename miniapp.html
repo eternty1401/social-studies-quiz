@@ -43,13 +43,6 @@
             position: relative;
             overflow: hidden;
         }
-        .header::before {
-            content: '';
-            position: absolute;
-            top: -50%; left: -50%; width: 200%; height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
-            pointer-events: none;
-        }
         .header h1 {
             font-size: 1.5rem;
             font-weight: 800;
@@ -59,40 +52,19 @@
             align-items: center;
             gap: 8px;
         }
-        .header p {
-            font-size: 0.9rem;
-            opacity: 0.9;
-            font-weight: 400;
-        }
+        .header p { font-size: 0.9rem; opacity: 0.9; font-weight: 400; }
 
         /* کانتینر اصلی */
-        .main-container {
-            flex: 1;
-            padding: 20px;
-            max-width: 600px;
-            margin: 0 auto;
-            width: 100%;
-        }
+        .main-container { flex: 1; padding: 20px; max-width: 600px; margin: 0 auto; width: 100%; }
 
         .step { display: none; animation: slideUp 0.4s ease; }
         .step.active { display: block; }
         @keyframes slideUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
 
-        .step-title {
-            font-size: 1.2rem;
-            font-weight: 800;
-            margin-bottom: 16px;
-            text-align: center;
-            color: var(--text);
-        }
+        .step-title { font-size: 1.2rem; font-weight: 800; margin-bottom: 16px; text-align: center; color: var(--text); }
 
         /* کارت‌های انتخاب پایه */
-        .grade-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
-            margin-bottom: 30px;
-        }
+        .grade-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 30px; }
         .grade-card {
             background: var(--card);
             border: 2px solid transparent;
@@ -102,119 +74,48 @@
             cursor: pointer;
             box-shadow: var(--shadow-sm);
             transition: all 0.2s ease;
-            position: relative;
         }
         .grade-card:active { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
-        .grade-card.selected {
-            border-color: var(--primary);
-            background: #eff6ff;
-        }
+        .grade-card.selected { border-color: var(--primary); background: #eff6ff; }
         .grade-icon { font-size: 2rem; margin-bottom: 8px; display: block; }
         .grade-name { font-weight: 700; font-size: 1.1rem; }
 
         /* بخش بازه درسی */
-        .range-card {
-            background: var(--card);
-            border-radius: 20px;
-            padding: 24px;
-            box-shadow: var(--shadow-sm);
-            margin-bottom: 24px;
-        }
-        .range-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 15px;
-        }
-        .range-input-group {
-            flex: 1;
-            text-align: center;
-        }
-        .range-input-group label {
-            display: block;
-            font-size: 0.85rem;
-            color: var(--hint);
-            margin-bottom: 8px;
-            font-weight: 600;
-        }
+        .range-card { background: var(--card); border-radius: 20px; padding: 24px; box-shadow: var(--shadow-sm); margin-bottom: 24px; }
+        .range-row { display: flex; align-items: center; justify-content: space-between; gap: 15px; }
+        .range-input-group { flex: 1; text-align: center; }
+        .range-input-group label { display: block; font-size: 0.85rem; color: var(--hint); margin-bottom: 8px; font-weight: 600; }
         .range-input {
-            width: 100%;
-            padding: 15px;
-            font-size: 1.5rem;
-            font-weight: 800;
-            text-align: center;
-            color: var(--primary);
-            background: #eff6ff;
-            border: 2px solid #bfdbfe;
-            border-radius: 16px;
-            font-family: inherit;
+            width: 100%; padding: 15px; font-size: 1.5rem; font-weight: 800;
+            text-align: center; color: var(--primary); background: #eff6ff;
+            border: 2px solid #bfdbfe; border-radius: 16px; font-family: inherit;
             transition: all 0.2s;
         }
-        .range-input:focus {
-            outline: none;
-            border-color: var(--primary);
-            background: #fff;
-            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
-        }
-        .range-divider {
-            font-weight: 800;
-            color: var(--hint);
-            margin-top: 24px;
-        }
+        .range-input:focus { outline: none; border-color: var(--primary); background: #fff; box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1); }
+        .range-divider { font-weight: 800; color: var(--hint); margin-top: 24px; }
 
         /* دکمه اکشن بزرگ */
-        .action-area {
-            margin-top: auto;
-            padding-top: 20px;
-        }
+        .action-area { margin-top: auto; padding-top: 20px; }
         .btn-generate {
-            width: 100%;
-            padding: 18px;
-            background: var(--primary-gradient);
-            color: white;
-            border: none;
-            border-radius: 16px;
-            font-family: inherit;
-            font-size: 1.1rem;
-            font-weight: 800;
-            cursor: pointer;
-            box-shadow: var(--shadow-lg);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
+            width: 100%; padding: 18px; background: var(--primary-gradient); color: white;
+            border: none; border-radius: 16px; font-family: inherit; font-size: 1.1rem;
+            font-weight: 800; cursor: pointer; box-shadow: var(--shadow-lg);
+            display: flex; align-items: center; justify-content: center; gap: 10px;
             transition: all 0.2s;
         }
         .btn-generate:active { transform: scale(0.97); }
         .btn-generate:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
 
         /* لودینگ */
-        .loader {
-            display: inline-block;
-            width: 20px; height: 20px;
-            border: 3px solid rgba(255,255,255,0.3);
-            border-radius: 50%;
-            border-top-color: #fff;
-            animation: spin 1s linear infinite;
-        }
+        .loader { display: inline-block; width: 20px; height: 20px; border: 3px solid rgba(255,255,255,0.3); border-radius: 50%; border-top-color: #fff; animation: spin 1s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
 
         /* دکمه برگشت */
         .back-btn {
-            position: absolute;
-            top: 24px;
-            right: 20px;
-            background: rgba(255,255,255,0.2);
-            border: none;
-            color: white;
-            width: 36px; height: 36px;
-            border-radius: 50%;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-            cursor: pointer;
-            backdrop-filter: blur(4px);
+            position: absolute; top: 24px; right: 20px; background: rgba(255,255,255,0.2);
+            border: none; color: white; width: 36px; height: 36px; border-radius: 50%;
+            display: none; align-items: center; justify-content: center;
+            font-size: 1.2rem; cursor: pointer; backdrop-filter: blur(4px);
         }
         .back-btn.active { display: flex; }
     </style>
@@ -278,13 +179,7 @@
 
     <script>
         let tg = null;
-        let selection = { 
-            level: 'motavassete_aval', 
-            subject: 'مطالعات اجتماعی', 
-            grade: null, 
-            lessonFrom: 1, 
-            lessonTo: 4 
-        };
+        let selection = { grade: null };
 
         function initTelegram() {
             if (!window.Telegram || !window.Telegram.WebApp) {
@@ -333,7 +228,7 @@
             showStep('step-grade');
         }
 
-        function submitExam() {
+        async function submitExam() {
             const from = parseInt(document.getElementById('lessonFrom').value);
             const to = parseInt(document.getElementById('lessonTo').value);
             
@@ -346,15 +241,40 @@
             btn.disabled = true;
             btn.innerHTML = '<span class="loader"></span> در حال ساخت آزمون...';
             
-            selection.lessonFrom = from;
-            selection.lessonTo = to;
-            
-            // ارسال به ربات با تاخیر 1 ثانیه‌ای برای جلوگیری از باگ تلگرام
-            if (tg && tg.sendData) {
-                tg.sendData(JSON.stringify(selection));
-                setTimeout(() => tg.close(), 1000); 
-            } else {
-                alert('اطلاعات ارسال شد: ' + JSON.stringify(selection));
+            const tgId = tg.initDataUnsafe?.user?.id;
+
+            if (!tgId) {
+                if(tg) tg.showAlert('خطا: اطلاعات تلگرام یافت نشد. لطفا از طریق ربات وارد شوید.');
+                btn.disabled = false;
+                btn.innerHTML = '🚀 تولید آزمون';
+                return;
+            }
+
+            try {
+                // ارسال اطلاعات به API اختصاصی
+                const res = await fetch('https://api.motadars.ir/create_draft_miniapp.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        telegram_id: tgId,
+                        grade: selection.grade,
+                        lessonFrom: from,
+                        lessonTo: to
+                    })
+                });
+
+                const data = await res.json();
+
+                if (data.ok) {
+                    // هدایت به صفحه ویرایش
+                    window.location.href = data.edit_link;
+                } else {
+                    if(tg) tg.showAlert(data.message || 'خطا در ساخت آزمون.');
+                    btn.disabled = false;
+                    btn.innerHTML = '🚀 تولید آزمون';
+                }
+            } catch (err) {
+                if(tg) tg.showAlert('خطای شبکه در ارتباط با سرور.');
                 btn.disabled = false;
                 btn.innerHTML = '🚀 تولید آزمون';
             }
