@@ -8,13 +8,14 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     
     <style>
+        /* 🎨 تنظیمات تم روشن (White Theme) */
         :root {
             --primary: #3b82f6;
-            --bg: var(--tg-theme-bg-color, #f8fafc);
-            --card: var(--tg-theme-secondary-bg-color, #ffffff);
-            --text: var(--tg-theme-text-color, #0f172a);
-            --hint: var(--tg-theme-hint-color, #64748b);
-            --border: rgba(148, 163, 184, 0.2);
+            --bg: #f8fafc;         /* پس‌زمینه کلی */
+            --card: #ffffff;       /* پس‌زمینه کارت‌ها */
+            --text: #0f172a;       /* رنگ متن اصلی */
+            --hint: #64748b;       /* رنگ متن راهنما */
+            --border: rgba(148, 163, 184, 0.3); /* رنگ حاشیه */
             --success: #10b981;
             --error: #ef4444;
         }
@@ -36,9 +37,7 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            background: rgba(var(--tg-theme-bg-color-rgb, 248, 250, 252), 0.8);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+            background: #ffffff;
             position: sticky;
             top: 0;
             z-index: 100;
@@ -53,7 +52,7 @@
             gap: 8px;
         }
         .back-btn {
-            background: var(--card);
+            background: #f1f5f9;
             border: 1px solid var(--border);
             font-size: 1.2rem;
             cursor: pointer;
@@ -132,9 +131,9 @@
 
         /* کارت‌های غیرفعال (به زودی) */
         .select-card.disabled {
-            opacity: 0.5;
+            opacity: 0.6;
             cursor: not-allowed;
-            background: transparent;
+            background: #f8fafc;
             border-style: dashed;
             flex-direction: row;
             justify-content: space-between;
@@ -144,7 +143,7 @@
         .lock-icon { font-size: 1.2rem; }
         .badge-soon {
             font-size: 0.7rem;
-            background: rgba(239, 68, 68, 0.1);
+            background: #fee2e2;
             color: var(--error);
             padding: 4px 10px;
             border-radius: 8px;
@@ -174,10 +173,10 @@
             font-size: 1.2rem;
             font-weight: 700;
             text-align: center;
-            background: var(--bg);
+            background: #f8fafc;
             color: var(--text);
         }
-        .form-control:focus { outline: none; border-color: var(--primary); }
+        .form-control:focus { outline: none; border-color: var(--primary); background: #fff; }
 
         /* دکمه اصلی */
         .bottom-action {
@@ -250,7 +249,7 @@
             </div>
         </div>
 
-        <!-- استپ ۲: رشته -->
+        <!-- استپ ۲: رشته (فقط متوسطه دوم) -->
         <div class="step" id="step-2-field">
             <h2 class="step-title">رشته تحصیلی</h2>
             <p class="step-subtitle">رشته خود را انتخاب کنید.</p>
@@ -267,18 +266,18 @@
             </div>
         </div>
 
-        <!-- استپ ۳: پایه -->
-        <div class="step" id="step-3-grade">
-            <h2 class="step-title">پایه تحصیلی</h2>
-            <p class="step-subtitle">پایه خود را انتخاب کنید.</p>
-            <div class="grid-3" id="grades-container"></div>
-        </div>
-
-        <!-- استپ ۴: درس -->
-        <div class="step" id="step-4-subject">
+        <!-- استپ ۳: انتخاب کتاب درسی (منتقل شد به قبل از پایه) -->
+        <div class="step" id="step-3-subject">
             <h2 class="step-title">انتخاب کتاب درسی</h2>
             <p class="step-subtitle">یک درس انتخاب کنید.</p>
             <div class="grid-1" id="subjects-container"></div>
+        </div>
+
+        <!-- استپ ۴: انتخاب پایه (منتقل شد به بعد از درس) -->
+        <div class="step" id="step-4-grade">
+            <h2 class="step-title">پایه تحصیلی</h2>
+            <p class="step-subtitle">پایه خود را انتخاب کنید.</p>
+            <div class="grid-3" id="grades-container"></div>
         </div>
 
         <!-- استپ ۵: بازه درسی -->
@@ -308,7 +307,7 @@
     </div>
 
     <script>
-        // ===== راه‌اندازی امن تلگرام (برای جلوگیری از فلش زدن) =====
+        // ===== راه‌اندازی امن تلگرام =====
         let tg = null;
         let appData = null;
         let selection = { level: null, field: null, grade: null, subject: null };
@@ -322,29 +321,16 @@
             tg = window.Telegram.WebApp;
             tg.ready();
             
-            // فقط اگر Expand نشده بود، اکسپند کن
             try {
-                if (!tg.isExpanded) {
-                    tg.expand();
-                }
-                // جلوگیری از سوایپ تصادفی (بستن مینی‌اپ)
-                if (tg.disableVerticalSwipes) {
-                    tg.disableVerticalSwipes();
-                }
+                if (!tg.isExpanded) tg.expand();
+                if (tg.disableVerticalSwipes) tg.disableVerticalSwipes();
             } catch (e) {
                 console.log('Telegram Expand Error:', e);
             }
-
-            // اعمال تم تاریک در صورت نیاز
-            if (tg.colorScheme === 'dark') {
-                document.body.classList.add('dark');
-            }
             
-            // لود دیتا
             loadData();
         }
 
-        // شروع با کمی تاخیر برای اطمینان از لود کامل WebView
         window.addEventListener('load', () => {
             setTimeout(initTelegram, 100);
         });
@@ -373,10 +359,11 @@
             if (stepId === 'step-5-lesson') bottomAction.style.display = 'block';
             else bottomAction.style.display = 'none';
             
+            // درصد پیشرفت
             let progress = 20;
             if (stepId === 'step-2-field') progress = 40;
-            if (stepId === 'step-3-grade') progress = 60;
-            if (stepId === 'step-4-subject') progress = 80;
+            if (stepId === 'step-3-subject') progress = 60;
+            if (stepId === 'step-4-grade') progress = 80;
             if (stepId === 'step-5-lesson') progress = 100;
             document.getElementById('progressBar').style.width = progress + '%';
             
@@ -386,56 +373,46 @@
         function prevStep() {
             const active = document.querySelector('.step.active').id;
             if (active === 'step-2-field') showStep('step-1');
-            else if (active === 'step-3-grade') {
+            else if (active === 'step-3-subject') {
                 if (selection.level === 'motavassete_dovom') showStep('step-2-field');
                 else showStep('step-1');
             }
-            else if (active === 'step-4-subject') showStep('step-3-grade');
-            else if (active === 'step-5-lesson') showStep('step-4-subject');
+            else if (active === 'step-4-grade') showStep('step-3-subject');
+            else if (active === 'step-5-lesson') showStep('step-4-grade');
         }
 
         // ===== انتخاب‌ها =====
         function selectLevel(levelId) {
             selection.level = levelId;
-            if (levelId === 'motavassete_dovom') showStep('step-2-field');
-            else { renderGrades(); showStep('step-3-grade'); }
+            if (levelId === 'motavassete_dovom') {
+                showStep('step-2-field');
+            } else {
+                renderSubjects(); // اول درس‌ها
+                showStep('step-3-subject');
+            }
         }
 
         function selectField(fieldId) {
             selection.field = fieldId;
-            renderGrades();
-            showStep('step-3-grade');
-        }
-
-        function renderGrades() {
-            const container = document.getElementById('grades-container');
-            container.innerHTML = '';
-            let gradesData = selection.level === 'motavassete_aval' 
-                ? appData.motavassete_aval.grades 
-                : appData.motavassete_dovom.fields[selection.field].grades;
-            
-            for (const gradeId in gradesData) {
-                container.innerHTML += `
-                    <div class="select-card" onclick="selectGrade('${gradeId}')">
-                        <span class="icon">🏫</span>
-                        <div class="title">${gradesData[gradeId].name}</div>
-                    </div>
-                `;
-            }
-        }
-
-        function selectGrade(gradeId) {
-            selection.grade = gradeId;
             renderSubjects();
-            showStep('step-4-subject');
+            showStep('step-3-subject');
         }
 
+        // استپ جدید: رندر درس‌ها (از اولین پایه موجود برای گرفتن لیست دروس استفاده می‌کنیم)
         function renderSubjects() {
             const container = document.getElementById('subjects-container');
             container.innerHTML = '';
-            let subjects = selection.level === 'motavassete_aval' 
-                ? appData.motavassete_aval.grades[selection.grade].subjects 
-                : appData.motavassete_dovom.fields[selection.field].grades[selection.grade].subjects;
+            
+            let subjects = [];
+            if (selection.level === 'motavassete_aval') {
+                // گرفتن دروس از پایه هفتم (چون لیست دروس در همه پایه‌ها یکسانه)
+                const firstGrade = Object.values(appData.motavassete_aval.grades)[0];
+                subjects = firstGrade.subjects;
+            } else {
+                // گرفتن دروس از پایه دهم رشته انتخابی
+                const firstGrade = Object.values(appData.motavassete_dovom.fields[selection.field].grades)[0];
+                subjects = firstGrade.subjects;
+            }
             
             subjects.forEach(sub => {
                 if (sub.active) {
@@ -460,6 +437,31 @@
 
         function selectSubject(subjectName) {
             selection.subject = subjectName;
+            renderGrades();
+            showStep('step-4-grade');
+        }
+
+        // ===== رندر پایه‌ها =====
+        function renderGrades() {
+            const container = document.getElementById('grades-container');
+            container.innerHTML = '';
+            
+            let gradesData = selection.level === 'motavassete_aval' 
+                ? appData.motavassete_aval.grades 
+                : appData.motavassete_dovom.fields[selection.field].grades;
+            
+            for (const gradeId in gradesData) {
+                container.innerHTML += `
+                    <div class="select-card" onclick="selectGrade('${gradeId}')">
+                        <span class="icon">🏫</span>
+                        <div class="title">${gradesData[gradeId].name}</div>
+                    </div>
+                `;
+            }
+        }
+
+        function selectGrade(gradeId) {
+            selection.grade = gradeId;
             showStep('step-5-lesson');
         }
 
