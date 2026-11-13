@@ -6,339 +6,104 @@
     <title>سوالینو | مطالعات اجتماعی</title>
     <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    
     <style>
-        :root {
-            --primary: #3b82f6;
-            --primary-gradient: linear-gradient(135deg, #2563eb, #3b82f6);
-            --bg: #f8fafc;
-            --card: #ffffff;
-            --text: #0f172a;
-            --hint: #64748b;
-            --border: #e2e8f0;
-            --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-            --shadow-lg: 0 10px 25px -5px rgba(59, 130, 246, 0.2);
-        }
-
+        :root { --primary: #3b82f6; --primary-gradient: linear-gradient(135deg, #2563eb, #3b82f6); --bg: #f8fafc; --card: #ffffff; --text: #0f172a; --hint: #64748b; --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.05); --shadow-lg: 0 10px 25px -5px rgba(59, 130, 246, 0.2); }
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-        
-        body {
-            font-family: 'Vazirmatn', sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
-            line-height: 1.6;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* هدر شیک */
-        .header {
-            background: var(--primary-gradient);
-            color: white;
-            padding: 24px 20px 30px;
-            border-radius: 0 0 24px 24px;
-            text-align: center;
-            box-shadow: var(--shadow-lg);
-            position: relative;
-            overflow: hidden;
-        }
-        .header::before {
-            content: '';
-            position: absolute;
-            top: -50%; left: -50%; width: 200%; height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
-            pointer-events: none;
-        }
-        .header h1 {
-            font-size: 1.5rem;
-            font-weight: 800;
-            margin-bottom: 4px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 8px;
-        }
-        .header p {
-            font-size: 0.9rem;
-            opacity: 0.9;
-            font-weight: 400;
-        }
-
-        /* کانتینر اصلی */
-        .main-container {
-            flex: 1;
-            padding: 20px;
-            max-width: 600px;
-            margin: 0 auto;
-            width: 100%;
-        }
-
+        body { font-family: 'Vazirmatn', sans-serif; background-color: var(--bg); color: var(--text); line-height: 1.6; min-height: 100vh; display: flex; flex-direction: column; }
+        .header { background: var(--primary-gradient); color: white; padding: 24px 20px 30px; border-radius: 0 0 24px 24px; text-align: center; box-shadow: var(--shadow-lg); position: relative; overflow: hidden; }
+        .header::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%); pointer-events: none; }
+        .header h1 { font-size: 1.5rem; font-weight: 800; margin-bottom: 4px; display: flex; justify-content: center; align-items: center; gap: 8px; }
+        .header p { font-size: 0.9rem; opacity: 0.9; font-weight: 400; }
+        .main-container { flex: 1; padding: 20px; max-width: 600px; margin: 0 auto; width: 100%; }
         .step { display: none; animation: slideUp 0.4s ease; }
         .step.active { display: block; }
         @keyframes slideUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
-
-        .step-title {
-            font-size: 1.2rem;
-            font-weight: 800;
-            margin-bottom: 16px;
-            text-align: center;
-            color: var(--text);
-        }
-
-        /* کارت‌های انتخاب پایه */
-        .grade-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
-            margin-bottom: 30px;
-        }
-        .grade-card {
-            background: var(--card);
-            border: 2px solid transparent;
-            border-radius: 20px;
-            padding: 20px 10px;
-            text-align: center;
-            cursor: pointer;
-            box-shadow: var(--shadow-sm);
-            transition: all 0.2s ease;
-            position: relative;
-        }
+        .step-title { font-size: 1.2rem; font-weight: 800; margin-bottom: 16px; text-align: center; color: var(--text); }
+        .grade-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 30px; }
+        .grade-card { background: var(--card); border: 2px solid transparent; border-radius: 20px; padding: 20px 10px; text-align: center; cursor: pointer; box-shadow: var(--shadow-sm); transition: all 0.2s ease; position: relative; }
         .grade-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
-        .grade-card.selected {
-            border-color: var(--primary);
-            background: #eff6ff;
-        }
+        .grade-card.selected { border-color: var(--primary); background: #eff6ff; }
         .grade-icon { font-size: 2rem; margin-bottom: 8px; display: block; }
         .grade-name { font-weight: 700; font-size: 1.1rem; }
-
-        /* بخش بازه درسی */
-        .range-card {
-            background: var(--card);
-            border-radius: 20px;
-            padding: 24px;
-            box-shadow: var(--shadow-sm);
-            margin-bottom: 24px;
-        }
-        .range-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 15px;
-        }
-        .range-input-group {
-            flex: 1;
-            text-align: center;
-        }
-        .range-input-group label {
-            display: block;
-            font-size: 0.85rem;
-            color: var(--hint);
-            margin-bottom: 8px;
-            font-weight: 600;
-        }
-        .range-input {
-            width: 100%;
-            padding: 15px;
-            font-size: 1.5rem;
-            font-weight: 800;
-            text-align: center;
-            color: var(--primary);
-            background: #eff6ff;
-            border: 2px solid #bfdbfe;
-            border-radius: 16px;
-            font-family: inherit;
-            transition: all 0.2s;
-        }
-        .range-input:focus {
-            outline: none;
-            border-color: var(--primary);
-            background: #fff;
-            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
-        }
-        .range-divider {
-            font-weight: 800;
-            color: var(--hint);
-            margin-top: 24px;
-        }
-
-        /* دکمه اکشن بزرگ */
-        .action-area {
-            margin-top: auto;
-            padding-top: 20px;
-        }
-        .btn-generate {
-            width: 100%;
-            padding: 18px;
-            background: var(--primary-gradient);
-            color: white;
-            border: none;
-            border-radius: 16px;
-            font-family: inherit;
-            font-size: 1.1rem;
-            font-weight: 800;
-            cursor: pointer;
-            box-shadow: var(--shadow-lg);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            transition: all 0.2s;
-        }
+        .range-card { background: var(--card); border-radius: 20px; padding: 24px; box-shadow: var(--shadow-sm); margin-bottom: 24px; }
+        .range-row { display: flex; align-items: center; justify-content: space-between; gap: 15px; }
+        .range-input-group { flex: 1; text-align: center; }
+        .range-input-group label { display: block; font-size: 0.85rem; color: var(--hint); margin-bottom: 8px; font-weight: 600; }
+        .range-input { width: 100%; padding: 15px; font-size: 1.5rem; font-weight: 800; text-align: center; color: var(--primary); background: #eff6ff; border: 2px solid #bfdbfe; border-radius: 16px; font-family: inherit; transition: all 0.2s; }
+        .range-input:focus { outline: none; border-color: var(--primary); background: #fff; box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1); }
+        .range-divider { font-weight: 800; color: var(--hint); margin-top: 24px; }
+        .action-area { margin-top: auto; padding-top: 20px; }
+        .btn-generate { width: 100%; padding: 18px; background: var(--primary-gradient); color: white; border: none; border-radius: 16px; font-family: inherit; font-size: 1.1rem; font-weight: 800; cursor: pointer; box-shadow: var(--shadow-lg); display: flex; align-items: center; justify-content: center; gap: 10px; transition: all 0.2s; }
         .btn-generate:active { transform: scale(0.97); }
         .btn-generate:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
-
-        /* لودینگ */
-        .loader {
-            display: inline-block;
-            width: 20px; height: 20px;
-            border: 3px solid rgba(255,255,255,0.3);
-            border-radius: 50%;
-            border-top-color: #fff;
-            animation: spin 1s linear infinite;
-        }
+        .loader { display: inline-block; width: 20px; height: 20px; border: 3px solid rgba(255,255,255,0.3); border-radius: 50%; border-top-color: #fff; animation: spin 1s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
-
-        /* دکمه برگشت */
-        .back-btn {
-            position: absolute;
-            top: 24px;
-            right: 20px;
-            background: rgba(255,255,255,0.2);
-            border: none;
-            color: white;
-            width: 36px; height: 36px;
-            border-radius: 50%;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-            cursor: pointer;
-            backdrop-filter: blur(4px);
-        }
+        .back-btn { position: absolute; top: 24px; right: 20px; background: rgba(255,255,255,0.2); border: none; color: white; width: 36px; height: 36px; border-radius: 50%; display: none; align-items: center; justify-content: center; font-size: 1.2rem; cursor: pointer; backdrop-filter: blur(4px); }
         .back-btn.active { display: flex; }
     </style>
 </head>
 <body>
-
     <header class="header">
         <button class="back-btn" id="backBtn" onclick="prevStep()">➡️</button>
         <h1><span>📚</span> سوالینو</h1>
         <p>طراحی آزمون هوشمند مطالعات اجتماعی</p>
     </header>
-
     <div class="main-container">
-        
-        <!-- استپ ۱: انتخاب پایه -->
         <div class="step active" id="step-grade">
             <div class="step-title">پایه تحصیلی خود را انتخاب کنید</div>
             <div class="grade-grid">
-                <div class="grade-card" onclick="selectGrade(7, this)">
-                    <span class="grade-icon">7️⃣</span>
-                    <span class="grade-name">هفتم</span>
-                </div>
-                <div class="grade-card" onclick="selectGrade(8, this)">
-                    <span class="grade-icon">8️⃣</span>
-                    <span class="grade-name">هشتم</span>
-                </div>
-                <div class="grade-card" onclick="selectGrade(9, this)">
-                    <span class="grade-icon">9️⃣</span>
-                    <span class="grade-name">نهم</span>
-                </div>
+                <div class="grade-card" onclick="selectGrade(7, this)"><span class="grade-icon">7️⃣</span><span class="grade-name">هفتم</span></div>
+                <div class="grade-card" onclick="selectGrade(8, this)"><span class="grade-icon">8️⃣</span><span class="grade-name">هشتم</span></div>
+                <div class="grade-card" onclick="selectGrade(9, this)"><span class="grade-icon">9️⃣</span><span class="grade-name">نهم</span></div>
             </div>
         </div>
-
-        <!-- استپ ۲: انتخاب بازه درسی -->
         <div class="step" id="step-range">
             <div class="step-title">بازه درسی را مشخص کنید</div>
             <div class="range-card">
                 <div class="range-row">
-                    <div class="range-input-group">
-                        <label>از درس</label>
-                        <input type="number" class="range-input" id="lessonFrom" value="1" min="1" max="24">
-                    </div>
+                    <div class="range-input-group"><label>از درس</label><input type="number" class="range-input" id="lessonFrom" value="1" min="1" max="24"></div>
                     <span class="range-divider">تا</span>
-                    <div class="range-input-group">
-                        <label>تا درس</label>
-                        <input type="number" class="range-input" id="lessonTo" value="4" min="1" max="24">
-                    </div>
+                    <div class="range-input-group"><label>تا درس</label><input type="number" class="range-input" id="lessonTo" value="4" min="1" max="24"></div>
                 </div>
             </div>
         </div>
-
     </div>
-
     <div class="main-container" id="action-container" style="display: none; padding-top: 0;">
         <div class="action-area">
-            <button class="btn-generate" id="generateBtn" onclick="submitExam()">
-                🚀 تولید آزمون
-            </button>
+            <button class="btn-generate" id="generateBtn" onclick="submitExam()">🚀 تولید آزمون</button>
         </div>
     </div>
-
     <script>
         let tg = null;
-        let selection = { 
-            level: 'motavassete_aval', 
-            subject: 'مطالعات اجتماعی', 
-            grade: null, 
-            lessonFrom: 1, 
-            lessonTo: 4 
-        };
-
-        // آدرس API بک‌اند خود را اینجا وارد کنید
-        const API_ENDPOINT = 'https://api.motadars.ir/generate_draft.php';
+        let selection = { level: 'motavassete_aval', subject: 'مطالعات اجتماعی', grade: null, lessonFrom: 1, lessonTo: 4 };
+        
+        // 🔴 اینجا آدرس فایل وب‌هوک خودت رو بذار
+        const API_ENDPOINT = 'https://api.motadars.ir/webhook.php'; 
 
         function initTelegram() {
-            if (!window.Telegram || !window.Telegram.WebApp) {
-                setTimeout(initTelegram, 50);
-                return;
-            }
+            if (!window.Telegram || !window.Telegram.WebApp) { setTimeout(initTelegram, 50); return; }
             tg = window.Telegram.WebApp;
             tg.ready();
-            try {
-                if (!tg.isExpanded) tg.expand();
-                if (tg.disableVerticalSwipes) tg.disableVerticalSwipes();
-            } catch (e) {}
+            try { if (!tg.isExpanded) tg.expand(); if (tg.disableVerticalSwipes) tg.disableVerticalSwipes(); } catch (e) {}
         }
-
         window.addEventListener('load', () => setTimeout(initTelegram, 100));
 
         function showStep(stepId) {
             document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
             document.getElementById(stepId).classList.add('active');
-            
             const backBtn = document.getElementById('backBtn');
             const actionContainer = document.getElementById('action-container');
-            
-            if (stepId === 'step-grade') {
-                backBtn.classList.remove('active');
-                actionContainer.style.display = 'none';
-            } else {
-                backBtn.classList.add('active');
-                actionContainer.style.display = 'block';
-            }
-            
+            if (stepId === 'step-grade') { backBtn.classList.remove('active'); actionContainer.style.display = 'none'; } 
+            else { backBtn.classList.add('active'); actionContainer.style.display = 'block'; }
             if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
         }
-
         function selectGrade(gradeNum, element) {
-            // حذف انتخاب قبلی
             document.querySelectorAll('.grade-card').forEach(c => c.classList.remove('selected'));
-            // انتخاب جدید
             element.classList.add('selected');
-            
             selection.grade = gradeNum;
-            
-            // رفتن به مرحله بعد با یک تاخیر کوتاه برای دیدن افکت
-            setTimeout(() => {
-                showStep('step-range');
-            }, 300);
+            setTimeout(() => { showStep('step-range'); }, 300);
         }
-
-        function prevStep() {
-            showStep('step-grade');
-        }
+        function prevStep() { showStep('step-grade'); }
 
         async function submitExam() {
             const from = parseInt(document.getElementById('lessonFrom').value);
@@ -351,33 +116,27 @@
             
             const btn = document.getElementById('generateBtn');
             const originalBtnText = btn.innerHTML;
-            
-            // غیرفعال کردن دکمه و نمایش لودینگ
             btn.disabled = true;
             btn.innerHTML = '<span class="loader"></span> در حال ساخت آزمون...';
             
             selection.lessonFrom = from;
             selection.lessonTo = to;
             
-            // گرفتن آیدی تلگرام کاربر برای ارسال پیام توسط ربات
             const telegramId = tg?.initDataUnsafe?.user?.id;
 
             if (!telegramId) {
-                if (tg) tg.showAlert('خطا: اطلاعات تلگرام شما یافت نشد. لطفا مینی‌اپ را از داخل ربات باز کنید.');
+                if (tg) tg.showAlert('خطا: اطلاعات تلگرام شما یافت نشد.');
                 btn.disabled = false;
                 btn.innerHTML = originalBtnText;
                 return;
             }
 
             try {
-                // ارسال درخواست به بک‌اند PHP
                 const response = await fetch(API_ENDPOINT, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        // اگر بک‌اند شما توکن نیاز دارد، اینجا هدر Authorization اضافه شود
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
+                        action: 'generate_draft',
                         telegram_id: telegramId,
                         ...selection
                     })
@@ -386,21 +145,14 @@
                 const result = await response.json();
 
                 if (result.success) {
-                    if (tg) {
-                        tg.showAlert('✅ آزمون با موفقیت ساخته شد. لینک ویرایش به ربات ارسال شد.');
-                    }
-                    // بستن مینی اپ بعد از پیام موفقیت
-                    setTimeout(() => {
-                        if (tg) tg.close();
-                    }, 2000);
+                    if (tg) tg.showAlert('✅ آزمون با موفقیت ساخته شد. لینک ویرایش به ربات ارسال شد.');
+                    setTimeout(() => { if (tg) tg.close(); }, 2000);
                 } else {
-                    if (tg) tg.showAlert('❌ خطا: ' + (result.message || 'مشکلی در ساخت آزمون پیش آمد.'));
+                    if (tg) tg.showAlert('❌ خطا: ' + (result.message || 'مشکلی پیش آمد.'));
                     btn.disabled = false;
                     btn.innerHTML = originalBtnText;
                 }
-
             } catch (error) {
-                console.error('API Error:', error);
                 if (tg) tg.showAlert('❌ خطای ارتباط با سرور. لطفا اینترنت خود را بررسی کنید.');
                 btn.disabled = false;
                 btn.innerHTML = originalBtnText;
