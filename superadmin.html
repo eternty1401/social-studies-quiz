@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>پنل مدیریت سوالینو</title>
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #3b82f6;
+            --primary-hover: #2563eb;
+            --bg: #f0f4f8;
+            --card: #ffffff;
+            --text: #0f172a;
+            --hint: #64748b;
+            --border: #cbd5e1;
+            --success: #10b981;
+            --error: #ef4444;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        /* هدر */
+        .header {
+            background: var(--card);
+            padding: 16px 20px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            margin-bottom: 24px;
+        }
+        .header h1 { color: var(--primary); font-size: 1.4rem; font-weight: 800; }
+
+        .container { max-width: 800px; margin: 0 auto; padding: 0 16px 40px; }
+
+        /* تب‌ها */
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            background: var(--card);
+            padding: 8px;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+        .tab-btn {
+            flex: 1;
+            padding: 12px;
+            text-align: center;
+            background: transparent;
+            border: none;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--hint);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .tab-btn.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* محتوای تب‌ها */
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: fadeIn 0.3s; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .card {
+            background: var(--card);
+            padding: 24px;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+            margin-bottom: 20px;
+        }
+
+        .form-group { margin-bottom: 16px; }
+        .form-group label { display: block; font-weight: 600; margin-bottom: 6px; font-size: 0.9rem; }
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 1.5px solid var(--border);
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 1rem;
+            transition: border-color 0.2s;
+        }
+        .form-control:focus { outline: none; border-color: var(--primary); }
+        textarea.form-control { min-height: 200px; resize: vertical; font-family: monospace; direction: ltr; text-align: left; }
+
+        .btn {
+            width: 100%;
+            padding: 14px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn:hover { background: var(--primary-hover); }
+        .btn:disabled { opacity: 0.7; cursor: not-allowed; }
+
+        .alert {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            display: none;
+            font-weight: 600;
+        }
+        .alert-success { background: #dcfce7; color: #166534; display: block; }
+        .alert-error { background: #fee2e2; color: #991b1b; display: block; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>🛠️ پنل مدیریت سوالینو</h1>
+    </div>
+
+    <div class="container">
+        
+        <!-- ورود ادمین -->
+        <div class="card" id="login-section">
+            <h2 style="text-align:center; margin-bottom: 20px;">ورود به پنل</h2>
+            <div class="form-group">
+                <label>رمز عبور مدیر</label>
+                <input type="password" id="admin-pass" class="form-control" placeholder="رمز را وارد کنید...">
+            </div>
+            <button class="btn" onclick="login()">ورود</button>
+        </div>
+
+        <!-- محتوای اصلی (بعد از لاگین) -->
+        <div id="main-panel" style="display: none;">
+            
+            <div class="tabs">
+                <button class="tab-btn active" onclick="switchTab('json')">📥 آپلود سوالات (JSON)</button>
+                <button class="tab-btn" onclick="switchTab('chapter')">📚 مدیریت فصل‌ها</button>
+            </div>
+
+            <!-- تب آپلود JSON -->
+            <div id="tab-json" class="tab-content active">
+                <div class="card">
+                    <div class="alert" id="json-alert"></div>
+                    
+                    <div class="form-group">
+                        <label>نام کتاب/درس (مثلاً: ریاضی هفتم)</label>
+                        <input type="text" id="json-subject" class="form-control" placeholder="ریاضی">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>محتوای JSON سوالات</label>
+                        <textarea id="json-content" class="form-control" placeholder="[ { &quot;grade&quot;: 7, &quot;chapter_id&quot;: 1, &quot;type&quot;: &quot;testi&quot;, ... } ]"></textarea>
+                    </div>
+                    
+                    <button class="btn" id="btn-upload-json" onclick="uploadJSON()">شروع آپلود گروهی</button>
+                </div>
+            </div>
+
+            <!-- تب مدیریت فصل‌ها -->
+            <div id="tab-chapter" class="tab-content">
+                <div class="card">
+                    <div class="alert" id="chapter-alert"></div>
+
+                    <div class="form-group">
+                        <label>پایه</label>
+                        <select id="ch-grade" class="form-control">
+                            <option value="7">هفتم</option>
+                            <option value="8">هشتم</option>
+                            <option value="9">نهم</option>
+                            <option value="10">دهم</option>
+                            <option value="11">یازدهم</option>
+                            <option value="12">دوازدهم</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>نام درس</label>
+                        <input type="text" id="ch-subject" class="form-control" placeholder="مثلاً: ریاضی">
+                    </div>
+                    <div class="form-group">
+                        <label>شماره فصل (عدد)</label>
+                        <input type="number" id="ch-number" class="form-control" placeholder="1">
+                    </div>
+                    <div class="form-group">
+                        <label>عنوان فصل</label>
+                        <input type="text" id="ch-title" class="form-control" placeholder="فصل اول: راهبردهای حل مسئله">
+                    </div>
+                    
+                    <button class="btn" id="btn-create-chapter" onclick="createChapter()">ثبت فصل</button>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+        const API_BASE = 'https://api.motadars.ir';
+        const ADMIN_PASS = 'AdminPassword123!'; // همان رمزی که در فایل PHP گذاشتیم
+        let isLoggedIn = false;
+
+        function login() {
+            const pass = document.getElementById('admin-pass').value;
+            if (pass === ADMIN_PASS) {
+                isLoggedIn = true;
+                document.getElementById('login-section').style.display = 'none';
+                document.getElementById('main-panel').style.display = 'block';
+            } else {
+                alert('رمز عبور اشتباه است!');
+            }
+        }
+
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            
+            if (tabName === 'json') {
+                document.querySelectorAll('.tab-btn')[0].classList.add('active');
+                document.getElementById('tab-json').classList.add('active');
+            } else {
+                document.querySelectorAll('.tab-btn')[1].classList.add('active');
+                document.getElementById('tab-chapter').classList.add('active');
+            }
+        }
+
+        function showAlert(id, type, message) {
+            const el = document.getElementById(id);
+            el.className = 'alert alert-' + type;
+            el.textContent = message;
+            el.style.display = 'block';
+        }
+
+        // آپلود JSON
+        async function uploadJSON() {
+            const btn = document.getElementById('btn-upload-json');
+            const subject = document.getElementById('json-subject').value.trim();
+            const content = document.getElementById('json-content').value.trim();
+            
+            if (!subject || !content) return showAlert('json-alert', 'error', 'نام درس و محتوای JSON را وارد کنید.');
+
+            let questions = [];
+            try {
+                questions = JSON.parse(content);
+            } catch (e) {
+                return showAlert('json-alert', 'error', 'فرمت JSON وارد شده صحیح نیست.');
+            }
+
+            btn.disabled = true;
+            btn.textContent = 'در حال آپلود...';
+
+            try {
+                const res = await fetch(`${API_BASE}/admin_import_json.php`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        admin_password: ADMIN_PASS,
+                        subject_name: subject,
+                        questions: questions
+                    })
+                });
+                
+                const data = await res.json();
+                
+                if (res.ok && data.ok) {
+                    showAlert('json-alert', 'success', data.message);
+                    document.getElementById('json-content').value = '';
+                } else {
+                    showAlert('json-alert', 'error', data.message);
+                }
+            } catch (e) {
+                showAlert('json-alert', 'error', 'خطای شبکه در ارتباط با سرور.');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'شروع آپلود گروهی';
+            }
+        }
+
+        // ثبت فصل
+        async function createChapter() {
+            const btn = document.getElementById('btn-create-chapter');
+            
+            const body = {
+                admin_password: ADMIN_PASS,
+                grade: parseInt(document.getElementById('ch-grade').value),
+                subject_name: document.getElementById('ch-subject').value.trim(),
+                chapter_number: parseInt(document.getElementById('ch-number').value),
+                title: document.getElementById('ch-title').value.trim()
+            };
+
+            if (!body.subject_name || !body.chapter_number || !body.title) {
+                return showAlert('chapter-alert', 'error', 'همه فیلدها الزامی است.');
+            }
+
+            btn.disabled = true;
+            btn.textContent = 'در حال ثبت...';
+
+            try {
+                const res = await fetch(`${API_BASE}/admin_create_chapter.php`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(body)
+                });
+                
+                const data = await res.json();
+                
+                if (res.ok && data.ok) {
+                    showAlert('chapter-alert', 'success', 'فصل با موفقیت ثبت شد. (شناسه: ' + data.chapter_id + ')');
+                    document.getElementById('ch-number').value = '';
+                    document.getElementById('ch-title').value = '';
+                } else {
+                    showAlert('chapter-alert', 'error', data.message);
+                }
+            } catch (e) {
+                showAlert('chapter-alert', 'error', 'خطای شبکه در ارتباط با سرور.');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'ثبت فصل';
+            }
+        }
+    </script>
+</body>
+</html>
