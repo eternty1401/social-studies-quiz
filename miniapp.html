@@ -286,6 +286,9 @@
             lessonTo: 4 
         };
 
+        // آدرس API بک‌اند خود را اینجا وارد کنید
+        const API_ENDPOINT = 'https://api.motadars.ir/generate_draft.php';
+
         function initTelegram() {
             if (!window.Telegram || !window.Telegram.WebApp) {
                 setTimeout(initTelegram, 50);
@@ -337,7 +340,7 @@
             showStep('step-grade');
         }
 
-        function submitExam() {
+        async function submitExam() {
             const from = parseInt(document.getElementById('lessonFrom').value);
             const to = parseInt(document.getElementById('lessonTo').value);
             
@@ -347,20 +350,60 @@
             }
             
             const btn = document.getElementById('generateBtn');
+            const originalBtnText = btn.innerHTML;
+            
+            // غیرفعال کردن دکمه و نمایش لودینگ
             btn.disabled = true;
             btn.innerHTML = '<span class="loader"></span> در حال ساخت آزمون...';
             
             selection.lessonFrom = from;
             selection.lessonTo = to;
             
-            // ارسال به ربات
-            if (tg && tg.sendData) {
-                tg.sendData(JSON.stringify(selection));
-                setTimeout(() => tg.close(), 500); // بستن با کمی تاخیر
-            } else {
-                alert('اطلاعات ارسال شد: ' + JSON.stringify(selection));
+            // گرفتن آیدی تلگرام کاربر برای ارسال پیام توسط ربات
+            const telegramId = tg?.initDataUnsafe?.user?.id;
+
+            if (!telegramId) {
+                if (tg) tg.showAlert('خطا: اطلاعات تلگرام شما یافت نشد. لطفا مینی‌اپ را از داخل ربات باز کنید.');
                 btn.disabled = false;
-                btn.innerHTML = '🚀 تولید آزمون';
+                btn.innerHTML = originalBtnText;
+                return;
+            }
+
+            try {
+                // ارسال درخواست به بک‌اند PHP
+                const response = await fetch(API_ENDPOINT, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        // اگر بک‌اند شما توکن نیاز دارد، اینجا هدر Authorization اضافه شود
+                    },
+                    body: JSON.stringify({
+                        telegram_id: telegramId,
+                        ...selection
+                    })
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    if (tg) {
+                        tg.showAlert('✅ آزمون با موفقیت ساخته شد. لینک ویرایش به ربات ارسال شد.');
+                    }
+                    // بستن مینی اپ بعد از پیام موفقیت
+                    setTimeout(() => {
+                        if (tg) tg.close();
+                    }, 2000);
+                } else {
+                    if (tg) tg.showAlert('❌ خطا: ' + (result.message || 'مشکلی در ساخت آزمون پیش آمد.'));
+                    btn.disabled = false;
+                    btn.innerHTML = originalBtnText;
+                }
+
+            } catch (error) {
+                console.error('API Error:', error);
+                if (tg) tg.showAlert('❌ خطای ارتباط با سرور. لطفا اینترنت خود را بررسی کنید.');
+                btn.disabled = false;
+                btn.innerHTML = originalBtnText;
             }
         }
     </script>
