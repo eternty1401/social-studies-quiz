@@ -20,149 +20,42 @@
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        
-        body {
-            font-family: 'Vazirmatn', sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
-            line-height: 1.6;
-            padding-bottom: 100px;
-        }
+        body { font-family: 'Vazirmatn', sans-serif; background-color: var(--bg); color: var(--text); line-height: 1.6; padding-bottom: 100px; }
 
-        .page-header {
-            padding: 16px 20px;
-            background: #ffffff;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+        .page-header { padding: 16px 20px; background: #ffffff; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
         .page-header h1 { font-size: 1.2rem; font-weight: 800; color: var(--primary); }
         .token-warning { font-size: 0.75rem; color: var(--error); background: #fee2e2; padding: 4px 8px; border-radius: 8px; }
 
         .container { max-width: 600px; margin: 0 auto; padding: 20px 16px; }
 
-        .card {
-            background: var(--card);
-            border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 20px;
-            border: 1px solid var(--border);
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02);
-        }
-
-        .card-title {
-            font-size: 1.1rem;
-            font-weight: 700;
-            margin-bottom: 16px;
-            color: var(--primary);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
+        .card { background: var(--card); border-radius: 16px; padding: 20px; margin-bottom: 20px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02); }
+        .card-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 16px; color: var(--primary); display: flex; align-items: center; gap: 8px; }
 
         .form-row { display: flex; gap: 12px; margin-bottom: 12px; }
         .form-group { flex: 1; }
         .form-group label { display: block; font-size: 0.85rem; font-weight: 600; color: var(--hint); margin-bottom: 6px; }
-        .form-control {
-            width: 100%;
-            padding: 12px;
-            border: 1.5px solid var(--border);
-            border-radius: 10px;
-            font-family: inherit;
-            font-size: 0.95rem;
-            background: var(--bg);
-            color: var(--text);
-            transition: border-color 0.2s;
-        }
+        .form-control { width: 100%; padding: 12px; border: 1.5px solid var(--border); border-radius: 10px; font-family: inherit; font-size: 0.95rem; background: var(--bg); color: var(--text); transition: border-color 0.2s; }
         .form-control:focus { outline: none; border-color: var(--primary); }
 
-        .question-item {
-            background: var(--card);
-            border-radius: 14px;
-            padding: 16px;
-            margin-bottom: 16px;
-            border: 1px solid var(--border);
-            position: relative;
-        }
+        .question-item { background: var(--card); border-radius: 14px; padding: 16px; margin-bottom: 16px; border: 1px solid var(--border); position: relative; }
         
-        .q-badge {
-            position: absolute;
-            top: -10px;
-            right: 16px;
-            font-size: 0.75rem;
-            font-weight: 700;
-            padding: 2px 12px;
-            border-radius: 20px;
-            color: white;
-        }
+        .q-badge { position: absolute; top: -10px; right: 16px; font-size: 0.75rem; font-weight: 700; padding: 2px 12px; border-radius: 20px; color: white; }
         .q-badge.testi { background: #8b5cf6; }
         .q-badge.truefalse { background: #ec4899; }
         .q-badge.jakhali { background: #f59e0b; }
         .q-badge.essay { background: #10b981; }
 
-        .q-text-input {
-            width: 100%;
-            padding: 12px;
-            border: 1.5px solid var(--border);
-            border-radius: 10px;
-            font-family: inherit;
-            font-size: 0.95rem;
-            background: var(--bg);
-            color: var(--text);
-            resize: vertical;
-            min-height: 80px;
-            margin-top: 8px;
-        }
-        
+        .q-text-input { width: 100%; padding: 12px; border: 1.5px solid var(--border); border-radius: 10px; font-family: inherit; font-size: 0.95rem; background: var(--bg); color: var(--text); resize: vertical; min-height: 80px; margin-top: 8px; }
         .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
         .option-input { padding: 10px; font-size: 0.9rem; }
+        .key-input { margin-top: 10px; background: #f0fdf4; border: 1.5px dashed #22c55e; color: #166534; font-weight: 600; }
 
-        .key-input {
-            margin-top: 10px;
-            background: #f0fdf4;
-            border: 1.5px dashed #22c55e;
-            color: #166534;
-            font-weight: 600;
-        }
-
-        .bottom-bar {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            padding: 16px;
-            background: linear-gradient(to top, var(--bg) 70%, transparent);
-            z-index: 100;
-        }
-        .btn-confirm {
-            width: 100%;
-            padding: 16px;
-            background: var(--success);
-            color: white;
-            border: none;
-            border-radius: 14px;
-            font-family: inherit;
-            font-size: 1.1rem;
-            font-weight: 800;
-            cursor: pointer;
-            box-shadow: 0 10px 20px -5px rgba(16, 185, 129, 0.4);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 8px;
-        }
+        .bottom-bar { position: fixed; bottom: 0; left: 0; width: 100%; padding: 16px; background: linear-gradient(to top, var(--bg) 70%, transparent); z-index: 100; }
+        .btn-confirm { width: 100%; padding: 16px; background: var(--success); color: white; border: none; border-radius: 14px; font-family: inherit; font-size: 1.1rem; font-weight: 800; cursor: pointer; box-shadow: 0 10px 20px -5px rgba(16, 185, 129, 0.4); display: flex; justify-content: center; align-items: center; gap: 8px; }
         .btn-confirm:active { transform: scale(0.98); }
         .btn-confirm:disabled { background: var(--hint); box-shadow: none; }
 
-        .loading-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--bg); display: flex; flex-direction: column;
-            justify-content: center; align-items: center; z-index: 9999;
-        }
+        .loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999; }
         .loader { width: 40px; height: 40px; border: 4px solid var(--border); border-radius: 50%; border-top-color: var(--primary); animation: spin 1s linear infinite; margin-bottom: 16px; }
         @keyframes spin { to { transform: rotate(360deg); } }
     </style>
@@ -180,7 +73,6 @@
     </header>
 
     <div class="container" id="main-content" style="display: none;">
-        
         <div class="card">
             <div class="card-title">🏢 اطلاعات سربرگ</div>
             <div class="form-row">
@@ -193,29 +85,24 @@
             </div>
             <div class="form-group" style="width: 50%;"><label>مدت زمان (دقیقه)</label><input type="number" id="head-duration" class="form-control"></div>
         </div>
-
         <h3 style="margin-bottom: 16px; color: var(--text);">📚 ویرایش سوالات</h3>
         <div id="questions-container"></div>
-
     </div>
 
     <div class="bottom-bar" id="bottom-bar" style="display: none;">
-        <button class="btn-confirm" id="btn-confirm" onclick="submitChanges()">
-            ✅ تایید نهایی و کسر ۱ اعتبار
-        </button>
+        <button class="btn-confirm" id="btn-confirm" onclick="submitChanges()">✅ تایید نهایی و کسر ۱ اعتبار</button>
     </div>
 
     <script>
         const API_BASE = 'https://api.motadars.ir';
         const urlParams = new URLSearchParams(window.location.search);
         const examCode = urlParams.get('code');
-        const teacherToken = urlParams.get('token');
+        const teacherToken = urlParams.get('token'); // مستقیم از URL می‌خونیم
         
         let examData = null;
         let questionsData = [];
         let tg = null;
 
-        // راه‌اندازی امن تلگرام
         window.addEventListener('load', () => {
             if (window.Telegram && window.Telegram.WebApp) {
                 tg = window.Telegram.WebApp;
@@ -244,7 +131,6 @@
                 examData = data.exam;
                 questionsData = data.questions;
                 renderUI();
-                
             } catch (e) {
                 document.getElementById('loading').innerHTML = "<h3 style='color:red;'>خطای شبکه در دریافت اطلاعات.</h3>";
             }
@@ -273,7 +159,7 @@
                 let optionsHtml = '';
                 if (q.type === 'testi' || q.type === 'truefalse') {
                     optionsHtml = `<div class="options-grid">` + q.options.map((opt, i) => `
-                        <input type="text" class="form-control option-input" data-qid="${q.id}" data-index="${i}" value="${opt || ''}" placeholder="گزینه ${['الف', 'ب', 'ج', 'د'][i] || i+1}">
+                        <input type="text" class="form-control option-input" data-qid="${q.id}" data-index="${i}" value="${opt || ''}">
                     `).join('') + `</div>`;
                 }
 
@@ -286,7 +172,7 @@
                 div.innerHTML = `
                     <span class="q-badge ${badgeClass}">${typeName}</span>
                     <label style="font-size: 0.85rem; color: var(--hint); margin-top: 8px; display: block;">متن سوال ${index + 1}</label>
-                    <textarea class="q-text-input text-input" data-qid="${q.id}" rows="2">${q.question_text}</textarea>
+                    <textarea class="q-text-input text-input" data-qid="${q.id}" rows="2">${q.question_text || ''}</textarea>
                     ${optionsHtml}
                     ${keyHtml}
                 `;
@@ -300,48 +186,55 @@
 
         async function submitChanges() {
             const btn = document.getElementById('btn-confirm');
-            btn.disabled = true;
-            btn.innerHTML = 'در حال ذخیره و کسر اعتبار...';
-
-            const headerData = {
-                admin: document.getElementById('head-admin').value,
-                school: document.getElementById('head-school').value,
-                teacher: document.getElementById('head-teacher').value,
-                date: document.getElementById('head-date').value,
-                duration: parseInt(document.getElementById('head-duration').value),
-                type: examData.exam_type
-            };
-
-            const editedQuestions = questionsData.map(q => {
-                let text = document.querySelector(`.text-input[data-qid="${q.id}"]`).value;
-                let options = q.options;
-                let answer = q.answer;
-
-                if (q.type === 'testi' || q.type === 'truefalse') {
-                    options = q.options.map((_, i) => document.querySelector(`.option-input[data-qid="${q.id}"][data-index="${i}"]`).value);
-                }
-                
-                if (q.type === 'essay' || q.type === 'jakhali') {
-                    let keyVal = document.querySelector(`.key-input[data-qid="${q.id}"]`).value;
-                    answer = [keyVal];
-                }
-
-                return {
-                    id: q.id,
-                    type: q.type,
-                    text: text,
-                    options: options,
-                    answer: answer
-                };
-            });
-
+            
+            // ⭐ قرار دادن کل عملیات در try/catch برای پیدا کردن خطای احتمالی
             try {
-                const token = localStorage.getItem('teacher_token');
+                btn.disabled = true;
+                btn.innerHTML = 'در حال ذخیره و کسر اعتبار...';
+
+                const headerData = {
+                    admin: document.getElementById('head-admin').value || 'نامشخص',
+                    school: document.getElementById('head-school').value || 'نامشخص',
+                    teacher: document.getElementById('head-teacher').value || 'نامشخص',
+                    date: document.getElementById('head-date').value || 'نامشخص',
+                    duration: parseInt(document.getElementById('head-duration').value) || 60,
+                    type: examData.exam_type
+                };
+
+                const editedQuestions = questionsData.map(q => {
+                    let textEl = document.querySelector(`.text-input[data-qid="${q.id}"]`);
+                    let text = textEl ? textEl.value : q.question_text;
+                    
+                    let options = q.options;
+                    let answer = q.answer;
+
+                    if (q.type === 'testi' || q.type === 'truefalse') {
+                        options = q.options.map((_, i) => {
+                            let optEl = document.querySelector(`.option-input[data-qid="${q.id}"][data-index="${i}"]`);
+                            return optEl ? optEl.value : '';
+                        });
+                    }
+                    
+                    if (q.type === 'essay' || q.type === 'jakhali') {
+                        let keyEl = document.querySelector(`.key-input[data-qid="${q.id}"]`);
+                        let keyVal = keyEl ? keyEl.value : '';
+                        answer = [keyVal];
+                    }
+
+                    return {
+                        id: q.id,
+                        type: q.type,
+                        text: text,
+                        options: options,
+                        answer: answer
+                    };
+                });
+
                 const res = await fetch(`${API_BASE}/confirm_exam.php`, {
                     method: 'POST',
                     headers: { 
                         'Content-Type': 'application/json',
-                        'X-Teacher-Token': token
+                        'X-Teacher-Token': teacherToken // استفاده از متغیر مستقیم
                     },
                     body: JSON.stringify({
                         code: examCode,
@@ -355,22 +248,22 @@
                 try {
                     data = JSON.parse(textData);
                 } catch (e) {
-                    alert("❌ خطای سرور:\n" + textData);
+                    alert("❌ خطای سرور (پاسخ نامعتبر):\n" + textData);
                     btn.disabled = false;
                     btn.innerHTML = '✅ تایید نهایی و کسر ۱ اعتبار';
                     return;
                 }
                 
                 if (res.ok && data.ok) {
-                    alert('✅ آزمون با موفقیت تایید شد!\n\nدر حال انتقال به صفحه چاپ...');
+                    alert('✅ آزمون با موفقیت تایید شد!\n\nانتقال به صفحه چاپ...');
                     window.location.href = data.final_link;
                 } else {
-                    alert('❌ خطا: ' + (data.message || 'ناشناخته'));
+                    alert('❌ خطا از سمت سرور: ' + (data.message || 'ناشناخته'));
                     btn.disabled = false;
                     btn.innerHTML = '✅ تایید نهایی و کسر ۱ اعتبار';
                 }
-            } catch (e) {
-                alert('❌ خطای شبکه در ارتباط با سرور: ' + e.message);
+            } catch (err) {
+                alert('❌ خطای جاوااسکریپت: ' + err.message);
                 btn.disabled = false;
                 btn.innerHTML = '✅ تایید نهایی و کسر ۱ اعتبار';
             }
