@@ -3,21 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>سوالینو | ساخت آزمون</title>
+    <title>سوالینو | مطالعات اجتماعی</title>
     <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     
     <style>
-        /* 🎨 تنظیمات تم روشن (White Theme) */
         :root {
             --primary: #3b82f6;
-            --bg: #f8fafc;         /* پس‌زمینه کلی */
-            --card: #ffffff;       /* پس‌زمینه کارت‌ها */
-            --text: #0f172a;       /* رنگ متن اصلی */
-            --hint: #64748b;       /* رنگ متن راهنما */
-            --border: rgba(148, 163, 184, 0.3); /* رنگ حاشیه */
-            --success: #10b981;
-            --error: #ef4444;
+            --primary-gradient: linear-gradient(135deg, #2563eb, #3b82f6);
+            --bg: #f8fafc;
+            --card: #ffffff;
+            --text: #0f172a;
+            --hint: #64748b;
+            --border: #e2e8f0;
+            --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            --shadow-lg: 0 10px 25px -5px rgba(59, 130, 246, 0.2);
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
@@ -28,170 +28,149 @@
             color: var(--text);
             line-height: 1.6;
             min-height: 100vh;
-            overflow-x: hidden;
-        }
-
-        /* هدر */
-        .app-header {
-            padding: 16px 20px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background: #ffffff;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            border-bottom: 1px solid var(--border);
-        }
-        .app-header h1 {
-            font-size: 1.25rem;
-            font-weight: 800;
-            color: var(--primary);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .back-btn {
-            background: #f1f5f9;
-            border: 1px solid var(--border);
-            font-size: 1.2rem;
-            cursor: pointer;
-            color: var(--text);
-            display: none;
-            width: 40px;
-            height: 40px;
-            border-radius: 12px;
-            align-items: center;
-            justify-content: center;
-        }
-        .back-btn.active { display: flex; }
-
-        /* نوار پیشرفت */
-        .progress-container {
-            width: 100%;
-            height: 4px;
-            background: var(--border);
-            position: fixed;
-            top: 63px;
-            left: 0;
-            z-index: 101;
-        }
-        .progress-bar {
-            height: 100%;
-            background: linear-gradient(90deg, var(--primary), var(--success));
-            width: 20%;
-            transition: width 0.4s ease;
-        }
-
-        /* کانتینر */
-        .wizard-container {
-            padding: 24px 16px 120px;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .step {
-            display: none;
-            animation: fadeIn 0.3s ease;
-        }
-        .step.active { display: block; }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .step-title { font-size: 1.3rem; font-weight: 800; text-align: center; margin-bottom: 4px; }
-        .step-subtitle { font-size: 0.9rem; color: var(--hint); text-align: center; margin-bottom: 24px; }
-
-        /* کارت‌های انتخاب */
-        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
-        .grid-1 { display: flex; flex-direction: column; gap: 10px; }
-
-        .select-card {
-            background: var(--card);
-            border: 1.5px solid var(--border);
-            border-radius: 16px;
-            padding: 16px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.2s ease;
             display: flex;
             flex-direction: column;
-            align-items: center;
+        }
+
+        /* هدر شیک */
+        .header {
+            background: var(--primary-gradient);
+            color: white;
+            padding: 24px 20px 30px;
+            border-radius: 0 0 24px 24px;
+            text-align: center;
+            box-shadow: var(--shadow-lg);
+            position: relative;
+            overflow: hidden;
+        }
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%; width: 200%; height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
+            pointer-events: none;
+        }
+        .header h1 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 4px;
+            display: flex;
             justify-content: center;
+            align-items: center;
             gap: 8px;
         }
-        .select-card:active { transform: scale(0.97); }
-        
-        .select-card .icon { font-size: 1.8rem; }
-        .select-card .title { font-weight: 700; font-size: 1rem; color: var(--text); }
-        .select-card .subtitle { font-size: 0.75rem; color: var(--hint); }
-
-        /* کارت‌های غیرفعال (به زودی) */
-        .select-card.disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            background: #f8fafc;
-            border-style: dashed;
-            flex-direction: row;
-            justify-content: space-between;
-            padding: 16px 20px;
-        }
-        .select-card.disabled .title { color: var(--hint); }
-        .lock-icon { font-size: 1.2rem; }
-        .badge-soon {
-            font-size: 0.7rem;
-            background: #fee2e2;
-            color: var(--error);
-            padding: 4px 10px;
-            border-radius: 8px;
-            font-weight: 700;
+        .header p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            font-weight: 400;
         }
 
-        /* فرم بازه درسی */
-        .range-inputs {
-            display: flex;
-            gap: 16px;
-            align-items: center;
-            justify-content: center;
-            margin-top: 20px;
-            background: var(--card);
+        /* کانتینر اصلی */
+        .main-container {
+            flex: 1;
             padding: 20px;
-            border-radius: 16px;
-            border: 1.5px solid var(--border);
-        }
-        .range-inputs .form-group { flex: 1; text-align: center; }
-        .form-group label { display: block; font-size: 0.85rem; font-weight: 600; color: var(--hint); margin-bottom: 8px; }
-        .form-control {
+            max-width: 600px;
+            margin: 0 auto;
             width: 100%;
-            padding: 12px;
-            border: 1.5px solid var(--border);
-            border-radius: 12px;
-            font-family: inherit;
+        }
+
+        .step { display: none; animation: slideUp 0.4s ease; }
+        .step.active { display: block; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+
+        .step-title {
             font-size: 1.2rem;
-            font-weight: 700;
+            font-weight: 800;
+            margin-bottom: 16px;
             text-align: center;
-            background: #f8fafc;
             color: var(--text);
         }
-        .form-control:focus { outline: none; border-color: var(--primary); background: #fff; }
 
-        /* دکمه اصلی */
-        .bottom-action {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            padding: 20px;
-            background: linear-gradient(to top, var(--bg) 80%, transparent);
-            z-index: 100;
+        /* کارت‌های انتخاب پایه */
+        .grade-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 30px;
         }
-        .btn-primary {
+        .grade-card {
+            background: var(--card);
+            border: 2px solid transparent;
+            border-radius: 20px;
+            padding: 20px 10px;
+            text-align: center;
+            cursor: pointer;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.2s ease;
+            position: relative;
+        }
+        .grade-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+        .grade-card.selected {
+            border-color: var(--primary);
+            background: #eff6ff;
+        }
+        .grade-icon { font-size: 2rem; margin-bottom: 8px; display: block; }
+        .grade-name { font-weight: 700; font-size: 1.1rem; }
+
+        /* بخش بازه درسی */
+        .range-card {
+            background: var(--card);
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 24px;
+        }
+        .range-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+        }
+        .range-input-group {
+            flex: 1;
+            text-align: center;
+        }
+        .range-input-group label {
+            display: block;
+            font-size: 0.85rem;
+            color: var(--hint);
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        .range-input {
             width: 100%;
-            padding: 16px;
-            background: var(--primary);
+            padding: 15px;
+            font-size: 1.5rem;
+            font-weight: 800;
+            text-align: center;
+            color: var(--primary);
+            background: #eff6ff;
+            border: 2px solid #bfdbfe;
+            border-radius: 16px;
+            font-family: inherit;
+            transition: all 0.2s;
+        }
+        .range-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: #fff;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+        }
+        .range-divider {
+            font-weight: 800;
+            color: var(--hint);
+            margin-top: 24px;
+        }
+
+        /* دکمه اکشن بزرگ */
+        .action-area {
+            margin-top: auto;
+            padding-top: 20px;
+        }
+        .btn-generate {
+            width: 100%;
+            padding: 18px;
+            background: var(--primary-gradient);
             color: white;
             border: none;
             border-radius: 16px;
@@ -199,297 +178,185 @@
             font-size: 1.1rem;
             font-weight: 800;
             cursor: pointer;
+            box-shadow: var(--shadow-lg);
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
+            gap: 10px;
+            transition: all 0.2s;
         }
-        .btn-primary:active { transform: scale(0.98); }
-        .btn-primary:disabled { background: var(--hint); cursor: not-allowed; }
+        .btn-generate:active { transform: scale(0.97); }
+        .btn-generate:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
 
         /* لودینگ */
         .loader {
             display: inline-block;
-            width: 20px;
-            height: 20px;
+            width: 20px; height: 20px;
             border: 3px solid rgba(255,255,255,0.3);
             border-radius: 50%;
             border-top-color: #fff;
-            animation: spin 1s ease-in-out infinite;
+            animation: spin 1s linear infinite;
         }
         @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* دکمه برگشت */
+        .back-btn {
+            position: absolute;
+            top: 24px;
+            right: 20px;
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            width: 36px; height: 36px;
+            border-radius: 50%;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            cursor: pointer;
+            backdrop-filter: blur(4px);
+        }
+        .back-btn.active { display: flex; }
     </style>
 </head>
 <body>
 
-    <header class="app-header">
-        <h1>✨ سوالینو</h1>
+    <header class="header">
         <button class="back-btn" id="backBtn" onclick="prevStep()">➡️</button>
+        <h1><span>📚</span> سوالینو</h1>
+        <p>طراحی آزمون هوشمند مطالعات اجتماعی</p>
     </header>
 
-    <div class="progress-container">
-        <div class="progress-bar" id="progressBar"></div>
-    </div>
-
-    <div class="wizard-container">
+    <div class="main-container">
         
-        <!-- استپ ۱: مقطع -->
-        <div class="step active" id="step-1">
-            <h2 class="step-title">مقطع تحصیلی</h2>
-            <p class="step-subtitle">برای شروع، مقطع خود را انتخاب کنید.</p>
-            <div class="grid-2">
-                <div class="select-card" onclick="selectLevel('motavassete_aval')">
-                    <span class="icon">🎒</span>
-                    <div class="title">متوسطه اول</div>
+        <!-- استپ ۱: انتخاب پایه -->
+        <div class="step active" id="step-grade">
+            <div class="step-title">پایه تحصیلی خود را انتخاب کنید</div>
+            <div class="grade-grid">
+                <div class="grade-card" onclick="selectGrade(7, this)">
+                    <span class="grade-icon">7️⃣</span>
+                    <span class="grade-name">هفتم</span>
                 </div>
-                <div class="select-card" onclick="selectLevel('motavassete_dovom')">
-                    <span class="icon">🎓</span>
-                    <div class="title">متوسطه دوم</div>
+                <div class="grade-card" onclick="selectGrade(8, this)">
+                    <span class="grade-icon">8️⃣</span>
+                    <span class="grade-name">هشتم</span>
                 </div>
-            </div>
-        </div>
-
-        <!-- استپ ۲: رشته (فقط متوسطه دوم) -->
-        <div class="step" id="step-2-field">
-            <h2 class="step-title">رشته تحصیلی</h2>
-            <p class="step-subtitle">رشته خود را انتخاب کنید.</p>
-            <div class="grid-1">
-                <div class="select-card" onclick="selectField('math')">
-                    <div class="title">📐 رشته ریاضی و فیزیک</div>
-                </div>
-                <div class="select-card" onclick="selectField('science')">
-                    <div class="title">🔬 رشته علوم تجربی</div>
-                </div>
-                <div class="select-card" onclick="selectField('humanities')">
-                    <div class="title">📖 رشته علوم انسانی</div>
+                <div class="grade-card" onclick="selectGrade(9, this)">
+                    <span class="grade-icon">9️⃣</span>
+                    <span class="grade-name">نهم</span>
                 </div>
             </div>
         </div>
 
-        <!-- استپ ۳: انتخاب کتاب درسی (منتقل شد به قبل از پایه) -->
-        <div class="step" id="step-3-subject">
-            <h2 class="step-title">انتخاب کتاب درسی</h2>
-            <p class="step-subtitle">یک درس انتخاب کنید.</p>
-            <div class="grid-1" id="subjects-container"></div>
-        </div>
-
-        <!-- استپ ۴: انتخاب پایه (منتقل شد به بعد از درس) -->
-        <div class="step" id="step-4-grade">
-            <h2 class="step-title">پایه تحصیلی</h2>
-            <p class="step-subtitle">پایه خود را انتخاب کنید.</p>
-            <div class="grid-3" id="grades-container"></div>
-        </div>
-
-        <!-- استپ ۵: بازه درسی -->
-        <div class="step" id="step-5-lesson">
-            <h2 class="step-title">بازه درسی</h2>
-            <p class="step-subtitle">از چه درس‌هایی سوال طرح شود؟</p>
-            
-            <div class="range-inputs">
-                <div class="form-group">
-                    <label>از درس</label>
-                    <input type="number" class="form-control" id="lessonFrom" value="1" min="1" max="24">
-                </div>
-                <span style="font-weight: bold; color: var(--hint); margin-top: 20px;">تا</span>
-                <div class="form-group">
-                    <label>تا درس</label>
-                    <input type="number" class="form-control" id="lessonTo" value="4" min="1" max="24">
+        <!-- استپ ۲: انتخاب بازه درسی -->
+        <div class="step" id="step-range">
+            <div class="step-title">بازه درسی را مشخص کنید</div>
+            <div class="range-card">
+                <div class="range-row">
+                    <div class="range-input-group">
+                        <label>از درس</label>
+                        <input type="number" class="range-input" id="lessonFrom" value="1" min="1" max="24">
+                    </div>
+                    <span class="range-divider">تا</span>
+                    <div class="range-input-group">
+                        <label>تا درس</label>
+                        <input type="number" class="range-input" id="lessonTo" value="4" min="1" max="24">
+                    </div>
                 </div>
             </div>
         </div>
 
     </div>
 
-    <div class="bottom-action" id="bottomAction" style="display: none;">
-        <button class="btn-primary" id="generateBtn" onclick="submitExam()">
-            🚀 تولید آزمون
-        </button>
+    <div class="main-container" id="action-container" style="display: none; padding-top: 0;">
+        <div class="action-area">
+            <button class="btn-generate" id="generateBtn" onclick="submitExam()">
+                🚀 تولید آزمون
+            </button>
+        </div>
     </div>
 
     <script>
-        // ===== راه‌اندازی امن تلگرام =====
         let tg = null;
-        let appData = null;
-        let selection = { level: null, field: null, grade: null, subject: null };
+        let selection = { 
+            level: 'motavassete_aval', 
+            subject: 'مطالعات اجتماعی', 
+            grade: null, 
+            lessonFrom: 1, 
+            lessonTo: 4 
+        };
 
         function initTelegram() {
             if (!window.Telegram || !window.Telegram.WebApp) {
                 setTimeout(initTelegram, 50);
                 return;
             }
-            
             tg = window.Telegram.WebApp;
             tg.ready();
-            
             try {
                 if (!tg.isExpanded) tg.expand();
                 if (tg.disableVerticalSwipes) tg.disableVerticalSwipes();
-            } catch (e) {
-                console.log('Telegram Expand Error:', e);
-            }
-            
-            loadData();
+            } catch (e) {}
         }
 
-        window.addEventListener('load', () => {
-            setTimeout(initTelegram, 100);
-        });
+        window.addEventListener('load', () => setTimeout(initTelegram, 100));
 
-        // ===== بارگذاری داده‌ها =====
-        async function loadData() {
-            try {
-                const res = await fetch('subjects.json');
-                appData = await res.json();
-            } catch (e) {
-                tg.showAlert('خطا در بارگذاری اطلاعات دروس.');
-            }
-        }
-
-        // ===== مدیریت استپ‌ها =====
         function showStep(stepId) {
             document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
             document.getElementById(stepId).classList.add('active');
             
             const backBtn = document.getElementById('backBtn');
-            const bottomAction = document.getElementById('bottomAction');
+            const actionContainer = document.getElementById('action-container');
             
-            if (stepId === 'step-1') backBtn.classList.remove('active');
-            else backBtn.classList.add('active');
-            
-            if (stepId === 'step-5-lesson') bottomAction.style.display = 'block';
-            else bottomAction.style.display = 'none';
-            
-            // درصد پیشرفت
-            let progress = 20;
-            if (stepId === 'step-2-field') progress = 40;
-            if (stepId === 'step-3-subject') progress = 60;
-            if (stepId === 'step-4-grade') progress = 80;
-            if (stepId === 'step-5-lesson') progress = 100;
-            document.getElementById('progressBar').style.width = progress + '%';
+            if (stepId === 'step-grade') {
+                backBtn.classList.remove('active');
+                actionContainer.style.display = 'none';
+            } else {
+                backBtn.classList.add('active');
+                actionContainer.style.display = 'block';
+            }
             
             if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
         }
 
+        function selectGrade(gradeNum, element) {
+            // حذف انتخاب قبلی
+            document.querySelectorAll('.grade-card').forEach(c => c.classList.remove('selected'));
+            // انتخاب جدید
+            element.classList.add('selected');
+            
+            selection.grade = gradeNum;
+            
+            // رفتن به مرحله بعد با یک تاخیر کوتاه برای دیدن افکت
+            setTimeout(() => {
+                showStep('step-range');
+            }, 300);
+        }
+
         function prevStep() {
-            const active = document.querySelector('.step.active').id;
-            if (active === 'step-2-field') showStep('step-1');
-            else if (active === 'step-3-subject') {
-                if (selection.level === 'motavassete_dovom') showStep('step-2-field');
-                else showStep('step-1');
-            }
-            else if (active === 'step-4-grade') showStep('step-3-subject');
-            else if (active === 'step-5-lesson') showStep('step-4-grade');
+            showStep('step-grade');
         }
 
-        // ===== انتخاب‌ها =====
-        function selectLevel(levelId) {
-            selection.level = levelId;
-            if (levelId === 'motavassete_dovom') {
-                showStep('step-2-field');
-            } else {
-                renderSubjects(); // اول درس‌ها
-                showStep('step-3-subject');
-            }
-        }
-
-        function selectField(fieldId) {
-            selection.field = fieldId;
-            renderSubjects();
-            showStep('step-3-subject');
-        }
-
-        // استپ جدید: رندر درس‌ها (از اولین پایه موجود برای گرفتن لیست دروس استفاده می‌کنیم)
-        function renderSubjects() {
-            const container = document.getElementById('subjects-container');
-            container.innerHTML = '';
-            
-            let subjects = [];
-            if (selection.level === 'motavassete_aval') {
-                // گرفتن دروس از پایه هفتم (چون لیست دروس در همه پایه‌ها یکسانه)
-                const firstGrade = Object.values(appData.motavassete_aval.grades)[0];
-                subjects = firstGrade.subjects;
-            } else {
-                // گرفتن دروس از پایه دهم رشته انتخابی
-                const firstGrade = Object.values(appData.motavassete_dovom.fields[selection.field].grades)[0];
-                subjects = firstGrade.subjects;
-            }
-            
-            subjects.forEach(sub => {
-                if (sub.active) {
-                    container.innerHTML += `
-                        <div class="select-card" onclick="selectSubject('${sub.name}')" style="flex-direction: row; justify-content: flex-start; padding: 16px 20px;">
-                            <div class="title">${sub.name}</div>
-                        </div>
-                    `;
-                } else {
-                    container.innerHTML += `
-                        <div class="select-card disabled" onclick="showComingSoon()">
-                            <div class="title">${sub.name}</div>
-                            <div style="display:flex; align-items:center; gap:8px;">
-                                <span class="badge-soon">به زودی</span>
-                                <span class="lock-icon">🔒</span>
-                            </div>
-                        </div>
-                    `;
-                }
-            });
-        }
-
-        function selectSubject(subjectName) {
-            selection.subject = subjectName;
-            renderGrades();
-            showStep('step-4-grade');
-        }
-
-        // ===== رندر پایه‌ها =====
-        function renderGrades() {
-            const container = document.getElementById('grades-container');
-            container.innerHTML = '';
-            
-            let gradesData = selection.level === 'motavassete_aval' 
-                ? appData.motavassete_aval.grades 
-                : appData.motavassete_dovom.fields[selection.field].grades;
-            
-            for (const gradeId in gradesData) {
-                container.innerHTML += `
-                    <div class="select-card" onclick="selectGrade('${gradeId}')">
-                        <span class="icon">🏫</span>
-                        <div class="title">${gradesData[gradeId].name}</div>
-                    </div>
-                `;
-            }
-        }
-
-        function selectGrade(gradeId) {
-            selection.grade = gradeId;
-            showStep('step-5-lesson');
-        }
-
-        function showComingSoon() {
-            if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('warning');
-            tg.showAlert('این کتاب درسی به زودی به بانک سوالات اضافه خواهد شد.');
-        }
-
-        // ===== ارسال نهایی =====
         function submitExam() {
             const from = parseInt(document.getElementById('lessonFrom').value);
             const to = parseInt(document.getElementById('lessonTo').value);
             
             if (from < 1 || to > 24 || from > to) {
-                tg.showAlert('بازه درسی نامعتبر است. اعداد باید بین ۱ تا ۲۴ و از کوچک به بزرگ باشند.');
+                if (tg) tg.showAlert('بازه درسی نامعتبر است. اعداد باید بین ۱ تا ۲۴ و از کوچک به بزرگ باشند.');
                 return;
             }
             
             const btn = document.getElementById('generateBtn');
             btn.disabled = true;
-            btn.innerHTML = '<span class="loader"></span> در حال ارسال...';
+            btn.innerHTML = '<span class="loader"></span> در حال ساخت آزمون...';
             
             selection.lessonFrom = from;
             selection.lessonTo = to;
             
+            // ارسال به ربات
             if (tg && tg.sendData) {
                 tg.sendData(JSON.stringify(selection));
-                tg.close();
+                setTimeout(() => tg.close(), 500); // بستن با کمی تاخیر
             } else {
                 alert('اطلاعات ارسال شد: ' + JSON.stringify(selection));
                 btn.disabled = false;
