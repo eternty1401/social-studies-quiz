@@ -32,7 +32,6 @@
             flex-direction: column;
         }
 
-        /* هدر شیک */
         .header {
             background: var(--primary-gradient);
             color: white;
@@ -43,18 +42,9 @@
             position: relative;
             overflow: hidden;
         }
-        .header h1 {
-            font-size: 1.5rem;
-            font-weight: 800;
-            margin-bottom: 4px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 8px;
-        }
+        .header h1 { font-size: 1.5rem; font-weight: 800; margin-bottom: 4px; display: flex; justify-content: center; align-items: center; gap: 8px; }
         .header p { font-size: 0.9rem; opacity: 0.9; font-weight: 400; }
 
-        /* کانتینر اصلی */
         .main-container { flex: 1; padding: 20px; max-width: 600px; margin: 0 auto; width: 100%; }
 
         .step { display: none; animation: slideUp 0.4s ease; }
@@ -63,7 +53,6 @@
 
         .step-title { font-size: 1.2rem; font-weight: 800; margin-bottom: 16px; text-align: center; color: var(--text); }
 
-        /* کارت‌های انتخاب پایه */
         .grade-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 30px; }
         .grade-card {
             background: var(--card);
@@ -80,7 +69,6 @@
         .grade-icon { font-size: 2rem; margin-bottom: 8px; display: block; }
         .grade-name { font-weight: 700; font-size: 1.1rem; }
 
-        /* بخش بازه درسی */
         .range-card { background: var(--card); border-radius: 20px; padding: 24px; box-shadow: var(--shadow-sm); margin-bottom: 24px; }
         .range-row { display: flex; align-items: center; justify-content: space-between; gap: 15px; }
         .range-input-group { flex: 1; text-align: center; }
@@ -94,7 +82,6 @@
         .range-input:focus { outline: none; border-color: var(--primary); background: #fff; box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1); }
         .range-divider { font-weight: 800; color: var(--hint); margin-top: 24px; }
 
-        /* دکمه اکشن بزرگ */
         .action-area { margin-top: auto; padding-top: 20px; }
         .btn-generate {
             width: 100%; padding: 18px; background: var(--primary-gradient); color: white;
@@ -106,11 +93,9 @@
         .btn-generate:active { transform: scale(0.97); }
         .btn-generate:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
 
-        /* لودینگ */
         .loader { display: inline-block; width: 20px; height: 20px; border: 3px solid rgba(255,255,255,0.3); border-radius: 50%; border-top-color: #fff; animation: spin 1s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* دکمه برگشت */
         .back-btn {
             position: absolute; top: 24px; right: 20px; background: rgba(255,255,255,0.2);
             border: none; color: white; width: 36px; height: 36px; border-radius: 50%;
@@ -241,17 +226,19 @@
             btn.disabled = true;
             btn.innerHTML = '<span class="loader"></span> در حال ساخت آزمون...';
             
-            const tgId = tg.initDataUnsafe?.user?.id;
+            // ⭐ دریافت tg_id از لینک مینی‌اپ
+            const urlParams = new URLSearchParams(window.location.search);
+            const tgId = urlParams.get('tg_id');
 
             if (!tgId) {
-                if(tg) tg.showAlert('خطا: اطلاعات تلگرام یافت نشد. لطفا از طریق ربات وارد شوید.');
+                if(tg) tg.showAlert('خطا: اطلاعات کاربری یافت نشد. لطفا از طریق دکمه ربات وارد شوید.');
                 btn.disabled = false;
                 btn.innerHTML = '🚀 تولید آزمون';
                 return;
             }
 
             try {
-                // ارسال اطلاعات به API اختصاصی
+                // ارسال به API اختصاصی
                 const res = await fetch('https://api.motadars.ir/create_draft_miniapp.php', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
