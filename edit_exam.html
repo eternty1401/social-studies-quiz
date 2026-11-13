@@ -282,12 +282,19 @@
                 }
                 
                 if (res.ok && data.ok) {
-                    alert('✅ آزمون با موفقیت تایید شد!');
-                    // اگر تلگرام هست، لینک رو در مرورگر خارجی باز کن، وگرنه در خود صفحه
-                    if (tg && tg.openLink) {
-                        tg.openLink(data.final_link);
+                    // ⭐ تغییر منطق موفقیت بر اساس نوع آزمون
+                    if (data.is_online) {
+                        // اگر آزمون آنلاین بود، لینک به ربات ارسال شده، پس فقط پیام بده و ببند
+                        alert('✅ آزمون آنلاین ساخته شد.\n\nلینک شرکت در آزمون برای شما در ربات ارسال شد. می‌توانید آن را کپی کرده و به دانش‌آموزان بدهید.');
+                        if (tg) tg.close();
                     } else {
-                        window.location.href = data.final_link;
+                        // اگر آزمون چاپی بود، لینک PDF را باز کن
+                        alert('✅ آزمون با موفقیت تایید شد!');
+                        if (tg && tg.openLink) {
+                            tg.openLink(data.final_link);
+                        } else {
+                            window.location.href = data.final_link;
+                        }
                     }
                     reset();
                 } else {
