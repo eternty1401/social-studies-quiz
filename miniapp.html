@@ -98,7 +98,6 @@
         }
         .grade-icon, .type-icon { font-size: 2rem; margin-bottom: 8px; display: block; }
         .grade-name, .type-name { font-weight: 700; font-size: 1.1rem; }
-        .type-desc { font-size: 0.8rem; color: var(--hint); margin-top: 5px; }
 
         /* بخش بازه درسی */
         .range-card {
@@ -157,7 +156,20 @@
             gap: 16px;
             margin-bottom: 30px;
         }
-        .type-card { padding: 30px 15px; }
+        .type-card { padding: 20px 12px; }
+
+        /* ⭐ استایل جدید برای لیست مزایا */
+        .type-features {
+            text-align: right;
+            margin-top: 12px;
+            padding-right: 18px;
+            font-size: 0.78rem;
+            color: var(--hint);
+            line-height: 1.5;
+        }
+        .type-features li {
+            margin-bottom: 4px;
+        }
 
         /* دکمه اکشن بزرگ */
         .action-area {
@@ -262,25 +274,34 @@
                 </div>
             </div>
             
-            <!-- دکمه رفتن به مرحله بعد -->
             <button class="btn-generate" onclick="goToTypeStep()" style="background: #e2e8f0; color: #0f172a; box-shadow: none;">
                 مرحله بعد ⬅️
             </button>
         </div>
 
-        <!-- استپ ۳: انتخاب نوع آزمون (جدید) -->
+        <!-- استپ ۳: انتخاب نوع آزمون -->
         <div class="step" id="step-type">
             <div class="step-title">نوع آزمون را انتخاب کنید</div>
             <div class="type-grid">
+                <!-- ⭐ کارت آزمون آنلاین با توضیحات کامل -->
                 <div class="type-card" onclick="selectType('online', this)">
                     <span class="type-icon">🌐</span>
                     <span class="type-name">آزمون آنلاین</span>
-                    <div class="type-desc">لینک شرکت در آزمون برای دانش‌آموزان</div>
+                    <ul class="type-features">
+                        <li>لینک اختصاصی برای دانش‌آموز</li>
+                        <li>تایمر و سیستم ضد تقلب</li>
+                        <li>دریافت کارنامه و اکسل نمرات</li>
+                    </ul>
                 </div>
+                <!-- ⭐ کارت آزمون چاپی با توضیحات کامل -->
                 <div class="type-card" onclick="selectType('pdf', this)">
                     <span class="type-icon">📄</span>
                     <span class="type-name">آزمون چاپی (PDF)</span>
-                    <div class="type-desc">خروجی استاندارد جهت پرینت</div>
+                    <ul class="type-features">
+                        <li>خروجی استاندارد و مرتب</li>
+                        <li>شامل سربرگ و جای بارم</li>
+                        <li>دارای پاسخنامه و کلید</li>
+                    </ul>
                 </div>
             </div>
         </div>
@@ -297,7 +318,6 @@
 
     <script>
         let tg = null;
-        // اضافه شدن examType به آبجکت انتخاب‌ها
         let selection = { grade: null, examType: 'pdf' }; 
 
         function initTelegram() {
@@ -324,13 +344,13 @@
             
             if (stepId === 'step-grade') {
                 backBtn.classList.remove('active');
-                actionContainer.style.display = 'none'; // دکمه تولید در مرحله اول مخفی
+                actionContainer.style.display = 'none'; 
             } else if (stepId === 'step-range') {
                 backBtn.classList.add('active');
-                actionContainer.style.display = 'none'; // در مرحله بازه، دکمه پایین مخفی باشد چون دکمه "مرحله بعد" داریم
+                actionContainer.style.display = 'none'; 
             } else {
                 backBtn.classList.add('active');
-                actionContainer.style.display = 'block'; // فقط در مرحله نوع آزمون، دکمه تولید نمایش داده شود
+                actionContainer.style.display = 'block'; 
             }
             
             if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
@@ -363,7 +383,6 @@
             selection.examType = type;
         }
 
-        // دکمه بازگشت (هوشمند)
         function prevStep() {
             const currentStep = document.querySelector('.step.active').id;
             if (currentStep === 'step-type') {
@@ -414,7 +433,7 @@
                         grade: selection.grade,
                         lessonFrom: from,
                         lessonTo: to,
-                        exam_type: selection.examType // ⭐ ارسال نوع آزمون به بک‌اند
+                        exam_type: selection.examType
                     })
                 });
 
