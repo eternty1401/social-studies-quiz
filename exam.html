@@ -2,13 +2,16 @@
 <html lang="fa" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>آزمون | مدرّس</title>
 <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
 <style>
-  :root { --primary: #1e40af; --bg: #f0f4f8; --card: #fff; --text: #1e293b; --border: #cbd5e1; --success: #16a34a; --error: #dc2626; }
+  :root { --primary: #1e40af; --bg: #f0f4f8; --card: #fff; --text: #1e293b; --border: #cbd5e1; --success: #16a34a; --error: #dc2626; --warning: #f59e0b; }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Vazirmatn', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+  body { font-family: 'Vazirmatn', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; user-select: none; -webkit-user-select: none; }
+
+  /* ⭐ برچسب نسخه برای تست */
+  .version-badge { position: fixed; top: 0; left: 0; background: var(--error); color: white; font-size: 10px; padding: 2px 5px; border-bottom-right-radius: 5px; z-index: 10000; }
 
   /* ===== استایل‌های آنلاین ===== */
   .container { max-width: 800px; margin: 0 auto; padding: 16px; }
@@ -23,8 +26,10 @@
   .header-title { font-size: 1.2rem; font-weight: bold; color: var(--primary); }
   .student-name-line { margin-top: 15px; font-weight: bold; text-align: right; border-bottom: 1px dashed #94a3b8; padding-bottom: 5px; }
   
-  .timer-box { position: sticky; top: 10px; background: var(--primary); color: white; padding: 12px; border-radius: 10px; text-align: center; font-size: 1.2rem; font-weight: bold; z-index: 100; margin-bottom: 20px; }
-  .timer-box.warning { background: var(--error); }
+  /* تایمر سوال */
+  .timer-box { position: sticky; top: 10px; background: var(--primary); color: white; padding: 12px; border-radius: 10px; text-align: center; font-size: 1.2rem; font-weight: bold; z-index: 100; margin-bottom: 20px; transition: background 0.3s; }
+  .timer-box.warning { background: var(--error); animation: pulse 1s infinite; }
+  @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.02); } 100% { transform: scale(1); } }
   
   .question-card { background: #fff; border-radius: 12px; padding: 20px; margin-bottom: 16px; animation: slideUp 0.3s ease; }
   @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
@@ -34,21 +39,25 @@
   .option-item { display: flex; align-items: center; padding: 12px; border: 1.5px solid var(--border); border-radius: 8px; cursor: pointer; transition: all 0.2s; }
   .option-item:hover { border-color: var(--primary); background: #eff6ff; }
   .option-item.selected { border-color: var(--primary); background: #eff6ff; font-weight: bold; }
-  .option-item input { margin-left: 10px; width: 18px; height: 18px; }
+  .option-item input { margin-left: 10px; width: 18px; height: 18px; pointer-events: none; }
   
-  input[type="text"], textarea { width: 100%; padding: 12px; border: 1.5px solid var(--border); border-radius: 8px; font-family: inherit; background: #fff; color: #000; margin-top: 10px; }
+  input[type="text"], textarea { width: 100%; padding: 12px; border: 1.5px solid var(--border); border-radius: 8px; font-family: inherit; background: #fff; color: #000; margin-top: 10px; user-select: text; -webkit-user-select: text; }
   textarea { resize: vertical; min-height: 120px; }
 
   /* دکمه‌های ناوبری آنلاین */
   .nav-buttons { display: flex; gap: 12px; margin-top: 20px; }
   .btn { flex: 1; padding: 16px; border: none; border-radius: 10px; font-family: inherit; font-size: 1rem; font-weight: bold; cursor: pointer; transition: all 0.2s; }
-  .btn-prev { background: #e2e8f0; color: var(--text); }
   .btn-next { background: var(--primary); color: white; }
   .btn-submit { background: var(--success); color: white; }
   .btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
   .result-box { background: #fff; padding: 30px; border-radius: 12px; text-align: center; display: none; }
   .score-circle { width: 120px; height: 120px; border-radius: 50%; border: 8px solid var(--success); display: flex; align-items: center; justify-content: center; font-size: 2.5rem; font-weight: bold; color: var(--success); margin: 20px auto; }
+
+  /* استایل هشدار تقلب */
+  .cheat-warning { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(220, 38, 38, 0.95); color: white; display: none; flex-direction: column; align-items: center; justify-content: center; z-index: 9999; text-align: center; padding: 20px; }
+  .cheat-warning h1 { font-size: 2rem; margin-bottom: 20px; }
+  .cheat-warning p { font-size: 1.2rem; }
 
   /* ===== استایل PDF ===== */
   #pdf-container { display: none; background: white; width: 100%; padding: 10px; }
@@ -89,6 +98,17 @@
 </head>
 <body>
 
+<!-- ⭐ برچسب نسخه برای تست -->
+<div class="version-badge">نسخه 3.0</div>
+
+<!-- اورلی هشدار تقلب -->
+<div class="cheat-warning" id="cheat-warning">
+  <h1>⚠️ اخطار تقلب!</h1>
+  <p>شما از صفحه آزمون خارج شدید.</p>
+  <p>در صورت تکرار، آزمون شما به صورت خودکار ثبت نهایی می‌شود.</p>
+  <button onclick="resumeExam()" style="margin-top: 30px; padding: 15px 30px; font-size: 1.2rem; border-radius: 10px; border: none; cursor: pointer; font-weight: bold;">بازگشت به آزمون</button>
+</div>
+
 <div class="name-overlay" id="name-overlay" style="display:none;">
   <div class="name-box">
     <h2>لطفاً نام و نام خانوادگی خود را وارد کنید</h2>
@@ -102,10 +122,9 @@
 
 <!-- بخش آزمون آنلاین -->
 <div id="exam-wrapper" class="container" style="display:none;">
-  <div class="timer-box" id="timer-box">زمان باقیمانده: <span id="timer-text">--:--</span></div>
+  <div class="timer-box" id="timer-box">زمان باقیمانده این سوال: <span id="timer-text">02:00</span></div>
   <div class="exam-header" id="exam-header-online"></div>
   
-  <!-- اینجا سوالات یکی یکی لود می‌شوند -->
   <div id="online-question-container"></div>
 </div>
 
@@ -129,39 +148,82 @@
   const API_BASE = 'https://api.motadars.ir';
   const urlParams = new URLSearchParams(window.location.search);
   const examCode = urlParams.get('code');
+  const urlType = urlParams.get('type'); // ⭐ چک کردن نوع آزمون از URL
   
   let examData = null;
-  let questionsData = []; // برای PDF
-  let onlineQuestions = []; // برای آنلاین
-  let examDuration = 0;
-  let timerInterval;
-  let isSubmitted = false;
-  let studentName = '';
-
-  // متغیرهای آزمون آنلاین
+  let questionsData = []; 
+  let onlineQuestions = []; 
+  
   let currentIndex = 0;
   let answers = {};
+  let studentName = '';
+
+  const TIME_PER_QUESTION = 120; 
+  let questionTimeLeft = TIME_PER_QUESTION;
+  let timerInterval;
+  let isSubmitted = false;
+  let cheatCounter = 0; 
+  let isExamActive = false;
 
   document.addEventListener('DOMContentLoaded', () => {
     if (!examCode) return showError('لینک نامعتبر است.');
+    setupAntiCheat();
     fetchExamInfo();
   });
 
-  // ⭐ دریافت اطلاعات اولیه (نوع آزمون)
+  function setupAntiCheat() {
+    document.addEventListener('contextmenu', e => e.preventDefault());
+    ['copy', 'cut', 'paste'].forEach(evt => {
+      document.addEventListener(evt, e => {
+        if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
+          e.preventDefault();
+          alert('کپی کردن متن سوالات مجاز نیست!');
+        }
+      });
+    });
+    document.addEventListener('keydown', e => {
+      if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'C' || e.key === 'J')) || (e.ctrlKey && (e.key === 'c' || e.key === 'v' || e.key === 'u'))) {
+        e.preventDefault(); return false;
+      }
+    });
+  }
+
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden && isExamActive && !isSubmitted) {
+      cheatCounter++;
+      if (cheatCounter === 1) {
+        document.getElementById('cheat-warning').style.display = 'flex';
+      } else if (cheatCounter >= 2) {
+        document.getElementById('cheat-warning').innerHTML = `
+          <h1>🚫 آزمون شما ثبت شد!</h1>
+          <p>شما بیش از حد مجاز از صفحه آزمون خارج شدید.</p>
+          <p>پاسخ‌های شما تا این لحظه به صورت خودکار ثبت شد.</p>
+        `;
+        submitOnlineExam(true); 
+      }
+    }
+  });
+
+  function resumeExam() {
+    document.getElementById('cheat-warning').style.display = 'none';
+  }
+
+  // ⭐ تشخیص نوع آزمون (حتی اگر دیتابیس قدیمی باشد، از URL کمک می‌گیرد)
   async function fetchExamInfo() {
     try {
-      // برای تشخیص نوع آزمون از get_exam.php استفاده می‌کنیم
       const res = await fetch(`${API_BASE}/get_exam.php?code=${examCode}`);
       const data = await res.json();
       if (!res.ok || !data.ok) return showError(data.message || 'خطا در دریافت.');
       
       examData = data.exam; 
       
-      if (examData.exam_type === 'online') {
+      // اگر نوع آزمون در دیتابیس online بود یا در لینک type=online وجود داشت
+      const isOnline = (examData.exam_type === 'online') || (urlType === 'online');
+      
+      if (isOnline) {
         document.getElementById('loading').style.display = 'none';
         document.getElementById('name-overlay').style.display = 'flex';
       } else {
-        // اگر PDF بود، سوالات رو از همین دیتا می‌خونیم
         questionsData = data.questions;
         document.getElementById('loading').style.display = 'none';
         renderPDFLayout();
@@ -169,7 +231,6 @@
     } catch (err) { showError('خطای شبکه: ' + err.message); }
   }
 
-  // ⭐ شروع آزمون آنلاین (گرفتن سوالات از فایل جدید)
   async function startExam() {
     const name = document.getElementById('student-name-input').value.trim();
     if (name.length < 3) return alert('نام کامل را وارد کنید.');
@@ -179,31 +240,26 @@
     document.getElementById('loading').innerText = 'در حال بارگذاری سوالات...';
 
     try {
-      // استفاده از فایل جدید برای چک کردن is_active
       const res = await fetch(`${API_BASE}/get_online_exam.php?code=${examCode}`);
       const data = await res.json();
 
       if (!data.ok) {
         document.getElementById('loading').style.display = 'none';
-        return showError(data.message); // مثلاً اگر منقضی شده باشد
+        return showError(data.message); 
       }
 
       onlineQuestions = data.questions;
-      examDuration = (data.exam.duration || 60) * 60;
-      
       document.getElementById('loading').style.display = 'none';
       document.getElementById('exam-wrapper').style.display = 'block';
       
-      // ساخت هدر
       document.getElementById('exam-header-online').innerHTML = `
         <div class="header-row"><span>${data.exam.header_admin || ''}</span><span>تاریخ: ${examData.exam_date || '---'}</span></div>
         <div class="header-title">آزمون ${data.exam.header_subject}</div>
         <div class="header-row" style="justify-content:space-between; margin-top:10px;"><span>مدرسه: ${data.exam.header_school || ''}</span><span>معلم: ${data.exam.teacher_name || ''}</span></div>
-        <div class="header-row" style="justify-content:center; margin-top:5px;"><span>مدت زمان: ${data.exam.duration} دقیقه</span></div>
         <div class="student-name-line">نام دانش‌آموز: ${studentName}</div>
       `;
 
-      startTimer();
+      isExamActive = true;
       renderOnlineQuestion();
 
     } catch(e) {
@@ -212,8 +268,10 @@
     }
   }
 
-  // ⭐ رندر کردن سوال آنلاین (یکی یکی)
   function renderOnlineQuestion() {
+    clearInterval(timerInterval);
+    startQuestionTimer();
+
     const container = document.getElementById('online-question-container');
     const q = onlineQuestions[currentIndex];
     
@@ -238,13 +296,44 @@
         ${inputHtml}
       </div>
       <div class="nav-buttons">
-        <button class="btn btn-prev" onclick="prevQuestion()" ${currentIndex === 0 ? 'disabled' : ''}>قبلی</button>
         ${currentIndex === onlineQuestions.length - 1 
             ? `<button class="btn btn-submit" onclick="submitOnlineExam()">پایان و ثبت آزمون</button>`
-            : `<button class="btn btn-next" onclick="nextQuestion()">بعدی</button>`
+            : `<button class="btn btn-next" onclick="nextQuestion()">سوال بعدی (ثبت و رفتن) ⬅️</button>`
         }
       </div>
     `;
+  }
+
+  function startQuestionTimer() {
+    questionTimeLeft = TIME_PER_QUESTION;
+    const timerText = document.getElementById('timer-text'), timerBox = document.getElementById('timer-box');
+    timerBox.classList.remove('warning');
+    
+    const updateTimerUI = () => {
+      const minutes = Math.floor(questionTimeLeft / 60);
+      const seconds = questionTimeLeft % 60;
+      timerText.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    };
+    
+    updateTimerUI();
+
+    timerInterval = setInterval(() => {
+      questionTimeLeft--;
+      updateTimerUI();
+
+      if (questionTimeLeft <= 20) timerBox.classList.add('warning');
+
+      if (questionTimeLeft <= 0) {
+        clearInterval(timerInterval);
+        if (currentIndex < onlineQuestions.length - 1) {
+          alert('زمان این سوال به پایان رسید. به سوال بعدی می‌رویم.');
+          nextQuestion();
+        } else {
+          alert('زمان سوال آخر به پایان رسید. آزمون ثبت می‌شود.');
+          submitOnlineExam(true);
+        }
+      }
+    }, 1000);
   }
 
   function saveAnswer(qId, value) {
@@ -262,18 +351,12 @@
     }
   }
 
-  function prevQuestion() {
-    if (currentIndex > 0) {
-      currentIndex--;
-      renderOnlineQuestion();
-    }
-  }
-
-  // ⭐ ارسال به بک‌اند
   async function submitOnlineExam(isAuto = false) {
-    if (!isAuto && !confirm('آیا از ثبت نهایی آزمون مطمئن هستید؟')) return;
+    if (!isAuto && !confirm('آیا از ثبت نهایی آزمون مطمئن هستید؟ پس از ثبت، امکان بازگشت وجود ندارد.')) return;
     if (isSubmitted) return;
+    
     isSubmitted = true;
+    isExamActive = false; 
     clearInterval(timerInterval);
 
     document.getElementById('online-question-container').innerHTML = '<div class="loading">در حال ثبت و تصحیح...</div>';
@@ -307,22 +390,13 @@
       } else { 
         alert('خطای سرور: ' + (data.message || 'ناشناخته')); 
         isSubmitted = false;
+        isExamActive = true;
       }
     } catch (err) { 
       alert('خطای شبکه: ' + err.message); 
       isSubmitted = false;
+      isExamActive = true;
     }
-  }
-
-  function startTimer() {
-    const timerText = document.getElementById('timer-text'), timerBox = document.getElementById('timer-box');
-    timerInterval = setInterval(() => {
-      const minutes = Math.floor(examDuration / 60), seconds = examDuration % 60;
-      timerText.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-      if (examDuration <= 300) timerBox.classList.add('warning');
-      if (examDuration <= 0) { clearInterval(timerInterval); if (!isSubmitted) { alert('زمان تمام شد!'); submitOnlineExam(true); } }
-      examDuration--;
-    }, 1000);
   }
 
   function showError(msg) {
@@ -331,16 +405,10 @@
     document.getElementById('error-msg').style.display = 'block';
   }
 
-  // =========================================================================
-  // ===== بخش PDF (دقیقاً همان کدهای قبلی شما بدون هیچ تغییر) =====
-  // =========================================================================
+  // ===== بخش PDF (بدون تغییر) =====
   const toFa = n => String(n).replace(/\d/g, d => '۰۱۲۳۴۵۶۷۸۹'[d]);
-
   function sectionRow(title, score, itemsHTML) {
-    return `<tr>
-      <td class="content-col"><div class="section-title">${title}</div>${itemsHTML}</td>
-      <td class="score-col">${toFa(score)}</td>
-    </tr>`;
+    return `<tr><td class="content-col"><div class="section-title">${title}</div>${itemsHTML}</td><td class="score-col">${toFa(score)}</td></tr>`;
   }
 
   function renderPDFLayout() {
@@ -367,20 +435,9 @@
       const headerHTML = `
             <table class="exam-header-table">
                 <tr><td colspan="3" class="exam-header-title">به نام خدای رنگین کمان</td></tr>
-                <tr>
-                    <td style="width: 33%;">نام درس: مطالعات اجتماعی</td>
-                    <td style="width: 34%;">${admin}</td>
-                    <td style="width: 33%;">مدرسه ${school}</td>
-                </tr>
-                <tr>
-                    <td>پایه: ${examData.grade || 'هفتم'}</td>
-                    <td>مدت امتحان: ${duration} دقیقه</td>
-                    <td>تاریخ امتحان: ${examDate}</td>
-                </tr>
-                <tr>
-                    <td colspan="2" style="text-align: right;">نام و نام خانوادگی دانش‌آموز: ......................................................</td>
-                    <td><b>طراح سوال: ${teacherName}</b></td>
-                </tr>
+                <tr><td style="width: 33%;">نام درس: مطالعات اجتماعی</td><td style="width: 34%;">${admin}</td><td style="width: 33%;">مدرسه ${school}</td></tr>
+                <tr><td>پایه: ${examData.grade || 'هفتم'}</td><td>مدت امتحان: ${duration} دقیقه</td><td>تاریخ امتحان: ${examDate}</td></tr>
+                <tr><td colspan="2" style="text-align: right;">نام و نام خانوادگی دانش‌آموز: ......................................................</td><td><b>طراح سوال: ${teacherName}</b></td></tr>
             </table>
             <div class="exam-motto">«در سکوت سخت تلاش کن، بگذار موفقیتت صدای تو باشد»</div>
       `;
@@ -392,10 +449,7 @@
         tfQ.forEach(q => {
           const a = Array.isArray(q.answer) ? q.answer[0] : q.answer;
           answerKeyHTML += `<tr><td>${qCounter}</td><td>${a === 0 ? 'صحیح' : 'غلط'}</td></tr>`;
-          items += `<div class="q-item"><div class="q-line">
-            <span class="q-t"><b>${toFa(qCounter++)}-</b> ${q.question_text}</span>
-            <span class="tf-paren">( &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; )</span>
-          </div></div>`;
+          items += `<div class="q-item"><div class="q-line"><span class="q-t"><b>${toFa(qCounter++)}-</b> ${q.question_text}</span><span class="tf-paren">( &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; )</span></div></div>`;
         });
         page1HTML += sectionRow('الف) عبارات صحیح و غلط را مشخص کنید.', 2, items);
       }
@@ -406,10 +460,7 @@
           const ci = Array.isArray(q.answer) ? q.answer[0] : q.answer;
           answerKeyHTML += `<tr><td>${qCounter}</td><td>${q.options[ci] || 'نامشخص'}</td></tr>`;
           const opts = q.options.map((opt, j) => `<div class="mc-option"><span class="mc-box"></span> ${['الف', 'ب', 'ج', 'د'][j]}) ${opt}</div>`).join('');
-          items += `<div class="q-item">
-            <div class="q-line"><span class="q-t"><b>${toFa(qCounter++)}-</b> ${q.question_text}</span></div>
-            <div class="mc-options">${opts}</div>
-          </div>`;
+          items += `<div class="q-item"><div class="q-line"><span class="q-t"><b>${toFa(qCounter++)}-</b> ${q.question_text}</span></div><div class="mc-options">${opts}</div></div>`;
         });
         page1HTML += sectionRow('ب) گزینه صحیح را انتخاب کنید.', 2, items);
       }
@@ -419,9 +470,7 @@
         jakhaliQ.forEach(q => {
           const a = Array.isArray(q.answer) ? q.answer.join(' / ') : q.answer;
           answerKeyHTML += `<tr><td>${qCounter}</td><td>${a}</td></tr>`;
-          items += `<div class="q-item"><div class="q-line">
-            <span class="q-t"><b>${toFa(qCounter++)}-</b> ${q.question_text}</span>
-          </div></div>`;
+          items += `<div class="q-item"><div class="q-line"><span class="q-t"><b>${toFa(qCounter++)}-</b> ${q.question_text}</span></div></div>`;
         });
         page1HTML += sectionRow('پ) عبارات زیر را با کلمات مناسب پر کنید.', 2, items);
       }
@@ -436,48 +485,28 @@
           const s = v => (typeof v === 'string' ? v.trim() : '');
           const first = Array.isArray(q.answer) ? q.answer[0] : q.answer;
           const key = s(q.question_key) || s(first) || 'پاسخ بررسی شود.';
-          
           answerKeyHTML += `<tr><td>${qCounter}</td><td>${key}</td></tr>`;
-          items += `<div class="q-item"><div class="q-line">
-            <span class="q-t"><b>${toFa(qCounter++)}-</b> ${q.question_text}</span>
-          </div></div>`;
+          items += `<div class="q-item"><div class="q-line"><span class="q-t"><b>${toFa(qCounter++)}-</b> ${q.question_text}</span></div></div>`;
         });
         items += `<div class="section-gap"></div>`;
         page2HTML += sectionRow('ت) به سوالات زیر پاسخ کوتاه دهید.', 3, items);
       }
 
       if (longAnswerQ.length) {
-        page2HTML += `<tr>
-          <td class="content-col" style="padding-bottom:2px;"><div class="section-title" style="margin-bottom:2px;">ث) به سوالات تشریحی زیر پاسخ کامل دهید.</div></td>
-          <td class="score-col"></td>
-        </tr>`;
+        page2HTML += `<tr><td class="content-col" style="padding-bottom:2px;"><div class="section-title" style="margin-bottom:2px;">ث) به سوالات تشریحی زیر پاسخ کامل دهید.</div></td><td class="score-col"></td></tr>`;
         longAnswerQ.forEach((q, i) => {
           const s = v => (typeof v === 'string' ? v.trim() : '');
           const first = Array.isArray(q.answer) ? q.answer[0] : q.answer;
           const key = s(q.question_key) || s(first) || 'پاسخ بررسی شود.';
-          
           answerKeyHTML += `<tr><td>${qCounter}</td><td>${key}</td></tr>`;
           const sc = q.score || defaultLongScores[i] || 1;
-          page2HTML += `<tr>
-            <td class="content-col" style="min-height:${sc * 34 + 14}px; height:${sc * 34 + 14}px;">
-              <div class="q-line"><span class="q-t"><b>${toFa(qCounter++)}-</b> ${q.question_text}</span></div>
-            </td>
-            <td class="score-col">${toFa(sc)}</td>
-          </tr>`;
+          page2HTML += `<tr><td class="content-col" style="min-height:${sc * 34 + 14}px; height:${sc * 34 + 14}px;"><div class="q-line"><span class="q-t"><b>${toFa(qCounter++)}-</b> ${q.question_text}</span></div></td><td class="score-col">${toFa(sc)}</td></tr>`;
         });
       }
 
       page2HTML += `</table></div>`; 
 
-      const page3HTML = `
-        <div class="pdf-page-3">
-        <h2 class="answer-key-title">پاسخنامه و کلید سوالات</h2>
-        <table class="answer-table">
-            <thead><tr><th style="width: 20%;">شماره سوال</th><th>پاسخ صحیح / کلید</th></tr></thead>
-            <tbody>${answerKeyHTML}</tbody>
-        </table>
-        <div style="margin-top: 30px; text-align: center; color: #555; font-weight: bold;">طراح سوال: ${teacherName}</div>
-        </div>`;
+      const page3HTML = `<div class="pdf-page-3"><h2 class="answer-key-title">پاسخنامه و کلید سوالات</h2><table class="answer-table"><thead><tr><th style="width: 20%;">شماره سوال</th><th>پاسخ صحیح / کلید</th></tr></thead><tbody>${answerKeyHTML}</tbody></table><div style="margin-top: 30px; text-align: center; color: #555; font-weight: bold;">طراح سوال: ${teacherName}</div></div>`;
 
       let pdfHTML = `<div class="exam-paper">`;
       if (tfQ.length + testiQ.length + jakhaliQ.length > 0) pdfHTML += page1HTML;
