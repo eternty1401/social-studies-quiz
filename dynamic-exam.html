@@ -73,7 +73,6 @@
         <div class="question-box" id="question-box"></div>
 
         <div class="nav-btns">
-            <button class="nav-btn btn-prev" id="btn-prev" onclick="prevQuestion()">سوال قبلی</button>
             <button class="nav-btn btn-next" id="btn-next" onclick="nextQuestion()">سوال بعدی</button>
             <button class="nav-btn btn-submit" id="btn-submit" onclick="submitExam(false)" style="display: none;">ثبت نهایی</button>
         </div>
@@ -242,7 +241,6 @@
 
         box.innerHTML = contentHtml;
 
-        document.getElementById('btn-prev').disabled = (currentQIndex === 0);
         if (currentQIndex === currentQuestions.length - 1) {
             document.getElementById('btn-next').style.display = 'none';
             document.getElementById('btn-submit').style.display = 'block';
@@ -254,7 +252,6 @@
 
     function saveAnswer(value) { studentAnswers[currentQIndex] = value; }
     function nextQuestion() { if (currentQIndex < currentQuestions.length - 1) { currentQIndex++; renderQuestion(); } }
-    function prevQuestion() { if (currentQIndex > 0) { currentQIndex--; renderQuestion(); } }
 
     function submitExam(isCheating) {
         if (!isCheating && !confirm("آیا از ثبت نهایی آزمون مطمئن هستید؟")) return;
