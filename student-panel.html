@@ -245,6 +245,16 @@
             }
         };
 
+        // 👇 کد جدید: بررسی مجدد وضعیت آزمون وقتی کاربر به صفحه برمی‌گردد 👇
+        document.addEventListener("visibilitychange", function() {
+            if (!document.hidden) {
+                if (typeof loadActiveExam === 'function') {
+                    loadActiveExam();
+                }
+            }
+        });
+        // 👆 پایان کد جدید 👆
+
         function getStudentGrade() {
             let studentGrade = "نامشخص";
             if (typeof schoolData !== 'undefined') {
