@@ -146,7 +146,49 @@
         loadQuestions(urlParams.get('grade') || '7');
     }
 
-    function loadQuestions(grade) {
+    // ───────────── بررسی وضعیت آزمون از سرور (جدید) ─────────────
+    async function loadQuestions(grade) {
+        const loadingEl = document.getElementById('loading');
+        loadingEl.style.display = 'block';
+
+        // تبدیل نام کامل مدرسه به کلید مورد انتظار سرور
+        let schoolKey = "all";
+        if (schoolName && schoolName.includes("حسن بن علی")) schoolKey = "hasan_bin_ali";
+        else if (schoolName && schoolName.includes("حضرت مهدی")) schoolKey = "hazrat_mahdi";
+
+        // ۱) چک وضعیت آزمون از طریق get_active_exam_link.php
+        try {
+            const res = await fetch('https://api.motadars.ir/get_active_exam_link.php', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ grade: grade, school: schoolKey })
+            });
+            const data = await res.json();
+
+            // اگر دیتا نال بود یعنی آزمون بسته است
+            if (data.status !== 'success' || data.data === null) {
+                loadingEl.innerHTML = `
+                    <div style="text-align:center; padding:40px 20px;">
+                        <div style="font-size:3rem; margin-bottom:15px;">⛔</div>
+                        <h2 style="color:#ef4444; margin-bottom:15px;">این آزمون بسته شده است</h2>
+                        <p style="color:#64748b; margin-bottom:25px; line-height:1.8;">
+                            این آزمون توسط دبیر غیرفعال شده یا هنوز باز نشده است.<br>
+                            لطفاً بعداً مراجعه کنید یا با معلم خود تماس بگیرید.
+                        </p>
+                        <a href="index.html" style="display:inline-block; background:#1e3c72; color:white; padding:12px 25px; border-radius:8px; text-decoration:none; font-weight:bold;">
+                            بازگشت به صفحه اصلی
+                        </a>
+                    </div>`;
+                document.getElementById('exam-section').style.display = 'none';
+                return;
+            }
+        } catch (e) {
+            loadingEl.innerText = "خطا در بررسی وضعیت آزمون. با پشتیبانی تماس بگیرید.";
+            return;
+        }
+
+        // ۲) اگر آزمون باز بود، فایل سوالات را لود کن
+        loadingEl.innerText = 'در حال دریافت اطلاعات...';
         const script = document.createElement('script');
         script.src = `questions-grade${grade}.js`;
         script.onload = () => {
@@ -155,22 +197,27 @@
             else if (grade === '8') bank = grade8Questions;
             else if (grade === '9') bank = grade9Questions;
 
+            if (!Array.isArray(bank)) {
+                loadingEl.innerText = 'فایل سوالات این پایه معتبر نیست.';
+                return;
+            }
+
             let filtered = bank.filter(q => q.lesson >= fromLesson && q.lesson <= toLesson);
             currentQuestions = filtered.sort(() => Math.random() - 0.5).slice(0, 20);
             
             if (currentQuestions.length === 0) {
-                document.getElementById('loading').innerText = "سوالی برای این بازه یافت نشد.";
+                loadingEl.innerText = `سوالی برای دروس ${fromLesson} تا ${toLesson} یافت نشد.`;
                 return;
             }
 
-            document.getElementById('loading').style.display = 'none';
+            loadingEl.style.display = 'none';
             document.getElementById('exam-section').style.display = 'block';
             document.getElementById('exam-title').innerText = `آزمون دروس ${fromLesson} تا ${toLesson}`;
             
             renderQuestion();
         };
         script.onerror = () => {
-            document.getElementById('loading').innerText = "فایل سوالات پیدا نشد.";
+            loadingEl.innerText = "فایل سوالات پیدا نشد. با پشتیبانی تماس بگیرید.";
         };
         document.head.appendChild(script);
     }
@@ -263,12 +310,10 @@
         let answersData = currentQuestions.map((q, index) => {
             let ans = studentAnswers[index] !== undefined ? studentAnswers[index] : "";
             
-            // استخراج متن پاسخ تستی برای نمایش به معلم
             if ((q.type === 'testi' || q.type === 'truefalse') && ans !== "") {
                 ans = q.options[ans]; 
             }
             
-            // استخراج کلید پاسخ برای نمایش به معلم
             let correctKey = "";
             if (q.type === 'essay' || q.type === 'jakhali') {
                 correctKey = q.key || "تصحیح دستی";
@@ -301,17 +346,12 @@
         .then(async data => {
             if(data.status === 'success') {
                 
-                // 👇 بخش جدید: دادن امتیاز بابت شرکت در آزمون (اگر تقلب نکرده باشد) 👇
                 if (!isCheating) {
                     const urlParams = new URLSearchParams(window.location.search);
                     const grade = urlParams.get('grade') || '7';
-                    // یک شناسه یکتا برای هر آزمون می‌سازیم تا دانش‌آموز بابت هر آزمون فقط یک بار امتیاز بگیرد
                     const activityId = `exam_g${grade}_lesson_${fromLesson}_to_${toLesson}`;
-                    
-                    // ۲۰ امتیاز برای شرکت در آزمون
                     await awardPoints(20, activityId); 
                 }
-                // 👆 پایان بخش جدید 👆
 
                 document.body.innerHTML = `
                     <div style="display:flex; justify-content:center; align-items:center; height:100vh; text-align:center; background:#f1f5f9;">
@@ -333,15 +373,12 @@
         });
     }
 
-    // 👇 تابع جدید برای ارتباط با API امتیازدهی 👇
     async function awardPoints(points, activityId) {
-        // استفاده از متغیر سراسری studentName
         if (!studentName) return; 
         
         const today = new Date().toLocaleDateString('fa-IR');
         const storageKey = `awarded_${activityId}_${today}`;
         
-        // اگر دانش‌آموز قبلاً (امروز) بابت این آزمون امتیاز گرفته باشد، دوباره نمی‌دهیم
         if (localStorage.getItem(storageKey)) {
             console.log("امتیاز قبلا ثبت شده است.");
             return; 
@@ -356,10 +393,7 @@
             const data = await res.json();
             
             if (data.status === 'success') {
-                // ذخیره در حافظه برای جلوگیری از تقلب
                 localStorage.setItem(storageKey, 'true');
-                
-                // نمایش پیام موفقیت‌آمیز بودن دریافت امتیاز
                 alert(`🎉 تبریک! شما بابت شرکت در این آزمون ${points} امتیاز دریافت کردید.\nامتیاز کل شما: ${data.new_points}`);
             }
         } catch (e) {
