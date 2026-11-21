@@ -2,258 +2,426 @@
 <html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#f6f9fc">
+    <meta name="color-scheme" content="light">
     <title>سوالینو | مطالعات اجتماعی</title>
     <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         :root {
-            --primary: #3b82f6;
-            --primary-gradient: linear-gradient(135deg, #2563eb, #3b82f6);
-            --green: #10b981;
-            --green-soft: #dcfce7;
-            --green-border: #bbf7d0;
-            --bg: #f8fafc;
-            --card: #ffffff;
-            --text: #0f172a;
-            --hint: #64748b;
-            --border: #e2e8f0;
-            --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-            --shadow-lg: 0 10px 25px -5px rgba(59, 130, 246, 0.2);
+            color-scheme: light;
+            --bg: #f6f9fc;
+            --bg2: #eaeef4;
+            --surf: #ffffff;
+            --ink: #2a3441;
+            --ink2: #6a7587;
+            --line: #e2e7ee;
+            --line2: #cdd5e0;
+            --blue: #3d7aa8;
+            --blue-h: #2f6590;
+            --blue-t: #e6f0f8;
+            --on-blue: #ffffff;
+            --coral: #b9675a;
+            --coral-t: #f6e9e6;
+            --glass: rgba(245, 247, 250, .86);
+            --shadow: 0 14px 30px -18px rgba(40, 70, 100, .45);
+            --ui: "Vazirmatn", "Estedad", "IRANSansX", "Segoe UI", Tahoma, Arial, sans-serif;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+        html { -webkit-text-size-adjust: 100%; }
         body {
-            font-family: 'Vazirmatn', sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
-            line-height: 1.6;
+            font-family: var(--ui);
+            background: var(--bg);
+            color: var(--ink);
+            font-size: 14px;
+            line-height: 1.75;
             min-height: 100vh;
+            min-height: 100dvh;
             display: flex;
             flex-direction: column;
+            -webkit-font-smoothing: antialiased;
         }
-        .header {
-            background: var(--primary-gradient);
-            color: white;
-            padding: 24px 20px 30px;
-            border-radius: 0 0 24px 24px;
-            text-align: center;
-            box-shadow: var(--shadow-lg);
-            position: relative;
-            overflow: hidden;
-        }
-        .header::before {
-            content: '';
-            position: absolute;
-            top: -50%; left: -50%; width: 200%; height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
-            pointer-events: none;
-        }
-        .header h1 { font-size: 1.5rem; font-weight: 800; margin-bottom: 4px; display: flex; justify-content: center; align-items: center; gap: 8px; }
-        .header p { font-size: 0.9rem; opacity: 0.9; font-weight: 400; }
-        .main-container { flex: 1; padding: 20px; max-width: 600px; margin: 0 auto; width: 100%; }
-        .step { display: none; animation: slideUp 0.4s ease; }
-        .step.active { display: block; }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
-        .step-title { font-size: 1.2rem; font-weight: 800; margin-bottom: 16px; text-align: center; color: var(--text); }
+        button, input { font: inherit; color: inherit; }
 
-        .grade-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 20px; }
-        .grade-card, .type-card {
-            background: var(--card);
-            border: 2px solid transparent;
+        /* ---------- Top bar ---------- */
+        .topbar {
+            position: sticky; top: 0; z-index: 20;
+            background: var(--glass);
+            -webkit-backdrop-filter: saturate(160%) blur(14px);
+            backdrop-filter: saturate(160%) blur(14px);
+            border-bottom: 1px solid var(--line);
+        }
+        .topbar-in {
+            max-width: 560px; margin: 0 auto;
+            height: 62px; padding: 0 16px;
+            display: flex; align-items: center; gap: 12px;
+        }
+        .back-btn {
+            display: none; flex: none;
+            width: 38px; height: 38px; border-radius: 50%;
+            border: 1px solid var(--line2); background: transparent;
+            align-items: center; justify-content: center; cursor: pointer;
+            color: var(--ink); transition: background .15s, border-color .15s;
+        }
+        .back-btn svg { width: 18px; height: 18px; }
+        .back-btn:active { background: var(--bg2); }
+        .back-btn.active { display: flex; }
+        .brand { display: flex; align-items: center; gap: 11px; min-width: 0; }
+        .mark { width: 34px; height: 34px; flex: none; color: var(--blue); }
+        .brand b { display: block; font-size: 18px; font-weight: 800; line-height: 1.2; letter-spacing: -.2px; }
+        .brand b i { font-style: normal; color: var(--coral); }
+        .brand small { display: block; font-size: 11px; color: var(--ink2); font-weight: 500; line-height: 1.4; }
+
+        /* ---------- Stepper ---------- */
+        .stepper { max-width: 560px; margin: 0 auto; width: 100%; padding: 16px 20px 0; }
+        .stepper ol { list-style: none; display: flex; gap: 8px; }
+        .stepper li { flex: 1; }
+        .stepper li span { display: block; height: 4px; border-radius: 4px; background: var(--line); transition: background .3s; margin-bottom: 7px; }
+        .stepper li em { font-style: normal; font-size: 11px; font-weight: 700; color: var(--ink2); transition: color .3s; }
+        .stepper li.done span, .stepper li.now span { background: var(--blue); }
+        .stepper li.now em { color: var(--blue); }
+
+        /* ---------- Layout ---------- */
+        .main { flex: 1; width: 100%; max-width: 560px; margin: 0 auto; padding: 22px 20px 140px; }
+        .step { display: none; }
+        .step.active { display: block; animation: rise .35s ease both; }
+        @keyframes rise { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+
+        .sec-h { display: flex; align-items: center; gap: 14px; margin-bottom: 22px; }
+        .num { font-size: 36px; font-weight: 800; line-height: 1; color: var(--coral); width: 40px; flex: none; text-align: center; }
+        .sec-h h2 { font-size: 19px; font-weight: 800; line-height: 1.4; }
+        .sec-h p { font-size: 12.5px; color: var(--ink2); }
+
+        /* ---------- Type cards ---------- */
+        .type-list { display: flex; flex-direction: column; gap: 12px; }
+        .type-card {
+            position: relative;
+            display: flex; align-items: flex-start; gap: 14px;
+            background: var(--surf);
+            border: 1.5px solid var(--line);
             border-radius: 20px;
-            padding: 20px 10px;
-            text-align: center;
+            padding: 16px;
             cursor: pointer;
-            box-shadow: var(--shadow-sm);
-            transition: all 0.2s ease;
+            transition: border-color .15s, transform .15s, box-shadow .15s, background .15s;
         }
-        .grade-card:active, .type-card:active { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
-        .grade-card.selected, .type-card.selected { border-color: var(--primary); background: #eff6ff; }
-        .grade-icon, .type-icon { font-size: 2rem; margin-bottom: 8px; display: block; }
-        .grade-name, .type-name { font-weight: 700; font-size: 1.1rem; }
+        .type-card:hover { border-color: var(--line2); }
+        .type-card:active { transform: scale(.985); }
+        .type-card.selected { border-color: var(--blue); background: var(--blue-t); box-shadow: var(--shadow); }
+        .ico {
+            flex: none; width: 48px; height: 48px; border-radius: 15px;
+            background: var(--blue-t); color: var(--blue);
+            display: grid; place-items: center;
+        }
+        .type-card.selected .ico { background: var(--blue); color: var(--on-blue); }
+        .ico svg { width: 25px; height: 25px; }
+        .type-body { flex: 1; min-width: 0; }
+        .type-name { display: block; font-size: 15.5px; font-weight: 800; margin-bottom: 1px; }
+        .type-desc { display: block; font-size: 12px; color: var(--ink2); margin-bottom: 9px; }
+        .chips { list-style: none; display: flex; flex-wrap: wrap; gap: 6px; }
+        .chips li {
+            font-size: 11px; font-weight: 600; color: var(--ink2);
+            border: 1px solid var(--line); background: var(--bg);
+            padding: 1px 10px; border-radius: 999px;
+        }
+        .go { flex: none; align-self: center; font-size: 22px; color: var(--line2); line-height: 1; transition: transform .15s, color .15s; }
+        .type-card:hover .go { color: var(--blue); transform: translateX(-3px); }
 
-        .range-card { background: var(--card); border-radius: 20px; padding: 24px; box-shadow: var(--shadow-sm); margin-bottom: 24px; }
-        .range-row { display: flex; align-items: center; justify-content: space-between; gap: 15px; }
-        .range-input-group { flex: 1; text-align: center; }
-        .range-input-group label { display: block; font-size: 0.85rem; color: var(--hint); margin-bottom: 8px; font-weight: 600; }
-        .range-input {
-            width: 100%; padding: 15px; font-size: 1.5rem; font-weight: 800;
-            text-align: center; color: var(--primary); background: #eff6ff;
-            border: 2px solid #bfdbfe; border-radius: 16px; font-family: inherit; transition: all 0.2s;
-        }
-        .range-input:focus { outline: none; border-color: var(--primary); background: #fff; box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1); }
-        .range-divider { font-weight: 800; color: var(--hint); margin-top: 24px; }
-
-        .type-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
-        .type-card { padding: 20px 12px; }
-        .type-features {
-            text-align: right;
-            margin-top: 12px;
-            padding-right: 18px;
-            font-size: 0.78rem;
-            color: var(--hint);
-            line-height: 1.5;
-        }
-        .type-features li { margin-bottom: 4px; }
-
-        .manual-card {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            padding: 18px 20px;
-            text-align: right;
-            position: relative;
-            background: linear-gradient(135deg, #f0fdf4 0%, var(--green-soft) 100%);
-            border-color: var(--green-border);
-        }
-        .manual-card.selected {
-            border-color: var(--green) !important;
-            background: var(--green-soft) !important;
-        }
-        .manual-card .type-icon { font-size: 2.2rem; margin-bottom: 0; flex-shrink: 0; }
-        .manual-body { flex: 1; min-width: 0; }
-        .manual-body .type-name { display: block; margin-bottom: 2px; font-size: 1.05rem; }
-        .manual-body .type-features { margin-top: 4px; padding-right: 16px; font-size: 0.75rem; }
+        .manual-card { border-style: dashed; border-color: var(--line2); margin-top: 8px; }
+        .manual-card .ico { background: var(--coral-t); color: var(--coral); }
+        .manual-card.selected .ico { background: var(--coral); color: var(--surf); }
         .free-badge {
-            position: absolute;
-            top: -10px;
-            left: 14px;
-            background: var(--green);
-            color: #fff;
-            font-size: 0.68rem;
-            font-weight: 800;
-            padding: 3px 10px;
-            border-radius: 999px;
-            box-shadow: 0 4px 10px -2px rgba(16, 185, 129, 0.5);
-            letter-spacing: 0.3px;
+            position: absolute; top: -11px; left: 16px;
+            background: var(--coral); color: #fff;
+            font-size: 11px; font-weight: 800;
+            padding: 1px 12px; border-radius: 999px;
+            box-shadow: 0 6px 12px -6px var(--coral);
         }
+        .divider { display: flex; align-items: center; gap: 12px; color: var(--ink2); font-size: 11.5px; font-weight: 700; margin: 18px 0 6px; }
+        .divider::before, .divider::after { content: ""; flex: 1; height: 1px; background: var(--line); }
 
-        .action-area { margin-top: auto; padding-top: 20px; }
+        /* ---------- Grade ---------- */
+        .grade-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+        .grade-card {
+            background: var(--surf); border: 1.5px solid var(--line); border-radius: 20px;
+            padding: 22px 8px 18px; text-align: center; cursor: pointer;
+            transition: border-color .15s, transform .15s, box-shadow .15s, background .15s;
+        }
+        .grade-card:hover { border-color: var(--line2); }
+        .grade-card:active { transform: scale(.97); }
+        .grade-card.selected { border-color: var(--blue); background: var(--blue-t); box-shadow: var(--shadow); }
+        .grade-card b { display: block; font-size: 44px; font-weight: 800; line-height: 1.1; color: var(--blue); }
+        .grade-name { display: block; margin-top: 6px; font-size: 14px; font-weight: 700; }
+
+        /* ---------- Range ---------- */
+        .range-card { background: var(--surf); border: 1px solid var(--line); border-radius: 20px; padding: 20px 16px; }
+        .range-row { display: flex; align-items: flex-end; gap: 10px; }
+        .range-input-group { flex: 1; min-width: 0; text-align: center; }
+        .range-input-group label { display: block; font-size: 12px; color: var(--ink2); font-weight: 700; margin-bottom: 8px; }
+        .stepbox { display: flex; align-items: center; border: 1.5px solid var(--line2); border-radius: 16px; overflow: hidden; background: var(--bg); transition: border-color .15s, box-shadow .15s; }
+        .stepbox:focus-within { border-color: var(--blue); box-shadow: 0 0 0 4px rgba(61, 122, 168, .18); background: var(--surf); }
+        .stepbox button {
+            flex: none; width: 40px; height: 52px; border: 0; background: transparent;
+            color: var(--blue); font-size: 22px; font-weight: 700; cursor: pointer;
+        }
+        .stepbox button:active { background: var(--blue-t); }
+        .range-input {
+            flex: 1; min-width: 0; width: 100%; height: 52px;
+            border: 0; background: transparent; outline: 0;
+            text-align: center; font-size: 24px; font-weight: 800; color: var(--blue);
+            -moz-appearance: textfield; appearance: textfield;
+        }
+        .range-input::-webkit-outer-spin-button, .range-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+        .range-divider { flex: none; padding-bottom: 14px; font-weight: 700; color: var(--ink2); }
+        .summary {
+            margin-top: 16px; padding: 10px 14px; border-radius: 14px;
+            background: var(--blue-t); color: var(--blue);
+            font-size: 12.5px; font-weight: 700; text-align: center; transition: background .2s, color .2s;
+        }
+        .summary.bad { background: var(--coral-t); color: var(--coral); }
+        .track { display: flex; gap: 2px; margin-top: 14px; direction: rtl; }
+        .track i { flex: 1; height: 8px; border-radius: 3px; background: var(--line); transition: background .2s; }
+        .track i.on { background: var(--blue); }
+        .track-lbl { display: flex; justify-content: space-between; font-size: 10.5px; color: var(--ink2); margin-top: 5px; }
+
+        /* ---------- Action dock ---------- */
+        .dock {
+            position: fixed; bottom: 0; inset-inline: 0; z-index: 30;
+            background: var(--glass);
+            -webkit-backdrop-filter: saturate(160%) blur(14px);
+            backdrop-filter: saturate(160%) blur(14px);
+            border-top: 1px solid var(--line);
+            padding: 12px 20px calc(14px + env(safe-area-inset-bottom));
+        }
+        .dock-in { max-width: 560px; margin: 0 auto; }
         .btn-generate {
-            width: 100%; padding: 18px;
-            background: var(--primary-gradient); color: white;
-            border: none; border-radius: 16px;
-            font-family: inherit; font-size: 1.1rem; font-weight: 800;
-            cursor: pointer; box-shadow: var(--shadow-lg);
-            display: flex; align-items: center; justify-content: center;
-            gap: 10px; transition: all 0.2s;
+            width: 100%; height: 54px; border: 0; border-radius: 999px;
+            background: var(--blue); color: var(--on-blue);
+            font-size: 16px; font-weight: 800; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+            box-shadow: 0 14px 26px -14px var(--blue);
+            transition: background .15s, transform .12s, opacity .15s;
         }
-        .btn-generate:active { transform: scale(0.97); }
-        .btn-generate:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
-
+        .btn-generate svg { width: 20px; height: 20px; }
+        .btn-generate:hover { background: var(--blue-h); }
+        .btn-generate:active { transform: scale(.98); }
+        .btn-generate:disabled { opacity: .7; cursor: not-allowed; transform: none; }
         .loader {
-            display: inline-block;
-            width: 20px; height: 20px;
-            border: 3px solid rgba(255,255,255,0.3);
-            border-radius: 50%; border-top-color: #fff;
-            animation: spin 1s linear infinite;
+            display: inline-block; width: 20px; height: 20px;
+            border: 3px solid rgba(255, 255, 255, .35); border-radius: 50%; border-top-color: #fff;
+            animation: spin .9s linear infinite;
         }
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        .back-btn {
-            position: absolute;
-            top: 24px; right: 20px;
-            background: rgba(255,255,255,0.2);
-            border: none; color: white;
-            width: 36px; height: 36px; border-radius: 50%;
-            display: none; align-items: center; justify-content: center;
-            font-size: 1.2rem; cursor: pointer;
-            backdrop-filter: blur(4px);
+        /* ---------- Motion ---------- */
+        body::before {
+            content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none;
+            background:
+                radial-gradient(520px 320px at 95% -4%, rgba(61, 122, 168, .16), transparent 70%),
+                radial-gradient(440px 300px at -5% 38%, rgba(185, 103, 90, .10), transparent 70%),
+                radial-gradient(420px 300px at 80% 100%, rgba(61, 122, 168, .10), transparent 70%);
+            animation: drift 16s ease-in-out infinite alternate;
         }
-        .back-btn.active { display: flex; }
+        @keyframes drift { from { transform: translate3d(0, 0, 0) scale(1); } to { transform: translate3d(-14px, 12px, 0) scale(1.06); } }
+        .mark { animation: float 4.5s ease-in-out infinite; }
+        @keyframes float { 0%, 100% { transform: translateY(0) rotate(0); } 50% { transform: translateY(-3px) rotate(-3deg); } }
+        .tick { stroke-dasharray: 26; stroke-dashoffset: 26; animation: draw .9s .35s ease forwards, tickpulse 4.5s 2s ease-in-out infinite; }
+        @keyframes draw { to { stroke-dashoffset: 0; } }
+        @keyframes tickpulse { 0%, 88%, 100% { stroke-width: 2.4; } 94% { stroke-width: 4; } }
+
+        .stepper li.now span { transform-origin: right; animation: fillbar .6s cubic-bezier(.2, .8, .2, 1) both; }
+        @keyframes fillbar { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+        .step.active .num { animation: pop .55s cubic-bezier(.3, 1.7, .5, 1) both; }
+        @keyframes pop { from { opacity: 0; transform: scale(.4) rotate(-12deg); } to { opacity: 1; transform: none; } }
+        .step.active .sec-h > div { animation: rise .45s .08s ease both; }
+
+        .step.active .type-card, .step.active .divider { animation: rise .5s cubic-bezier(.2, .8, .2, 1) both; }
+        .step.active .type-list > .type-card:nth-child(1) { animation-delay: .12s; }
+        .step.active .type-list > .type-card:nth-child(2) { animation-delay: .2s; }
+        .step.active .divider { animation-delay: .27s; }
+        .step.active .manual-card { animation-delay: .34s; }
+        .step.active .grade-card { animation: popcard .5s cubic-bezier(.3, 1.5, .5, 1) both; }
+        .step.active .grade-card:nth-child(1) { animation-delay: .1s; }
+        .step.active .grade-card:nth-child(2) { animation-delay: .2s; }
+        .step.active .grade-card:nth-child(3) { animation-delay: .3s; }
+        @keyframes popcard { from { opacity: 0; transform: translateY(18px) scale(.85); } to { opacity: 1; transform: none; } }
+        .step.active .range-card { animation: rise .5s .12s ease both; }
+
+        .type-card:hover { transform: translateY(-2px); }
+        .type-card:hover .ico, .type-card.selected .ico { animation: wiggle .6s ease; }
+        @keyframes wiggle { 0%, 100% { transform: rotate(0); } 25% { transform: rotate(-9deg) scale(1.08); } 60% { transform: rotate(7deg) scale(1.08); } }
+        .step.active .type-card.selected, .step.active .grade-card.selected { animation: ring .7s ease-out; }
+        .grade-card:hover { transform: translateY(-3px); }
+        .grade-card.selected b { animation: bounce .55s cubic-bezier(.3, 1.8, .5, 1); }
+        @keyframes ring { 0% { box-shadow: 0 0 0 0 rgba(61, 122, 168, .45); } 100% { box-shadow: 0 0 0 16px rgba(61, 122, 168, 0); } }
+        @keyframes bounce { 0% { transform: scale(1); } 40% { transform: scale(1.35); } 100% { transform: scale(1); } }
+        .free-badge { animation: badge 2.6s ease-in-out infinite; }
+        @keyframes badge { 0%, 100% { transform: translateY(0) rotate(0); } 50% { transform: translateY(-2px) rotate(-3deg); } }
+        .go { animation: nudge 2.2s ease-in-out infinite; }
+        @keyframes nudge { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(-4px); } }
+
+        .track i.on { animation: bar .45s cubic-bezier(.3, 1.6, .5, 1) both; animation-delay: calc(var(--i) * 16ms); }
+        @keyframes bar { from { transform: scaleY(.2); opacity: .3; } to { transform: none; opacity: 1; } }
+        .summary.flash { animation: flash .5s ease; }
+        @keyframes flash { 0% { transform: scale(.97); } 50% { transform: scale(1.025); } 100% { transform: none; } }
+        .stepbox button { transition: background .15s, transform .12s; }
+        .stepbox button:active { transform: scale(1.3); }
+
+        .dock { animation: dockup .5s cubic-bezier(.2, .9, .3, 1.1) both; }
+        @keyframes dockup { from { transform: translateY(100%); } to { transform: none; } }
+        .btn-generate { position: relative; overflow: hidden; isolation: isolate; }
+        .btn-generate::after {
+            content: ""; position: absolute; top: 0; bottom: 0; width: 38%; left: -50%; z-index: -1;
+            background: linear-gradient(100deg, transparent, rgba(255, 255, 255, .35), transparent);
+            transform: skewX(-20deg); animation: shine 3.2s 1s ease-in-out infinite;
+        }
+        @keyframes shine { 0% { left: -50%; } 55%, 100% { left: 130%; } }
+        .btn-generate:not(:disabled) { animation: breathe 2.8s ease-in-out infinite; }
+        @keyframes breathe { 0%, 100% { box-shadow: 0 14px 26px -14px var(--blue), 0 0 0 0 rgba(61, 122, 168, .35); } 50% { box-shadow: 0 14px 26px -14px var(--blue), 0 0 0 8px rgba(61, 122, 168, 0); } }
+        .btn-generate svg { animation: twinkle 2.2s ease-in-out infinite; }
+        @keyframes twinkle { 0%, 100% { transform: scale(1) rotate(0); } 50% { transform: scale(1.2) rotate(15deg); } }
+
+        .confetti { position: fixed; top: 0; width: 9px; height: 14px; border-radius: 2px; z-index: 60; pointer-events: none; animation: fall linear forwards; }
+        @keyframes fall { to { transform: translateY(105vh) rotate(720deg); opacity: .9; } }
+        @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+        @media (max-width: 360px) { .type-card { padding: 14px 12px; gap: 10px; } .ico { width: 42px; height: 42px; } .grade-card b { font-size: 36px; } }
     </style>
 </head>
 <body>
 
-    <header class="header">
-        <button class="back-btn" id="backBtn" onclick="prevStep()">➡️</button>
-        <h1><span>📚</span> سوالینو</h1>
-        <p>طراحی آزمون هوشمند مطالعات اجتماعی</p>
+    <header class="topbar">
+        <div class="topbar-in">
+            <button class="back-btn" id="backBtn" onclick="prevStep()" aria-label="بازگشت">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6" transform="scale(-1 1) translate(-24 0)"/></svg>
+            </button>
+            <div class="brand">
+                <svg class="mark" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="4" width="28" height="32" rx="5"/><path d="M12 13h16M12 19h10"/><path class="tick" d="m13 27 4 4 9-9" stroke="#b9675a"/></svg>
+                <div>
+                    <b>سوالینو</b>
+                    <small>طراحی آزمون هوشمند مطالعات اجتماعی</small>
+                </div>
+            </div>
+        </div>
     </header>
 
-    <div class="main-container">
-        
+    <nav class="stepper" aria-label="مراحل">
+        <ol id="stepper">
+            <li class="now"><span></span><em>نوع آزمون</em></li>
+            <li><span></span><em>پایه</em></li>
+            <li><span></span><em>بازه درسی</em></li>
+        </ol>
+    </nav>
+
+    <main class="main">
+
         <!-- استپ ۱: نوع آزمون -->
-        <div class="step active" id="step-type">
-            <div class="step-title">نوع آزمون را انتخاب کنید</div>
-            <div class="type-grid">
+        <section class="step active" id="step-type">
+            <div class="sec-h"><span class="num">۱</span><div><h2>نوع آزمون را انتخاب کنید</h2><p>آزمون چطور و در چه قالبی ساخته شود؟</p></div></div>
+
+            <div class="type-list">
                 <div class="type-card" onclick="selectType('online', this)">
-                    <span class="type-icon">🌐</span>
-                    <span class="type-name">آزمون آنلاین</span>
-                    <ul class="type-features">
-                        <li>لینک اختصاصی برای دانش‌آموز</li>
-                        <li>تایمر و سیستم ضد تقلب</li>
-                        <li>دریافت کارنامه و اکسل نمرات</li>
-                    </ul>
+                    <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.6 2.7 4 5.7 4 9s-1.4 6.3-4 9c-2.6-2.7-4-5.7-4-9s1.4-6.3 4-9z"/></svg></span>
+                    <div class="type-body">
+                        <span class="type-name">آزمون آنلاین</span>
+                        <span class="type-desc">دانش‌آموزان با یک لینک آزمون می‌دهند</span>
+                        <ul class="chips">
+                            <li>لینک اختصاصی</li>
+                            <li>تایمر و ضد تقلب</li>
+                            <li>کارنامه و اکسل نمرات</li>
+                        </ul>
+                    </div>
+                    <span class="go">‹</span>
                 </div>
+
                 <div class="type-card" onclick="selectType('pdf', this)">
-                    <span class="type-icon">📄</span>
-                    <span class="type-name">آزمون چاپی (PDF)</span>
-                    <ul class="type-features">
-                        <li>خروجی استاندارد و مرتب</li>
-                        <li>شامل سربرگ و جای بارم</li>
-                        <li>دارای پاسخنامه و کلید</li>
-                    </ul>
+                    <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg></span>
+                    <div class="type-body">
+                        <span class="type-name">آزمون چاپی (PDF)</span>
+                        <span class="type-desc">برگه‌ی آماده برای چاپ و برگزاری حضوری</span>
+                        <ul class="chips">
+                            <li>خروجی مرتب</li>
+                            <li>سربرگ و جای بارم</li>
+                            <li>پاسخنامه و کلید</li>
+                        </ul>
+                    </div>
+                    <span class="go">‹</span>
                 </div>
             </div>
 
+            <div class="divider">یا</div>
+
             <div class="type-card manual-card" onclick="selectType('manual', this)">
-                <span class="free-badge">🎁 رایگان</span>
-                <span class="type-icon">✏️</span>
-                <div class="manual-body">
+                <span class="free-badge">رایگان</span>
+                <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9a2.8 2.8 0 0 0-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></svg></span>
+                <div class="type-body">
                     <span class="type-name">آزمون دستی (استودیو)</span>
-                    <ul class="type-features">
-                        <li>سؤالات را خودتان می‌نویسید</li>
-                        <li>بدون بانک سؤال و بدون کسر اعتبار</li>
+                    <span class="type-desc">سؤال‌ها را خودتان می‌نویسید و می‌چینید</span>
+                    <ul class="chips">
+                        <li>بدون بانک سؤال</li>
+                        <li>بدون کسر اعتبار</li>
                         <li>خروجی PDF و Word</li>
                     </ul>
                 </div>
+                <span class="go">‹</span>
             </div>
-        </div>
+        </section>
 
         <!-- استپ ۲: انتخاب پایه -->
-        <div class="step" id="step-grade">
-            <div class="step-title">پایه تحصیلی خود را انتخاب کنید</div>
+        <section class="step" id="step-grade">
+            <div class="sec-h"><span class="num">۲</span><div><h2>پایه تحصیلی را انتخاب کنید</h2><p>سؤال‌ها از کتاب همین پایه انتخاب می‌شوند</p></div></div>
             <div class="grade-grid">
                 <div class="grade-card" onclick="selectGrade(7, this)">
-                    <span class="grade-icon">7️⃣</span>
+                    <b>۷</b>
                     <span class="grade-name">هفتم</span>
                 </div>
                 <div class="grade-card" onclick="selectGrade(8, this)">
-                    <span class="grade-icon">8️⃣</span>
+                    <b>۸</b>
                     <span class="grade-name">هشتم</span>
                 </div>
                 <div class="grade-card" onclick="selectGrade(9, this)">
-                    <span class="grade-icon">9️⃣</span>
+                    <b>۹</b>
                     <span class="grade-name">نهم</span>
                 </div>
             </div>
-        </div>
+        </section>
 
         <!-- استپ ۳: بازه درسی -->
-        <div class="step" id="step-range">
-            <div class="step-title">بازه درسی را مشخص کنید</div>
+        <section class="step" id="step-range">
+            <div class="sec-h"><span class="num">۳</span><div><h2>بازه درسی را مشخص کنید</h2><p>آزمون از این درس‌ها ساخته می‌شود</p></div></div>
             <div class="range-card">
                 <div class="range-row">
                     <div class="range-input-group">
-                        <label>از درس</label>
-                        <input type="number" class="range-input" id="lessonFrom" value="1" min="1" max="24">
+                        <label for="lessonFrom">از درس</label>
+                        <div class="stepbox">
+                            <button type="button" onclick="bump('lessonFrom', 1)" aria-label="افزایش">+</button>
+                            <input type="number" class="range-input" id="lessonFrom" value="1" min="1" max="24" inputmode="numeric">
+                            <button type="button" onclick="bump('lessonFrom', -1)" aria-label="کاهش">−</button>
+                        </div>
                     </div>
                     <span class="range-divider">تا</span>
                     <div class="range-input-group">
-                        <label>تا درس</label>
-                        <input type="number" class="range-input" id="lessonTo" value="4" min="1" max="24">
+                        <label for="lessonTo">تا درس</label>
+                        <div class="stepbox">
+                            <button type="button" onclick="bump('lessonTo', 1)" aria-label="افزایش">+</button>
+                            <input type="number" class="range-input" id="lessonTo" value="4" min="1" max="24" inputmode="numeric">
+                            <button type="button" onclick="bump('lessonTo', -1)" aria-label="کاهش">−</button>
+                        </div>
                     </div>
                 </div>
+                <div class="track" id="track" aria-hidden="true"></div>
+                <div class="track-lbl" aria-hidden="true"><span>درس ۱</span><span>درس ۲۴</span></div>
+                <div class="summary" id="rangeSummary"></div>
             </div>
-        </div>
+        </section>
 
-    </div>
+    </main>
 
-    <div class="main-container" id="action-container" style="display: none; padding-top: 0;">
-        <div class="action-area">
+    <div class="dock" id="action-container" style="display: none;">
+        <div class="dock-in">
             <button class="btn-generate" id="generateBtn" onclick="submitExam()">
-                🚀 تولید آزمون
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/><path d="M19 16l.7 1.8L21.5 18.5l-1.8.7L19 21l-.7-1.8-1.8-.7 1.8-.7z"/></svg>
+                تولید آزمون
             </button>
         </div>
     </div>
@@ -264,6 +432,10 @@
 
         let tg = null;
         let selection = { grade: null, examType: null };
+
+        const BTN_HTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/><path d="M19 16l.7 1.8L21.5 18.5l-1.8.7L19 21l-.7-1.8-1.8-.7 1.8-.7z"/></svg> تولید آزمون';
+        const FA = '۰۱۲۳۴۵۶۷۸۹';
+        const fa = n => String(n).replace(/\d/g, d => FA[d]);
 
         function initTelegram() {
             if (!window.Telegram || !window.Telegram.WebApp) {
@@ -281,24 +453,36 @@
         }
         window.addEventListener('load', () => setTimeout(initTelegram, 100));
 
+        function updateStepper(index) {
+            document.querySelectorAll('#stepper li').forEach((li, i) => {
+                li.classList.toggle('done', i < index);
+                li.classList.toggle('now', i === index);
+            });
+        }
+
         function showStep(stepId) {
             document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
             document.getElementById(stepId).classList.add('active');
-            
+
             const backBtn = document.getElementById('backBtn');
             const actionContainer = document.getElementById('action-container');
-            
+
             if (stepId === 'step-type') {
                 backBtn.classList.remove('active');
                 actionContainer.style.display = 'none';
+                updateStepper(0);
             } else if (stepId === 'step-grade') {
                 backBtn.classList.add('active');
                 actionContainer.style.display = 'none';
+                updateStepper(1);
             } else if (stepId === 'step-range') {
                 backBtn.classList.add('active');
                 actionContainer.style.display = 'block';
+                updateStepper(2);
+                renderRange();
             }
-            
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
             if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
         }
 
@@ -313,12 +497,11 @@
             // ⭐ اگر آزمون دستی انتخاب شد، فوراً برو به استودیو (هیچ تغییر دیگری نده)
             if (type === 'manual') {
                 openStudio();
-                return; 
+                return;
             }
 
             // ادامه مسیر برای آزمون آنلاین و PDF
-            const btn = document.getElementById('generateBtn');
-            btn.innerHTML = '🚀 تولید آزمون';
+            document.getElementById('generateBtn').innerHTML = BTN_HTML;
 
             // هدایت خودکار به مرحله بعد (پایه)
             setTimeout(() => {
@@ -330,7 +513,7 @@
             document.querySelectorAll('.grade-card').forEach(c => c.classList.remove('selected'));
             element.classList.add('selected');
             selection.grade = gradeNum;
-            
+
             setTimeout(() => {
                 showStep('step-range');
             }, 300);
@@ -345,10 +528,44 @@
             }
         }
 
+        /* ---------- بازه درسی ---------- */
+        (function buildTrack() {
+            const t = document.getElementById('track');
+            for (let i = 0; i < 24; i++) { const b = document.createElement('i'); b.style.setProperty('--i', i); t.appendChild(b); }
+        })();
+
+        function bump(id, delta) {
+            const el = document.getElementById(id);
+            let v = parseInt(el.value);
+            if (isNaN(v)) v = id === 'lessonFrom' ? 1 : 4;
+            el.value = Math.min(24, Math.max(1, v + delta));
+            renderRange();
+            if (tg && tg.HapticFeedback) tg.HapticFeedback.selectionChanged && tg.HapticFeedback.selectionChanged();
+        }
+
+        function renderRange() {
+            const from = parseInt(document.getElementById('lessonFrom').value);
+            const to = parseInt(document.getElementById('lessonTo').value);
+            const box = document.getElementById('rangeSummary');
+            const valid = !isNaN(from) && !isNaN(to) && from >= 1 && to <= 24 && from <= to;
+            box.classList.toggle('bad', !valid);
+            box.textContent = valid
+                ? `از درس ${fa(from)} تا درس ${fa(to)}، یعنی ${fa(to - from + 1)} درس`
+                : 'بازه نامعتبر است؛ عددها باید بین ۱ تا ۲۴ و از کوچک به بزرگ باشند';
+            // درس ۱ در سمت راست (راست‌به‌چپ) نمایش داده می‌شود
+            box.classList.remove('flash'); void box.offsetWidth; if (valid) box.classList.add('flash');
+            document.querySelectorAll('#track i').forEach((el, i) => {
+                el.classList.toggle('on', valid && i + 1 >= from && i + 1 <= to);
+            });
+        }
+        document.getElementById('lessonFrom').addEventListener('input', renderRange);
+        document.getElementById('lessonTo').addEventListener('input', renderRange);
+        renderRange();
+
         async function submitExam() {
             const from = parseInt(document.getElementById('lessonFrom').value);
             const to = parseInt(document.getElementById('lessonTo').value);
-            
+
             if (from < 1 || to > 24 || from > to) {
                 if (tg) tg.showAlert('بازه درسی نامعتبر است. اعداد باید بین ۱ تا ۲۴ و از کوچک به بزرگ باشند.');
                 return;
@@ -357,14 +574,14 @@
             const btn = document.getElementById('generateBtn');
             btn.disabled = true;
             btn.innerHTML = '<span class="loader"></span> در حال ساخت...';
-            
+
             function getInitData() {
                 const tgApp = window.Telegram && window.Telegram.WebApp;
                 if (tgApp && tgApp.initData) return tgApp.initData;
                 const h = new URLSearchParams(location.hash.slice(1));
                 return h.get('tgWebAppData') || '';
             }
-            
+
             const initData = getInitData();
             const urlParams = new URLSearchParams(window.location.search);
             const fallbackTgId = urlParams.get('tg_id');
@@ -372,7 +589,7 @@
             if (!initData && !fallbackTgId) {
                 if(tg) tg.showAlert('خطا: اطلاعات تلگرام یافت نشد. لطفا از طریق ربات وارد شوید.');
                 btn.disabled = false;
-                btn.innerHTML = '🚀 تولید آزمون';
+                btn.innerHTML = BTN_HTML;
                 return;
             }
 
@@ -393,16 +610,34 @@
                 const data = await res.json();
 
                 if (data.ok) {
-                    window.location.href = data.edit_link;
+                    burst();
+                    btn.innerHTML = '✓ آماده شد!';
+                    setTimeout(() => { window.location.href = data.edit_link; }, 650);
                 } else {
                     if(tg) tg.showAlert(data.message || 'خطا در ساخت آزمون.');
                     btn.disabled = false;
-                    btn.innerHTML = '🚀 تولید آزمون';
+                    btn.innerHTML = BTN_HTML;
                 }
             } catch (err) {
                 if(tg) tg.showAlert('خطای شبکه در ارتباط با سرور.');
                 btn.disabled = false;
-                btn.innerHTML = '🚀 تولید آزمون';
+                btn.innerHTML = BTN_HTML;
+            }
+        }
+
+        function burst() {
+            if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+            const colors = ['#3d7aa8', '#b9675a', '#e6b450', '#6fb3a0', '#9aa7e8'];
+            for (let i = 0; i < 36; i++) {
+                const c = document.createElement('span');
+                c.className = 'confetti';
+                c.style.left = Math.random() * 100 + 'vw';
+                c.style.background = colors[i % colors.length];
+                c.style.animationDuration = (1.1 + Math.random() * 1.1) + 's';
+                c.style.animationDelay = (Math.random() * .25) + 's';
+                c.style.transform = 'rotate(' + Math.random() * 180 + 'deg)';
+                document.body.appendChild(c);
+                setTimeout(() => c.remove(), 2800);
             }
         }
 
