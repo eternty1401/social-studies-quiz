@@ -6,11 +6,13 @@
     <title>سوالینو | مطالعات اجتماعی</title>
     <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    
     <style>
         :root {
             --primary: #3b82f6;
             --primary-gradient: linear-gradient(135deg, #2563eb, #3b82f6);
+            --green: #10b981;
+            --green-soft: #dcfce7;
+            --green-border: #bbf7d0;
             --bg: #f8fafc;
             --card: #ffffff;
             --text: #0f172a;
@@ -19,9 +21,7 @@
             --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
             --shadow-lg: 0 10px 25px -5px rgba(59, 130, 246, 0.2);
         }
-
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-        
         body {
             font-family: 'Vazirmatn', sans-serif;
             background-color: var(--bg);
@@ -31,8 +31,6 @@
             display: flex;
             flex-direction: column;
         }
-
-        /* هدر شیک */
         .header {
             background: var(--primary-gradient);
             color: white;
@@ -52,35 +50,13 @@
         }
         .header h1 { font-size: 1.5rem; font-weight: 800; margin-bottom: 4px; display: flex; justify-content: center; align-items: center; gap: 8px; }
         .header p { font-size: 0.9rem; opacity: 0.9; font-weight: 400; }
-
-        /* کانتینر اصلی */
-        .main-container {
-            flex: 1;
-            padding: 20px;
-            max-width: 600px;
-            margin: 0 auto;
-            width: 100%;
-        }
-
+        .main-container { flex: 1; padding: 20px; max-width: 600px; margin: 0 auto; width: 100%; }
         .step { display: none; animation: slideUp 0.4s ease; }
         .step.active { display: block; }
         @keyframes slideUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        .step-title { font-size: 1.2rem; font-weight: 800; margin-bottom: 16px; text-align: center; color: var(--text); }
 
-        .step-title {
-            font-size: 1.2rem;
-            font-weight: 800;
-            margin-bottom: 16px;
-            text-align: center;
-            color: var(--text);
-        }
-
-        /* کارت‌های انتخاب پایه */
-        .grade-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
-            margin-bottom: 30px;
-        }
+        .grade-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 20px; }
         .grade-card, .type-card {
             background: var(--card);
             border: 2px solid transparent;
@@ -92,73 +68,24 @@
             transition: all 0.2s ease;
         }
         .grade-card:active, .type-card:active { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
-        .grade-card.selected, .type-card.selected {
-            border-color: var(--primary);
-            background: #eff6ff;
-        }
+        .grade-card.selected, .type-card.selected { border-color: var(--primary); background: #eff6ff; }
         .grade-icon, .type-icon { font-size: 2rem; margin-bottom: 8px; display: block; }
         .grade-name, .type-name { font-weight: 700; font-size: 1.1rem; }
 
-        /* بخش بازه درسی */
-        .range-card {
-            background: var(--card);
-            border-radius: 20px;
-            padding: 24px;
-            box-shadow: var(--shadow-sm);
-            margin-bottom: 24px;
-        }
-        .range-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 15px;
-        }
-        .range-input-group {
-            flex: 1;
-            text-align: center;
-        }
-        .range-input-group label {
-            display: block;
-            font-size: 0.85rem;
-            color: var(--hint);
-            margin-bottom: 8px;
-            font-weight: 600;
-        }
+        .range-card { background: var(--card); border-radius: 20px; padding: 24px; box-shadow: var(--shadow-sm); margin-bottom: 24px; }
+        .range-row { display: flex; align-items: center; justify-content: space-between; gap: 15px; }
+        .range-input-group { flex: 1; text-align: center; }
+        .range-input-group label { display: block; font-size: 0.85rem; color: var(--hint); margin-bottom: 8px; font-weight: 600; }
         .range-input {
-            width: 100%;
-            padding: 15px;
-            font-size: 1.5rem;
-            font-weight: 800;
-            text-align: center;
-            color: var(--primary);
-            background: #eff6ff;
-            border: 2px solid #bfdbfe;
-            border-radius: 16px;
-            font-family: inherit;
-            transition: all 0.2s;
+            width: 100%; padding: 15px; font-size: 1.5rem; font-weight: 800;
+            text-align: center; color: var(--primary); background: #eff6ff;
+            border: 2px solid #bfdbfe; border-radius: 16px; font-family: inherit; transition: all 0.2s;
         }
-        .range-input:focus {
-            outline: none;
-            border-color: var(--primary);
-            background: #fff;
-            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
-        }
-        .range-divider {
-            font-weight: 800;
-            color: var(--hint);
-            margin-top: 24px;
-        }
+        .range-input:focus { outline: none; border-color: var(--primary); background: #fff; box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1); }
+        .range-divider { font-weight: 800; color: var(--hint); margin-top: 24px; }
 
-        /* کارت‌های نوع آزمون */
-        .type-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-            margin-bottom: 30px;
-        }
+        .type-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
         .type-card { padding: 20px 12px; }
-
-        /* ⭐ استایل جدید برای لیست مزایا */
         .type-features {
             text-align: right;
             margin-top: 12px;
@@ -167,62 +94,91 @@
             color: var(--hint);
             line-height: 1.5;
         }
-        .type-features li {
-            margin-bottom: 4px;
-        }
+        .type-features li { margin-bottom: 4px; }
 
-        /* دکمه اکشن بزرگ */
-        .action-area {
-            margin-top: auto;
-            padding-top: 20px;
-        }
-        .btn-generate {
-            width: 100%;
-            padding: 18px;
-            background: var(--primary-gradient);
-            color: white;
-            border: none;
-            border-radius: 16px;
-            font-family: inherit;
-            font-size: 1.1rem;
-            font-weight: 800;
-            cursor: pointer;
-            box-shadow: var(--shadow-lg);
+        .manual-card {
             display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 10px;
+            gap: 16px;
+            padding: 18px 20px;
+            text-align: right;
+            position: relative;
+            background: linear-gradient(135deg, #f0fdf4 0%, var(--green-soft) 100%);
+            border-color: var(--green-border);
+        }
+        .manual-card.selected {
+            border-color: var(--green) !important;
+            background: var(--green-soft) !important;
+        }
+        .manual-card .type-icon { font-size: 2.2rem; margin-bottom: 0; flex-shrink: 0; }
+        .manual-body { flex: 1; min-width: 0; }
+        .manual-body .type-name { display: block; margin-bottom: 2px; font-size: 1.05rem; }
+        .manual-body .type-features { margin-top: 4px; padding-right: 16px; font-size: 0.75rem; }
+        .free-badge {
+            position: absolute;
+            top: -10px;
+            left: 14px;
+            background: var(--green);
+            color: #fff;
+            font-size: 0.68rem;
+            font-weight: 800;
+            padding: 3px 10px;
+            border-radius: 999px;
+            box-shadow: 0 4px 10px -2px rgba(16, 185, 129, 0.5);
+            letter-spacing: 0.3px;
+        }
+
+        /* ⭐ لینک میان‌بر رایگان در استپ پایه */
+        .free-shortcut {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            padding: 14px;
+            background: linear-gradient(135deg, #f0fdf4, var(--green-soft));
+            border: 1.5px dashed var(--green-border);
+            border-radius: 14px;
+            color: #047857;
+            font-size: 0.88rem;
+            font-weight: 800;
+            text-decoration: none;
             transition: all 0.2s;
+        }
+        .free-shortcut:active { transform: scale(0.98); background: var(--green-soft); }
+
+        .action-area { margin-top: auto; padding-top: 20px; }
+        .btn-generate {
+            width: 100%; padding: 18px;
+            background: var(--primary-gradient); color: white;
+            border: none; border-radius: 16px;
+            font-family: inherit; font-size: 1.1rem; font-weight: 800;
+            cursor: pointer; box-shadow: var(--shadow-lg);
+            display: flex; align-items: center; justify-content: center;
+            gap: 10px; transition: all 0.2s;
         }
         .btn-generate:active { transform: scale(0.97); }
         .btn-generate:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
+        .btn-generate.manual-mode {
+            background: linear-gradient(135deg, #10b981, #34d399);
+            box-shadow: 0 10px 25px -5px rgba(16, 185, 129, 0.4);
+        }
 
-        /* لودینگ */
         .loader {
             display: inline-block;
             width: 20px; height: 20px;
             border: 3px solid rgba(255,255,255,0.3);
-            border-radius: 50%;
-            border-top-color: #fff;
+            border-radius: 50%; border-top-color: #fff;
             animation: spin 1s linear infinite;
         }
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* دکمه برگشت */
         .back-btn {
             position: absolute;
-            top: 24px;
-            right: 20px;
+            top: 24px; right: 20px;
             background: rgba(255,255,255,0.2);
-            border: none;
-            color: white;
-            width: 36px; height: 36px;
-            border-radius: 50%;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-            cursor: pointer;
+            border: none; color: white;
+            width: 36px; height: 36px; border-radius: 50%;
+            display: none; align-items: center; justify-content: center;
+            font-size: 1.2rem; cursor: pointer;
             backdrop-filter: blur(4px);
         }
         .back-btn.active { display: flex; }
@@ -237,7 +193,6 @@
     </header>
 
     <div class="main-container">
-        
         <!-- استپ ۱: انتخاب پایه -->
         <div class="step active" id="step-grade">
             <div class="step-title">پایه تحصیلی خود را انتخاب کنید</div>
@@ -255,9 +210,14 @@
                     <span class="grade-name">نهم</span>
                 </div>
             </div>
+
+            <!-- ⭐ میان‌بر: مستقیم به استودیو -->
+            <a class="free-shortcut" href="#" onclick="event.preventDefault(); openStudioDirect();">
+                🎁 ساخت آزمون دستی رایگان (بدون کسر اعتبار)
+            </a>
         </div>
 
-        <!-- استپ ۲: انتخاب بازه درسی -->
+        <!-- استپ ۲: بازه درسی -->
         <div class="step" id="step-range">
             <div class="step-title">بازه درسی را مشخص کنید</div>
             <div class="range-card">
@@ -273,17 +233,15 @@
                     </div>
                 </div>
             </div>
-            
             <button class="btn-generate" onclick="goToTypeStep()" style="background: #e2e8f0; color: #0f172a; box-shadow: none;">
                 مرحله بعد ⬅️
             </button>
         </div>
 
-        <!-- استپ ۳: انتخاب نوع آزمون -->
+        <!-- استپ ۳: نوع آزمون -->
         <div class="step" id="step-type">
             <div class="step-title">نوع آزمون را انتخاب کنید</div>
             <div class="type-grid">
-                <!-- ⭐ کارت آزمون آنلاین با توضیحات کامل -->
                 <div class="type-card" onclick="selectType('online', this)">
                     <span class="type-icon">🌐</span>
                     <span class="type-name">آزمون آنلاین</span>
@@ -293,7 +251,6 @@
                         <li>دریافت کارنامه و اکسل نمرات</li>
                     </ul>
                 </div>
-                <!-- ⭐ کارت آزمون چاپی با توضیحات کامل -->
                 <div class="type-card" onclick="selectType('pdf', this)">
                     <span class="type-icon">📄</span>
                     <span class="type-name">آزمون چاپی (PDF)</span>
@@ -304,8 +261,20 @@
                     </ul>
                 </div>
             </div>
-        </div>
 
+            <div class="type-card manual-card" onclick="selectType('manual', this)">
+                <span class="free-badge">🎁 رایگان</span>
+                <span class="type-icon">✏️</span>
+                <div class="manual-body">
+                    <span class="type-name">آزمون دستی (استودیو)</span>
+                    <ul class="type-features">
+                        <li>سؤالات را خودتان می‌نویسید</li>
+                        <li>بدون بانک سؤال و بدون کسر اعتبار</li>
+                        <li>خروجی PDF و Word</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div class="main-container" id="action-container" style="display: none; padding-top: 0;">
@@ -317,11 +286,16 @@
     </div>
 
     <script>
+        /* ⚙️ CONFIG — آدرس استودیو (نسبت به همین فایل) */
+        const STUDIO_URL = 'studio.html';
+
         let tg = null;
-        let selection = { grade: null, examType: 'pdf' }; 
+        let selection = { grade: null, examType: null };
 
         function initTelegram() {
             if (!window.Telegram || !window.Telegram.WebApp) {
+                if (!initTelegram._tries) initTelegram._tries = 0;
+                if (++initTelegram._tries > 40) return;
                 setTimeout(initTelegram, 50);
                 return;
             }
@@ -332,27 +306,23 @@
                 if (tg.disableVerticalSwipes) tg.disableVerticalSwipes();
             } catch (e) {}
         }
-
         window.addEventListener('load', () => setTimeout(initTelegram, 100));
 
         function showStep(stepId) {
             document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
             document.getElementById(stepId).classList.add('active');
-            
             const backBtn = document.getElementById('backBtn');
             const actionContainer = document.getElementById('action-container');
-            
             if (stepId === 'step-grade') {
                 backBtn.classList.remove('active');
-                actionContainer.style.display = 'none'; 
+                actionContainer.style.display = 'none';
             } else if (stepId === 'step-range') {
                 backBtn.classList.add('active');
-                actionContainer.style.display = 'none'; 
+                actionContainer.style.display = 'none';
             } else {
                 backBtn.classList.add('active');
-                actionContainer.style.display = 'block'; 
+                actionContainer.style.display = 'block';
             }
-            
             if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
         }
 
@@ -360,16 +330,12 @@
             document.querySelectorAll('.grade-card').forEach(c => c.classList.remove('selected'));
             element.classList.add('selected');
             selection.grade = gradeNum;
-            
-            setTimeout(() => {
-                showStep('step-range');
-            }, 300);
+            setTimeout(() => showStep('step-range'), 300);
         }
 
         function goToTypeStep() {
             const from = parseInt(document.getElementById('lessonFrom').value);
             const to = parseInt(document.getElementById('lessonTo').value);
-            
             if (from < 1 || to > 24 || from > to) {
                 if (tg) tg.showAlert('بازه درسی نامعتبر است. اعداد باید بین ۱ تا ۲۴ و از کوچک به بزرگ باشند.');
                 return;
@@ -381,43 +347,59 @@
             document.querySelectorAll('.type-card').forEach(c => c.classList.remove('selected'));
             element.classList.add('selected');
             selection.examType = type;
+            if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
+
+            const btn = document.getElementById('generateBtn');
+            if (type === 'manual') {
+                btn.classList.add('manual-mode');
+                btn.innerHTML = '✏️ باز کردن استودیو';
+            } else {
+                btn.classList.remove('manual-mode');
+                btn.innerHTML = '🚀 تولید آزمون';
+            }
         }
 
         function prevStep() {
             const currentStep = document.querySelector('.step.active').id;
-            if (currentStep === 'step-type') {
-                showStep('step-range');
-            } else if (currentStep === 'step-range') {
-                showStep('step-grade');
-            }
+            if (currentStep === 'step-type') showStep('step-range');
+            else if (currentStep === 'step-range') showStep('step-grade');
         }
 
         async function submitExam() {
+            if (!selection.examType) {
+                if (tg) tg.showAlert('لطفاً نوع آزمون را انتخاب کنید.');
+                return;
+            }
+
+            /* ⭐ حالت دستی: صفر تماس با بک‌اند */
+            if (selection.examType === 'manual') {
+                openStudio();
+                return;
+            }
+
             const from = parseInt(document.getElementById('lessonFrom').value);
             const to = parseInt(document.getElementById('lessonTo').value);
-            
-            if (!selection.examType) {
-                if (tg) tg.showAlert('لطفاً نوع آزمون (آنلاین یا PDF) را انتخاب کنید.');
+            if (from < 1 || to > 24 || from > to) {
+                if (tg) tg.showAlert('بازه درسی نامعتبر است.');
                 return;
             }
 
             const btn = document.getElementById('generateBtn');
             btn.disabled = true;
             btn.innerHTML = '<span class="loader"></span> در حال ساخت...';
-            
+
             function getInitData() {
                 const tgApp = window.Telegram && window.Telegram.WebApp;
                 if (tgApp && tgApp.initData) return tgApp.initData;
                 const h = new URLSearchParams(location.hash.slice(1));
                 return h.get('tgWebAppData') || '';
             }
-            
             const initData = getInitData();
             const urlParams = new URLSearchParams(window.location.search);
             const fallbackTgId = urlParams.get('tg_id');
 
             if (!initData && !fallbackTgId) {
-                if(tg) tg.showAlert('خطا: اطلاعات تلگرام یافت نشد. لطفا از طریق ربات وارد شوید.');
+                if (tg) tg.showAlert('خطا: اطلاعات تلگرام یافت نشد. لطفا از طریق ربات وارد شوید.');
                 btn.disabled = false;
                 btn.innerHTML = '🚀 تولید آزمون';
                 return;
@@ -428,28 +410,44 @@
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        initData: initData,
-                        tg_id: fallbackTgId,
+                        initData, tg_id: fallbackTgId,
                         grade: selection.grade,
-                        lessonFrom: from,
-                        lessonTo: to,
+                        lessonFrom: from, lessonTo: to,
                         exam_type: selection.examType
                     })
                 });
-
                 const data = await res.json();
-
                 if (data.ok) {
                     window.location.href = data.edit_link;
                 } else {
-                    if(tg) tg.showAlert(data.message || 'خطا در ساخت آزمون.');
+                    if (tg) tg.showAlert(data.message || 'خطا در ساخت آزمون.');
                     btn.disabled = false;
                     btn.innerHTML = '🚀 تولید آزمون';
                 }
             } catch (err) {
-                if(tg) tg.showAlert('خطای شبکه در ارتباط با سرور.');
+                if (tg) tg.showAlert('خطای شبکه در ارتباط با سرور.');
                 btn.disabled = false;
                 btn.innerHTML = '🚀 تولید آزمون';
+            }
+        }
+
+        function openStudioDirect() {
+            if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
+            openStudio();
+        }
+
+        function openStudio() {
+            try {
+                const target = new URL(STUDIO_URL, window.location.href);
+                if (target.origin === window.location.origin) {
+                    window.location.href = target.href;
+                } else if (tg && typeof tg.openLink === 'function') {
+                    tg.openLink(target.href);
+                } else {
+                    window.location.href = target.href;
+                }
+            } catch (e) {
+                window.location.href = STUDIO_URL;
             }
         }
     </script>
