@@ -56,7 +56,6 @@
         @keyframes slideUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
         .step-title { font-size: 1.2rem; font-weight: 800; margin-bottom: 16px; text-align: center; color: var(--text); }
 
-        /* --- استپ‌ها --- */
         .grade-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 20px; }
         .grade-card, .type-card {
             background: var(--card);
@@ -141,10 +140,6 @@
         }
         .btn-generate:active { transform: scale(0.97); }
         .btn-generate:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
-        .btn-generate.manual-mode {
-            background: linear-gradient(135deg, #10b981, #34d399);
-            box-shadow: 0 10px 25px -5px rgba(16, 185, 129, 0.4);
-        }
 
         .loader {
             display: inline-block;
@@ -178,7 +173,7 @@
 
     <div class="main-container">
         
-        <!-- ⭐ استپ ۱: نوع آزمون (اول) -->
+        <!-- استپ ۱: نوع آزمون -->
         <div class="step active" id="step-type">
             <div class="step-title">نوع آزمون را انتخاب کنید</div>
             <div class="type-grid">
@@ -216,7 +211,7 @@
             </div>
         </div>
 
-        <!-- ⭐ استپ ۲: انتخاب پایه -->
+        <!-- استپ ۲: انتخاب پایه -->
         <div class="step" id="step-grade">
             <div class="step-title">پایه تحصیلی خود را انتخاب کنید</div>
             <div class="grade-grid">
@@ -235,7 +230,7 @@
             </div>
         </div>
 
-        <!-- ⭐ استپ ۳: بازه درسی -->
+        <!-- استپ ۳: بازه درسی -->
         <div class="step" id="step-range">
             <div class="step-title">بازه درسی را مشخص کنید</div>
             <div class="range-card">
@@ -255,7 +250,6 @@
 
     </div>
 
-    <!-- دکمه پایین صفحه فقط در استپ آخر نمایش داده می‌شود -->
     <div class="main-container" id="action-container" style="display: none; padding-top: 0;">
         <div class="action-area">
             <button class="btn-generate" id="generateBtn" onclick="submitExam()">
@@ -294,37 +288,37 @@
             const backBtn = document.getElementById('backBtn');
             const actionContainer = document.getElementById('action-container');
             
-            // منطق دکمه‌ها بر اساس مرحله فعلی
             if (stepId === 'step-type') {
                 backBtn.classList.remove('active');
-                actionContainer.style.display = 'none'; // دکمه تولید مخفی
+                actionContainer.style.display = 'none';
             } else if (stepId === 'step-grade') {
                 backBtn.classList.add('active');
                 actionContainer.style.display = 'none';
             } else if (stepId === 'step-range') {
                 backBtn.classList.add('active');
-                actionContainer.style.display = 'block'; // دکمه تولید نمایش داده شود
+                actionContainer.style.display = 'block';
             }
             
             if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
         }
 
         function selectType(type, element) {
+            // اعمال ظاهر انتخاب شده
             document.querySelectorAll('.type-card').forEach(c => c.classList.remove('selected'));
             element.classList.add('selected');
             selection.examType = type;
-            
-            // تغییر متن دکمه تولید بر اساس نوع انتخاب شده
-            const btn = document.getElementById('generateBtn');
-            if (type === 'manual') {
-                btn.classList.add('manual-mode');
-                btn.innerHTML = '✏️ باز کردن استودیو';
-            } else {
-                btn.classList.remove('manual-mode');
-                btn.innerHTML = '🚀 تولید آزمون';
-            }
 
             if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
+
+            // ⭐ اگر آزمون دستی انتخاب شد، فوراً برو به استودیو (هیچ تغییر دیگری نده)
+            if (type === 'manual') {
+                openStudio();
+                return; 
+            }
+
+            // ادامه مسیر برای آزمون آنلاین و PDF
+            const btn = document.getElementById('generateBtn');
+            btn.innerHTML = '🚀 تولید آزمون';
 
             // هدایت خودکار به مرحله بعد (پایه)
             setTimeout(() => {
@@ -337,7 +331,6 @@
             element.classList.add('selected');
             selection.grade = gradeNum;
             
-            // هدایت خودکار به مرحله بعد (بازه درسی)
             setTimeout(() => {
                 showStep('step-range');
             }, 300);
@@ -359,12 +352,6 @@
             if (from < 1 || to > 24 || from > to) {
                 if (tg) tg.showAlert('بازه درسی نامعتبر است. اعداد باید بین ۱ تا ۲۴ و از کوچک به بزرگ باشند.');
                 return;
-            }
-
-            /* ⭐ حالت دستی: مستقیم به استودیو */
-            if (selection.examType === 'manual') {
-                openStudio();
-                return; 
             }
 
             const btn = document.getElementById('generateBtn');
