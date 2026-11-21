@@ -56,6 +56,7 @@
         @keyframes slideUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
         .step-title { font-size: 1.2rem; font-weight: 800; margin-bottom: 16px; text-align: center; color: var(--text); }
 
+        /* --- استپ‌ها --- */
         .grade-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 20px; }
         .grade-card, .type-card {
             background: var(--card);
@@ -128,23 +129,6 @@
             letter-spacing: 0.3px;
         }
 
-        /* ⭐ لینک میان‌بر رایگان در استپ پایه */
-        .free-shortcut {
-            display: block;
-            text-align: center;
-            margin-top: 20px;
-            padding: 14px;
-            background: linear-gradient(135deg, #f0fdf4, var(--green-soft));
-            border: 1.5px dashed var(--green-border);
-            border-radius: 14px;
-            color: #047857;
-            font-size: 0.88rem;
-            font-weight: 800;
-            text-decoration: none;
-            transition: all 0.2s;
-        }
-        .free-shortcut:active { transform: scale(0.98); background: var(--green-soft); }
-
         .action-area { margin-top: auto; padding-top: 20px; }
         .btn-generate {
             width: 100%; padding: 18px;
@@ -193,53 +177,9 @@
     </header>
 
     <div class="main-container">
-        <!-- استپ ۱: انتخاب پایه -->
-        <div class="step active" id="step-grade">
-            <div class="step-title">پایه تحصیلی خود را انتخاب کنید</div>
-            <div class="grade-grid">
-                <div class="grade-card" onclick="selectGrade(7, this)">
-                    <span class="grade-icon">7️⃣</span>
-                    <span class="grade-name">هفتم</span>
-                </div>
-                <div class="grade-card" onclick="selectGrade(8, this)">
-                    <span class="grade-icon">8️⃣</span>
-                    <span class="grade-name">هشتم</span>
-                </div>
-                <div class="grade-card" onclick="selectGrade(9, this)">
-                    <span class="grade-icon">9️⃣</span>
-                    <span class="grade-name">نهم</span>
-                </div>
-            </div>
-
-            <!-- ⭐ میان‌بر: مستقیم به استودیو -->
-            <a class="free-shortcut" href="#" onclick="event.preventDefault(); openStudioDirect();">
-                🎁 ساخت آزمون دستی رایگان (بدون کسر اعتبار)
-            </a>
-        </div>
-
-        <!-- استپ ۲: بازه درسی -->
-        <div class="step" id="step-range">
-            <div class="step-title">بازه درسی را مشخص کنید</div>
-            <div class="range-card">
-                <div class="range-row">
-                    <div class="range-input-group">
-                        <label>از درس</label>
-                        <input type="number" class="range-input" id="lessonFrom" value="1" min="1" max="24">
-                    </div>
-                    <span class="range-divider">تا</span>
-                    <div class="range-input-group">
-                        <label>تا درس</label>
-                        <input type="number" class="range-input" id="lessonTo" value="4" min="1" max="24">
-                    </div>
-                </div>
-            </div>
-            <button class="btn-generate" onclick="goToTypeStep()" style="background: #e2e8f0; color: #0f172a; box-shadow: none;">
-                مرحله بعد ⬅️
-            </button>
-        </div>
-
-        <!-- استپ ۳: نوع آزمون -->
-        <div class="step" id="step-type">
+        
+        <!-- ⭐ استپ ۱: نوع آزمون (اول) -->
+        <div class="step active" id="step-type">
             <div class="step-title">نوع آزمون را انتخاب کنید</div>
             <div class="type-grid">
                 <div class="type-card" onclick="selectType('online', this)">
@@ -275,8 +215,47 @@
                 </div>
             </div>
         </div>
+
+        <!-- ⭐ استپ ۲: انتخاب پایه -->
+        <div class="step" id="step-grade">
+            <div class="step-title">پایه تحصیلی خود را انتخاب کنید</div>
+            <div class="grade-grid">
+                <div class="grade-card" onclick="selectGrade(7, this)">
+                    <span class="grade-icon">7️⃣</span>
+                    <span class="grade-name">هفتم</span>
+                </div>
+                <div class="grade-card" onclick="selectGrade(8, this)">
+                    <span class="grade-icon">8️⃣</span>
+                    <span class="grade-name">هشتم</span>
+                </div>
+                <div class="grade-card" onclick="selectGrade(9, this)">
+                    <span class="grade-icon">9️⃣</span>
+                    <span class="grade-name">نهم</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ⭐ استپ ۳: بازه درسی -->
+        <div class="step" id="step-range">
+            <div class="step-title">بازه درسی را مشخص کنید</div>
+            <div class="range-card">
+                <div class="range-row">
+                    <div class="range-input-group">
+                        <label>از درس</label>
+                        <input type="number" class="range-input" id="lessonFrom" value="1" min="1" max="24">
+                    </div>
+                    <span class="range-divider">تا</span>
+                    <div class="range-input-group">
+                        <label>تا درس</label>
+                        <input type="number" class="range-input" id="lessonTo" value="4" min="1" max="24">
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 
+    <!-- دکمه پایین صفحه فقط در استپ آخر نمایش داده می‌شود -->
     <div class="main-container" id="action-container" style="display: none; padding-top: 0;">
         <div class="action-area">
             <button class="btn-generate" id="generateBtn" onclick="submitExam()">
@@ -286,7 +265,7 @@
     </div>
 
     <script>
-        /* ⚙️ CONFIG — آدرس استودیو (نسبت به همین فایل) */
+        /* ⚙️ CONFIG — آدرس استودیو */
         const STUDIO_URL = 'studio.html';
 
         let tg = null;
@@ -311,44 +290,31 @@
         function showStep(stepId) {
             document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
             document.getElementById(stepId).classList.add('active');
+            
             const backBtn = document.getElementById('backBtn');
             const actionContainer = document.getElementById('action-container');
-            if (stepId === 'step-grade') {
+            
+            // منطق دکمه‌ها بر اساس مرحله فعلی
+            if (stepId === 'step-type') {
                 backBtn.classList.remove('active');
+                actionContainer.style.display = 'none'; // دکمه تولید مخفی
+            } else if (stepId === 'step-grade') {
+                backBtn.classList.add('active');
                 actionContainer.style.display = 'none';
             } else if (stepId === 'step-range') {
                 backBtn.classList.add('active');
-                actionContainer.style.display = 'none';
-            } else {
-                backBtn.classList.add('active');
-                actionContainer.style.display = 'block';
+                actionContainer.style.display = 'block'; // دکمه تولید نمایش داده شود
             }
+            
             if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
-        }
-
-        function selectGrade(gradeNum, element) {
-            document.querySelectorAll('.grade-card').forEach(c => c.classList.remove('selected'));
-            element.classList.add('selected');
-            selection.grade = gradeNum;
-            setTimeout(() => showStep('step-range'), 300);
-        }
-
-        function goToTypeStep() {
-            const from = parseInt(document.getElementById('lessonFrom').value);
-            const to = parseInt(document.getElementById('lessonTo').value);
-            if (from < 1 || to > 24 || from > to) {
-                if (tg) tg.showAlert('بازه درسی نامعتبر است. اعداد باید بین ۱ تا ۲۴ و از کوچک به بزرگ باشند.');
-                return;
-            }
-            showStep('step-type');
         }
 
         function selectType(type, element) {
             document.querySelectorAll('.type-card').forEach(c => c.classList.remove('selected'));
             element.classList.add('selected');
             selection.examType = type;
-            if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
-
+            
+            // تغییر متن دکمه تولید بر اساس نوع انتخاب شده
             const btn = document.getElementById('generateBtn');
             if (type === 'manual') {
                 btn.classList.add('manual-mode');
@@ -357,49 +323,67 @@
                 btn.classList.remove('manual-mode');
                 btn.innerHTML = '🚀 تولید آزمون';
             }
+
+            if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
+
+            // هدایت خودکار به مرحله بعد (پایه)
+            setTimeout(() => {
+                showStep('step-grade');
+            }, 300);
+        }
+
+        function selectGrade(gradeNum, element) {
+            document.querySelectorAll('.grade-card').forEach(c => c.classList.remove('selected'));
+            element.classList.add('selected');
+            selection.grade = gradeNum;
+            
+            // هدایت خودکار به مرحله بعد (بازه درسی)
+            setTimeout(() => {
+                showStep('step-range');
+            }, 300);
         }
 
         function prevStep() {
             const currentStep = document.querySelector('.step.active').id;
-            if (currentStep === 'step-type') showStep('step-range');
-            else if (currentStep === 'step-range') showStep('step-grade');
+            if (currentStep === 'step-range') {
+                showStep('step-grade');
+            } else if (currentStep === 'step-grade') {
+                showStep('step-type');
+            }
         }
 
         async function submitExam() {
-            if (!selection.examType) {
-                if (tg) tg.showAlert('لطفاً نوع آزمون را انتخاب کنید.');
-                return;
-            }
-
-            /* ⭐ حالت دستی: صفر تماس با بک‌اند */
-            if (selection.examType === 'manual') {
-                openStudio();
-                return;
-            }
-
             const from = parseInt(document.getElementById('lessonFrom').value);
             const to = parseInt(document.getElementById('lessonTo').value);
+            
             if (from < 1 || to > 24 || from > to) {
-                if (tg) tg.showAlert('بازه درسی نامعتبر است.');
+                if (tg) tg.showAlert('بازه درسی نامعتبر است. اعداد باید بین ۱ تا ۲۴ و از کوچک به بزرگ باشند.');
                 return;
+            }
+
+            /* ⭐ حالت دستی: مستقیم به استودیو */
+            if (selection.examType === 'manual') {
+                openStudio();
+                return; 
             }
 
             const btn = document.getElementById('generateBtn');
             btn.disabled = true;
             btn.innerHTML = '<span class="loader"></span> در حال ساخت...';
-
+            
             function getInitData() {
                 const tgApp = window.Telegram && window.Telegram.WebApp;
                 if (tgApp && tgApp.initData) return tgApp.initData;
                 const h = new URLSearchParams(location.hash.slice(1));
                 return h.get('tgWebAppData') || '';
             }
+            
             const initData = getInitData();
             const urlParams = new URLSearchParams(window.location.search);
             const fallbackTgId = urlParams.get('tg_id');
 
             if (!initData && !fallbackTgId) {
-                if (tg) tg.showAlert('خطا: اطلاعات تلگرام یافت نشد. لطفا از طریق ربات وارد شوید.');
+                if(tg) tg.showAlert('خطا: اطلاعات تلگرام یافت نشد. لطفا از طریق ربات وارد شوید.');
                 btn.disabled = false;
                 btn.innerHTML = '🚀 تولید آزمون';
                 return;
@@ -410,30 +394,29 @@
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        initData, tg_id: fallbackTgId,
+                        initData: initData,
+                        tg_id: fallbackTgId,
                         grade: selection.grade,
-                        lessonFrom: from, lessonTo: to,
+                        lessonFrom: from,
+                        lessonTo: to,
                         exam_type: selection.examType
                     })
                 });
+
                 const data = await res.json();
+
                 if (data.ok) {
                     window.location.href = data.edit_link;
                 } else {
-                    if (tg) tg.showAlert(data.message || 'خطا در ساخت آزمون.');
+                    if(tg) tg.showAlert(data.message || 'خطا در ساخت آزمون.');
                     btn.disabled = false;
                     btn.innerHTML = '🚀 تولید آزمون';
                 }
             } catch (err) {
-                if (tg) tg.showAlert('خطای شبکه در ارتباط با سرور.');
+                if(tg) tg.showAlert('خطای شبکه در ارتباط با سرور.');
                 btn.disabled = false;
                 btn.innerHTML = '🚀 تولید آزمون';
             }
-        }
-
-        function openStudioDirect() {
-            if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
-            openStudio();
         }
 
         function openStudio() {
