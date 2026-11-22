@@ -60,6 +60,12 @@ button,input,select,textarea{font:inherit;color:inherit}
 .stage{overflow:auto;background:var(--desk);padding:28px 24px 60px;position:relative;}
 .stage-bar{display:none}
 
+.dirbox{position:relative;border:2px solid #d93a3a;border-radius:16px;padding:18px 14px 10px;margin:6px 0 18px;background:rgba(217,58,58,.05);animation:dirpulse 2.6s ease-in-out infinite}
+.dirtag{position:absolute;top:-12px;inset-inline-start:14px;background:#d93a3a;color:#fff;font-size:11px;font-weight:800;padding:1px 12px;border-radius:999px}
+@keyframes dirpulse{0%,100%{box-shadow:0 0 0 0 rgba(217,58,58,.35)}50%{box-shadow:0 0 0 6px rgba(217,58,58,0)}}
+@media(prefers-reduced-motion:reduce){.dirbox{animation:none}}
+.sub{border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-top:10px;background:var(--bg)}
+.sub-h{display:flex;align-items:center;gap:6px;margin-bottom:8px}.sub-h b{font-size:12.5px;color:var(--green)}.sub-h .grow{flex:1}
 .sec{border-bottom:1px solid var(--line);padding:22px 0}
 .sec-h{display:flex;align-items:center;gap:14px;cursor:pointer;user-select:none}
 .num{font:800 30px/1 var(--serif);color:var(--coral);width:38px;flex:none}
@@ -158,6 +164,8 @@ input[type=file]{display:none}
 .p-in{width:100%;border-collapse:collapse;margin:6px 0;table-layout:fixed}
 .p-in td{border:1px solid #333;padding:5px;text-align:center;white-space:pre-wrap;height:28px}
 .p-match{margin:8px 0 4px}.p-mrow{display:flex;justify-content:space-between;gap:30px;padding:0 10px;margin:7px 0;line-height:1.7}.p-mrow span{flex:0 1 44%}
+.p-tfr{display:flex;align-items:baseline;gap:14px;margin:4px 0}.p-tft{flex:1;min-width:0}.p-tfc{flex:none;white-space:nowrap;font-weight:600}.p-sub{margin:7px 0}
+.tfadd{display:flex;flex-direction:column;align-items:flex-start;gap:4px}
 .p-total{font-weight:700;margin:6px 2px}
 
 .modal{position:fixed;inset:0;background:rgba(10,16,13,.55);backdrop-filter:blur(3px);z-index:90;display:none;align-items:center;justify-content:center;padding:16px}
@@ -275,7 +283,7 @@ html,body{height:auto;overflow:visible;background:#fff}
   <section class="sec" id="secQ">
     <div class="sec-h"><span class="num">۲</span><div class="grow"><h2>سؤال‌ها</h2><p>برای ویرایش روی سؤال بزنید؛ با کشیدن جابجا کنید</p></div><span class="chev">‹</span></div>
     <div class="sec-b">
-      <label class="f" style="margin-bottom:14px"><span>جهت‌بندی متن (ویژه‌ی ریاضی و انگلیسی)</span><select data-set="dirMode"><option value="normal">خاموش — همه‌ی درس‌ها مثل همیشه</option><option value="mixed">روشن — فارسی راست‌چین، انگلیسی و اعداد چپ‌چین</option></select></label>
+      <div class="dirbox"><div class="dirtag">ویژه‌ی درس‌های ریاضی و انگلیسی</div><label class="f"><span>جهت‌بندی خودکار متن</span><select data-set="dirMode"><option value="normal">خاموش — برای همه‌ی درس‌های دیگر</option><option value="mixed">روشن — فارسی راست‌چین، انگلیسی و اعداد چپ‌چین</option></select></label><p class="hint" style="margin:8px 0 0">برای ریاضی و انگلیسی روشن کنید؛ برای بقیه‌ی درس‌ها خاموش بماند.</p></div>
       <div id="qList"></div>
       <div class="add-head">افزودن سؤال تازه</div>
       <div class="tiles" id="tiles"></div>
@@ -352,20 +360,21 @@ function parseScore(v){var s=String(v||""),fa="۰۱۲۳۴۵۶۷۸۹",o="";for(va
 function lim(v,a,b,d){var n=Number(v);if(isNaN(n)||n===0)n=d;return Math.max(a,Math.min(b,n))}
 function mixed(){return S.settings.dirMode==="mixed"}
 function hasFa(t){return /[\u0600-\u06FF]/.test(String(t==null?"":t))}
-function qLang(q){var t=String(q.text||"");if(hasFa(t))return"fa";if(/[A-Za-z]/.test(t))return"en";var o=(q.options||[]).join(" ");return(/[A-Za-z]/.test(o)&&!hasFa(o))?"en":"fa"}
+function qLang(q){var t=String(q.text||"").replace(/⟦[^⟧]*⟧/g,"");if(hasFa(t))return"fa";if(/[A-Za-z]/.test(t))return"en";var o=(q.options||[]).join(" ");return(/[A-Za-z]/.test(o)&&!hasFa(o))?"en":"fa"}
 function qEn(q,en){return mixed()?qLang(q)==="en":en}
-function qLetters(q){return mixed()?(qLang(q)==="en"?["A","B","C","D"]:["الف","ب","ج","د"]):letters()}
+function qLetters(q){return mixed()?((qLang(q)==="en"||optsEn(q))?["A","B","C","D"]:["الف","ب","ج","د"]):letters()}
 function dirSt(t,al){if(!mixed())return"";var r=hasFa(t);return"direction:"+(r?"rtl":"ltr")+";"+(al?"text-align:"+(r?"right":"left")+";":"")}
 function letters(){return isEn()?["A","B","C","D"]:["الف","ب","ج","د"]}
 function byId(id){for(var i=0;i<S.questions.length;i++)if(S.questions[i].id===id)return S.questions[i]}
 function toast(m){var t=$("#toast");t.textContent=m;t.classList.add("show");clearTimeout(toast.t);toast.t=setTimeout(function(){t.classList.remove("show")},2200)}
 function save(){clearTimeout(saveT);saveT=setTimeout(function(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}},250)}
-function newQ(type){var q={id:uid(),type:type,text:"",score:"",fontSize:14,lines:3,options:["","","",""],answer:"",vocab:[""],match:[{r:"",l:""}],rows:3,cols:3,cells:[],images:[],imgCols:3,imgLine:"auto",imageWidth:150,imageAlign:"center",imagePos:"below"};if(type==="table")resizeTable(q);return q}
+function newQ(type){var q={id:uid(),type:type,text:"",score:"",fontSize:14,lines:3,options:["","","",""],answer:"",vocab:[""],match:[{r:"",l:""}],rows:3,cols:3,cells:[],images:[],imgCols:3,imgLine:"auto",imageWidth:150,imageAlign:"center",imagePos:"below",multi:false,items:[]};if(type==="table")resizeTable(q);return q}
 function resizeTable(q){q.rows=lim(q.rows,1,30,3);q.cols=lim(q.cols,1,15,3);var old=q.cells||[];q.cells=[];for(var r=0;r<q.rows;r++){q.cells[r]=[];for(var c=0;c<q.cols;c++)q.cells[r][c]=(old[r]&&old[r][c])||""}}
-function norm(q){migrate(q);var b=newQ(q.type||"essay");for(var k in b)if(q[k]===undefined||q[k]===null)q[k]=b[k];if(!Array.isArray(q.options))q.options=["","","",""];while(q.options.length<4)q.options.push("");if(!q.vocab.length&&q.type==="vocab")q.vocab=[""];if(!q.match.length&&q.type==="matching")q.match=[{r:"",l:""}];if(q.type==="table")resizeTable(q);return q}
+function norm(q){migrate(q);var b=newQ(q.type||"essay");q.items=(Array.isArray(q.items)?q.items:[]).map(function(it){it=it||{};it.text=it.text||"";it.options=Array.isArray(it.options)?it.options:[];while(it.options.length<4)it.options.push("");it.answer=it.answer==null?"":String(it.answer);return it});for(var k in b)if(q[k]===undefined||q[k]===null)q[k]=b[k];if(!Array.isArray(q.options))q.options=["","","",""];while(q.options.length<4)q.options.push("");if(!q.vocab.length&&q.type==="vocab")q.vocab=[""];if(!q.match.length&&q.type==="matching")q.match=[{r:"",l:""}];if(q.type==="table")resizeTable(q);return q}
 function migrate(q){if(q.image){if(!q.images||!q.images.length)q.images=[q.image];q.image=""}return q}
 
 function load(){S=def();try{var raw=localStorage.getItem(KEY);if(raw)adopt(JSON.parse(raw),true)}catch(e){}
+ S.settings.dirMode="normal";
  if(!S.theme)S.theme=(window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches)?"dark":"light"}
 function adopt(d,silent){
  if(!d||typeof d!=="object")throw new Error("bad");
@@ -437,18 +446,42 @@ function imgHTML(q){var im=imgList(q);if(!im.length)return"";
  var o='<div style="display:flex;flex-wrap:wrap;justify-content:'+jc+';direction:'+dir+';margin:8px 0;row-gap:12px">';
  im.forEach(function(src){o+='<div style="flex:'+(im.length===1&&!line?"0 0 auto":"0 0 "+(100/cols)+"%")+';max-width:100%;padding:0 6px;box-sizing:border-box;text-align:center"><img src="'+src+'" style="width:'+w+'px;max-width:100%;height:auto;max-height:320px;object-fit:contain;display:block;margin:0 auto" alt="">'+(line?'<div style="border-bottom:1px dotted #333;height:26px;margin-top:6px"></div>':"")+"</div>"});
  return o+"</div>"}
+var SUBFA=["الف","ب","ج","د","هـ","و","ز","ح","ط","ی","ک","ل"];
+function isMulti(q){return(q.type==="mcq"||q.type==="tf")&&!!q.multi}
+function newItem(){return{text:"",options:["","","",""],answer:""}}
+function subLab(i,en){return en?String.fromCharCode(97+(i%26)):(SUBFA[i]||toNum(i+1))}
+function itemsOf(q){return(q.items||[]).filter(function(x){return String(x.text||"").trim()||(q.type==="mcq"&&(x.options||[]).some(function(o){return String(o).trim()}))})}
+function itemEn(it,q,en){return mixed()?qLang(it)==="en":en}
+function itemRtl(it,q,en){return mixed()?qLang(it)==="fa":!en}
+function nums(en){return en?["A","B","C","D"]:[toNum(1),toNum(2),toNum(3),toNum(4)]}
+var TFTOK="⟦صحیح □ غلط □⟧";
+function tfSub(str,e2,key,ans){str=String(str==null?"":str);if(str.indexOf("⟦")<0)return str;return str.replace(/⟦[^⟧]*⟧/g,function(){return(e2?"True":"صحیح")+"\u00A0"+(key&&ans==="T"?"☑":"□")+"\u2003"+(e2?"False":"غلط")+"\u00A0"+(key&&ans==="F"?"☑":"□")})}
+function optsEn(it){var t=(it.options||[]).join(" ");return/[A-Za-z]/.test(t)&&!hasFa(t)}
+function mbR(it){return qLang(it)==="fa"&&!optsEn(it)}
+function matEn(q){var t=(q.match||[]).map(function(m){return(m.r||"")+" "+(m.l||"")}).join(" ");return/[A-Za-z]/.test(t)&&!hasFa(t)}
+function matR(q){return qLang(q)==="fa"&&!matEn(q)}
+function optsHTML(it,L,key,od,cdir){var h="";(it.options||[]).forEach(function(t,j){if(t&&t.trim())h+="<span"+(od?' style="direction:'+od+'"':"")+">"+L[j]+") "+rich(t)+(key&&String(it.answer)===String(j)?" ☑":" □")+"</span>"});return'<div class="p-opts"'+(cdir?' style="direction:'+cdir+'"':"")+">"+h+"</div>"}
+function groupHTML(q,en){var key=S.settings.key==="yes",o="";
+ itemsOf(q).forEach(function(it,ix){var e2=itemEn(it,q,en),r2=itemRtl(it,q,en),lab=subLab(ix,e2)+") ",tx=rich(it.text||"").replace(/\n/g,"<br>");
+  if(q.type==="tf")tx=rich(tfSub(it.text||"",e2,key,it.answer)).replace(/\n/g,"<br>");
+  var bd=mixed()?(mbR(it)?"rtl":"ltr"):"";
+  o+='<div class="p-sub" style="direction:'+(r2?"rtl":"ltr")+";text-align:"+(r2?"right":"left")+'"><div class="p-t">'+lab+tx+"</div>"+(q.type==="mcq"?optsHTML(it,nums(mixed()?(e2||optsEn(it)):e2),key,bd,bd):"")+"</div>"});
+ return o}
+function bodyHTML(q,lines,en){var has=String(q.text||"").trim();
+ if(isMulti(q)&&!has)return"";
+ return'<div class="p-t">'+lines+"</div>"}
 function qExtra0(q,en){
  var key=S.settings.key==="yes",o="";
- if(q.type==="mcq"){var L=qLetters(q),h="",od=mixed()?(qLang(q)==="fa"?"rtl":"ltr"):"";(q.options||[]).forEach(function(t,j){if(t&&t.trim())h+="<span"+(od?' style="direction:'+od+'"':"")+">"+L[j]+") "+rich(t)+(key&&String(q.answer)===String(j)?" ☑":" □")+"</span>"});o+='<div class="p-opts">'+h+"</div>"}
- else if(q.type==="tf"&&String(q.text||"").trim())o+='<div style="margin:2px 0">'+(qEn(q,en)?"True ":"صحیح ")+(key&&q.answer==="T"?"☑":"□")+"&nbsp;&nbsp;&nbsp;"+(qEn(q,en)?"False ":"غلط ")+(key&&q.answer==="F"?"☑":"□")+"</div>";
+ if(isMulti(q))o+=groupHTML(q,en);
+ else if(q.type==="mcq"){var bd=mixed()?(mbR(q)?"rtl":"ltr"):"";o+=optsHTML(q,qLetters(q),key,bd,bd)}
  else if(q.type==="vocab"){var w=(q.vocab||[]).filter(function(x){return String(x).trim()});if(w.length)o+='<div style="margin:8px 0">'+w.map(function(x){return'<div style="margin-bottom:14px;'+dirSt(x,1)+'"><b>'+rich(x.trim())+":</b></div>"}).join("")+"</div>"}
  else if(q.type==="essay")o+='<div style="min-height:'+lim(q.lines,1,30,3)*25+'px"></div>';
- else if(q.type==="matching"){var rows="";(q.match||[]).forEach(function(m){if((m.r||"").trim()||(m.l||"").trim())rows+='<div class="p-mrow"><span style="'+dirSt(m.r)+'">'+rich(m.r)+'</span><span style="'+dirSt(m.l)+'">'+rich(m.l)+"</span></div>"});if(rows)o+='<div class="p-match">'+rows+"</div>"}
+ else if(q.type==="matching"){var rows="";(q.match||[]).forEach(function(m){if((m.r||"").trim()||(m.l||"").trim())rows+='<div class="p-mrow"><span style="'+dirSt(m.r)+'">'+rich(m.r)+'</span><span style="'+dirSt(m.l)+'">'+rich(m.l)+"</span></div>"});if(rows)o+='<div class="p-match"'+(mixed()?' style="direction:'+(matR(q)?"rtl":"ltr")+'"':"")+">"+rows+"</div>"}
  else if(q.type==="table"){var h2='<table class="p-in">';for(var r=0;r<q.rows;r++){h2+="<tr>";for(var c=0;c<q.cols;c++)h2+='<td style="'+dirSt((q.cells[r]||[])[c])+'">'+rich((q.cells[r]||[])[c]||"")+"</td>";h2+="</tr>"}o+=h2+"</table>"}
 
  return o}
-function qExtra(q,en){var o=qExtra0(q,en);return mixed()?'<div style="direction:ltr;text-align:left">'+o+"</div>":o}
-function qLinesHTML(q){var blank=q.type==="blank",txt=String(q.text||"").replace(/\r/g,"");
+function qExtra(q,en){var o=qExtra0(q,en);if(!mixed())return o;var d="ltr";if(!isMulti(q)){if(q.type==="mcq")d=mbR(q)?"rtl":"ltr";else if(q.type==="matching")d=matR(q)?"rtl":"ltr"}return'<div style="direction:'+d+";text-align:"+(d==="rtl"?"right":"left")+'">'+o+"</div>"}
+function qLinesHTML(q){var blank=q.type==="blank",txt=String(q.text||"").replace(/\r/g,"");if(q.type==="tf"&&!isMulti(q))txt=tfSub(txt,qEn(q,isEn()),S.settings.key==="yes",q.answer);
  if(!mixed())return txt.split("\n").map(function(l){return rich(l,blank)}).join("<br>");
  var prev=qLang(q)==="fa";
  return txt.split("\n").map(function(l){var r=l.trim()?hasFa(l):prev;prev=r;return'<div style="direction:'+(r?"rtl":"ltr")+";text-align:"+(r?"right":"left")+'">'+(rich(l,blank)||"&nbsp;")+"</div>"}).join("")}
@@ -467,7 +500,7 @@ function renderPaper(){
  S.questions.forEach(function(q,i){
   var lines=qLinesHTML(q);
   var fs=lim(q.fontSize,6,60,14);
-  rows+='<tr><td class="c-n" style="font-size:'+fs+'px;direction:ltr">'+toNum(i+1)+'</td><td class="c-q" style="font-size:'+fs+"px;direction:"+dir+";text-align:"+al+'">'+(q.imagePos==="above"?imgHTML(q):"")+'<div class="p-t">'+lines+"</div>"+qExtra(q,en)+(q.imagePos==="above"?"":imgHTML(q))+"</td>"+(showScore?'<td class="c-s" style="font-size:'+fs+'px;direction:ltr">'+toNum(esc(q.score||""))+"</td>":"")+"</tr>"});
+  rows+='<tr><td class="c-n" style="font-size:'+fs+'px;direction:ltr">'+toNum(i+1)+'</td><td class="c-q" style="font-size:'+fs+"px;direction:"+dir+";text-align:"+al+'">'+(q.imagePos==="above"?imgHTML(q):"")+bodyHTML(q,lines,en)+qExtra(q,en)+(q.imagePos==="above"?"":imgHTML(q))+"</td>"+(showScore?'<td class="c-s" style="font-size:'+fs+'px;direction:ltr">'+toNum(esc(q.score||""))+"</td>":"")+"</tr>"});
  if(st.endText)rows+='<tr><td colspan="'+(showScore?3:2)+'" style="text-align:center;font-weight:bold;font-size:'+lim(st.endSize,8,40,12)+'px;padding:4px">'+esc(st.endText)+"</td></tr>";
  var tot=(st.showTotal==="yes"&&showScore)?'<div class="p-total" style="text-align:'+(en?"right":"left")+'">'+(en?"Total Score: ":"جمع بارم: ")+toNum(total)+"</div>":"";
  paper.innerHTML=head+(S.questions.length?'<table class="p-tbl">'+thead+"<tbody>"+rows+"</tbody></table>"+tot:"");
@@ -486,7 +519,7 @@ function fit(){
 /* ---------- editors ---------- */
 function fld(label,inner,cls){return'<label class="f '+(cls||"")+'"><span>'+label+"</span>"+inner+"</label>"}
 function sel(f,val,opts){return'<select data-f="'+f+'">'+opts.map(function(o){return'<option value="'+o[0]+'"'+(String(val)===String(o[0])?" selected":"")+">"+o[1]+"</option>"}).join("")+"</select>"}
-function snippet(q){var t=String(q.text||"").replace(/\s+/g," ").trim();if(t)return t;if(q.type==="vocab"){var w=q.vocab.filter(Boolean).join("، ");if(w)return w}return"بدون متن"}
+function snippet(q){var t=String(q.text||"").replace(/⟦[^⟧]*⟧/g,"").replace(/\s+/g," ").trim();if(isMulti(q)){var its=itemsOf(q);if(!t&&its[0])t=String(its[0].text||"").replace(/\s+/g," ").trim();return"("+toNum(its.length)+" سؤال) "+(t||"")}if(t)return t;if(q.type==="vocab"){var w=q.vocab.filter(Boolean).join("، ");if(w)return w}return"بدون متن"}
 var mathOpen=false,lastField=null,lastS=0,lastE=0;
 var BUILD=[["frac","½ کسر"],["rad","√ رادیکال"],["pow","xⁿ توان"],["sub","x₁ اندیس"]];
 var SYM="× ÷ ± ∓ = ≠ ≈ ≤ ≥ < > ² ³ ° π ∞ √ ∛ ∜ ∠ ⊥ ∥ △ ∈ ∉ ⊂ ∪ ∩ ∅ ℕ ℤ ℚ ℝ ∑ ∫ α β θ Δ → ⇒ ⇔ ‰ % ½ ⅓ ¼ ¾ ( ) [ ] { } · − ′ ″".split(" ");
@@ -504,14 +537,27 @@ function mmUpdate(){var c=BCFG[mmKind],v=$$("#mmFields input").map(function(i){r
 function openBuilder(kind){var t=target();mmTarget=t;mmKind=kind;var c=BCFG[kind],sel2="";if(t&&t.s!=null&&t.e>t.s)sel2=t.el.value.slice(t.s,t.e);
  $("#mmTitle").textContent=c.t;$("#mmFields").innerHTML=c.f.map(function(l,i){return'<label class="f"><span>'+l+'</span><input type="text" value="'+(i===0?esc(sel2):"")+'" autocomplete="off"></label>'}).join("");
  $("#mathModal").classList.add("open");mmUpdate();var f=$("#mmFields input");if(f)f.focus()}
+function modeSeg(q){var m=!!q.multi;return'<div class="mt"><span class="hint" style="margin:0 0 6px;display:block">قالب سؤال</span><div class="seg"><button type="button" class="'+(m?"":"on")+'" data-act="mmode" data-v="0">یک سؤال</button><button type="button" class="'+(m?"on":"")+'" data-act="mmode" data-v="1">چند سؤال در یک شماره</button></div></div>'}
+function itemsEditor(q){var its=q.items||[],da=mixed()?' dir="auto"':"",o='<div class="hint">سؤال‌ها به‌ترتیب با الف، ب، ج… شماره می‌خورند و بارم بالا برای کل این شماره است.</div>';
+ its.forEach(function(it,i){
+  o+='<div class="sub"><div class="sub-h"><b>سؤال '+subLab(i,false)+'</b><span class="grow"></span><button class="btn ghost sm" type="button" data-act="iup" data-i="'+i+'" title="بالا">↑</button><button class="btn ghost sm" type="button" data-act="idown" data-i="'+i+'" title="پایین">↓</button>'+(its.length>1?'<button class="btn danger sm" type="button" data-act="idel" data-i="'+i+'">حذف</button>':"")+"</div>"+
+   fld("متن سؤال",'<textarea data-it="'+i+'" data-k="text"'+da+' placeholder="متن سؤال را بنویسید…">'+esc(it.text)+"</textarea>")+(q.type==="tf"?tfBtn(i):"");
+  if(q.type==="mcq")o+='<div class="g2 mt">'+[0,1,2,3].map(function(j){return fld("گزینه "+toNum(j+1),'<input type="text"'+da+' data-it="'+i+'" data-io="'+j+'" value="'+esc(it.options[j]||"")+'">')}).join("")+'</div><div class="mt">'+fld("پاسخ صحیح (اختیاری)",'<select data-it="'+i+'" data-k="answer">'+[["","انتخاب نشده"],["0","گزینه ۱"],["1","گزینه ۲"],["2","گزینه ۳"],["3","گزینه ۴"]].map(function(a){return'<option value="'+a[0]+'"'+(String(it.answer)===a[0]?" selected":"")+">"+a[1]+"</option>"}).join("")+"</select>")+"</div>";
+  else o+='<div class="mt">'+fld("پاسخ صحیح (اختیاری)",'<select data-it="'+i+'" data-k="answer">'+[["","انتخاب نشده"],["T","صحیح"],["F","غلط"]].map(function(a){return'<option value="'+a[0]+'"'+(String(it.answer)===a[0]?" selected":"")+">"+a[1]+"</option>"}).join("")+"</select>")+"</div>";
+  o+="</div>"});
+ return o+'<button class="btn ghost sm mt" type="button" data-act="iadd">＋ افزودن سؤال</button>'}
+function tfBtn(i){return'<div class="mt tfadd"><button class="btn sm" type="button" data-act="tfadd"'+(i==null?"":' data-i="'+i+'"')+'>＋ افزودن «صحیح □ غلط □» به انتهای جمله</button><span class="hint">وقتی جمله را کامل کردید این دکمه را بزنید؛ «صحیح □ غلط □» دقیقاً بعد از جمله اضافه می‌شود.</span></div>'}
 function qBody(q){
  var L=letters(),o='<div class="qb"><div class="tools">'+
  '<button class="btn ghost sm" data-act="up" title="بالا">↑</button><button class="btn ghost sm" data-act="down" title="پایین">↓</button><button class="btn ghost sm" data-act="dup">کپی</button><button class="btn danger sm" data-act="del">حذف</button></div>';
  o+='<div class="g3">'+fld("نوع سؤال",sel("type",q.type,Object.keys(TYPES).map(function(k){return[k,TYPES[k].n]})))+fld("بارم",'<input type="text" inputmode="decimal" data-f="score" value="'+esc(q.score)+'">')+fld("اندازه فونت",'<input type="number" min="6" max="60" data-f="fontSize" value="'+esc(q.fontSize)+'">')+"</div>";
+ if(q.type==="mcq"||q.type==="tf")o+=modeSeg(q);
  o+='<div class="mathbar"><button type="button" class="btn ghost sm" data-act="mtoggle">∑ علائم ریاضی</button>'+(mathOpen?mathPanel():"")+'</div>';
- o+='<div class="mt">'+(q.type==="blank"?'<div class="tip">برای ساخت جای خالی، بین کلمات بیش از دو فاصله (Space) بزنید؛ هر فاصله‌ی اضافه، نقطه‌چین بلندتری می‌سازد.</div>':"")+fld("متن سؤال",'<textarea data-f="text'+(mixed()?'" dir="auto':'')+'" placeholder="متن سؤال را بنویسید…">'+esc(q.text)+"</textarea>")+"</div>";
+ o+='<div class="mt">'+(q.type==="blank"?'<div class="tip">برای ساخت جای خالی، بین کلمات بیش از دو فاصله (Space) بزنید؛ هر فاصله‌ی اضافه، نقطه‌چین بلندتری می‌سازد.</div>':"")+fld(isMulti(q)?"دستور سؤال (اختیاری؛ مثلاً: گزینه‌ی صحیح را انتخاب کنید)":"متن سؤال",'<textarea data-f="text'+(mixed()?'" dir="auto':'')+'" placeholder="متن سؤال را بنویسید…">'+esc(q.text)+"</textarea>")+"</div>";
  var x='<div class="mt">';
- if(q.type==="mcq"){x+='<div class="g2">'+[0,1,2,3].map(function(j){return fld("گزینه "+L[j],'<input type="text"'+(mixed()?' dir="auto"':"")+' data-opt="'+j+'" value="'+esc(q.options[j])+'">')}).join("")+'</div><div class="mt">'+fld("پاسخ صحیح (اختیاری)",sel("answer",q.answer,[["","انتخاب نشده"]].concat([0,1,2,3].map(function(j){return[String(j),"گزینه "+L[j]]}))))+"</div>"}
+ if(q.type==="tf"&&!isMulti(q))x+=tfBtn();
+ if(isMulti(q)){x+=itemsEditor(q)}
+ else if(q.type==="mcq"){x+='<div class="g2">'+[0,1,2,3].map(function(j){return fld("گزینه "+L[j],'<input type="text"'+(mixed()?' dir="auto"':"")+' data-opt="'+j+'" value="'+esc(q.options[j])+'">')}).join("")+'</div><div class="mt">'+fld("پاسخ صحیح (اختیاری)",sel("answer",q.answer,[["","انتخاب نشده"]].concat([0,1,2,3].map(function(j){return[String(j),"گزینه "+L[j]]}))))+"</div>"}
  else if(q.type==="tf")x+=fld("پاسخ صحیح (اختیاری)",sel("answer",q.answer,[["","انتخاب نشده"],["T",isEn()?"True":"صحیح"],["F",isEn()?"False":"غلط"]]));
  else if(q.type==="essay")x+=fld("فضای پاسخ (تعداد خط)",'<input type="number" min="1" max="30" data-f="lines" value="'+esc(q.lines)+'">');
  else if(q.type==="vocab"){x+=q.vocab.map(function(w,i){return'<div class="opt-row"><label class="f" style="flex:1"><span>واژه '+toNum(i+1)+'</span><input type="text" data-vw="'+i+'" value="'+esc(w)+'"></label><button class="x" data-act="vdel" data-i="'+i+'" title="حذف">✕</button></div>'}).join("")+'<button class="btn ghost sm" data-act="vadd">＋ واژه</button>'}
@@ -577,6 +623,11 @@ $("#qList").addEventListener("click",function(e){
  if(act==="vdel")q.vocab.splice(i,1);
  if(act==="madd")q.match.push({r:"",l:""});
  if(act==="mdel")q.match.splice(i,1);
+ if(act==="mmode"){q.multi=a.dataset.v==="1";if(q.multi&&!(q.items||[]).length)q.items=[newItem(),newItem()]}
+ if(act==="iadd"){(q.items=q.items||[]).push(newItem())}
+ if(act==="idel"&&q.items.length>1)q.items.splice(i,1);
+ if(act==="iup"||act==="idown"){var j2=i+(act==="iup"?-1:1);if(j2>=0&&j2<q.items.length){var tmp=q.items[i];q.items[i]=q.items[j2];q.items[j2]=tmp}}
+ if(act==="tfadd"){var tg2=(a.dataset.i!==undefined&&isMulti(q))?q.items[i]:q;if(tg2){if(String(tg2.text||"").indexOf("⟦")>=0)toast("قبلاً اضافه شده است");else tg2.text=String(tg2.text||"").replace(/\s+$/,"")+" "+TFTOK}}
  if(act==="ialign"){q.imageAlign=a.dataset.v}
  if(act==="imgdel"){q.images.splice(i,1)}
  renderQuestions();renderPaper();save()});
@@ -585,6 +636,7 @@ $("#qList").addEventListener("input",function(e){
  var card=el.closest(".qc"),q=card&&byId(card.dataset.q);if(!q)return;
  var f=el.dataset.f;
  if(f){if(f==="rows"||f==="cols")return;q[f]=el.value}
+ else if(el.dataset.it!==undefined){var itx=q.items[+el.dataset.it];if(!itx)return;if(el.dataset.io!==undefined)itx.options[+el.dataset.io]=el.value;else itx[el.dataset.k]=el.value}
  else if(el.dataset.opt!==undefined)q.options[+el.dataset.opt]=el.value;
  else if(el.dataset.vw!==undefined)q.vocab[+el.dataset.vw]=el.value;
  else if(el.dataset.m!==undefined)q.match[+el.dataset.m][el.dataset.s]=el.value;
@@ -594,6 +646,7 @@ $("#qList").addEventListener("input",function(e){
 $("#qList").addEventListener("change",function(e){
  var el=e.target,card=el.closest(".qc"),q=card&&byId(card.dataset.q);if(!q)return;
  if(el.dataset.img){var fl=Array.prototype.slice.call(el.files).slice(0,Math.max(0,12-(q.images||[]).length)),left=fl.length;fl.forEach(function(f){readImg(f,function(d){if(d)q.images.push(d);if(--left===0){renderQuestions();renderPaper();save()}})});el.value="";return}
+ if(el.dataset.it!==undefined){var ity=q.items[+el.dataset.it];if(ity){ity[el.dataset.k]=el.value;renderPaper();save()}return}
  var f=el.dataset.f;
  if(f==="type"){var t=el.value;q.type=t;norm(q);renderQuestions();renderPaper();save();return}
  if(f==="imagePos"||f==="imgCols"||f==="imgLine"){q[f]=el.value;renderPaper();save();return}
@@ -763,6 +816,9 @@ async function exportWord(){
    var grid2=showScore?[nW,qW,sW]:[nW,qW];
    var rows=tr(tc(para(run(st.colRow,{b:1,sz:th}),{jc:"center"}),nW,{shade:1,va:"center"})+tc(para(run(st.colQ,{b:1,sz:th}),{jc:"center"}),qW,{shade:1,va:"center"})+(showScore?tc(para(run(st.colScore,{b:1,sz:th}),{jc:"center"}),sW,{shade:1,va:"center"}):""));
    var total=0,innerW=qW-240;
+         var mcqWord=function(it,L,fs,iw,key){var opts=(it.options||[]).map(function(o,j){return o&&o.trim()?L[j]+") "+o+(key&&String(it.answer)===String(j)?" ☑":" □"):""}).filter(Boolean);if(!opts.length)return"";
+    if(mixed()){var ord=mbR(it),ow=Math.floor(iw/opts.length),oc=opts.map(function(t){return tc(inDir(ord,function(){return para(wparse(t,{sz:fs}))}),ow,{nob:1})}).join("");return tbl(tr(oc),opts.map(function(){return ow}),ow*opts.length,1,!ord)+para("",{after:0})}
+    return para(opts.map(function(t){return wparse(t,{sz:fs})}).join(run("      ",{sz:fs})))};
    for(var i=0;i<S.questions.length;i++){
     var q=S.questions[i],fs=lim(q.fontSize,6,60,14),content="";total+=parseScore(q.score);
     var imgP="",ims=imgList(q);
@@ -780,18 +836,22 @@ async function exportWord(){
       imgP=tbl(prow,new Array(ncols).fill(cwid),cwid*ncols,1)+para("",{after:0})}
     }
     if(q.imagePos==="above")content+=imgP;
-    var prevR=qLang(q)==="fa";
-    String(q.text||"").replace(/\r/g,"").split("\n").forEach(function(line){
+    var prevR=qLang(q)==="fa",key=st.key==="yes",multi=isMulti(q),hasT=String(q.text||"").trim()!=="",hd="";
+    if(!multi||hasT)String(q.text||"").replace(/\r/g,"").split("\n").forEach(function(line){
+     if(q.type==="tf"&&!multi)line=tfSub(line,qEn(q,en),key,q.answer);
      if(q.type==="blank")line=line.replace(/ {3,}/g,function(m){return " "+new Array((m.length-2)*2+6).join(".")+" "});
-     if(mixed()){var rr=line.trim()?hasFa(line):prevR;prevR=rr;content+=inDir(rr,function(){return para(wparse(line,{sz:fs}))})}
-     else content+=para(wparse(line,{sz:fs}))});
-    var key=st.key==="yes";
-    if(q.type==="mcq"){var Ls=qLetters(q),opts=q.options.map(function(o,j){return o&&o.trim()?Ls[j]+") "+o+(key&&String(q.answer)===String(j)?" ☑":" □"):""}).filter(Boolean);if(opts.length){if(mixed()){var ord=qLang(q)==="fa",ow=Math.floor(innerW/opts.length),ocells=opts.map(function(t){return tc(inDir(ord,function(){return para(wparse(t,{sz:fs}))}),ow,{nob:1})}).join("");content+=tbl(tr(ocells),opts.map(function(){return ow}),ow*opts.length,1,1)+para("",{after:0})}
-     else content+=para(opts.map(function(t){return wparse(t,{sz:fs})}).join(run("      ",{sz:fs})))}}
-    else if(q.type==="tf"&&String(q.text||"").trim())content+=(mixed()?inDir(false,function(){return para(run((qEn(q,en)?"True ":"صحیح ")+(key&&q.answer==="T"?"☑":"□")+"      "+(qEn(q,en)?"False ":"غلط ")+(key&&q.answer==="F"?"☑":"□"),{sz:fs}))}):para(run((en?"True ":"صحیح ")+(key&&q.answer==="T"?"☑":"□")+"      "+(en?"False ":"غلط ")+(key&&q.answer==="F"?"☑":"□"),{sz:fs})));
+     if(mixed()){var rr=line.trim()?hasFa(line):prevR;prevR=rr;hd+=inDir(rr,function(){return para(wparse(line,{sz:fs}))})}
+     else hd+=para(wparse(line,{sz:fs}))});
+    content+=hd;
+    if(multi){
+     itemsOf(q).forEach(function(it,ix){var e2=itemEn(it,q,en),r2=itemRtl(it,q,en),lab=subLab(ix,e2)+") ",tx=String(it.text||"").replace(/\s*\n\s*/g," ");
+      if(q.type==="tf")tx=tfSub(tx,e2,key,it.answer);
+      var cell=inDir(r2,function(){return para(wparse(lab+tx,{sz:fs}))});
+      content+=q.type==="tf"?cell:cell+mcqWord(it,nums(mixed()?(e2||optsEn(it)):e2),fs,innerW,key)})}
+    else if(q.type==="mcq")content+=mcqWord(q,qLetters(q),fs,innerW,key);
     else if(q.type==="vocab")q.vocab.filter(function(w){return String(w).trim()}).forEach(function(w){content+=pd(w,function(){return para(wparse(w.trim()+":",{b:1,sz:fs}),{after:360})})});
     else if(q.type==="essay"){for(var z=0;z<lim(q.lines,1,30,3);z++)content+=para("",{after:160})}
-    else if(q.type==="matching"){var mr="",mw=Math.floor(innerW/2);q.match.forEach(function(m){if((m.r||"").trim()||(m.l||"").trim())mr+=tr(tc(pd(m.r,function(){return para(wparse(m.r||"",{sz:fs}))}),mw,{nob:1})+tc(pd(m.l,function(){return para(wparse(m.l||"",{sz:fs}))}),mw,{nob:1}))});if(mr)content+=tbl(mr,[mw,mw],mw*2,1)+para("",{after:0})}
+    else if(q.type==="matching"){var mr="",mw=Math.floor(innerW/2),mR=mixed()?matR(q):false,pm=function(f){return mixed()?inDir(mR,f):f()};q.match.forEach(function(m){if((m.r||"").trim()||(m.l||"").trim())mr+=tr(tc(pm(function(){return para(wparse(m.r||"",{sz:fs}))}),mw,{nob:1})+tc(pm(function(){return para(wparse(m.l||"",{sz:fs}))}),mw,{nob:1}))});if(mr)content+=tbl(mr,[mw,mw],mw*2,1,mixed()&&!mR)+para("",{after:0})}
     else if(q.type==="table"){var cw=Math.floor(innerW/q.cols),tr2="";for(var r=0;r<q.rows;r++){var cc="";for(var c=0;c<q.cols;c++)cc+=tc(pd((q.cells[r]||[])[c],function(){return para(wparse((q.cells[r]||[])[c]||"",{sz:fs}),{jc:"center"})}),cw);tr2+=tr(cc)}content+=tbl(tr2,new Array(q.cols+1).join(cw+",").split(",").filter(Boolean).map(Number),cw*q.cols)+para("",{after:0})}
     if(q.imagePos!=="above")content+=imgP;
     rows+=tr(tc(para(run(toNum(i+1),{sz:fs}),{jc:"center"}),nW,{va:"center"})+tc(content,qW)+(showScore?tc(para(run(toNum(q.score||""),{sz:fs}),{jc:"center"}),sW,{va:"center"}):""));
