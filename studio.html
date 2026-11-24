@@ -344,6 +344,7 @@ html,body{height:auto;overflow:visible;background:#fff}
 "use strict";
 /* ⚙️ CONFIG — آدرس مینی‌اپ برای دکمه بازگشت */
 var MINIAPP_URL = 'index.html';
+var DRAFT_API = 'https://api.motadars.ir/bot.php'; // ⚠️ آدرس واقعی فایل ربات (همان که webhook به آن اشاره می‌کند)
 
 var KEY="exam_studio_v1";
 var TYPES={essay:{n:"تشریحی",i:"✎"},mcq:{n:"چهارگزینه‌ای",i:"ⓐ"},tf:{n:"صحیح و غلط",i:"✓✗"},blank:{n:"جای خالی",i:"…"},vocab:{n:"تعریف واژه",i:"Aa"},matching:{n:"وصل کردن",i:"⇄"},table:{n:"جدول",i:"▦"}};
@@ -741,7 +742,14 @@ async function handoff(kind){
  xpOpen("⬇","برگه آماده‌ی دانلود "+name+" است","تلگرام اجازه‌ی دانلود مستقیم فایل را نمی‌دهد. با زدن دکمه‌ی زیر برگه در مرورگر گوشی باز می‌شود و فقط کافی است همان‌جا یک‌بار روی «دانلود» بزنید.","باز کردن در مرورگر و دانلود "+name,function(){
   try{w.openLink(xpUrl,{try_instant_view:false})}catch(e){try{window.open(xpUrl,"_blank")}catch(_){location.href=xpUrl}}
   setTimeout(xpClose,400)})}
+async function fromDraft(){
+ var m=/[#&]draft=([a-f0-9]{32})/.exec(location.hash);if(!m)return false;
+ try{var r=await fetch(DRAFT_API+"?id="+m[1]);if(!r.ok)throw new Error("x");
+  adopt(await r.json());openQ=null;renderAll();try{history.replaceState(null,"",location.pathname)}catch(_){}
+  toast("سوال‌ها از ربات وارد شد")}catch(e){toast("پیش‌نویس پیدا نشد یا منقضی شده است")}
+ return true}
 async function incoming(){
+ if(await fromDraft())return;
  var m=/[#&]xp=([^&]+)/.exec(location.hash),a=/[#&]a=(word|pdf)/.exec(location.hash);
  if(!m||!a||tgApp())return;
  var kind=a[1];
