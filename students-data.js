@@ -64,33 +64,121 @@ const schoolData = {
 };
 
 // ==========================================
-// ⭐ تابع کمکی برای استانداردسازی متن
-// این تابع حروف عربی (ي، ك) را به فارسی (ی، ک) تبدیل می‌کند
-// تا اگر دانش‌آموز اسمش را با کیبورد عربی تایپ کرد، سیستم متوجه شود.
+// ⭐ استانداردسازی متن برای «مقایسه‌ی نام‌ها»
+// مشکل‌های رایج که باعث «جزو دانش‌آموزان نیستید» می‌شدند:
+//  ۱) ه/ة/ۀ، ی/ي/ى/ئ، ک/ك، ا/أ/إ/آ، و/ؤ  (مثلاً «هئیتی» ← «هیتی»)
+//  ۲) فاصله و نیم‌فاصله («محمد امین» ↔ «محمدامین»، «ساربان پور» ↔ «ساربانپور»)
+//  ۳) اعراب، کشیده (ـ)، نویسه‌های نامرئی و ارقام عربی/فارسی
+//  ۴) جابه‌جایی نام و نام خانوادگی («پیردادی علی» ↔ «علی پیردادی»)
+//  ۵) یک غلط تایپی کوچک (فقط اگر دقیقاً یک نفر نزدیک باشد)
 // ==========================================
 function normalizeText(text) {
     if (!text) return "";
     return text
         .toString()
-        .replace(/ي/g, "ی") // تبدیل ی عربی به فارسی
-        .replace(/ك/g, "ک") // تبدیل ک عربی به فارسی
-        .replace(/\u200c/g, " ") // تبدیل نیم‌فاصله به فاصله
-        .replace(/\s+/g, " ") // حذف فاصله‌های اضافی
-        .trim();
+        .normalize("NFKC")                                   // شکل‌های نمایشی عربی → حروف عادی
+        .replace(/[ً-ٰٟـ]/g, "")         // اعراب، تشدید، کشیده
+        .replace(/[​‎‏‪-‮﻿]/g, "") // نویسه‌های نامرئی (نیم‌فاصله جدا اداره می‌شود)
+        .replace(/[يىئ]/g, "ی")
+        .replace(/ك/g, "ک")
+        .replace(/[ةۀھە]/g, "ه")
+        .replace(/[أإآٱ]/g, "ا")
+        .replace(/ؤ/g, "و")
+        .replace(/[٠-٩]/g, d => String(d.charCodeAt(0) - 0x0660))
+        .replace(/[۰-۹]/g, d => String(d.charCodeAt(0) - 0x06F0))
+        .replace(/‌/g, " ")                             // نیم‌فاصله → فاصله
+        .replace(/[^؀-ۿa-zA-Z0-9\s]/g, " ")        // نشانه‌گذاری
+        .replace(/\s+/g, " ")
+        .trim()
+        .toLowerCase();
+}
+
+// کلید مقایسه: همان متن بدون هیچ فاصله‌ای
+function nameKey(text) { return normalizeText(text).replace(/\s/g, ""); }
+
+// همه‌ی کلیدهای ممکن با جابه‌جایی چرخشی بخش‌های نام
+function nameKeys(text) {
+    const parts = normalizeText(text).split(" ").filter(Boolean);
+    if (!parts.length) return [];
+    const keys = new Set();
+    for (let i = 0; i < parts.length; i++) keys.add(parts.slice(i).concat(parts.slice(0, i)).join(""));
+    return Array.from(keys);
+}
+
+function editDistance(a, b) {
+    if (a === b) return 0;
+    if (Math.abs(a.length - b.length) > 1) return 2;
+    const m = a.length, n = b.length;
+    let prev = Array.from({ length: n + 1 }, (_, j) => j);
+    for (let i = 1; i <= m; i++) {
+        const cur = [i];
+        for (let j = 1; j <= n; j++) {
+            cur[j] = Math.min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1));
+        }
+        prev = cur;
+    }
+    return prev[n];
+}
+
+// نرمال‌سازی کلید مدرسه و پایه (۷ / "۷" / "07" / "هفتم" / "پایه هفتم")
+function normalizeGrade(g) {
+    const t = normalizeText(g);
+    const words = { "هفتم": "7", "هشتم": "8", "نهم": "9" };
+    for (const w in words) if (t.indexOf(w) !== -1) return words[w];
+    const m = t.match(/\d+/);
+    return m ? String(parseInt(m[0], 10)) : t;
+}
+function normalizeSchool(s) {
+    const k = String(s == null ? "" : s).trim();
+    if (schoolData[k]) return k;
+    const t = normalizeText(k);
+    for (const key in schoolData) {
+        if (normalizeText(schoolData[key].name) === t) return key;
+    }
+    return k;
 }
 
 // ==========================================
-// ⭐ تابع جستجوی دانش‌آموز
-// این تابع اسم دانش‌آموز را در لیست مدرسه و پایه پیدا می‌کند
+// ⭐ پیدا کردن دانش‌آموز؛ نام رسمی را برمی‌گرداند (یا null)
+// ==========================================
+function findStudent(schoolKey, gradeKey, studentName) {
+    schoolKey = normalizeSchool(schoolKey);
+    gradeKey = normalizeGrade(gradeKey);
+    if (!schoolData[schoolKey] || !schoolData[schoolKey].grades[gradeKey]) return null;
+
+    const list = schoolData[schoolKey].grades[gradeKey];
+    const inputs = nameKeys(studentName);
+    if (!inputs.length) return null;
+
+    // ۱) تطبیق دقیق (با نرمال‌سازی و جابه‌جایی نام و نام خانوادگی)
+    for (const official of list) {
+        const ok = nameKey(official);
+        if (inputs.indexOf(ok) !== -1) return official;
+    }
+    // ۲) یک غلط تایپی (فقط اگر نام به‌اندازه‌ی کافی بلند باشد و دقیقاً یک نفر نزدیک باشد)
+    const hits = [];
+    for (const official of list) {
+        const ok = nameKey(official);
+        if (ok.length < 8) continue;
+        if (inputs.some(k => editDistance(k, ok) <= 1)) hits.push(official);
+    }
+    return hits.length === 1 ? hits[0] : null;
+}
+
+// برای پیام دقیق‌تر: همین نام در مدرسه/پایه‌ی دیگری هست؟
+function findStudentAnywhere(studentName) {
+    for (const sk in schoolData) {
+        for (const gk in schoolData[sk].grades) {
+            const official = findStudent(sk, gk, studentName);
+            if (official) return { school: sk, schoolName: schoolData[sk].name, grade: gk, name: official };
+        }
+    }
+    return null;
+}
+
+// ==========================================
+// ⭐ تابع قبلی (با همان امضا؛ بقیه‌ی سایت بدون تغییر کار می‌کند)
 // ==========================================
 function isStudentExist(schoolKey, gradeKey, studentName) {
-    if (!schoolData[schoolKey] || !schoolData[schoolKey].grades[gradeKey]) {
-        return false;
-    }
-    
-    const cleanInputName = normalizeText(studentName);
-    const studentList = schoolData[schoolKey].grades[gradeKey];
-    
-    // مقایسه اسم وارد شده با تمام اسامی لیست (با نرمال‌سازی)
-    return studentList.some(student => normalizeText(student) === cleanInputName);
+    return findStudent(schoolKey, gradeKey, studentName) !== null;
 }
